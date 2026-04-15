@@ -175,14 +175,28 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
+        .chart-sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #1a1a1a;
+            border-bottom: 2px solid #333;
+        }
+
+        .chart-header-scroll {
+            overflow-x: hidden;
+        }
+
+        .swan-house-toggle {
+            font-size: 10px !important;
+            padding: 2px 8px !important;
+        }
+
         .chart-header {
             display: grid;
             grid-template-columns: 220px repeat(12, 1fr);
             background: #1a1a1a;
             border-bottom: 2px solid #333;
-            position: sticky;
-            top: 0;
-            z-index: 10;
         }
 
         .chart-header-ingredient {
@@ -861,7 +875,12 @@
             </div>
         </div>
 
-        <div class="chart-wrapper">
+        <div class="chart-sticky-header" id="chartStickyHeader">
+            <div class="chart-header-scroll" id="chartHeaderScroll">
+                <div id="chartHeader"></div>
+            </div>
+        </div>
+        <div class="chart-wrapper" id="chartWrapper">
             <div class="chart" id="chart"></div>
         </div>
 
@@ -7116,6 +7135,9 @@ const PRICE_TRENDS = {
             const chartDiv = document.getElementById('chart');
             chartDiv.innerHTML = '';
 
+            // Render header into the separate sticky container
+            const headerContainer = document.getElementById('chartHeader');
+            headerContainer.innerHTML = '';
             const header = document.createElement('div');
             header.className = 'chart-header';
             const headerIngredient = document.createElement('div');
@@ -7130,7 +7152,19 @@ const PRICE_TRENDS = {
                 headerMonth.textContent = month;
                 header.appendChild(headerMonth);
             });
-            chartDiv.appendChild(header);
+            headerContainer.appendChild(header);
+
+            // Sync horizontal scroll between header and chart body
+            const chartWrapper = document.getElementById('chartWrapper');
+            const headerScroll = document.getElementById('chartHeaderScroll');
+            // Match header width to chart content width after render
+            requestAnimationFrame(() => {
+                const chartWidth = chartDiv.scrollWidth;
+                headerContainer.style.minWidth = chartWidth + 'px';
+            });
+            chartWrapper.addEventListener('scroll', function() {
+                headerScroll.scrollLeft = chartWrapper.scrollLeft;
+            });
 
             const grouped = {};
             DATA.ingredients.forEach(ing => {
@@ -7186,24 +7220,19 @@ const PRICE_TRENDS = {
                 sourceLabel.textContent = source;
                 sourceHeader.appendChild(sourceLabel);
 
-                // Swan House 2026/All toggle
+                // Swan House 2026/All toggle — pinned inside the sticky source label
                 if (source === 'Swan House Farms') {
-                    const toggleWrap = document.createElement('div');
-                    toggleWrap.style.cssText = 'display:flex;align-items:center;gap:6px;margin-left:auto;';
                     const toggleBtn = document.createElement('button');
                     toggleBtn.className = 'filter-btn swan-house-toggle';
-                    toggleBtn.style.cssText = 'font-size:11px;padding:2px 10px;margin:0;';
-                    toggleBtn.textContent = activeFilters.showSwanHouseAll ? 'Showing All (incl. historical)' : '2026 Plan';
-                    if (activeFilters.showSwanHouseAll) toggleBtn.classList.add('active');
-                    else toggleBtn.classList.add('active');
-                    toggleBtn.addEventListener('click', () => {
+                    toggleBtn.style.cssText = 'font-size:10px;padding:2px 8px;margin-left:8px;vertical-align:middle;';
+                    toggleBtn.textContent = activeFilters.showSwanHouseAll ? 'All Years' : '2026';
+                    toggleBtn.classList.add('active');
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         activeFilters.showSwanHouseAll = !activeFilters.showSwanHouseAll;
                         renderChart();
                     });
-                    toggleWrap.appendChild(toggleBtn);
-                    sourceHeader.appendChild(toggleWrap);
-                    sourceHeader.style.display = 'flex';
-                    sourceHeader.style.alignItems = 'center';
+                    sourceLabel.appendChild(toggleBtn);
                 }
 
                 chartDiv.appendChild(sourceHeader);
