@@ -162,6 +162,7 @@
 
         .chart-wrapper {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             margin-bottom: 50px;
             position: relative;
         }
@@ -171,7 +172,6 @@
             min-width: 100%;
             background: rgba(255, 255, 255, 0.01);
             border-radius: 8px;
-            overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
@@ -193,6 +193,10 @@
             font-size: 0.75rem;
             letter-spacing: 0.5px;
             border-right: 1px solid #333;
+            position: sticky;
+            left: 0;
+            z-index: 12;
+            background: #1a1a1a;
         }
 
         .chart-header-month {
@@ -227,6 +231,10 @@
             font-weight: 500;
             grid-column: 1 / 2;
             border-right: 1px solid #333;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: #222;
         }
 
         .category-header {
@@ -248,6 +256,10 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: #1d1d1d;
         }
 
         .category-dot {
@@ -279,6 +291,14 @@
             cursor: pointer;
             font-size: 0.95rem;
             transition: color 0.2s ease;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: #0f0f0f;
+        }
+
+        .ingredient-row:hover .ingredient-name {
+            background: #161616;
         }
 
         .ingredient-name:hover {
@@ -345,10 +365,28 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             font-size: 0.85rem;
             color: #ddd;
-            pointer-events: none;
         }
 
         .tooltip.visible { display: block; }
+
+        .tooltip-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            line-height: 1;
+            border-radius: 4px;
+        }
+
+        .tooltip-close:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
 
         .tooltip-title {
             font-weight: 600;
@@ -655,19 +693,56 @@
         }
 
         @media (max-width: 768px) {
-            body { padding: 20px 10px; }
-            .header { margin-bottom: 30px; }
-            .header h1 { font-size: 1.5rem; }
-            .controls { padding: 15px; }
-            .button-group { gap: 8px; }
-            .filter-btn { padding: 8px 14px; font-size: 0.85rem; }
-            .chart-header { grid-template-columns: 150px repeat(12, 1fr); }
-            .source-header { grid-template-columns: 150px repeat(12, 1fr); }
-            .category-header { grid-template-columns: 150px repeat(12, 1fr); }
-            .ingredient-row { grid-template-columns: 150px repeat(12, 1fr); }
-            .ingredient-name { padding: 12px 10px; font-size: 0.85rem; }
-            .chart-header-ingredient { padding: 12px 10px; }
-            .month-cell { padding: 8px 6px; min-height: 40px; }
+            body { padding: 15px 8px; }
+            .header { margin-bottom: 20px; padding-bottom: 15px; }
+            .header h1 { font-size: 1.3rem; }
+            .header p { font-size: 0.85rem; }
+            .controls { padding: 12px; margin-bottom: 20px; }
+            .control-group { margin-bottom: 12px; }
+            .control-label { font-size: 0.8rem; margin-bottom: 8px; }
+            .button-group { gap: 6px; }
+            .filter-btn { padding: 7px 12px; font-size: 0.8rem; }
+            .legend-section { padding: 12px; margin-bottom: 20px; }
+            .legend-title { font-size: 1rem; margin-bottom: 12px; }
+            .legend-swatch { width: 28px; height: 28px; }
+            .legend-text { font-size: 0.78rem; }
+
+            .chart-header { grid-template-columns: 130px repeat(12, minmax(52px, 1fr)); }
+            .source-header { grid-template-columns: 130px repeat(12, minmax(52px, 1fr)); }
+            .category-header { grid-template-columns: 130px repeat(12, minmax(52px, 1fr)); }
+            .ingredient-row { grid-template-columns: 130px repeat(12, minmax(52px, 1fr)); }
+            .ingredient-name { padding: 10px 8px; font-size: 0.82rem; }
+            .chart-header-ingredient { padding: 10px 8px; font-size: 0.7rem; }
+            .chart-header-month { padding: 10px 4px; font-size: 0.75rem; }
+            .source-header-label { padding: 10px 8px; font-size: 0.95rem; }
+            .category-header-label { padding: 8px 8px; font-size: 0.78rem; }
+            .month-cell { padding: 6px 4px; min-height: 36px; }
+
+            .tooltip { max-width: calc(100vw - 32px); left: 16px !important; right: 16px; }
+            .trend-badge { font-size: 0.6rem; padding: 1px 4px; margin-left: 4px; }
+
+            .menu-planning { margin-top: 30px; padding-top: 20px; }
+            .menu-planning-title { font-size: 1.3rem; margin-bottom: 15px; }
+            .weather-intelligence { margin-top: 30px; padding-top: 20px; }
+            .weather-title { font-size: 1.3rem; }
+            .weather-regions-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px 4px; }
+            .header h1 { font-size: 1.1rem; }
+            .chart-header { grid-template-columns: 110px repeat(12, minmax(44px, 1fr)); }
+            .source-header { grid-template-columns: 110px repeat(12, minmax(44px, 1fr)); }
+            .category-header { grid-template-columns: 110px repeat(12, minmax(44px, 1fr)); }
+            .ingredient-row { grid-template-columns: 110px repeat(12, minmax(44px, 1fr)); }
+            .ingredient-name { padding: 8px 6px; font-size: 0.78rem; }
+            .chart-header-ingredient { padding: 8px 6px; }
+            .chart-header-month { padding: 8px 2px; font-size: 0.7rem; }
+            .source-header-label { padding: 8px 6px; font-size: 0.85rem; }
+            .category-header-label { padding: 6px 6px; font-size: 0.72rem; }
+            .month-cell { min-height: 32px; }
+            .filter-btn { padding: 6px 10px; font-size: 0.75rem; }
+            .trend-badge { display: none; }
         }
 
         .hidden { display: none !important; }
@@ -817,7 +892,7 @@
 const DATA = {
   "metadata": {
     "restaurant": "San Fermo",
-    "last_updated": "2026-04-14",
+    "last_updated": "2026-04-15",
     "data_sources": [
       "Local Roots Farm",
       "Farmstand Local Foods",
@@ -5185,6 +5260,250 @@ const DATA = {
       "WA Asparagus delayed by freezing temps (Franks)."
     ]
   }
+,
+  "weather": {
+    "last_fetched": "2026-04-15T18:56:03.345Z",
+    "note": "Includes agricultural, foraging, rangeland, and marine regions.",
+    "region_summary": {
+      "total_regions": 19,
+      "agricultural": 7,
+      "foraging": 7,
+      "rangeland": 2,
+      "marine": 3
+    },
+    "regions": {
+      "skagit_valley_wa": {
+        "name": "Skagit Valley, WA",
+        "category": "agricultural",
+        "conditions": "Showers And Thunderstorms Likely | High 49\u00b0F / Low 35\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "0 GDD (base 50\u00b0F, 3-day est.)",
+        "linked_vendors": [
+          "Swan House Farm",
+          "Local Roots Farm",
+          "Foraged & Found Edibles"
+        ]
+      },
+      "snoqualmie_valley_wa": {
+        "name": "Snoqualmie Valley, WA",
+        "category": "agricultural",
+        "conditions": "Showers And Thunderstorms | High 48\u00b0F / Low 34\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "0 GDD (base 50\u00b0F, 3-day est.)",
+        "linked_vendors": [
+          "Local Roots Farm",
+          "Farmstand Local Foods"
+        ]
+      },
+      "snohomish_sammamish_valleys_wa": {
+        "name": "Snohomish/Sammamish Valleys, WA",
+        "category": "agricultural",
+        "conditions": "Showers And Thunderstorms | High 48\u00b0F / Low 35\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "0 GDD (base 50\u00b0F, 3-day est.)",
+        "linked_vendors": [
+          "Farmstand Local Foods"
+        ]
+      },
+      "puget_lowlands_seattle_wa": {
+        "name": "Puget Lowlands / Greater Seattle",
+        "category": "agricultural",
+        "conditions": "Showers And Thunderstorms | High 47\u00b0F / Low 35\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "0 GDD (base 50\u00b0F, 3-day est.)",
+        "linked_vendors": [
+          "Franks Produce",
+          "EC Wilson"
+        ]
+      },
+      "yakima_valley_wa": {
+        "name": "Yakima Valley, WA",
+        "category": "agricultural",
+        "conditions": "Partly Sunny | High 57\u00b0F / Low 27\u00b0F",
+        "alerts": [],
+        "watch_conditions": [
+          "Freeze Watch issued April 15 at 7:52AM PDT until April 16 at 9:00AM PDT by NWS Pendleton OR"
+        ],
+        "gdd_status": "0 GDD (base 50\u00b0F, 3-day est.)",
+        "linked_vendors": [
+          "Farmstand Local Foods",
+          "Franks Produce"
+        ]
+      },
+      "columbia_basin_wa": {
+        "name": "Columbia Basin, WA",
+        "category": "agricultural",
+        "conditions": "Partly Sunny then Slight Chance Light Rain | High 60\u00b0F / Low 30\u00b0F",
+        "alerts": [],
+        "watch_conditions": [
+          "Freeze Watch issued April 15 at 7:52AM PDT until April 16 at 9:00AM PDT by NWS Pendleton OR"
+        ],
+        "gdd_status": "0 GDD (base 50\u00b0F, 3-day est.)",
+        "linked_vendors": [
+          "Farmstand Local Foods"
+        ]
+      },
+      "okanogan_highlands_wa": {
+        "name": "Okanogan Highlands, WA",
+        "category": "agricultural",
+        "conditions": "Chance Light Rain | High 52\u00b0F / Low 30\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "0 GDD (base 50\u00b0F, 3-day est.)",
+        "linked_vendors": [
+          "Farmstand Local Foods"
+        ]
+      },
+      "cascade_range_forests": {
+        "name": "Cascade Range / Western WA Forests",
+        "category": "foraging",
+        "conditions": "Showers And Thunderstorms | High 44\u00b0F / Low 27\u00b0F",
+        "alerts": [
+          "Winter Storm Warning issued April 14 at 10:03PM PDT until April 16 at 5:00AM PDT by NWS Seattle WA"
+        ],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Foraged & Found Edibles"
+        ]
+      },
+      "eastern_wa_rangeland": {
+        "name": "Eastern WA Rangeland",
+        "category": "rangeland",
+        "conditions": "Mostly Sunny | High 57\u00b0F / Low 28\u00b0F",
+        "alerts": [],
+        "watch_conditions": [
+          "Freeze Watch issued April 15 at 7:52AM PDT until April 16 at 9:00AM PDT by NWS Pendleton OR"
+        ],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Preservation Meat Collective"
+        ]
+      },
+      "olympic_peninsula_hood_canal": {
+        "name": "Olympic Peninsula / Hood Canal",
+        "category": "marine",
+        "conditions": "Showers And Thunderstorms | High 47\u00b0F / Low 34\u00b0F",
+        "alerts": [
+          "Freeze Watch issued April 15 at 7:52AM PDT until April 16 at 9:00AM PDT by NWS Seattle WA"
+        ],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Key City Fish Co"
+        ]
+      },
+      "neah_bay_strait_juan_de_fuca": {
+        "name": "Neah Bay / Strait of Juan de Fuca",
+        "category": "marine",
+        "conditions": "Showers And Thunderstorms | High 47\u00b0F / Low 40\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Key City Fish Co"
+        ]
+      },
+      "port_townsend_puget_sound": {
+        "name": "Port Townsend / Puget Sound",
+        "category": "marine",
+        "conditions": "Showers And Thunderstorms | High 47\u00b0F / Low 37\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Key City Fish Co"
+        ]
+      },
+      "oregon_cascades": {
+        "name": "Oregon Cascades",
+        "category": "foraging",
+        "conditions": "Snow Showers | High 33\u00b0F / Low 24\u00b0F",
+        "alerts": [
+          "Winter Storm Warning issued April 15 at 11:40AM PDT until April 16 at 5:00AM PDT by NWS Portland OR"
+        ],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Foraged & Found Edibles"
+        ]
+      },
+      "eastern_oregon_rangeland": {
+        "name": "Eastern Oregon Rangeland",
+        "category": "rangeland",
+        "conditions": "Mostly Cloudy then Partly Sunny | High 58\u00b0F / Low 28\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Preservation Meat Collective"
+        ]
+      },
+      "northern_ca_coast_forests": {
+        "name": "Northern California Coast/Forests",
+        "category": "foraging",
+        "conditions": "Rain | High 48\u00b0F / Low 33\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Foraged & Found Edibles"
+        ]
+      },
+      "northern_ca_interior": {
+        "name": "Northern California Interior",
+        "category": "foraging",
+        "conditions": "Chance Light Rain | High 65\u00b0F / Low 40\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Foraged & Found Edibles"
+        ]
+      },
+      "southern_bc": {
+        "name": "Southern British Columbia",
+        "category": "foraging",
+        "conditions": "Snow Showers Likely | High 32\u00b0F / Low 27\u00b0F",
+        "alerts": [],
+        "watch_conditions": [],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Foraged & Found Edibles"
+        ]
+      },
+      "western_montana": {
+        "name": "Western Montana",
+        "category": "foraging",
+        "conditions": "Light Snow Likely | High 45\u00b0F / Low 24\u00b0F",
+        "alerts": [],
+        "watch_conditions": [
+          "Winter Weather Advisory issued April 14 at 11:53AM MDT until April 16 at 9:00AM MDT by NWS Missoula MT"
+        ],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Foraged & Found Edibles"
+        ]
+      },
+      "northern_idaho": {
+        "name": "Northern Idaho",
+        "category": "foraging",
+        "conditions": "Light Rain | High 42\u00b0F / Low 28\u00b0F",
+        "alerts": [],
+        "watch_conditions": [
+          "Winter Weather Advisory issued April 15 at 4:37AM PDT until April 16 at 5:00AM PDT by NWS Spokane WA"
+        ],
+        "gdd_status": "N/A",
+        "linked_vendors": [
+          "Foraged & Found Edibles"
+        ]
+      }
+    }
+  }
 };
 
 const PRICE_TRENDS = {
@@ -6881,16 +7200,26 @@ const PRICE_TRENDS = {
                             }
                         }
 
-                        nameCell.addEventListener('mouseover', (e) => showTooltip(e, ing));
-                        nameCell.addEventListener('mouseout', hideTooltip);
+                        if (isTouchDevice) {
+                            nameCell.addEventListener('click', (e) => showTooltip(e, ing));
+                        } else {
+                            nameCell.addEventListener('mouseover', (e) => showTooltip(e, ing));
+                            nameCell.addEventListener('mouseout', hideTooltip);
+                            nameCell.addEventListener('click', (e) => showTooltip(e, ing));
+                        }
                         row.appendChild(nameCell);
 
                         ing.months.forEach((score, idx) => {
                             const cell = document.createElement('div');
                             cell.className = `month-cell score-${score} category-${ing.category}`;
                             if (idx === currentMonth) cell.classList.add('current-month');
-                            cell.addEventListener('mouseover', (e) => showTooltip(e, ing));
-                            cell.addEventListener('mouseout', hideTooltip);
+                            if (isTouchDevice) {
+                                cell.addEventListener('click', (e) => showTooltip(e, ing));
+                            } else {
+                                cell.addEventListener('mouseover', (e) => showTooltip(e, ing));
+                                cell.addEventListener('mouseout', hideTooltip);
+                                cell.addEventListener('click', (e) => showTooltip(e, ing));
+                            }
                             row.appendChild(cell);
                         });
 
@@ -6900,9 +7229,23 @@ const PRICE_TRENDS = {
             });
         }
 
+        // Touch detection
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        let activeTooltipIngredient = null;
+
         function showTooltip(event, ingredient) {
+            event.stopPropagation();
             const tooltip = document.getElementById('tooltip');
+
+            // If tapping the same ingredient again, dismiss
+            if (isTouchDevice && activeTooltipIngredient === ingredient.name && tooltip.classList.contains('visible')) {
+                hideTooltip();
+                return;
+            }
+            activeTooltipIngredient = ingredient.name;
+
             let tooltipHTML = `
+                <button class="tooltip-close" onclick="hideTooltip()" aria-label="Close">&times;</button>
                 <div class="tooltip-title">${ingredient.name}</div>
                 <div class="tooltip-field"><span class="tooltip-label">Category:</span> ${ingredient.category.charAt(0).toUpperCase() + ingredient.category.slice(1)}</div>
                 <div class="tooltip-field"><span class="tooltip-label">Vendor:</span> ${ingredient.vendor}</div>
@@ -6957,17 +7300,49 @@ const PRICE_TRENDS = {
 
             tooltip.innerHTML = tooltipHTML;
             tooltip.classList.add('visible');
-            const rect = event.target.getBoundingClientRect();
-            tooltip.style.left = (rect.right + 15) + 'px';
-            tooltip.style.top = (rect.top - 10) + 'px';
-            if (tooltip.offsetLeft + tooltip.offsetWidth > window.innerWidth) {
-                tooltip.style.left = (rect.left - tooltip.offsetWidth - 15) + 'px';
+
+            if (window.innerWidth <= 768) {
+                // Mobile: fixed bottom sheet style
+                tooltip.style.left = '16px';
+                tooltip.style.right = '16px';
+                tooltip.style.top = 'auto';
+                tooltip.style.bottom = '16px';
+                tooltip.style.maxHeight = '60vh';
+                tooltip.style.overflowY = 'auto';
+            } else {
+                // Desktop: position near element
+                tooltip.style.bottom = 'auto';
+                tooltip.style.right = 'auto';
+                tooltip.style.maxHeight = 'none';
+                tooltip.style.overflowY = 'visible';
+                const rect = event.target.getBoundingClientRect();
+                tooltip.style.left = (rect.right + 15) + 'px';
+                tooltip.style.top = (rect.top - 10) + 'px';
+                if (tooltip.offsetLeft + tooltip.offsetWidth > window.innerWidth) {
+                    tooltip.style.left = (rect.left - tooltip.offsetWidth - 15) + 'px';
+                }
+                if (tooltip.offsetTop + tooltip.offsetHeight > window.innerHeight) {
+                    tooltip.style.top = Math.max(10, window.innerHeight - tooltip.offsetHeight - 10) + 'px';
+                }
             }
         }
 
         function hideTooltip() {
-            document.getElementById('tooltip').classList.remove('visible');
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('visible');
+            activeTooltipIngredient = null;
         }
+
+        // Tap-outside-to-dismiss
+        document.addEventListener('click', function(e) {
+            const tooltip = document.getElementById('tooltip');
+            if (!tooltip.classList.contains('visible')) return;
+            // If click is inside tooltip, keep it open
+            if (tooltip.contains(e.target)) return;
+            // If click is on an ingredient name or month cell, showTooltip handles it
+            if (e.target.closest('.ingredient-name') || e.target.closest('.month-cell')) return;
+            hideTooltip();
+        });
 
         function renderMenuPlanning() {
             const cardsDiv = document.getElementById('menuPlanningCards');
