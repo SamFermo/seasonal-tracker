@@ -1,0 +1,7229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Fermo — Seasonal Ingredient Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #e8e8e8;
+            font-family: 'DM Sans', sans-serif;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 50px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #f0f0f0;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .last-updated {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .controls {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #bbb;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 18px;
+            border: 1px solid #555;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ddd;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #777;
+        }
+
+        .filter-btn.active {
+            background: #666;
+            border-color: #888;
+            color: #fff;
+        }
+
+        .legend-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .legend-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            color: #f0f0f0;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .legend-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .legend-score-0 { background: #2a2a2a; }
+        .legend-score-1 { background: #4a5a4a; }
+        .legend-score-2 { background: #7a9a7a; }
+        .legend-score-3 {
+            background: repeating-linear-gradient(
+                45deg,
+                #4a5a4a,
+                #4a5a4a 8px,
+                #3a4a3a 8px,
+                #3a4a3a 16px
+            );
+        }
+
+        .legend-text {
+            font-size: 0.85rem;
+            color: #bbb;
+        }
+
+        .chart-wrapper {
+            overflow-x: auto;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .chart {
+            display: inline-block;
+            min-width: 100%;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .chart-header {
+            display: grid;
+            grid-template-columns: 220px repeat(12, 1fr);
+            background: #1a1a1a;
+            border-bottom: 2px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .chart-header-ingredient {
+            padding: 18px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            border-right: 1px solid #333;
+        }
+
+        .chart-header-month {
+            padding: 18px 10px;
+            font-weight: 600;
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            border-right: 1px solid #333;
+            position: relative;
+        }
+
+        .chart-header-month.current-month {
+            background: rgba(220, 53, 69, 0.1);
+            border-right: 3px solid #dc3545;
+            color: #f0f0f0;
+        }
+
+        .source-header {
+            display: grid;
+            grid-template-columns: 220px repeat(12, 1fr);
+            background: rgba(100, 100, 100, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .source-header-label {
+            padding: 14px 18px;
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.1rem;
+            color: #aaa;
+            font-weight: 500;
+            grid-column: 1 / 2;
+            border-right: 1px solid #333;
+        }
+
+        .category-header {
+            display: grid;
+            grid-template-columns: 220px repeat(12, 1fr);
+            background: rgba(80, 80, 80, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .category-header-label {
+            padding: 12px 18px;
+            font-size: 0.9rem;
+            color: #999;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            grid-column: 1 / 2;
+            border-right: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .ingredient-row {
+            display: grid;
+            grid-template-columns: 220px repeat(12, 1fr);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            align-items: stretch;
+        }
+
+        .ingredient-row:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .ingredient-name {
+            padding: 16px 18px;
+            font-weight: 500;
+            color: #ddd;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .ingredient-name:hover {
+            color: #f0f0f0;
+        }
+
+        .month-cell {
+            padding: 10px;
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .month-cell:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .month-cell.current-month {
+            border-left: 3px solid #dc3545;
+            border-right: 3px solid #dc3545;
+            background: rgba(220, 53, 69, 0.08);
+        }
+
+        .score-0 { background: #2a2a2a; }
+        .score-1 { background: #4a5a4a; }
+        .score-2 { background: #6a9a6a; }
+        .score-3 {
+            background: repeating-linear-gradient(
+                45deg,
+                #4a5a4a,
+                #4a5a4a 6px,
+                #3a4a3a 6px,
+                #3a4a3a 12px
+            );
+        }
+
+        .category-mushroom.score-1 { background: #5a4a2a; }
+        .category-mushroom.score-2 { background: #8B6914; }
+        .category-green.score-1 { background: #3a4a3a; }
+        .category-green.score-2 { background: #2D5F2D; }
+        .category-berry.score-1 { background: #4a3a4a; }
+        .category-berry.score-2 { background: #8B2252; }
+        .category-sea.score-1 { background: #2a4a4a; }
+        .category-sea.score-2 { background: #1A6B6B; }
+        .category-flower.score-1 { background: #4a3a5a; }
+        .category-flower.score-2 { background: #6B4C8B; }
+        .category-produce.score-1 { background: #4a4a2a; }
+        .category-produce.score-2 { background: #8B6B14; }
+
+        .tooltip {
+            display: none;
+            position: fixed;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 16px;
+            z-index: 1000;
+            max-width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            font-size: 0.85rem;
+            color: #ddd;
+            pointer-events: none;
+        }
+
+        .tooltip.visible { display: block; }
+
+        .tooltip-title {
+            font-weight: 600;
+            color: #f0f0f0;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .tooltip-field {
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .tooltip-label {
+            color: #999;
+            font-weight: 500;
+        }
+
+        .menu-planning {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px solid #333;
+        }
+
+        .menu-planning-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #f0f0f0;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 18px;
+            color: #f0f0f0;
+        }
+
+        .card-title.peaking { color: #7a9a7a; }
+        .card-title.coming { color: #6a8aaa; }
+        .card-title.ending { color: #8b7a5a; }
+        .card-title.alerts { color: #aa6a6a; }
+
+        .card-list { list-style: none; }
+
+        .card-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ddd;
+        }
+
+        .card-list li:before {
+            content: "\25AA";
+            position: absolute;
+            left: 0;
+            color: #666;
+        }
+
+        .card-list li:last-child { margin-bottom: 0; }
+
+        /* Weather Intelligence Section */
+        .weather-intelligence {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px solid #333;
+        }
+
+        .weather-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .weather-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .weather-toggle-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            font-size: 1.5rem;
+            color: #888;
+        }
+
+        .weather-toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .weather-timestamp {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .weather-regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .weather-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .weather-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .weather-card.category-agricultural {
+            border-left: 4px solid #7a9a7a;
+        }
+
+        .weather-card.category-foraging {
+            border-left: 4px solid #6B4C8B;
+        }
+
+        .weather-card.category-marine {
+            border-left: 4px solid #1A6B6B;
+        }
+
+        .weather-card.category-rangeland {
+            border-left: 4px solid #8B6914;
+        }
+
+        .weather-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .weather-card-region {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #f0f0f0;
+        }
+
+        .weather-card-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .weather-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+
+        .weather-indicator.alert { background: #dc3545; }
+        .weather-indicator.watch { background: #ffc107; }
+        .weather-indicator.normal { background: #7a9a7a; }
+
+        .weather-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .weather-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .weather-label {
+            color: #999;
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+
+        .weather-value {
+            color: #e8e8e8;
+            flex: 1;
+        }
+
+        .weather-alerts-list,
+        .weather-watch-list {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            border-left: 2px solid;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .weather-alerts-list {
+            border-left-color: #dc3545;
+            color: #ff9999;
+        }
+
+        .weather-watch-list {
+            border-left-color: #ffc107;
+            color: #ffdd99;
+        }
+
+        .weather-alerts-list li,
+        .weather-watch-list li {
+            margin-bottom: 6px;
+            list-style: none;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .weather-alerts-list li:last-child,
+        .weather-watch-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .weather-alerts-list li:before {
+            content: "●";
+            position: absolute;
+            left: 0;
+            color: inherit;
+        }
+
+        .weather-watch-list li:before {
+            content: "◆";
+            position: absolute;
+            left: 0;
+            color: inherit;
+        }
+
+        .weather-vendors {
+            font-size: 0.85rem;
+            color: #999;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .weather-vendor-item {
+            display: inline-block;
+            margin-right: 8px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .weather-hidden { display: none; }
+
+        .weather-indicator-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 6px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .weather-indicator-dot.alert { background: #dc3545; }
+        .weather-indicator-dot.watch { background: #ffc107; }
+
+        @media (max-width: 1024px) {
+            .header h1 { font-size: 1.8rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .legend-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .header { margin-bottom: 30px; }
+            .header h1 { font-size: 1.5rem; }
+            .controls { padding: 15px; }
+            .button-group { gap: 8px; }
+            .filter-btn { padding: 8px 14px; font-size: 0.85rem; }
+            .chart-header { grid-template-columns: 150px repeat(12, 1fr); }
+            .source-header { grid-template-columns: 150px repeat(12, 1fr); }
+            .category-header { grid-template-columns: 150px repeat(12, 1fr); }
+            .ingredient-row { grid-template-columns: 150px repeat(12, 1fr); }
+            .ingredient-name { padding: 12px 10px; font-size: 0.85rem; }
+            .chart-header-ingredient { padding: 12px 10px; }
+            .month-cell { padding: 8px 6px; min-height: 40px; }
+        }
+
+        .hidden { display: none !important; }
+
+        /* Price trend arrows */
+        .trend-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+            margin-left: 6px;
+            flex-shrink: 0;
+        }
+        .trend-badge.trend-up {
+            color: #ff8866;
+            background: rgba(255, 100, 80, 0.12);
+            border: 1px solid rgba(255, 100, 80, 0.25);
+        }
+        .trend-badge.trend-down {
+            color: #66cc88;
+            background: rgba(80, 200, 120, 0.12);
+            border: 1px solid rgba(80, 200, 120, 0.25);
+        }
+        .trend-badge.trend-stable {
+            color: #88aacc;
+            background: rgba(100, 160, 220, 0.08);
+            border: 1px solid rgba(100, 160, 220, 0.15);
+        }
+        .trend-badge .trend-arrow {
+            font-size: 0.75rem;
+        }
+        /* Price tooltip section */
+        .tooltip-price-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .tooltip-price-header {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ccaa77;
+            margin-bottom: 6px;
+        }
+        .tooltip-price-current {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f0f0f0;
+            margin-bottom: 4px;
+        }
+        .tooltip-price-detail {
+            font-size: 0.78rem;
+            color: #999;
+            margin-bottom: 2px;
+        }
+        .tooltip-sparkline {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 24px;
+            margin-top: 8px;
+        }
+        .tooltip-sparkline .bar {
+            flex: 1;
+            background: rgba(200, 170, 120, 0.4);
+            border-radius: 1px 1px 0 0;
+            min-width: 4px;
+        }
+        .tooltip-sparkline .bar.latest {
+            background: rgba(200, 170, 120, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>San Fermo — Seasonal Ingredient Tracker</h1>
+            <p>Interactive seasonal availability and pricing guide</p>
+            <p class="last-updated" id="lastUpdated"></p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label class="control-label">Category Filters</label>
+                <div class="button-group" id="categoryFilters"></div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Source Filters</label>
+                <div class="button-group" id="sourceFilters"></div>
+            </div>
+        </div>
+
+        <div class="legend-section">
+            <div class="legend-title">Availability Scoring</div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-swatch legend-score-0"></div>
+                    <div class="legend-text"><strong>0:</strong> Not Available</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch legend-score-1"></div>
+                    <div class="legend-text"><strong>1:</strong> Available</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch legend-score-2"></div>
+                    <div class="legend-text"><strong>2:</strong> Peak Season / Best Pricing</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch legend-score-3"></div>
+                    <div class="legend-text"><strong>3:</strong> Limited / End of Season</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-wrapper">
+            <div class="chart" id="chart"></div>
+        </div>
+
+        <div class="weather-intelligence" id="weatherIntelligence">
+            <div class="weather-header" id="weatherToggle">
+                <div class="weather-title">
+                    <span>☁ Weather Intelligence</span>
+                    <span class="weather-toggle-icon" id="weatherToggleIcon">▼</span>
+                </div>
+                <div class="weather-timestamp" id="weatherTimestamp"></div>
+            </div>
+            <div id="weatherAllClear" style="display:none; padding:10px 0 4px 0; color:#8aad8a; font-size:13px;">✓ No active alerts or watches across all 19 regions.</div>
+            <div class="weather-regions-grid" id="weatherRegions"></div>
+            <div id="weatherViewToggle" style="display:none; padding:8px 0 4px 0;">
+                <button id="weatherViewToggleBtn" onclick="toggleWeatherView()" style="background:none; border:1px solid #444; color:#aaa; padding:5px 14px; border-radius:4px; cursor:pointer; font-size:12px;"></button>
+            </div>
+        </div>
+
+        <div class="menu-planning">
+            <div class="menu-planning-title">Menu Planning Summary</div>
+            <div class="cards-grid" id="menuPlanningCards"></div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+const DATA = {
+  "metadata": {
+    "restaurant": "San Fermo",
+    "last_updated": "2026-04-14",
+    "data_sources": [
+      "Local Roots Farm",
+      "Farmstand Local Foods",
+      "Foraged & Found Edibles",
+      "EC Wilson",
+      "Franks Produce",
+      "Key City Fish",
+      "Preserve Meat",
+      "Sea Breeze Farm / Magic Meat Truck",
+      "Swan House Farms (Google Sheet)"
+    ],
+    "notes": "Month scores: 0 = not available, 1 = available, 2 = peak season / best pricing, 3 = limited / end of season. Farm items sourced from Kelly Baker's SHF Fresh Sheet. Wild mushroom data sourced from 15 months of Foraged & Found emails (Jan 2025 - Mar 2026). Franks seasonal items added from 14 months of fresh sheet analysis (Feb 2025 - Apr 2026)."
+  },
+  "vendors": {
+    "local_roots_farm": {
+      "name": "Local Roots Farm",
+      "contact": "orders@localrootsfarm.com",
+      "delivery": "Wednesday",
+      "minimums": "$75 min, $5 delivery fee",
+      "order_deadline": "Monday 8:00 PM",
+      "last_fresh_sheet": "2026-04-09"
+    },
+    "local_roots_farm_note": "4/10 sheet sent a day early (Jason going out of town). Not many changes. Curly Kale Rapini removed from sheet — uncertain supply Tuesday, only Mixed Rapini this week (specific varieties may be accommodated on request). Rossa di Milano Onions gone. Pinto Fingerlings still limited. Beets, Mixed Rapini, and Potatoes really awesome right now. March flooding recovery still ongoing — baby lettuce, spinach, arugula, salad mix, radishes, turnips still 4-5 weeks out (mid-May).",
+    "farmstand_local_foods": {
+      "name": "Farmstand Local Foods",
+      "contact": "info@farmstandlocalfoods.com",
+      "delivery": "Varies (Mon/Wed/Fri)",
+      "minimums": "See online shop",
+      "order_deadline": "See weekly fresh sheet",
+      "last_fresh_sheet": "2026-04-07"
+    },
+    "foraged_and_found": {
+      "name": "Foraged & Found Edibles",
+      "contact": "orders@foragedandfoundedibles.com",
+      "delivery": "Tue-Fri",
+      "minimums": "10# min, $4 fuel surcharge",
+      "order_deadline": "See fresh sheet",
+      "last_fresh_sheet": "2026-04-05"
+    },
+    "ec_wilson": {
+      "name": "EC Wilson",
+      "contact": "jordan@wilsonmeats.com / orders@wilsonmeats.com",
+      "delivery": "Mon-Sat (limited Sat)",
+      "minimums": "See fresh sheet",
+      "order_deadline": "See fresh sheet",
+      "last_fresh_sheet": "2026-03-27"
+    },
+    "franks_produce": {
+      "name": "Franks Quality Produce",
+      "contact": "jeffh@franksproduce.net",
+      "delivery": "See fresh sheet",
+      "minimums": "See fresh sheet",
+      "order_deadline": "See fresh sheet",
+      "last_fresh_sheet": "2026-04-06"
+    },
+    "key_city_fish": {
+      "name": "Key City Fish Co",
+      "contact": "info@keycityfish.com",
+      "delivery": "Next-day (midnight cutoff Mon-Fri)",
+      "minimums": "See fresh sheet",
+      "order_deadline": "Midnight Mon-Fri for next-day",
+      "last_fresh_sheet": "2026-04-13"
+    },
+    "preserve_meat": {
+      "name": "Preserve Meat",
+      "contact": "meatme@preservemeat.com / sean@preservemeat.com",
+      "delivery": "See ordering app",
+      "minimums": "See ordering app",
+      "order_deadline": "Via ordering app",
+      "last_fresh_sheet": "2026-04-04"
+    },
+    "preserve_meat_note": "Apr 4: Sean flagged bavette supply tightness — ~9 lbs/animal, multiple customers competing. Suggested alternatives: Ribeyes Bone In, Tenderloins, Striploins, Top Sirloin Cap Off, Flat Iron, Culottes Cap On, Outside Skirt (may be spoken for). Chris cc'd. All Pure Country Beef.",
+    "sea_breeze_farm": {
+      "name": "Sea Breeze Farm / Magic Meat Truck",
+      "contact": "george@seabreeze.farm / rose@seabreeze.farm",
+      "delivery": "Call to arrange / Sunday pop-up 1-5pm",
+      "minimums": "Call for details",
+      "order_deadline": "Call in orders Sunday 1-5pm",
+      "last_fresh_sheet": "2026-01-31"
+    },
+    "swan_house_farms": {
+      "name": "Swan House Farms (Our Farm)",
+      "contact": "Kelly Baker (Google Sheet)",
+      "delivery": "Direct from Skagit Valley",
+      "minimums": "N/A — our farm",
+      "order_deadline": "N/A",
+      "last_fresh_sheet": "2026-04-15"
+    }
+  },
+  "ingredients": [
+    {
+      "name": "Beets",
+      "category": "produce",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        2,
+        2,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "notes": "On sale through spring. Storage crop. Really awesome right now (Apr 2026).",
+      "price_range": "On sale — check fresh sheet"
+    },
+    {
+      "name": "Rutabaga",
+      "category": "produce",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "notes": "Surprise find added to the 3/27 sheet. Wintery root available through early spring.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Curly Kale Rapini",
+      "category": "green",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        2,
+        3,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Removed from 4/10 Local Roots sheet — uncertain Tuesday supply, only Mixed Rapini available this week. May return on future sheets. Was limited after March flood damage. First rapini of season, arrived late Feb 2026.",
+      "price_range": "Low when abundant — check sheet"
+    },
+    {
+      "name": "Mixed Rapini",
+      "category": "green",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "New on 4/3 sheet. Mixed brassica rapini as warm weather brings more varieties into flower.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Lacinato Rapini",
+      "category": "green",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        2,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "First rapini of the season, arrived earlier than normal (late Feb 2026). Lost to March flood. May regrow.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Potatoes (mixed varieties)",
+      "category": "produce",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        1
+      ],
+      "notes": "Storage varieties. Satina Yellow and Purple Majesty BACK as of 4/3! Pinto Fingerlings limited. Really awesome right now.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Purple Daikon",
+      "category": "produce",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "notes": "Limited for weeks, gone as of 3/27. Storage crop.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Carrots (Nantes)",
+      "category": "produce",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        1
+      ],
+      "notes": "Were on sale in Feb. Gone from March sheet after flood/storage depletion. Really awesome through early March.",
+      "price_range": "On sale in Feb"
+    },
+    {
+      "name": "Braising Mix",
+      "category": "green",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "notes": "Was really awesome in mid-March but lost to flood. Expected to return as fields dry out.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Red Russian Kale",
+      "category": "green",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "notes": "New addition in March, lost to flood. Should return when fields recover.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Celeriac",
+      "category": "produce",
+      "vendor": "Local Roots Farm",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "notes": "Storage crop. Gone as of 3/22 update.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Maitake Mushrooms",
+      "category": "mushroom",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        1
+      ],
+      "notes": "From Misty Mountain Mushrooms (Yamhill, OR). Cultivated but from seasonal WA/OR producer — slight fall peak. Not a wild variety.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Lemon Balm",
+      "category": "green",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "From Tualco Valley Produce (Monroe). Great for citrusy tea or simple syrup, pairs with fish/poultry.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Mixed Fingerling Potatoes",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From First Cut Farm (Mount Vernon). Purple Fiesta, Red Thumb, and petite yellow varieties.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Green Bibb Lettuce",
+      "category": "green",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From DeGoede Farms (Sumner). Hydroponic Rex variety, year-round. Great for wraps.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Green Cabbage",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From Boldly Grown Farm (Bow). Rumored to be last local cabbage as of 3/10.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Rapini (vendor mix)",
+      "category": "green",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Plenty available via Farmstand as of 3/24. Multiple farm sources.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Rhubarb",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Sprouting at Sidhu Farms and Ralph's Greenhouse as of late March. Field grown rhubarb season approaching (Franks hot house ended 4/6).",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Frozen Tayberries",
+      "category": "berry",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From Hayton Farms (Fir Island). Blackberry x Raspberry hybrid. Bold sweet-tart flavor, rich wine color. IQF frozen from prior summer harvest. Great for sauces, jams, desserts. Back in stock as of 4/7 sheet.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Red Lasoda Potatoes",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From Olsen Farms (Colville). Good for potato salad. Red Pontiac also available from Swiss Farms.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Yellow Onions",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From Anderson Organics (Othello). Year-round staple.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Cultured Butter",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From Cherry Valley Dairy (Duvall). 2017 American Cheese Society gold winner.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Fireweed Honey",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From Robbins Honey Farm (Lakewood). Rich in antioxidants. Back in stock as of 3/24.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Stinging Nettles",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Peak spring season (Apr 2026). Volume pricing: $9.50/# for 20#+, $7.50/# for 50#+. Available Feb–May.",
+      "price_range": "$10.50/#, $9.50/# for 20#+, $7.50/# for 50#+"
+    },
+    {
+      "name": "True Miner's Lettuce",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "A bit limited as of April — transitioning to higher elevation areas. $9.75/# for 10#+.",
+      "price_range": "$11/#, $9.75/# for 10#+"
+    },
+    {
+      "name": "Ladyfern Fiddleheads",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Peak spring season. Available through April. Volume pricing for 20#+.",
+      "price_range": "$10.50/#, $9.50/# for 20#+"
+    },
+    {
+      "name": "Wild Watercress",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Just begun as of 3/29. Available through April+.",
+      "price_range": "$10.50/#"
+    },
+    {
+      "name": "Wood Sorrel (Wild)",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        3,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Limited for now, just starting. Available spring through early summer.",
+      "price_range": "$13.50/# (limited)"
+    },
+    {
+      "name": "Flowering Red Currant Blossoms",
+      "category": "flower",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Wild foraged (WA). Spring blooms for garnish.",
+      "price_range": "$6.25/pint, $30/5 pints"
+    },
+    {
+      "name": "Magnolia Buds",
+      "category": "flower",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Wild foraged (WA). Unique garnish/pickling item. Not listed on 4/5 sheet — likely ending/ended for the season.",
+      "price_range": "$12/#"
+    },
+    {
+      "name": "Licorice Fern Rhizomes",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "notes": "Wild foraged (WA). Available fall through spring.",
+      "price_range": "$18.50/#"
+    },
+    {
+      "name": "Ramps (Wild)",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Fully available as of April 5! Appalachian (WV) sourced now, available through May.",
+      "price_range": "$19.50/#"
+    },
+    {
+      "name": "Morels (Wild)",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Black burn morels May-Jun (WA/OR/ID), gray/greenie morels Jun-Jul. Prices drop from $33/# early to $15-17/# at peak. Season ends late July. PRE-ORDER SIGNAL from Franks 4/6 sheet — season imminent, ~2-3 weeks out as of early April.",
+      "price_range": "Fresh: $15-34/#, Dried: $85-135/#"
+    },
+    {
+      "name": "Golden Chanterelle (Wild)",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "notes": "WA wild. Limited Jul-Aug (weather dependent), peak Sep-Oct with best prices. Buttons ideal for pickling. Season ends by late Dec.",
+      "price_range": "$9-26/# (peak Oct ~$9-11/#)"
+    },
+    {
+      "name": "White Chanterelle",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "notes": "WA Cascades. Below-average years common. Available Aug-Oct in limited quantities alongside golden chanterelle.",
+      "price_range": "$9.50-12.50/#"
+    },
+    {
+      "name": "Yellowfoot Chanterelle",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        2,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "notes": "OR/WA wild. Winter variety starting mid-Nov. Abundant Jan at lowest prices. Available through Feb-Mar. One of three core winter wilds.",
+      "price_range": "$8-9.75/#"
+    },
+    {
+      "name": "Black Trumpet",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        2,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "notes": "OR (Siskiyou Mtns) wild. Starts late Nov, peaks Dec-Jan with dramatic price drops. Nearly flawless quality in warm winters. One of three core winter wilds.",
+      "price_range": "$10-25.50/# (peak Jan ~$10-11/#)"
+    },
+    {
+      "name": "Hedgehog (Sweet Tooth & Bellybutton)",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2
+      ],
+      "notes": "WA/OR wild. Sweet Tooth Sep-Nov, Bellybutton Nov-Feb. Peak Oct-Jan. Bellybutton is the winter variety — one of three core winter wilds.",
+      "price_range": "$10.50-13.50/# (bulk discounts available)"
+    },
+    {
+      "name": "Lobster Mushroom",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "notes": "WA coastal wild. Starts late Jul, peak Aug (most abundant summer mushroom). Continues into Oct. Grows deep in duff — reliable even in dry years.",
+      "price_range": "$8.25-17.75/# (peak Aug-Sep ~$10-12/#)"
+    },
+    {
+      "name": "Matsutake",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        3,
+        0
+      ],
+      "notes": "WA/OR wild. Quality improves with freezing nights (early Sep product often poor). Peak Oct with all grades. Volcanic-area fruit (late Sep) is best quality.",
+      "price_range": "#1: $21-27/#, #2-3: $10.50-17/#, #4: $10.50/#"
+    },
+    {
+      "name": "Porcini / King Bolete",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "notes": "Two seasons: spring (May-Jun, limited, WA/OR) and fall coastal flush (Oct, abundant). Moisture-loving — dry years produce almost nothing. Fall is the reliable window.",
+      "price_range": "#1: $22-34/#, #2: $14-18/#, #3: $8.50-10.50/#"
+    },
+    {
+      "name": "Cauliflower Mushroom",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        3,
+        3
+      ],
+      "notes": "WA/OR wild. Sep-Oct available, Nov-Dec ending/limited. Final offerings from Oregon sources in Dec.",
+      "price_range": "$16.50/#"
+    },
+    {
+      "name": "Chicken of the Woods",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        3,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA wild. Mid-summer mushroom. Available Jul-Aug, ending early Sep. Small/sporadic quantities.",
+      "price_range": "$13.50/#"
+    },
+    {
+      "name": "Wine Cap Mushroom",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA (Kitsap biodynamic farm). Semi-wild, brief spring window in Apr. Limited availability, lasts a few weeks.",
+      "price_range": "$12.50/#"
+    },
+    {
+      "name": "Douglas Fir Truffle",
+      "category": "mushroom",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "notes": "PNW wild. Rare/premium. Black and white varieties. Mentioned Dec 2025 only — limited data. Seasonal window likely Nov-Jan.",
+      "price_range": "Black $185/#, White $120/#"
+    },
+    {
+      "name": "Bigleaf Maple Blossoms",
+      "category": "flower",
+      "vendor": "Foraged & Found Edibles",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Wild foraged (WA). Spring blossoms for garnish. New on April 5 sheet.",
+      "price_range": "$18.50/#"
+    },
+    {
+      "name": "Halibut (New Season)",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "New season starting 3/30! H&G $15.95/lb, Skin-on fillet $25.95/lb. Alaska sourced.",
+      "price_range": "$15.95-$25.95/lb"
+    },
+    {
+      "name": "Black Cod",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "Washington sourced. Available year-round.",
+      "price_range": "Check EC Wilson sheet"
+    },
+    {
+      "name": "Petrale Sole Fillet",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "notes": "Washington sourced. Winter/spring season.",
+      "price_range": "Check EC Wilson sheet"
+    },
+    {
+      "name": "Rockfish Fillet",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "Washington sourced. Available year-round.",
+      "price_range": "Check EC Wilson sheet"
+    },
+    {
+      "name": "Manila Clams",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "Washington sourced. Year-round availability.",
+      "price_range": "Check EC Wilson sheet"
+    },
+    {
+      "name": "Mussels",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "Washington sourced (Penn Cove area). Year-round.",
+      "price_range": "Check EC Wilson sheet"
+    },
+    {
+      "name": "Oysters (Samish Pearl/Kusshi)",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "Samish Pearl (WA) and Kusshi (Canada). Year-round.",
+      "price_range": "Check EC Wilson sheet"
+    },
+    {
+      "name": "Sea Scallops",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "Fresh dry pack: U10 $41.95/8lb, U12 $37.95/8lb, U14-15 $29.95/8lb (MA). Also IQF Weathervane AK scallops (wild, frozen). Year-round via Key City (Port Townsend). Sheet 4/8/26.",
+      "price_range": "$29.95-$41.95/8lb (fresh dry pack)"
+    },
+    {
+      "name": "Smoked Trout",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From Key City Fish Co. Year-round availability.",
+      "price_range": "Check Key City sheet"
+    },
+    {
+      "name": "English Peas",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "In stock but tight supply confirmed again on 4/6 sheet. Spring/summer seasonal.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Fava Beans",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "In stock as of 3/23. Spring/summer seasonal.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Sugar Snap Peas",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "In stock as of 3/23.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Snow Peas",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "In stock as of 3/23.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Pea Vines",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "In stock as of 3/23. Delicate garnish green.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Hydro Chervil",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Hydroponic, Rain City WA. Featured on Franks 4/6 sheet. Delicate anise-flavored herb; excellent for spring plating.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Hydro Frilly Mustard",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Hydroponic, Rain City WA. Featured on Franks 4/6 sheet. Specialty mustard green with frilly texture; good for garnish and salads.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Asparagus",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA Asparagus still delayed as of 4/6 — freezing temps pushed back harvest. CA asparagus available meanwhile.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Rhubarb (Hot House)",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Hot house rhubarb ENDED as of 4/6. Field grown coming soon. Frozen slices (5lb/30lb packs) available as gap fill.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Castelfranco",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "notes": "Shortage still an issue confirmed on 4/6 sheet. Mid-April expected for regular supply.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Purple Sprouting Broccoli",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "From Bumblebee Farm (Fall City). 'Still flowin out of the fields' as of 4/7. Incredibly tender broccoli shoots. Short spring window.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Arugula (Local)",
+      "category": "green",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "notes": "Roquette variety from High & Dry Farm (Sultan). First local lettuce to market as of 4/7! Limited quantities this early. Mildly spicy.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Chives (Local)",
+      "category": "green",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "From Steel Wheel Farm (Fall City). Spring chives with closed flower blossoms as of 4/7.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "Green Garlic",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Available via Willamette Valley farms through Farmstand as of 3/24. Spring seasonal — override: not commodity garlic.",
+      "price_range": "Check Farmstand shop"
+    },
+    {
+      "name": "WA Wheatgrass",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Arriving week of 3/30! 20# cases. Washington-grown spring seasonal.",
+      "price_range": "Check Franks sheet"
+    },
+    {
+      "name": "Dover Sole Fillet",
+      "category": "sea",
+      "vendor": "EC Wilson",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "notes": "Washington sourced. Available on 3/30 sheet. Winter/spring flatfish.",
+      "price_range": "Check EC Wilson sheet"
+    },
+    {
+      "name": "Rhubarb (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Available from early April through June. One of the first farm crops of the season.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Mustard Greens",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Purple and green varieties. 'Need to move soon' note on May 10 sheet. Early spring crop.",
+      "price_range": "N/A — our farm",
+      "available_2026": false
+    },
+    {
+      "name": "Nettle",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Available April–May. Classic spring foraged green.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Sorrel (French)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Green French variety. Very lemony flavor. Becomes 'French sorrel' on June sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Lovage",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Celery-like herb. Available April through summer, highlighted green (abundant) on June sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Mache",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Delicate salad green. Spring crop April–June.",
+      "price_range": "N/A — our farm",
+      "available_2026": false
+    },
+    {
+      "name": "Chives",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Garlic and regular varieties available by June. Highlighted green (abundant) on May and June sheets.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Chard",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Red stemmed variety. Available April through summer.",
+      "price_range": "N/A — our farm",
+      "available_2026": false
+    },
+    {
+      "name": "Lemon Balm (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Appears on April 29 sheet onward. Highlighted green (abundant) on June sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Lilacs",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Appears on April 29 sheet. Seasonal cut flower / garnish.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Angelica",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Leaves and pods by June. Appears starting May 10 sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Radish",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Pearl and pink varieties. Highlighted green (abundant) on May 10 sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Mint",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Highlighted green (abundant) on May 10 sheet. Prolific grower.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Oregano",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Italian and golden varieties. Highlighted green (abundant) on June sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Thyme",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Available May through September. Perennial herb.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Sweet Cicely",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Leaves and pods by June. Anise-flavored herb.",
+      "price_range": "N/A — our farm",
+      "available_2026": false
+    },
+    {
+      "name": "Rose Petals",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Highlighted green (abundant) on June sheet. Edible garnish.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Honeysuckle",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Highlighted green (abundant) on June sheet. Sweet floral flavor.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Edible Flowers",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Mix of violas by June. Various seasonal blooms May through September.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Nasturtium",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Leaves and flowers. Peppery flavor. Appears on June 23 sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Chamomile",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Appears on June 23 sheet. Great for teas and garnish.",
+      "price_range": "N/A — our farm",
+      "available_2026": false
+    },
+    {
+      "name": "Raspberries",
+      "category": "berry",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Appears on June 23 sheet. Peak summer berry.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Green Garlic",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "'Only enough for farm dinner' note on June 23 sheet. Very limited supply.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Kohlrabi",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Highlighted green (abundant) on June 23 sheet.",
+      "price_range": "N/A — our farm",
+      "available_2026": false
+    },
+    {
+      "name": "Kale (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "notes": "Appears on June 23 sheet. Main season summer through fall.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Bronze Fennel",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Appears on June 23 sheet. Ornamental and culinary herb.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Rosemary",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Appears on June 23 sheet. Perennial, peak in summer.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Lavender",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Appears on June 23 sheet. Culinary and garnish use.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Grape Leaves",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Appears on June 23 sheet. For wrapping and cooking.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Flowering Branches",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Cut flowers. Available April–June. Spring bloom decorative use.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Duck Eggs",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "notes": "Available April through October from the farm.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Chicken Eggs",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "notes": "Available April through November from the farm.",
+      "price_range": "N/A — our farm",
+      "available_2026": true
+    },
+    {
+      "name": "Turnips",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+      ],
+      "notes": "Violetta and purple top varieties. Spring and fall crop from 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Potatoes (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": false,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "New potatoes by June. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Garlic Scapes",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Brief June-July window. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Beets (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": false,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Red and golden varieties. Bulls blood variety historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Snap/Snow Peas",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Mammoth variety. Includes pea shoots. Mixed colors historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Lettuce (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Red romaine and salanova green mix. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Currants",
+      "category": "berry",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Black and red varieties. Brief summer window. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Cabbage (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0
+      ],
+      "notes": "Green and red varieties. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Zucchini (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Summer squash. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Dried Beans",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": false,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0
+      ],
+      "notes": "Teggia, Pellegrini, Rattlesnake, Runner varieties historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Walla Walla Onions",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Walla Walla sweet and Cippolini varieties. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Tomatoes (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Heirloom slicers and saladettes. Cherry tomatoes (small and saladette). From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Sweet Peppers (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Nardello, Buena Mulata, Aji Crystal, Aleppo historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Padron/Shishito (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Also Poblano, Sugar Rush Peach historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Eggplant (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "From 2026 plan. Late summer crop.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "GCR Squash",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0
+      ],
+      "notes": "Georgia Candy Roaster. Summer/winter squash crossover. LOTS historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Honeynut Squash",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1
+      ],
+      "notes": "Winter squash. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Cucumber (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Silver slicer, Japanese, Persian (no lemon). From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Carrots (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Deep purple variety. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Marjoram (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Variegated variety historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Savory",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Lemon Verbena",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Basil (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Cinnamon and Genovese varieties historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Dill (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Dukat variety historically. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Marigolds",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Edible flower. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Violas",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Part of edible flowers mix. Spring bloom. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Calendula",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Edible flower. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Cut Flowers (Farm)",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Zinnia, Amaranth, Snapdragon, Cosmos, Dahlia. From 2026 plan.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Beef Shanks",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From freezer. Available now. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Beef Tenderloin",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From freezer. 3-4lbs total, small run of tartar. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Ground Beef / Bolo Meat",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From freezer. 425lbs. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Lamb Loin Chops",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "From freezer. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Lamb-Pork Sausage",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "May-Jun. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Pork Belly",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "May-Jun. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Pork Chops",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "May-Jun. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Pork Shanks",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "May onward. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Beef Primals",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "notes": "Jul onward. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Guanciale (House-Cured)",
+      "category": "protein",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jul-Aug after cure. Tim 2026 confirmed.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Cilantro (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jul. Invoice history 2024.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Loganberries",
+      "category": "berry",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Aug. Invoice history 2023.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Cherry Tomatoes (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jul-Sep. Small and saladette varieties.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Heirloom Tomatoes (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Aug-Oct. Peak late summer.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Apples (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0
+      ],
+      "notes": "Sep-Nov. King variety and others.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Snow Peas",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jun-Jul.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Squash (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jul-Sep. Various summer varieties.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Peppers (Farm)",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "notes": "Sep. Various varieties incl. Nardello, Buena Mulata, Aji Crystal.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Mixed Berries (Farm)",
+      "category": "berry",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jul-Sep. Raspberry, boysenberry, mulberry mix.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Chive Blossoms",
+      "category": "flower",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jun. Invoice history 2023-2024.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Parsley (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jun-Aug. Invoice history 2024.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Tarragon (Farm)",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jun-Aug. French variety.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Tomato Leaf",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "Jun-Sep. For infusions and garnish.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Borage",
+      "category": "green",
+      "vendor": "Swan House Farms",
+      "source": "farm",
+      "available_2026": true,
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Aug. Invoice history 2021.",
+      "price_range": "N/A — our farm"
+    },
+    {
+      "name": "Chicories (Mixed)",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2
+      ],
+      "notes": "Radicchio, Castelfranco, Treviso, Frisee, Escarole, Sugar Loaf. WA grown peak fall through winter. Jeff's mixed cases available Sep-Apr.",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Corn (Bi-Color)",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "CA first, then WA grown peak Aug-Sep. Jeff: 'Gorgeous Bi Color Corn from WA' (Aug 2025).",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Cranberries (Fresh)",
+      "category": "berry",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1
+      ],
+      "notes": "WA grown, Ocean Spray label. Jeff: 'Fresh PNW Cranberries in stock' (Oct-Nov).",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Heirloom Peppers",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "notes": "Nardellos, Shishitos, Gypsy, Fresno, Poblano, Anaheim, Hatch. WA grown Jul-Oct. 100+ invoices.",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Kumquats",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        3,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "notes": "CA citrus. Jeff notes gapping issues Jan 2026. Season ~Nov-Mar.",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Meyer Lemon",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "notes": "CA citrus. Peak winter. Year-round conventional available but seasonal CA crop is best.",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Peaches",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA stone fruit peak Aug. Jeff: 'WA grown stone fruits — peaches, nectarines, donut peaches'.",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Persimmons (Fuyu)",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "notes": "CA crop Oct-Dec, import Jan hanging on. Jeff: 'Persimmons available until new year'.",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Plums & Pluots",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA stone fruit. Italian prune plums Aug. Jeff: 'Apricots, Peaches, Plums, Pluots all looking good' (Jul).",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Strawberries (Local)",
+      "category": "berry",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA hydroponic start Apr, field Jun-Aug peak. Jeff: 'WA Grown Hydroponic Strawberries available' (Apr).",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Sunchokes",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "notes": "Newaukum Valley Farm, WA. Season Oct-May/June. Jeff: 'Out of season, back late fall' (May).",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Watermelon",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        3,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA grown Yumi. Jeff: 'Watermelon season winding down' (Sep).",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Winter Squash",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2
+      ],
+      "notes": "WA grown: Butternut, Kabocha, Acorn, Spaghetti, Sugar Pie, Winter Luxury, Kuri, Honeynut, Delicata. Kuri/Honeynut done by mid-Dec. Jan-Feb = CA/MEX stock.",
+      "price_range": "See invoice data"
+    },
+    {
+      "name": "Apricots",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA peak Aug. Jeff: 'Apricots back to CA but ending soon' (Aug).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Baby Artichokes",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "notes": "CA grown. Jeff: 'Baby Artichokes should be back soon' (Apr).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Bergamot",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "notes": "CA specialty citrus. Jeff groups with buddha hand, yuzu, makrut (Oct start).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Buddha Hand",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "notes": "CA specialty citrus. On fresh sheet Oct-Feb.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Garlic Scapes",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA grown. Short season. Jeff: 'Garlic Scapes in house!!' (Jun), 'run their course' (Jul).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Green Beans",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA grown. Jeff: 'Green Beans, Yellow Wax, Romano around until September' (Jul).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Mission Figs",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        3,
+        3,
+        0
+      ],
+      "notes": "CA grown. Jeff: 'Figs winding down, couple weeks left' (Nov).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Nectarines",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA stone fruit. Same season as peaches.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Parsley Root",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "notes": "WA grown. Jeff: 'Organic Parsley Root from WA, Boldly Grown Farm' (Nov).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Pomegranate",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        2,
+        1
+      ],
+      "notes": "CA crop Aug-Dec (better pricing than imports). Import available other months. Jeff: 'CA Pomegranate Season just started!' (Aug).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Quince",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        3
+      ],
+      "notes": "CA grown. Jeff: 'Quince done for the season' (Jan). Short fall window.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Rainier Cherries",
+      "category": "berry",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA grown. Very short peak. Jeff: 'Rainier Cherries ending fast, guessing a week' (Aug).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Red Cherries",
+      "category": "berry",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA grown. Last longer than Rainiers. Jeff: 'Red cherries in some form for the next month' (after Rainiers end).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Romano Beans",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA grown. Same season as green/wax beans. Jul-Sep.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Tayberries",
+      "category": "berry",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA local berry. Short season. Jeff groups with local berry peak (Jul).",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Yellow Wax Beans",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "notes": "WA grown. Same season as green/romano beans.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Yuzu",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "notes": "CA specialty citrus. Jeff: 'Yuzu done for the season' (Jan). Oct-Dec peak.",
+      "price_range": "Check fresh sheet"
+    },
+    {
+      "name": "Troll King Salmon",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "months": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "notes": "Fresh O/R Troll King Salmon, AK — confirmed available April 2026. Troll-caught wild; season runs spring through fall, peak May-Aug. Restaurant pricing: $19.95/lb whole, $28.95/lb fillet (sheet 4/8/26). Re-Fresh H&G also available BC $14.25/lb whole.",
+      "price_range": "$19.95/lb whole, $28.95/lb fillet"
+    },
+    {
+      "name": "Troll Coho Salmon",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "months": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0
+      ],
+      "notes": "Troll-caught Coho, AK. Available Apr as re-fresh ($8.99/lb, $12.99/fillet). Peak fresh season Aug-Oct. Sheet 4/8/26.",
+      "price_range": "$8.99/lb whole, $12.99/lb fillet"
+    },
+    {
+      "name": "Dungeness Crab (Live, WA)",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "months": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2
+      ],
+      "notes": "Live WA/OR Dungeness Crab — prime Dec-Mar, available through June, unavailable Jul-Oct (molting). $17.99/lb live. Picked meat: $49.95/lb tub or $48.50/lb (5lb can). Key City, Port Townsend. Sheet 4/8/26.",
+      "price_range": "$17.99/lb live, $49.95/lb crabmeat"
+    },
+    {
+      "name": "Geoduck (WA, Live)",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "notes": "Live WA Geoduck — pre-order required, dive harvest quota controlled. Best fall through spring. $36.95/lb. Sheet 4/8/26.",
+      "price_range": "$36.95/lb"
+    }
+  ],
+  "menu_planning": {
+    "current_month_summary": "Mid-April — peak spring foraging season. Last automated run: 4/12. All 8 vendors checked. F&F no new sheet since 4/5; Local Roots current 4/10; Farmstand current 4/7; Franks current 4/6; EC Wilson active (invoices confirm orders through 4/5 week) but no new fresh sheet since 3/30; Key City no new sheet since 3/11; Preserve Meat last contact 4/4 (bavette supply alert); Sea Breeze newsletters only, no fresh sheet. New this run: Frozen Tayberries added (Farmstand/Hayton Farms), Magnolia Buds downgraded to 'ending' (absent from 4/5 sheet). Preserve Meat vendor date updated to 4/4.",
+    "whats_peaking": [
+      "Stinging Nettles (Foraged & Found — 50# volume pricing at $7.50/#; also available through Franks)",
+      "Ramps (Foraged & Found — fully available, $19.50/#)",
+      "Fiddleheads (Foraged & Found — volume pricing for 20#+)",
+      "Wild Watercress (Foraged & Found — taking off for spring)",
+      "Purple Sprouting Broccoli (Farmstand/Bumblebee Farm — still flowing, act now)",
+      "Mixed Rapini (Local Roots — only rapini on 4/10 sheet, really awesome; Farmstand also has rapini)",
+      "Beets (Local Roots on sale + Farmstand/Caruso Farm)",
+      "Halibut (EC Wilson — new season in full swing)"
+    ],
+    "whats_coming": [
+      "WA Asparagus (Franks — still delayed by freezing temps as of 4/6)",
+      "Field Grown Rhubarb (Franks — replacing ended hot house, coming soon)",
+      "Baby Artichokes (Franks — back soon, no date yet)",
+      "Local Roots replanted crops (baby lettuce, arugula, radishes, salad mix — mid-May)",
+      "Swan House Farms first crops (rhubarb, mustard greens, nettles, sorrel, mache — mid-April)",
+      "Morels (Foraged & Found — May)",
+      "Castelfranco regular supply (Franks — mid-April)"
+    ],
+    "whats_ending": [
+      "Magnolia Buds (Foraged & Found — not on 4/5 sheet, likely ended for the season)",
+      "Curly Kale Rapini (Local Roots — off 4/10 sheet, uncertain supply; only Mixed Rapini this week)",
+      "Hot House Rhubarb (Franks — ENDED as of 4/6, frozen slices available as bridge)",
+      "Watermelon Radish (Local Roots — gone)",
+      "Red Onions (Local Roots — gone)",
+      "Miner's Lettuce transitioning to higher elevations (Foraged & Found — limited)",
+      "Less-local organic supplementation winding down as local produce returns (Farmstand)"
+    ],
+    "alerts": [
+      "Local Roots flood recovery: replanted greenhouses, warm/dry stretch expected to help. Crops 4-5 weeks out.",
+      "Basil market still recovering (Franks) — supply improving but pricing difficult.",
+      "Preserve Meat bavettes tight — Sean suggesting alternative cuts (ribeye, tenderloin, striploin, flat iron, culotte, outside skirt). May face back-orders.",
+      "Castelfranco shortage continues (Franks) — regular supply expected mid-April.",
+      "WA Asparagus delayed by freezing temps (Franks)."
+    ]
+  }
+};
+
+const PRICE_TRENDS = {
+  "Asparagus": {
+    "price": 4.73,
+    "date": "2025-06-26",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 4.14,
+      "max": 5.45
+    },
+    "count": 9,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-06-04",
+        "price": 5.45
+      },
+      {
+        "date": "2025-06-05",
+        "price": 4.14
+      },
+      {
+        "date": "2025-06-06",
+        "price": 5.45
+      },
+      {
+        "date": "2025-06-12",
+        "price": 4.73
+      },
+      {
+        "date": "2025-06-19",
+        "price": 4.73
+      },
+      {
+        "date": "2025-06-20",
+        "price": 4.73
+      },
+      {
+        "date": "2025-06-21",
+        "price": 4.73
+      },
+      {
+        "date": "2025-06-26",
+        "price": 4.73
+      }
+    ]
+  },
+  "Black Cod": {
+    "price": 9.95,
+    "date": "2025-12-17",
+    "unit": "lb",
+    "vendor": "key_city_fish",
+    "range": {
+      "min": 8.99,
+      "max": 11.95
+    },
+    "count": 7,
+    "t30": 10.7,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-03-26",
+        "price": 8.99
+      },
+      {
+        "date": "2025-04-05",
+        "price": 11.95
+      },
+      {
+        "date": "2025-04-17",
+        "price": 11.95
+      },
+      {
+        "date": "2025-04-18",
+        "price": 11.95
+      },
+      {
+        "date": "2025-04-21",
+        "price": 8.99
+      },
+      {
+        "date": "2025-06-10",
+        "price": 8.99
+      },
+      {
+        "date": "2025-12-17",
+        "price": 9.95
+      }
+    ]
+  },
+  "Chicken Feet": {
+    "price": 2.09,
+    "date": "2025-12-13",
+    "unit": "lb",
+    "vendor": "ec_wilson",
+    "range": {
+      "min": 0.85,
+      "max": 2.49
+    },
+    "count": 17,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-10-21",
+        "price": 2.09
+      },
+      {
+        "date": "2025-11-03",
+        "price": 2.09
+      },
+      {
+        "date": "2025-11-07",
+        "price": 2.09
+      },
+      {
+        "date": "2025-11-17",
+        "price": 2.09
+      },
+      {
+        "date": "2025-11-28",
+        "price": 2.09
+      },
+      {
+        "date": "2025-12-05",
+        "price": 2.09
+      },
+      {
+        "date": "2025-12-08",
+        "price": 2.09
+      },
+      {
+        "date": "2025-12-13",
+        "price": 2.09
+      }
+    ]
+  },
+  "Chicories (Mixed)": {
+    "price": 29.5,
+    "date": "2026-03-23",
+    "unit": "cs",
+    "vendor": "franks",
+    "range": {
+      "min": 24.5,
+      "max": 34.5
+    },
+    "count": 10,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-06-11",
+        "price": 34.5
+      },
+      {
+        "date": "2025-06-16",
+        "price": 34.5
+      },
+      {
+        "date": "2025-06-23",
+        "price": 34.5
+      },
+      {
+        "date": "2025-07-01",
+        "price": 34.5
+      },
+      {
+        "date": "2025-08-14",
+        "price": 32.5
+      },
+      {
+        "date": "2025-08-15",
+        "price": 29.5
+      },
+      {
+        "date": "2026-03-13",
+        "price": 24.5
+      },
+      {
+        "date": "2026-03-23",
+        "price": 29.5
+      }
+    ]
+  },
+  "Corn (Bi-Color)": {
+    "price": 42.0,
+    "date": "2025-09-04",
+    "unit": "cs",
+    "vendor": "franks",
+    "range": {
+      "min": 42.0,
+      "max": 44.0
+    },
+    "count": 26,
+    "t30": -4.5,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-08-11",
+        "price": 44.0
+      },
+      {
+        "date": "2025-08-14",
+        "price": 42.0
+      },
+      {
+        "date": "2025-08-15",
+        "price": 42.0
+      },
+      {
+        "date": "2025-08-19",
+        "price": 42.0
+      },
+      {
+        "date": "2025-08-25",
+        "price": 42.0
+      },
+      {
+        "date": "2025-08-28",
+        "price": 42.0
+      },
+      {
+        "date": "2025-09-02",
+        "price": 42.0
+      },
+      {
+        "date": "2025-09-04",
+        "price": 42.0
+      }
+    ]
+  },
+  "Cranberries (Fresh)": {
+    "price": 2.85,
+    "date": "2025-12-20",
+    "unit": "bag_12oz",
+    "vendor": "franks",
+    "range": {
+      "min": 2.75,
+      "max": 2.85
+    },
+    "count": 12,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-10-24",
+        "price": 2.85
+      },
+      {
+        "date": "2025-10-31",
+        "price": 2.85
+      },
+      {
+        "date": "2025-11-06",
+        "price": 2.85
+      },
+      {
+        "date": "2025-11-12",
+        "price": 2.85
+      },
+      {
+        "date": "2025-11-21",
+        "price": 2.85
+      },
+      {
+        "date": "2025-12-03",
+        "price": 2.85
+      },
+      {
+        "date": "2025-12-19",
+        "price": 2.85
+      },
+      {
+        "date": "2025-12-20",
+        "price": 2.85
+      }
+    ]
+  },
+  "Duck Breast, Culver Pekin": {
+    "price": 12.59,
+    "date": "2025-01-17",
+    "unit": "lb",
+    "vendor": "ec_wilson",
+    "range": {
+      "min": 12.59,
+      "max": 12.59
+    },
+    "count": 1,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-01-17",
+        "price": 12.59
+      }
+    ]
+  },
+  "English Peas": {
+    "price": 2.98,
+    "date": "2025-07-25",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 1.21,
+      "max": 3.12
+    },
+    "count": 13,
+    "t30": -2.3,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-07-07",
+        "price": 2.98
+      },
+      {
+        "date": "2025-07-09",
+        "price": 2.98
+      },
+      {
+        "date": "2025-07-12",
+        "price": 2.98
+      },
+      {
+        "date": "2025-07-15",
+        "price": 2.98
+      },
+      {
+        "date": "2025-07-18",
+        "price": 2.98
+      },
+      {
+        "date": "2025-07-19",
+        "price": 2.98
+      },
+      {
+        "date": "2025-07-22",
+        "price": 2.98
+      },
+      {
+        "date": "2025-07-25",
+        "price": 2.98
+      }
+    ]
+  },
+  "Golden Chanterelle (Wild)": {
+    "price": 12.75,
+    "date": "2025-11-06",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 12.75,
+      "max": 15.5
+    },
+    "count": 3,
+    "t30": -5.6,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-09-09",
+        "price": 15.5
+      },
+      {
+        "date": "2025-09-26",
+        "price": 13.5
+      },
+      {
+        "date": "2025-11-06",
+        "price": 12.75
+      }
+    ]
+  },
+  "Halibut (New Season)": {
+    "price": 14.99,
+    "date": "2025-12-19",
+    "unit": "lb",
+    "vendor": "key_city_fish",
+    "range": {
+      "min": 14.95,
+      "max": 15.99
+    },
+    "count": 9,
+    "t30": -3.3,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-09-23",
+        "price": 14.95
+      },
+      {
+        "date": "2025-09-26",
+        "price": 14.95
+      },
+      {
+        "date": "2025-09-29",
+        "price": 14.95
+      },
+      {
+        "date": "2025-10-21",
+        "price": 14.99
+      },
+      {
+        "date": "2025-11-01",
+        "price": 14.99
+      },
+      {
+        "date": "2025-11-07",
+        "price": 15.5
+      },
+      {
+        "date": "2025-12-17",
+        "price": 15.99
+      },
+      {
+        "date": "2025-12-19",
+        "price": 14.99
+      }
+    ]
+  },
+  "Heirloom Peppers": {
+    "price": 9.75,
+    "date": "2026-03-30",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 1.25,
+      "max": 9.75
+    },
+    "count": 47,
+    "t30": 21.9,
+    "tyoy": 30.0,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-11-03",
+        "price": 2.5
+      },
+      {
+        "date": "2025-11-05",
+        "price": 2.5
+      },
+      {
+        "date": "2025-11-17",
+        "price": 2.5
+      },
+      {
+        "date": "2025-12-22",
+        "price": 2.99
+      },
+      {
+        "date": "2025-12-31",
+        "price": 5.0
+      },
+      {
+        "date": "2026-01-19",
+        "price": 8.0
+      },
+      {
+        "date": "2026-03-23",
+        "price": 8.0
+      },
+      {
+        "date": "2026-03-30",
+        "price": 9.75
+      }
+    ]
+  },
+  "Kumquats": {
+    "price": 7.5,
+    "date": "2025-06-05",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 7.5,
+      "max": 7.5
+    },
+    "count": 1,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-06-05",
+        "price": 7.5
+      }
+    ]
+  },
+  "Ladyfern Fiddleheads": {
+    "price": 10.5,
+    "date": "2025-04-29",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 10.5,
+      "max": 10.5
+    },
+    "count": 1,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-04-29",
+        "price": 10.5
+      }
+    ]
+  },
+  "Lobster Mushroom": {
+    "price": 12.0,
+    "date": "2025-09-17",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 12.0,
+      "max": 12.0
+    },
+    "count": 1,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-09-17",
+        "price": 12.0
+      }
+    ]
+  },
+  "Maitake Mushrooms": {
+    "price": 13.29,
+    "date": "2026-04-01",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 13.24,
+      "max": 14.19
+    },
+    "count": 4,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2026-03-20",
+        "price": 14.19
+      },
+      {
+        "date": "2026-03-21",
+        "price": 14.19
+      },
+      {
+        "date": "2026-03-26",
+        "price": 13.24
+      },
+      {
+        "date": "2026-04-01",
+        "price": 13.29
+      }
+    ]
+  },
+  "Manila Clams": {
+    "price": 4.99,
+    "date": "2025-06-19",
+    "unit": "lb",
+    "vendor": "key_city_fish",
+    "range": {
+      "min": 4.99,
+      "max": 4.99
+    },
+    "count": 10,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-03-29",
+        "price": 4.99
+      },
+      {
+        "date": "2025-04-05",
+        "price": 4.99
+      },
+      {
+        "date": "2025-04-17",
+        "price": 4.99
+      },
+      {
+        "date": "2025-04-23",
+        "price": 4.99
+      },
+      {
+        "date": "2025-04-25",
+        "price": 4.99
+      },
+      {
+        "date": "2025-05-01",
+        "price": 4.99
+      },
+      {
+        "date": "2025-05-03",
+        "price": 4.99
+      },
+      {
+        "date": "2025-06-19",
+        "price": 4.99
+      }
+    ]
+  },
+  "Meyer Lemon": {
+    "price": 2.56,
+    "date": "2026-03-21",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 2.56,
+      "max": 3.75
+    },
+    "count": 6,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-07-07",
+        "price": 3.75
+      },
+      {
+        "date": "2025-07-18",
+        "price": 3.75
+      },
+      {
+        "date": "2025-08-07",
+        "price": 3.75
+      },
+      {
+        "date": "2025-09-20",
+        "price": 3.75
+      },
+      {
+        "date": "2026-01-15",
+        "price": 2.56
+      },
+      {
+        "date": "2026-03-21",
+        "price": 2.56
+      }
+    ]
+  },
+  "Morels (Wild)": {
+    "price": 15.75,
+    "date": "2025-06-12",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 15.75,
+      "max": 31.5
+    },
+    "count": 4,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-05-16",
+        "price": 31.5
+      },
+      {
+        "date": "2025-05-28",
+        "price": 17.5
+      },
+      {
+        "date": "2025-06-04",
+        "price": 15.75
+      },
+      {
+        "date": "2025-06-12",
+        "price": 15.75
+      }
+    ]
+  },
+  "Palouse Pastured Chicken Eggs (Large)": {
+    "price": 99.99,
+    "date": "2025-07-21",
+    "unit": "case",
+    "vendor": "preserve_meat",
+    "range": {
+      "min": 83.88,
+      "max": 99.99
+    },
+    "count": 14,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-05-07",
+        "price": 99.99
+      },
+      {
+        "date": "2025-05-12",
+        "price": 99.99
+      },
+      {
+        "date": "2025-05-19",
+        "price": 99.99
+      },
+      {
+        "date": "2025-05-27",
+        "price": 99.99
+      },
+      {
+        "date": "2025-06-30",
+        "price": 99.99
+      },
+      {
+        "date": "2025-07-07",
+        "price": 99.99
+      },
+      {
+        "date": "2025-07-14",
+        "price": 99.99
+      },
+      {
+        "date": "2025-07-21",
+        "price": 99.99
+      }
+    ]
+  },
+  "Peaches": {
+    "price": 2.67,
+    "date": "2025-10-07",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 2.67,
+      "max": 3.06
+    },
+    "count": 17,
+    "t30": -7.6,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-09-09",
+        "price": 2.89
+      },
+      {
+        "date": "2025-09-10",
+        "price": 2.89
+      },
+      {
+        "date": "2025-09-16",
+        "price": 2.67
+      },
+      {
+        "date": "2025-09-18",
+        "price": 2.67
+      },
+      {
+        "date": "2025-09-19",
+        "price": 2.67
+      },
+      {
+        "date": "2025-09-26",
+        "price": 2.67
+      },
+      {
+        "date": "2025-09-29",
+        "price": 2.67
+      },
+      {
+        "date": "2025-10-07",
+        "price": 2.67
+      }
+    ]
+  },
+  "Persimmons (Fuyu)": {
+    "price": 38.0,
+    "date": "2026-02-13",
+    "unit": "cs",
+    "vendor": "franks",
+    "range": {
+      "min": 38.0,
+      "max": 39.5
+    },
+    "count": 10,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2026-01-08",
+        "price": 38.0
+      },
+      {
+        "date": "2026-01-10",
+        "price": 38.0
+      },
+      {
+        "date": "2026-01-17",
+        "price": 38.0
+      },
+      {
+        "date": "2026-01-26",
+        "price": 38.0
+      },
+      {
+        "date": "2026-01-28",
+        "price": 38.0
+      },
+      {
+        "date": "2026-02-05",
+        "price": 38.0
+      },
+      {
+        "date": "2026-02-07",
+        "price": 38.0
+      },
+      {
+        "date": "2026-02-13",
+        "price": 38.0
+      }
+    ]
+  },
+  "Plums & Pluots": {
+    "price": 3.25,
+    "date": "2025-11-26",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 2.5,
+      "max": 3.25
+    },
+    "count": 5,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-09-03",
+        "price": 2.5
+      },
+      {
+        "date": "2025-10-16",
+        "price": 3.25
+      },
+      {
+        "date": "2025-10-23",
+        "price": 3.25
+      },
+      {
+        "date": "2025-10-30",
+        "price": 3.25
+      },
+      {
+        "date": "2025-11-26",
+        "price": 3.25
+      }
+    ]
+  },
+  "Porcini / King Bolete": {
+    "price": 12.5,
+    "date": "2025-06-27",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 12.5,
+      "max": 18.75
+    },
+    "count": 2,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-06-20",
+        "price": 18.75
+      },
+      {
+        "date": "2025-06-27",
+        "price": 12.5
+      }
+    ]
+  },
+  "Pure Country Beef Chuck": {
+    "price": 14.99,
+    "date": "2025-06-27",
+    "unit": "lb",
+    "vendor": "preserve_meat",
+    "range": {
+      "min": 14.99,
+      "max": 14.99
+    },
+    "count": 1,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-06-27",
+        "price": 14.99
+      }
+    ]
+  },
+  "Pure Country Beef Striploin": {
+    "price": 18.99,
+    "date": "2025-06-19",
+    "unit": "lb",
+    "vendor": "preserve_meat",
+    "range": {
+      "min": 18.99,
+      "max": 18.99
+    },
+    "count": 4,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-05-16",
+        "price": 18.99
+      },
+      {
+        "date": "2025-05-21",
+        "price": 18.99
+      },
+      {
+        "date": "2025-05-23",
+        "price": 18.99
+      },
+      {
+        "date": "2025-06-19",
+        "price": 18.99
+      }
+    ]
+  },
+  "Pure Country GL Pork Rack": {
+    "price": 6.5,
+    "date": "2025-05-12",
+    "unit": "lb",
+    "vendor": "preserve_meat",
+    "range": {
+      "min": 5.0,
+      "max": 6.5
+    },
+    "count": 15,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-04-18",
+        "price": 6.5
+      },
+      {
+        "date": "2025-04-21",
+        "price": 6.5
+      },
+      {
+        "date": "2025-04-25",
+        "price": 6.5
+      },
+      {
+        "date": "2025-04-28",
+        "price": 6.5
+      },
+      {
+        "date": "2025-05-01",
+        "price": 6.5
+      },
+      {
+        "date": "2025-05-03",
+        "price": 6.5
+      },
+      {
+        "date": "2025-05-07",
+        "price": 6.5
+      },
+      {
+        "date": "2025-05-12",
+        "price": 6.5
+      }
+    ]
+  },
+  "Ramps (Wild)": {
+    "price": 14.5,
+    "date": "2025-05-13",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 14.5,
+      "max": 14.5
+    },
+    "count": 1,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-05-13",
+        "price": 14.5
+      }
+    ]
+  },
+  "Rhubarb (Hot House)": {
+    "price": 3.5,
+    "date": "2025-06-23",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 3.5,
+      "max": 3.5
+    },
+    "count": 3,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-06-07",
+        "price": 3.5
+      },
+      {
+        "date": "2025-06-16",
+        "price": 3.5
+      },
+      {
+        "date": "2025-06-23",
+        "price": 3.5
+      }
+    ]
+  },
+  "Sitka Spruce Tips": {
+    "price": 16.5,
+    "date": "2025-05-16",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 16.5,
+      "max": 16.5
+    },
+    "count": 2,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-05-13",
+        "price": 16.5
+      },
+      {
+        "date": "2025-05-16",
+        "price": 16.5
+      }
+    ]
+  },
+  "Smoked Trout": {
+    "price": 8.49,
+    "date": "2025-08-30",
+    "unit": "lb",
+    "vendor": "key_city_fish",
+    "range": {
+      "min": 5.99,
+      "max": 8.49
+    },
+    "count": 18,
+    "t30": 6.3,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-08-07",
+        "price": 7.99
+      },
+      {
+        "date": "2025-08-09",
+        "price": 8.49
+      },
+      {
+        "date": "2025-08-14",
+        "price": 8.49
+      },
+      {
+        "date": "2025-08-18",
+        "price": 8.49
+      },
+      {
+        "date": "2025-08-23",
+        "price": 8.49
+      },
+      {
+        "date": "2025-08-28",
+        "price": 8.49
+      },
+      {
+        "date": "2025-08-29",
+        "price": 8.49
+      },
+      {
+        "date": "2025-08-30",
+        "price": 8.49
+      }
+    ]
+  },
+  "Snow Peas": {
+    "price": 4.4,
+    "date": "2025-08-25",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 4.4,
+      "max": 5.25
+    },
+    "count": 18,
+    "t30": -16.2,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-07-25",
+        "price": 5.25
+      },
+      {
+        "date": "2025-07-29",
+        "price": 5.25
+      },
+      {
+        "date": "2025-07-30",
+        "price": 5.25
+      },
+      {
+        "date": "2025-08-08",
+        "price": 5.25
+      },
+      {
+        "date": "2025-08-09",
+        "price": 5.25
+      },
+      {
+        "date": "2025-08-16",
+        "price": 5.25
+      },
+      {
+        "date": "2025-08-18",
+        "price": 5.25
+      },
+      {
+        "date": "2025-08-25",
+        "price": 4.4
+      }
+    ]
+  },
+  "Stinging Nettles": {
+    "price": 9.5,
+    "date": "2025-04-29",
+    "unit": "lb",
+    "vendor": "foraged_found",
+    "range": {
+      "min": 9.5,
+      "max": 9.5
+    },
+    "count": 2,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-04-11",
+        "price": 9.5
+      },
+      {
+        "date": "2025-04-29",
+        "price": 9.5
+      }
+    ]
+  },
+  "Strawberries (Local)": {
+    "price": 2.75,
+    "date": "2026-03-23",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 2.75,
+      "max": 3.69
+    },
+    "count": 9,
+    "t30": -25.5,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-07-02",
+        "price": 3.06
+      },
+      {
+        "date": "2025-07-10",
+        "price": 3.56
+      },
+      {
+        "date": "2025-07-31",
+        "price": 3.56
+      },
+      {
+        "date": "2025-08-13",
+        "price": 3.56
+      },
+      {
+        "date": "2025-08-21",
+        "price": 3.56
+      },
+      {
+        "date": "2025-09-03",
+        "price": 3.69
+      },
+      {
+        "date": "2026-03-14",
+        "price": 2.75
+      },
+      {
+        "date": "2026-03-23",
+        "price": 2.75
+      }
+    ]
+  },
+  "Sugar Snap Peas": {
+    "price": 4.92,
+    "date": "2025-08-25",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 4.92,
+      "max": 4.92
+    },
+    "count": 9,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-07-29",
+        "price": 4.92
+      },
+      {
+        "date": "2025-08-01",
+        "price": 4.92
+      },
+      {
+        "date": "2025-08-04",
+        "price": 4.92
+      },
+      {
+        "date": "2025-08-08",
+        "price": 4.92
+      },
+      {
+        "date": "2025-08-09",
+        "price": 4.92
+      },
+      {
+        "date": "2025-08-16",
+        "price": 4.92
+      },
+      {
+        "date": "2025-08-18",
+        "price": 4.92
+      },
+      {
+        "date": "2025-08-25",
+        "price": 4.92
+      }
+    ]
+  },
+  "Sunchokes": {
+    "price": 4.5,
+    "date": "2026-02-09",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 4.5,
+      "max": 4.5
+    },
+    "count": 2,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2026-02-03",
+        "price": 4.5
+      },
+      {
+        "date": "2026-02-09",
+        "price": 4.5
+      }
+    ]
+  },
+  "Watermelon": {
+    "price": 12.99,
+    "date": "2025-08-21",
+    "unit": "ea",
+    "vendor": "franks",
+    "range": {
+      "min": 12.99,
+      "max": 12.99
+    },
+    "count": 2,
+    "t30": null,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2025-08-06",
+        "price": 12.99
+      },
+      {
+        "date": "2025-08-21",
+        "price": 12.99
+      }
+    ]
+  },
+  "Winter Squash": {
+    "price": 1.5,
+    "date": "2026-02-11",
+    "unit": "lb",
+    "vendor": "franks",
+    "range": {
+      "min": 1.5,
+      "max": 1.75
+    },
+    "count": 18,
+    "t30": 0.0,
+    "tyoy": null,
+    "tseason": null,
+    "history": [
+      {
+        "date": "2026-01-15",
+        "price": 1.5
+      },
+      {
+        "date": "2026-01-16",
+        "price": 1.5
+      },
+      {
+        "date": "2026-01-17",
+        "price": 1.5
+      },
+      {
+        "date": "2026-01-22",
+        "price": 1.5
+      },
+      {
+        "date": "2026-01-29",
+        "price": 1.5
+      },
+      {
+        "date": "2026-02-02",
+        "price": 1.5
+      },
+      {
+        "date": "2026-02-05",
+        "price": 1.5
+      },
+      {
+        "date": "2026-02-11",
+        "price": 1.5
+      }
+    ]
+  }
+};
+
+        const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const CATEGORY_COLORS = {
+            mushroom: "#8B6914",
+            green: "#2D5F2D",
+            berry: "#8B2252",
+            sea: "#1A6B6B",
+            flower: "#6B4C8B",
+            produce: "#8B6B14",
+            protein: "#8B3A3A"
+        };
+
+        const ALL_CATEGORIES = ["mushroom", "green", "berry", "sea", "flower", "produce", "protein"];
+        const ALL_VENDORS = ['Swan House Farms', 'Local Roots Farm', 'Farmstand Local Foods', 'Foraged & Found Edibles', 'EC Wilson', 'Franks Quality Produce', 'Key City Fish', 'Preserve Meat', 'Sea Breeze Farm / Magic Meat Truck'];
+        let activeFilters = { categories: new Set(ALL_CATEGORIES), vendors: new Set(ALL_VENDORS), showSwanHouseAll: false };
+        const currentMonth = new Date().getMonth();
+
+        function initializeApp() {
+            updateLastUpdated();
+            renderFilters();
+            renderChart();
+            renderWeatherIntelligence();
+            renderMenuPlanning();
+            setupWeatherToggle();
+        }
+
+        function updateLastUpdated() {
+            const date = new Date(DATA.metadata.last_updated);
+            const formatter = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('lastUpdated').textContent = `Last updated: ${formatter.format(date)}`;
+        }
+
+        function renderFilters() {
+            const categoryDiv = document.getElementById('categoryFilters');
+            const sourceDiv = document.getElementById('sourceFilters');
+            categoryDiv.innerHTML = '';
+            sourceDiv.innerHTML = '';
+
+            // Category filters — click to show only that category, click again or All to reset
+            ['All', ...ALL_CATEGORIES].forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.dataset.filter = 'category';
+                btn.dataset.value = cat;
+                btn.textContent = cat === 'All' ? 'All Categories' : cat.charAt(0).toUpperCase() + cat.slice(1);
+                if (cat === 'All' && activeFilters.categories.size === ALL_CATEGORIES.length) btn.classList.add('active');
+                else if (cat !== 'All' && activeFilters.categories.has(cat)) btn.classList.add('active');
+                btn.addEventListener('click', () => {
+                    if (cat === 'All') {
+                        activeFilters.categories = new Set(ALL_CATEGORIES);
+                    } else if (activeFilters.categories.size === ALL_CATEGORIES.length) {
+                        // All were shown — click one to isolate it
+                        activeFilters.categories = new Set([cat]);
+                    } else if (activeFilters.categories.has(cat) && activeFilters.categories.size === 1) {
+                        // Only this one was active — clicking it resets to all
+                        activeFilters.categories = new Set(ALL_CATEGORIES);
+                    } else if (activeFilters.categories.has(cat)) {
+                        // Multiple active — toggle this one off
+                        activeFilters.categories.delete(cat);
+                    } else {
+                        // Add this one to the selection
+                        activeFilters.categories.add(cat);
+                    }
+                    updateFilterButtons();
+                    renderChart();
+                });
+                categoryDiv.appendChild(btn);
+            });
+
+            // Vendor filters — individual vendors, click to isolate
+            const allVendorBtn = document.createElement('button');
+            allVendorBtn.className = 'filter-btn';
+            allVendorBtn.dataset.filter = 'vendor';
+            allVendorBtn.dataset.value = 'All';
+            allVendorBtn.textContent = 'All Vendors';
+            if (activeFilters.vendors.size === ALL_VENDORS.length) allVendorBtn.classList.add('active');
+            allVendorBtn.addEventListener('click', () => {
+                activeFilters.vendors = new Set(ALL_VENDORS);
+                updateFilterButtons();
+                renderChart();
+            });
+            sourceDiv.appendChild(allVendorBtn);
+
+            ALL_VENDORS.forEach(vendor => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.dataset.filter = 'vendor';
+                btn.dataset.value = vendor;
+                // Short display names
+                const shortNames = {
+                    'Swan House Farms': 'Swan House',
+                    'Local Roots Farm': 'Local Roots',
+                    'Farmstand Local Foods': 'Farmstand',
+                    'Foraged & Found Edibles': 'Foraged & Found',
+                    'EC Wilson': 'EC Wilson',
+                    'Franks Quality Produce': 'Franks',
+                    'Key City Fish': 'Key City Fish',
+                    'Preserve Meat': 'Preserve Meat',
+                    'Sea Breeze Farm / Magic Meat Truck': 'Sea Breeze'
+                };
+                btn.textContent = shortNames[vendor] || vendor;
+                if (activeFilters.vendors.has(vendor)) btn.classList.add('active');
+                btn.addEventListener('click', () => {
+                    if (activeFilters.vendors.size === ALL_VENDORS.length) {
+                        // All were shown — click one to isolate
+                        activeFilters.vendors = new Set([vendor]);
+                    } else if (activeFilters.vendors.has(vendor) && activeFilters.vendors.size === 1) {
+                        // Only this one active — reset to all
+                        activeFilters.vendors = new Set(ALL_VENDORS);
+                    } else if (activeFilters.vendors.has(vendor)) {
+                        activeFilters.vendors.delete(vendor);
+                    } else {
+                        activeFilters.vendors.add(vendor);
+                    }
+                    updateFilterButtons();
+                    renderChart();
+                });
+                sourceDiv.appendChild(btn);
+            });
+        }
+
+        function updateFilterButtons() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const filterType = btn.dataset.filter;
+                const value = btn.dataset.value;
+                let isActive = false;
+                if (filterType === 'category') {
+                    isActive = value === 'All'
+                        ? activeFilters.categories.size === ALL_CATEGORIES.length
+                        : activeFilters.categories.has(value);
+                } else if (filterType === 'vendor') {
+                    isActive = value === 'All'
+                        ? activeFilters.vendors.size === ALL_VENDORS.length
+                        : activeFilters.vendors.has(value);
+                }
+                if (isActive) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+
+        function renderChart() {
+            const chartDiv = document.getElementById('chart');
+            chartDiv.innerHTML = '';
+
+            const header = document.createElement('div');
+            header.className = 'chart-header';
+            const headerIngredient = document.createElement('div');
+            headerIngredient.className = 'chart-header-ingredient';
+            headerIngredient.textContent = 'Ingredient';
+            header.appendChild(headerIngredient);
+
+            MONTHS.forEach((month, idx) => {
+                const headerMonth = document.createElement('div');
+                headerMonth.className = 'chart-header-month';
+                if (idx === currentMonth) headerMonth.classList.add('current-month');
+                headerMonth.textContent = month;
+                header.appendChild(headerMonth);
+            });
+            chartDiv.appendChild(header);
+
+            const grouped = {};
+            DATA.ingredients.forEach(ing => {
+                if (!activeFilters.categories.has(ing.category) || !activeFilters.vendors.has(ing.vendor)) return;
+                // Swan House 2026 filter: skip historical items unless toggle is on
+                if (ing.vendor === 'Swan House Farms' && ing.available_2026 === false && !activeFilters.showSwanHouseAll) return;
+                const sourceKey = ing.vendor;
+                if (!grouped[sourceKey]) grouped[sourceKey] = {};
+                if (!grouped[sourceKey][ing.category]) grouped[sourceKey][ing.category] = [];
+                grouped[sourceKey][ing.category].push(ing);
+            });
+
+            // Sort ingredients within each category: in-season first, then coming-into-season, then out
+            function seasonalSortKey(ing) {
+                const now = ing.months[currentMonth];
+                const next1 = ing.months[(currentMonth + 1) % 12];
+                const next2 = ing.months[(currentMonth + 2) % 12];
+                if (now > 0) {
+                    // In season — sort by score descending (peak=2 first, then available=1, then limited=3)
+                    // Score 2 (peak) should be top, then 1 (available), then 3 (limited/ending), then 4 (expected)
+                    const scorePriority = {2: 0, 1: 1, 4: 2, 3: 3};
+                    return [0, scorePriority[now] !== undefined ? scorePriority[now] : 1, ing.name];
+                } else if (next1 > 0 || next2 > 0) {
+                    // Coming into season — sooner arrivals first
+                    return [1, next1 > 0 ? 0 : 1, ing.name];
+                } else {
+                    // Out of season
+                    return [2, 0, ing.name];
+                }
+            }
+            Object.keys(grouped).forEach(source => {
+                Object.keys(grouped[source]).forEach(cat => {
+                    grouped[source][cat].sort((a, b) => {
+                        const ka = seasonalSortKey(a);
+                        const kb = seasonalSortKey(b);
+                        for (let i = 0; i < ka.length; i++) {
+                            if (ka[i] < kb[i]) return -1;
+                            if (ka[i] > kb[i]) return 1;
+                        }
+                        return 0;
+                    });
+                });
+            });
+
+            const sourceOrder = ['Swan House Farms', 'Local Roots Farm', 'Farmstand Local Foods', 'Foraged & Found Edibles', 'EC Wilson', 'Franks Quality Produce', 'Key City Fish', 'Preserve Meat', 'Sea Breeze Farm / Magic Meat Truck'];
+            sourceOrder.forEach(source => {
+                if (!grouped[source]) return;
+
+                const sourceHeader = document.createElement('div');
+                sourceHeader.className = 'source-header';
+                const sourceLabel = document.createElement('div');
+                sourceLabel.className = 'source-header-label';
+                sourceLabel.textContent = source;
+                sourceHeader.appendChild(sourceLabel);
+
+                // Swan House 2026/All toggle
+                if (source === 'Swan House Farms') {
+                    const toggleWrap = document.createElement('div');
+                    toggleWrap.style.cssText = 'display:flex;align-items:center;gap:6px;margin-left:auto;';
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'filter-btn swan-house-toggle';
+                    toggleBtn.style.cssText = 'font-size:11px;padding:2px 10px;margin:0;';
+                    toggleBtn.textContent = activeFilters.showSwanHouseAll ? 'Showing All (incl. historical)' : '2026 Plan';
+                    if (activeFilters.showSwanHouseAll) toggleBtn.classList.add('active');
+                    else toggleBtn.classList.add('active');
+                    toggleBtn.addEventListener('click', () => {
+                        activeFilters.showSwanHouseAll = !activeFilters.showSwanHouseAll;
+                        renderChart();
+                    });
+                    toggleWrap.appendChild(toggleBtn);
+                    sourceHeader.appendChild(toggleWrap);
+                    sourceHeader.style.display = 'flex';
+                    sourceHeader.style.alignItems = 'center';
+                }
+
+                chartDiv.appendChild(sourceHeader);
+
+                const categoryOrder = ['protein', 'mushroom', 'green', 'berry', 'sea', 'flower', 'produce'];
+                categoryOrder.forEach(cat => {
+                    if (!grouped[source][cat]) return;
+
+                    const catHeader = document.createElement('div');
+                    catHeader.className = 'category-header';
+                    const catLabel = document.createElement('div');
+                    catLabel.className = 'category-header-label';
+                    const dot = document.createElement('span');
+                    dot.className = 'category-dot';
+                    dot.style.backgroundColor = CATEGORY_COLORS[cat];
+                    catLabel.appendChild(dot);
+                    catLabel.appendChild(document.createTextNode(cat.charAt(0).toUpperCase() + cat.slice(1)));
+                    catHeader.appendChild(catLabel);
+                    chartDiv.appendChild(catHeader);
+
+                    grouped[source][cat].forEach(ing => {
+                        const row = document.createElement('div');
+                        row.className = 'ingredient-row';
+                        // Grey out historical Swan House items
+                        if (ing.vendor === 'Swan House Farms' && ing.available_2026 === false) {
+                            row.style.opacity = '0.4';
+                            row.title = 'Historical — not on 2026 plan';
+                        }
+
+                        const nameCell = document.createElement('div');
+                        nameCell.className = 'ingredient-name';
+                        nameCell.style.display = 'flex';
+                        nameCell.style.alignItems = 'center';
+                        nameCell.style.justifyContent = 'space-between';
+
+                        const nameSpan = document.createElement('span');
+                        nameSpan.textContent = ing.name;
+                        nameSpan.style.flex = '1';
+                        nameSpan.style.minWidth = '0';
+                        nameSpan.style.overflow = 'hidden';
+                        nameSpan.style.textOverflow = 'ellipsis';
+                        nameCell.appendChild(nameSpan);
+
+                        // Price trend badge — only show on currently in-season items
+                        const isInSeason = ing.months[currentMonth] > 0;
+                        const trend = PRICE_TRENDS[ing.name];
+                        if (trend && trend.count >= 2 && isInSeason) {
+                            const badge = document.createElement('span');
+                            badge.className = 'trend-badge';
+                            let arrow = '';
+                            let pct = trend.t30;
+                            if (pct !== null) {
+                                if (pct > 5) {
+                                    badge.classList.add('trend-up');
+                                    arrow = '\u2191';
+                                } else if (pct < -5) {
+                                    badge.classList.add('trend-down');
+                                    arrow = '\u2193';
+                                } else {
+                                    badge.classList.add('trend-stable');
+                                    arrow = '\u2192';
+                                }
+                                badge.innerHTML = '<span class="trend-arrow">' + arrow + '</span> $' + trend.price.toFixed(2) + '/' + trend.unit;
+                            } else {
+                                // No 30d trend but we have price data
+                                badge.classList.add('trend-stable');
+                                badge.innerHTML = '$' + trend.price.toFixed(2) + '/' + trend.unit;
+                            }
+                            nameCell.appendChild(badge);
+                        }
+
+                        // Add weather indicator dot — only if ingredient is currently in season
+                        // and the alert is relevant to its category
+                        const currentMonthScore = ing.months[currentMonth] || 0;
+                        if (currentMonthScore > 0) {
+                            const weatherContext = getWeatherContextForIngredient(ing.vendor, ing.category);
+                            if (weatherContext && weatherContext.length > 0) {
+                                const weatherDot = document.createElement('span');
+                                weatherDot.className = 'weather-indicator-dot ' + weatherContext.level;
+                                weatherDot.title = weatherContext.summary;
+                                nameCell.appendChild(weatherDot);
+                            }
+                        }
+
+                        nameCell.addEventListener('mouseover', (e) => showTooltip(e, ing));
+                        nameCell.addEventListener('mouseout', hideTooltip);
+                        row.appendChild(nameCell);
+
+                        ing.months.forEach((score, idx) => {
+                            const cell = document.createElement('div');
+                            cell.className = `month-cell score-${score} category-${ing.category}`;
+                            if (idx === currentMonth) cell.classList.add('current-month');
+                            cell.addEventListener('mouseover', (e) => showTooltip(e, ing));
+                            cell.addEventListener('mouseout', hideTooltip);
+                            row.appendChild(cell);
+                        });
+
+                        chartDiv.appendChild(row);
+                    });
+                });
+            });
+        }
+
+        function showTooltip(event, ingredient) {
+            const tooltip = document.getElementById('tooltip');
+            let tooltipHTML = `
+                <div class="tooltip-title">${ingredient.name}</div>
+                <div class="tooltip-field"><span class="tooltip-label">Category:</span> ${ingredient.category.charAt(0).toUpperCase() + ingredient.category.slice(1)}</div>
+                <div class="tooltip-field"><span class="tooltip-label">Vendor:</span> ${ingredient.vendor}</div>
+                <div class="tooltip-field"><span class="tooltip-label">Price Range:</span> ${ingredient.price_range}</div>
+                <div class="tooltip-field"><span class="tooltip-label">Notes:</span> ${ingredient.notes}</div>
+            `;
+
+            // Add price trend section if available
+            const trend = PRICE_TRENDS[ingredient.name];
+            if (trend) {
+                tooltipHTML += '<div class="tooltip-price-section">';
+                tooltipHTML += '<div class="tooltip-price-header">Price Intelligence</div>';
+                tooltipHTML += '<div class="tooltip-price-current">$' + trend.price.toFixed(2) + '/' + trend.unit + '</div>';
+                tooltipHTML += '<div class="tooltip-price-detail">Range: $' + trend.range.min.toFixed(2) + ' \u2013 $' + trend.range.max.toFixed(2) + ' (' + trend.count + ' invoices)</div>';
+                if (trend.t30 !== null) {
+                    const dir = trend.t30 > 5 ? '\u2191 Up' : trend.t30 < -5 ? '\u2193 Down' : '\u2192 Stable';
+                    const color = trend.t30 > 5 ? '#ff8866' : trend.t30 < -5 ? '#66cc88' : '#88aacc';
+                    tooltipHTML += '<div class="tooltip-price-detail" style="color:' + color + '">30-day: ' + dir + ' (' + (trend.t30 > 0 ? '+' : '') + trend.t30.toFixed(1) + '%)</div>';
+                }
+                if (trend.tyoy !== null) {
+                    tooltipHTML += '<div class="tooltip-price-detail">Year-over-year: ' + (trend.tyoy > 0 ? '+' : '') + trend.tyoy.toFixed(1) + '%</div>';
+                }
+                tooltipHTML += '<div class="tooltip-price-detail" style="color:#666;">Last: ' + trend.date + ' via ' + trend.vendor.replace(/_/g, ' ') + '</div>';
+                // Sparkline
+                if (trend.history && trend.history.length > 1) {
+                    const prices = trend.history.map(h => h.price);
+                    const maxP = Math.max(...prices);
+                    const minP = Math.min(...prices);
+                    const range = maxP - minP || 1;
+                    tooltipHTML += '<div class="tooltip-sparkline">';
+                    prices.forEach((p, i) => {
+                        const pct = ((p - minP) / range) * 100;
+                        const height = Math.max(4, pct * 0.2 + 4);
+                        const isLatest = i === prices.length - 1 ? ' latest' : '';
+                        tooltipHTML += '<div class="bar' + isLatest + '" style="height:' + height + 'px;" title="$' + p.toFixed(2) + '"></div>';
+                    });
+                    tooltipHTML += '</div>';
+                }
+                tooltipHTML += '</div>';
+            }
+
+            // Add weather context if available
+            const weatherContext = getWeatherContextForVendor(ingredient.vendor);
+            if (weatherContext && weatherContext.length > 0) {
+                tooltipHTML += `<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div class="tooltip-label" style="color: #ffdd99;">Weather Alert:</div>`;
+                weatherContext.forEach(alert => {
+                    tooltipHTML += `<div style="font-size: 0.8rem; color: #ffaa88; margin-top: 4px;">⚠ ${alert}</div>`;
+                });
+                tooltipHTML += `</div>`;
+            }
+
+            tooltip.innerHTML = tooltipHTML;
+            tooltip.classList.add('visible');
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = (rect.right + 15) + 'px';
+            tooltip.style.top = (rect.top - 10) + 'px';
+            if (tooltip.offsetLeft + tooltip.offsetWidth > window.innerWidth) {
+                tooltip.style.left = (rect.left - tooltip.offsetWidth - 15) + 'px';
+            }
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('visible');
+        }
+
+        function renderMenuPlanning() {
+            const cardsDiv = document.getElementById('menuPlanningCards');
+            cardsDiv.innerHTML = '';
+            if (!DATA.menu_planning) return;
+
+            const sections = [
+                { title: "What's Peaking", key: 'whats_peaking', class: 'peaking' },
+                { title: "What's Coming", key: 'whats_coming', class: 'coming' },
+                { title: "What's Ending", key: 'whats_ending', class: 'ending' },
+                { title: 'Alerts', key: 'alerts', class: 'alerts' }
+            ];
+
+            sections.forEach(section => {
+                if (!DATA.menu_planning[section.key]) return;
+                const card = document.createElement('div');
+                card.className = 'card';
+                const title = document.createElement('div');
+                title.className = `card-title ${section.class}`;
+                title.textContent = section.title;
+                card.appendChild(title);
+
+                const list = document.createElement('ul');
+                list.className = 'card-list';
+                DATA.menu_planning[section.key].forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    list.appendChild(li);
+                });
+                card.appendChild(list);
+                cardsDiv.appendChild(card);
+            });
+        }
+
+        let _weatherShowAll = false;
+
+        function toggleWeatherView() {
+            _weatherShowAll = !_weatherShowAll;
+            const cards = document.querySelectorAll('.weather-card');
+            const btn = document.getElementById('weatherViewToggleBtn');
+            cards.forEach(card => {
+                if (_weatherShowAll || card.dataset.hasAlert === 'true') {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            const totalRegions = Object.keys(DATA.weather.regions).length;
+            const alertCount = document.querySelectorAll('.weather-card[data-has-alert="true"]').length;
+            btn.textContent = _weatherShowAll
+                ? `Show alerts only (${alertCount} active)`
+                : `View all ${totalRegions} regions`;
+        }
+
+        function renderWeatherIntelligence() {
+            const weatherData = DATA.weather;
+            if (!weatherData) return;
+
+            // Update timestamp
+            const timestamp = document.getElementById('weatherTimestamp');
+            if (timestamp && weatherData.last_fetched) {
+                const date = new Date(weatherData.last_fetched);
+                const formatter = new Intl.DateTimeFormat('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                timestamp.textContent = `Last fetched: ${formatter.format(date)}`;
+            }
+
+            const regionsDiv = document.getElementById('weatherRegions');
+            regionsDiv.innerHTML = '';
+            _weatherShowAll = false;
+
+            const categoryOrder = ['agricultural', 'foraging', 'marine', 'rangeland'];
+            let alertRegionCount = 0;
+            const totalRegions = Object.keys(weatherData.regions).length;
+
+            categoryOrder.forEach(category => {
+                const regionKeys = Object.keys(weatherData.regions).filter(key =>
+                    weatherData.regions[key].category === category
+                );
+
+                regionKeys.forEach(regionKey => {
+                    const region = weatherData.regions[regionKey];
+                    const card = document.createElement('div');
+                    card.className = `weather-card category-${category}`;
+
+                    // Determine alert status
+                    let alertStatus = 'normal';
+                    let hasAlert = false;
+                    if (region.alerts && region.alerts.length > 0) {
+                        alertStatus = 'alert';
+                        hasAlert = true;
+                    } else if (region.watch_conditions && region.watch_conditions.length > 0) {
+                        alertStatus = 'watch';
+                        hasAlert = true;
+                    }
+
+                    card.dataset.hasAlert = hasAlert ? 'true' : 'false';
+                    if (!hasAlert) card.style.display = 'none'; // default: hide normal regions
+                    if (hasAlert) alertRegionCount++;
+
+                    // Header
+                    const header = document.createElement('div');
+                    header.className = 'weather-card-header';
+                    const titleDiv = document.createElement('div');
+                    titleDiv.innerHTML = `<div class="weather-card-region">${region.name}<span class="weather-indicator weather-indicator-${alertStatus}"></span></div><div class="weather-card-category">${category}</div>`;
+                    header.appendChild(titleDiv);
+                    card.appendChild(header);
+
+                    // Body
+                    const body = document.createElement('div');
+                    body.className = 'weather-card-body';
+
+                    // Current conditions
+                    const condItem = document.createElement('div');
+                    condItem.className = 'weather-item';
+                    condItem.innerHTML = `<span class="weather-label">Conditions:</span><span class="weather-value">${region.conditions}</span>`;
+                    body.appendChild(condItem);
+
+                    // Alerts
+                    if (region.alerts && region.alerts.length > 0) {
+                        const alertsDiv = document.createElement('ul');
+                        alertsDiv.className = 'weather-alerts-list';
+                        region.alerts.forEach(alert => {
+                            const li = document.createElement('li');
+                            li.textContent = alert;
+                            alertsDiv.appendChild(li);
+                        });
+                        body.appendChild(alertsDiv);
+                    }
+
+                    // Watch conditions
+                    if (region.watch_conditions && region.watch_conditions.length > 0) {
+                        const watchDiv = document.createElement('ul');
+                        watchDiv.className = 'weather-watch-list';
+                        region.watch_conditions.forEach(condition => {
+                            const li = document.createElement('li');
+                            li.textContent = condition;
+                            watchDiv.appendChild(li);
+                        });
+                        body.appendChild(watchDiv);
+                    }
+
+                    // GDD/Status
+                    const statusItem = document.createElement('div');
+                    statusItem.className = 'weather-item';
+                    statusItem.innerHTML = `<span class="weather-label">Status:</span><span class="weather-value">${region.gdd_status}</span>`;
+                    body.appendChild(statusItem);
+
+                    // Linked vendors
+                    if (region.linked_vendors && region.linked_vendors.length > 0) {
+                        const vendorsDiv = document.createElement('div');
+                        vendorsDiv.className = 'weather-vendors';
+                        region.linked_vendors.forEach(vendor => {
+                            const vendorSpan = document.createElement('span');
+                            vendorSpan.className = 'weather-vendor-item';
+                            vendorSpan.textContent = vendor;
+                            vendorsDiv.appendChild(vendorSpan);
+                        });
+                        body.appendChild(vendorsDiv);
+                    }
+
+                    card.appendChild(body);
+                    regionsDiv.appendChild(card);
+                });
+            });
+
+            // Show all-clear message or alert summary, and view toggle button
+            const allClearDiv = document.getElementById('weatherAllClear');
+            const viewToggleDiv = document.getElementById('weatherViewToggle');
+            const btn = document.getElementById('weatherViewToggleBtn');
+
+            if (alertRegionCount === 0) {
+                allClearDiv.style.display = 'block';
+            } else {
+                allClearDiv.style.display = 'none';
+            }
+
+            viewToggleDiv.style.display = 'block';
+            btn.textContent = `View all ${totalRegions} regions`;
+        }
+
+        function setupWeatherToggle() {
+            const toggle = document.getElementById('weatherToggle');
+            const icon = document.getElementById('weatherToggleIcon');
+            const regions = document.getElementById('weatherRegions');
+
+            if (!toggle || !icon || !regions) return;
+
+            toggle.addEventListener('click', function() {
+                regions.classList.toggle('weather-hidden');
+                icon.classList.toggle('collapsed');
+            });
+        }
+
+        // Category → relevant region type mapping
+        const CATEGORY_REGION_TYPE = {
+            'mushroom': 'foraging',
+            'sea':      'marine',
+            'berry':    'agricultural',
+            'flower':   'agricultural',
+            'green':    'agricultural',
+            'produce':  'agricultural',
+            'meat':     'rangeland'
+        };
+
+        function getWeatherContextForIngredient(vendorName, category) {
+            const weatherData = DATA.weather;
+            if (!weatherData || !weatherData.regions) return null;
+
+            const relevantType = CATEGORY_REGION_TYPE[category] || 'agricultural';
+            let bestAlert = null;
+            let bestWatch = null;
+
+            Object.values(weatherData.regions).forEach(region => {
+                if (region.category !== relevantType) return;
+                if (!region.linked_vendors || !region.linked_vendors.includes(vendorName)) return;
+
+                if (region.alerts && region.alerts.length > 0) {
+                    bestAlert = { level: 'alert', summary: region.alerts[0] };
+                } else if (region.watch_conditions && region.watch_conditions.length > 0) {
+                    if (!bestAlert) bestWatch = { level: 'watch', summary: region.watch_conditions[0] };
+                }
+            });
+
+            return bestAlert || bestWatch || null;
+        }
+
+        // Keep backward compat for tooltip use
+        function getWeatherContextForVendor(vendorName) {
+            const weatherData = DATA.weather;
+            if (!weatherData || !weatherData.regions) return null;
+            const regionAlerts = [];
+            Object.values(weatherData.regions).forEach(region => {
+                if (region.linked_vendors && region.linked_vendors.includes(vendorName)) {
+                    (region.alerts || []).forEach(a => regionAlerts.push(`${region.name}: ${a}`));
+                    (region.watch_conditions || []).forEach(w => regionAlerts.push(`${region.name}: ${w}`));
+                }
+            });
+            return regionAlerts.length > 0 ? regionAlerts : null;
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                try { initializeApp(); } catch(e) {
+                    document.getElementById('chart').innerHTML = '<div style="padding:20px;color:#f66;">Error: ' + e.message + '</div>';
+                }
+            });
+        } else {
+            try { initializeApp(); } catch(e) {
+                document.getElementById('chart').innerHTML = '<div style="padding:20px;color:#f66;">Error: ' + e.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html>
