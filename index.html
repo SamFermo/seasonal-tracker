@@ -474,7 +474,7 @@
         }
 
         .chart-wrapper {
-            overflow-x: auto;
+            overflow-x: visible;
             margin-bottom: 50px;
             position: relative;
         }
@@ -484,7 +484,6 @@
             min-width: 100%;
             background: rgba(255, 255, 255, 0.01);
             border-radius: 8px;
-            overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
@@ -492,7 +491,7 @@
             display: grid;
             grid-template-columns: 220px repeat(12, 1fr);
             background: #1a1a1a;
-            border-bottom: 2px solid #333;
+            border-bottom: 1px solid #333;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -527,9 +526,12 @@
         .source-header {
             display: grid;
             grid-template-columns: 220px repeat(12, 1fr);
-            background: rgba(100, 100, 100, 0.15);
+            background: #1a1a1a;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: none;
+            position: sticky;
+            top: calc(var(--header-h, 56px) - 1px);
+            z-index: 9;
         }
 
         .source-header-label {
@@ -542,11 +544,44 @@
             border-right: 1px solid #333;
         }
 
+        .back-to-top-btn {
+            margin-left: auto;
+            margin-right: 14px;
+            padding: 4px 12px;
+            background: none;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #666;
+            font-size: 11px;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .back-to-top-btn:hover {
+            color: #aaa;
+            border-color: #666;
+        }
+
         .category-header {
             display: grid;
             grid-template-columns: 220px repeat(12, 1fr);
             background: rgba(80, 80, 80, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background 0.15s ease;
+        }
+
+        .category-header:hover {
+            background: rgba(80, 80, 80, 0.2);
+        }
+
+        .category-header:active {
+            background: rgba(80, 80, 80, 0.25);
         }
 
         .category-header-label {
@@ -561,6 +596,33 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .category-chevron {
+            font-size: 0.65rem;
+            color: #666;
+            transition: transform 0.2s ease;
+            margin-left: auto;
+            padding-left: 6px;
+        }
+
+        .category-header.collapsed .category-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .category-count {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+
+        .category-rows {
+            transition: none;
+        }
+
+        .category-rows.collapsed {
+            display: none;
         }
 
         .category-dot {
@@ -744,6 +806,19 @@
         }
 
         .card-list li:last-child { margin-bottom: 0; }
+
+        .menu-planning-link {
+            color: #e8c170;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(232, 193, 112, 0.4);
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .menu-planning-link:hover {
+            color: #f0d890;
+            border-bottom-color: rgba(240, 216, 144, 0.7);
+        }
 
         /* Weather Intelligence Section */
         .weather-intelligence {
@@ -974,8 +1049,9 @@
             .controls { padding: 15px; }
             .button-group { gap: 8px; }
             .filter-btn { padding: 8px 14px; font-size: 0.85rem; }
+            .chart-wrapper { overflow-x: clip; }
             .chart-header { grid-template-columns: 150px repeat(12, 1fr); }
-            .source-header { grid-template-columns: 150px repeat(12, 1fr); }
+            .source-header { grid-template-columns: 150px repeat(12, 1fr); top: calc(var(--header-h-mobile, 44px) - 1px); }
             .category-header { grid-template-columns: 150px repeat(12, 1fr); }
             .ingredient-row { grid-template-columns: 150px repeat(12, 1fr); }
             .ingredient-name { padding: 12px 10px; font-size: 0.85rem; }
@@ -1106,8 +1182,9 @@
             </div>
         </div>
 
-        <div class="chart-wrapper">
-            <div class="chart" id="chart"></div>
+        <div class="menu-planning">
+            <div class="menu-planning-title">Menu Planning Summary</div>
+            <div class="cards-grid" id="menuPlanningCards"></div>
         </div>
 
         <div class="weather-intelligence" id="weatherIntelligence">
@@ -1125,9 +1202,8 @@
             </div>
         </div>
 
-        <div class="menu-planning">
-            <div class="menu-planning-title">Menu Planning Summary</div>
-            <div class="cards-grid" id="menuPlanningCards"></div>
+        <div class="chart-wrapper">
+            <div class="chart" id="chart"></div>
         </div>
 
         </div><!-- end panel-seasonal -->
@@ -1161,19 +1237,18 @@
 const DATA = {
   "metadata": {
     "restaurant": "San Fermo",
-    "last_updated": "2026-04-14",
+    "last_updated": "2026-04-19",
     "data_sources": [
       "Local Roots Farm",
       "Farmstand Local Foods",
       "Foraged & Found Edibles",
-      "EC Wilson",
       "Franks Produce",
       "Key City Fish",
       "Preserve Meat",
       "Sea Breeze Farm / Magic Meat Truck",
       "Swan House Farms (Google Sheet)"
     ],
-    "notes": "Month scores: 0 = not available, 1 = available, 2 = peak season / best pricing, 3 = limited / end of season. Farm items sourced from Kelly Baker's SHF Fresh Sheet. Wild mushroom data sourced from 15 months of Foraged & Found emails (Jan 2025 - Mar 2026). Franks seasonal items added from 14 months of fresh sheet analysis (Feb 2025 - Apr 2026)."
+    "notes": "Month scores: 0 = not available, 1 = available, 2 = peak season / best pricing, 3 = limited / end of season. Farm items sourced from Kelly Baker's SHF Fresh Sheet. Wild mushroom data sourced from 15 months of Foraged & Found emails (Jan 2025 - Mar 2026). Franks seasonal items added from 14 months of fresh sheet analysis (Feb 2025 - Apr 2026). EC Wilson items tracked but hidden from chart (meat/seafood, not seasonal)."
   },
   "vendors": {
     "local_roots_farm": {
@@ -1184,7 +1259,7 @@ const DATA = {
       "order_deadline": "Monday 8:00 PM",
       "last_fresh_sheet": "2026-04-09"
     },
-    "local_roots_farm_note": "4/10 sheet sent a day early (Jason going out of town). Not many changes. Curly Kale Rapini removed from sheet — uncertain supply Tuesday, only Mixed Rapini this week (specific varieties may be accommodated on request). Rossa di Milano Onions gone. Pinto Fingerlings still limited. Beets, Mixed Rapini, and Potatoes really awesome right now. March flooding recovery still ongoing — baby lettuce, spinach, arugula, salad mix, radishes, turnips still 4-5 weeks out (mid-May).",
+    "local_roots_farm_note": "4/10 sheet sent a day early (Jason going out of town). Not many changes. Curly Kale Rapini removed from sheet \u2014 uncertain supply Tuesday, only Mixed Rapini this week (specific varieties may be accommodated on request). Rossa di Milano Onions gone. Pinto Fingerlings still limited. Beets, Mixed Rapini, and Potatoes really awesome right now. March flooding recovery still ongoing \u2014 baby lettuce, spinach, arugula, salad mix, radishes, turnips still 4-5 weeks out (mid-May).",
     "farmstand_local_foods": {
       "name": "Farmstand Local Foods",
       "contact": "info@farmstandlocalfoods.com",
@@ -1223,7 +1298,8 @@ const DATA = {
       "delivery": "Next-day (midnight cutoff Mon-Fri)",
       "minimums": "See fresh sheet",
       "order_deadline": "Midnight Mon-Fri for next-day",
-      "last_fresh_sheet": "2026-04-13"
+      "last_fresh_sheet": "2026-03-11",
+      "last_fresh_sheet_note": "Full catalogue sheets (Retail Seafood + Restaurant Meat & Poultry). Both reflect actual SF ordering prices."
     },
     "preserve_meat": {
       "name": "Preserve Meat",
@@ -1233,7 +1309,7 @@ const DATA = {
       "order_deadline": "Via ordering app",
       "last_fresh_sheet": "2026-04-04"
     },
-    "preserve_meat_note": "Apr 4: Sean flagged bavette supply tightness — ~9 lbs/animal, multiple customers competing. Suggested alternatives: Ribeyes Bone In, Tenderloins, Striploins, Top Sirloin Cap Off, Flat Iron, Culottes Cap On, Outside Skirt (may be spoken for). Chris cc'd. All Pure Country Beef.",
+    "preserve_meat_note": "Apr 4: Sean flagged bavette supply tightness \u2014 ~9 lbs/animal, multiple customers competing. Suggested alternatives: Ribeyes Bone In, Tenderloins, Striploins, Top Sirloin Cap Off, Flat Iron, Culottes Cap On, Outside Skirt (may be spoken for). Chris cc'd. All Pure Country Beef.",
     "sea_breeze_farm": {
       "name": "Sea Breeze Farm / Magic Meat Truck",
       "contact": "george@seabreeze.farm / rose@seabreeze.farm",
@@ -1246,7 +1322,7 @@ const DATA = {
       "name": "Swan House Farms (Our Farm)",
       "contact": "Kelly Baker (Google Sheet)",
       "delivery": "Direct from Skagit Valley",
-      "minimums": "N/A — our farm",
+      "minimums": "N/A \u2014 our farm",
       "order_deadline": "N/A",
       "last_fresh_sheet": "2026-04-15"
     }
@@ -1271,8 +1347,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "On sale through spring. Storage crop. Really awesome right now (Apr 2026).",
-      "price_range": "On sale — check fresh sheet"
+      "price_range": "On sale \u2014 check fresh sheet",
+      "notes": "On sale through spring. Storage crop. Really awesome right now (Apr 2026)."
     },
     {
       "name": "Rutabaga",
@@ -1293,8 +1369,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Surprise find added to the 3/27 sheet. Wintery root available through early spring.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "Surprise find added to the 3/27 sheet. Wintery root available through early spring."
     },
     {
       "name": "Curly Kale Rapini",
@@ -1315,8 +1391,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Removed from 4/10 Local Roots sheet — uncertain Tuesday supply, only Mixed Rapini available this week. May return on future sheets. Was limited after March flood damage. First rapini of season, arrived late Feb 2026.",
-      "price_range": "Low when abundant — check sheet"
+      "price_range": "Low when abundant \u2014 check sheet",
+      "notes": "Removed from 4/10 Local Roots sheet \u2014 uncertain Tuesday supply, only Mixed Rapini available this week. May return on future sheets. Was limited after March flood damage. First rapini of season, arrived late Feb 2026."
     },
     {
       "name": "Mixed Rapini",
@@ -1337,8 +1413,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "New on 4/3 sheet. Mixed brassica rapini as warm weather brings more varieties into flower.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "New on 4/3 sheet. Mixed brassica rapini as warm weather brings more varieties into flower."
     },
     {
       "name": "Lacinato Rapini",
@@ -1359,8 +1435,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "First rapini of the season, arrived earlier than normal (late Feb 2026). Lost to March flood. May regrow.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "First rapini of the season, arrived earlier than normal (late Feb 2026). Lost to March flood. May regrow."
     },
     {
       "name": "Potatoes (mixed varieties)",
@@ -1381,8 +1457,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Storage varieties. Satina Yellow and Purple Majesty BACK as of 4/3! Pinto Fingerlings limited. Really awesome right now.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "Storage varieties. Satina Yellow and Purple Majesty BACK as of 4/3! Pinto Fingerlings limited. Really awesome right now."
     },
     {
       "name": "Purple Daikon",
@@ -1403,8 +1479,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Limited for weeks, gone as of 3/27. Storage crop.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "Limited for weeks, gone as of 3/27. Storage crop."
     },
     {
       "name": "Carrots (Nantes)",
@@ -1425,8 +1501,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Were on sale in Feb. Gone from March sheet after flood/storage depletion. Really awesome through early March.",
-      "price_range": "On sale in Feb"
+      "price_range": "On sale in Feb",
+      "notes": "Were on sale in Feb. Gone from March sheet after flood/storage depletion. Really awesome through early March."
     },
     {
       "name": "Braising Mix",
@@ -1447,8 +1523,8 @@ const DATA = {
         1,
         0
       ],
-      "notes": "Was really awesome in mid-March but lost to flood. Expected to return as fields dry out.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "Was really awesome in mid-March but lost to flood. Expected to return as fields dry out."
     },
     {
       "name": "Red Russian Kale",
@@ -1469,8 +1545,8 @@ const DATA = {
         1,
         0
       ],
-      "notes": "New addition in March, lost to flood. Should return when fields recover.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "New addition in March, lost to flood. Should return when fields recover."
     },
     {
       "name": "Celeriac",
@@ -1491,8 +1567,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Storage crop. Gone as of 3/22 update.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "Storage crop. Gone as of 3/22 update."
     },
     {
       "name": "Maitake Mushrooms",
@@ -1513,8 +1589,8 @@ const DATA = {
         2,
         1
       ],
-      "notes": "From Misty Mountain Mushrooms (Yamhill, OR). Cultivated but from seasonal WA/OR producer — slight fall peak. Not a wild variety.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Misty Mountain Mushrooms (Yamhill, OR). Cultivated but from seasonal WA/OR producer \u2014 slight fall peak. Not a wild variety."
     },
     {
       "name": "Lemon Balm",
@@ -1535,8 +1611,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "From Tualco Valley Produce (Monroe). Great for citrusy tea or simple syrup, pairs with fish/poultry.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Tualco Valley Produce (Monroe). Great for citrusy tea or simple syrup, pairs with fish/poultry."
     },
     {
       "name": "Mixed Fingerling Potatoes",
@@ -1557,8 +1633,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From First Cut Farm (Mount Vernon). Purple Fiesta, Red Thumb, and petite yellow varieties.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From First Cut Farm (Mount Vernon). Purple Fiesta, Red Thumb, and petite yellow varieties."
     },
     {
       "name": "Green Bibb Lettuce",
@@ -1579,8 +1655,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From DeGoede Farms (Sumner). Hydroponic Rex variety, year-round. Great for wraps.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From DeGoede Farms (Sumner). Hydroponic Rex variety, year-round. Great for wraps."
     },
     {
       "name": "Green Cabbage",
@@ -1601,8 +1677,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From Boldly Grown Farm (Bow). Rumored to be last local cabbage as of 3/10.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Boldly Grown Farm (Bow). Rumored to be last local cabbage as of 3/10."
     },
     {
       "name": "Rapini (vendor mix)",
@@ -1623,8 +1699,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Plenty available via Farmstand as of 3/24. Multiple farm sources.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "Plenty available via Farmstand as of 3/24. Multiple farm sources."
     },
     {
       "name": "Rhubarb",
@@ -1645,8 +1721,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Sprouting at Sidhu Farms and Ralph's Greenhouse as of late March. Field grown rhubarb season approaching (Franks hot house ended 4/6).",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "Sidhu Farms first picking confirmed on 4/15 Farmstand sheet \u2014 field-grown season now live. Red, full stalks, local. Previously sprouting at Sidhu + Ralph's Greenhouse in late March. Peaks Apr\u2013May."
     },
     {
       "name": "Frozen Tayberries",
@@ -1667,8 +1743,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From Hayton Farms (Fir Island). Blackberry x Raspberry hybrid. Bold sweet-tart flavor, rich wine color. IQF frozen from prior summer harvest. Great for sauces, jams, desserts. Back in stock as of 4/7 sheet.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Hayton Farms (Fir Island). Blackberry x Raspberry hybrid. Bold sweet-tart flavor, rich wine color. IQF frozen from prior summer harvest. Great for sauces, jams, desserts. Back in stock as of 4/7 sheet."
     },
     {
       "name": "Red Lasoda Potatoes",
@@ -1689,8 +1765,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From Olsen Farms (Colville). Good for potato salad. Red Pontiac also available from Swiss Farms.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Olsen Farms (Colville). Good for potato salad. Red Pontiac also available from Swiss Farms."
     },
     {
       "name": "Yellow Onions",
@@ -1711,8 +1787,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From Anderson Organics (Othello). Year-round staple.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Anderson Organics (Othello). Year-round staple."
     },
     {
       "name": "Cultured Butter",
@@ -1733,8 +1809,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From Cherry Valley Dairy (Duvall). 2017 American Cheese Society gold winner.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Cherry Valley Dairy (Duvall). 2017 American Cheese Society gold winner."
     },
     {
       "name": "Fireweed Honey",
@@ -1755,8 +1831,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From Robbins Honey Farm (Lakewood). Rich in antioxidants. Back in stock as of 3/24.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Robbins Honey Farm (Lakewood). Rich in antioxidants. Back in stock as of 3/24."
     },
     {
       "name": "Stinging Nettles",
@@ -1777,8 +1853,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Peak spring season (Apr 2026). Volume pricing: $9.50/# for 20#+, $7.50/# for 50#+. Available Feb–May.",
-      "price_range": "$10.50/#, $9.50/# for 20#+, $7.50/# for 50#+"
+      "price_range": "$10.50/#, $9.50/# for 20#+, $7.50/# for 50#+",
+      "notes": "Peak spring season (Apr 2026). Volume pricing: $9.50/# for 20#+, $7.50/# for 50#+. Available Feb\u2013May."
     },
     {
       "name": "True Miner's Lettuce",
@@ -1799,8 +1875,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "A bit limited as of April — transitioning to higher elevation areas. $9.75/# for 10#+.",
-      "price_range": "$11/#, $9.75/# for 10#+"
+      "price_range": "$11/#, $9.75/# for 10#+",
+      "notes": "A bit limited as of April \u2014 transitioning to higher elevation areas. $9.75/# for 10#+."
     },
     {
       "name": "Ladyfern Fiddleheads",
@@ -1821,8 +1897,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Peak spring season. Available through April. Volume pricing for 20#+.",
-      "price_range": "$10.50/#, $9.50/# for 20#+"
+      "price_range": "$10.50/#, $9.50/# for 20#+",
+      "notes": "Peak spring season. Available through April. Volume pricing for 20#+."
     },
     {
       "name": "Wild Watercress",
@@ -1843,8 +1919,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Just begun as of 3/29. Available through April+.",
-      "price_range": "$10.50/#"
+      "price_range": "$10.50/#",
+      "notes": "Just begun as of 3/29. Available through April+."
     },
     {
       "name": "Wood Sorrel (Wild)",
@@ -1865,8 +1941,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Limited for now, just starting. Available spring through early summer.",
-      "price_range": "$13.50/# (limited)"
+      "price_range": "$13.50/# (limited)",
+      "notes": "Limited for now, just starting. Available spring through early summer."
     },
     {
       "name": "Flowering Red Currant Blossoms",
@@ -1887,8 +1963,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Wild foraged (WA). Spring blooms for garnish.",
-      "price_range": "$6.25/pint, $30/5 pints"
+      "price_range": "$6.25/pint, $30/5 pints",
+      "notes": "Wild foraged (WA). Spring blooms for garnish."
     },
     {
       "name": "Magnolia Buds",
@@ -1909,8 +1985,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Wild foraged (WA). Unique garnish/pickling item. Not listed on 4/5 sheet — likely ending/ended for the season.",
-      "price_range": "$12/#"
+      "price_range": "$12/#",
+      "notes": "Wild foraged (WA). Unique garnish/pickling item. Not listed on 4/5 sheet \u2014 likely ending/ended for the season."
     },
     {
       "name": "Licorice Fern Rhizomes",
@@ -1931,8 +2007,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Wild foraged (WA). Available fall through spring.",
-      "price_range": "$18.50/#"
+      "price_range": "$18.50/#",
+      "notes": "Wild foraged (WA). Available fall through spring."
     },
     {
       "name": "Ramps (Wild)",
@@ -1953,8 +2029,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Fully available as of April 5! Appalachian (WV) sourced now, available through May.",
-      "price_range": "$19.50/#"
+      "price_range": "$19.50/#",
+      "notes": "Fully available as of April 5! Appalachian (WV) sourced now, available through May."
     },
     {
       "name": "Morels (Wild)",
@@ -1975,8 +2051,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Black burn morels May-Jun (WA/OR/ID), gray/greenie morels Jun-Jul. Prices drop from $33/# early to $15-17/# at peak. Season ends late July. PRE-ORDER SIGNAL from Franks 4/6 sheet — season imminent, ~2-3 weeks out as of early April.",
-      "price_range": "Fresh: $15-34/#, Dried: $85-135/#"
+      "price_range": "Fresh: $15-34/#, Dried: $85-135/#",
+      "notes": "Black burn morels May-Jun (WA/OR/ID), gray/greenie morels Jun-Jul. Prices drop from $33/# early to $15-17/# at peak. Season ends late July. PRE-ORDER SIGNAL from Franks 4/6 sheet \u2014 season imminent, ~2-3 weeks out as of early April."
     },
     {
       "name": "Golden Chanterelle (Wild)",
@@ -1997,8 +2073,8 @@ const DATA = {
         1,
         3
       ],
-      "notes": "WA wild. Limited Jul-Aug (weather dependent), peak Sep-Oct with best prices. Buttons ideal for pickling. Season ends by late Dec.",
-      "price_range": "$9-26/# (peak Oct ~$9-11/#)"
+      "price_range": "$9-26/# (peak Oct ~$9-11/#)",
+      "notes": "WA wild. Limited Jul-Aug (weather dependent), peak Sep-Oct with best prices. Buttons ideal for pickling. Season ends by late Dec."
     },
     {
       "name": "White Chanterelle",
@@ -2019,8 +2095,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA Cascades. Below-average years common. Available Aug-Oct in limited quantities alongside golden chanterelle.",
-      "price_range": "$9.50-12.50/#"
+      "price_range": "$9.50-12.50/#",
+      "notes": "WA Cascades. Below-average years common. Available Aug-Oct in limited quantities alongside golden chanterelle."
     },
     {
       "name": "Yellowfoot Chanterelle",
@@ -2041,8 +2117,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "OR/WA wild. Winter variety starting mid-Nov. Abundant Jan at lowest prices. Available through Feb-Mar. One of three core winter wilds.",
-      "price_range": "$8-9.75/#"
+      "price_range": "$8-9.75/#",
+      "notes": "OR/WA wild. Winter variety starting mid-Nov. Abundant Jan at lowest prices. Available through Feb-Mar. One of three core winter wilds."
     },
     {
       "name": "Black Trumpet",
@@ -2063,8 +2139,8 @@ const DATA = {
         1,
         2
       ],
-      "notes": "OR (Siskiyou Mtns) wild. Starts late Nov, peaks Dec-Jan with dramatic price drops. Nearly flawless quality in warm winters. One of three core winter wilds.",
-      "price_range": "$10-25.50/# (peak Jan ~$10-11/#)"
+      "price_range": "$10-25.50/# (peak Jan ~$10-11/#)",
+      "notes": "OR (Siskiyou Mtns) wild. Starts late Nov, peaks Dec-Jan with dramatic price drops. Nearly flawless quality in warm winters. One of three core winter wilds."
     },
     {
       "name": "Hedgehog (Sweet Tooth & Bellybutton)",
@@ -2085,8 +2161,8 @@ const DATA = {
         2,
         2
       ],
-      "notes": "WA/OR wild. Sweet Tooth Sep-Nov, Bellybutton Nov-Feb. Peak Oct-Jan. Bellybutton is the winter variety — one of three core winter wilds.",
-      "price_range": "$10.50-13.50/# (bulk discounts available)"
+      "price_range": "$10.50-13.50/# (bulk discounts available)",
+      "notes": "WA/OR wild. Sweet Tooth Sep-Nov, Bellybutton Nov-Feb. Peak Oct-Jan. Bellybutton is the winter variety \u2014 one of three core winter wilds."
     },
     {
       "name": "Lobster Mushroom",
@@ -2107,8 +2183,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA coastal wild. Starts late Jul, peak Aug (most abundant summer mushroom). Continues into Oct. Grows deep in duff — reliable even in dry years.",
-      "price_range": "$8.25-17.75/# (peak Aug-Sep ~$10-12/#)"
+      "price_range": "$8.25-17.75/# (peak Aug-Sep ~$10-12/#)",
+      "notes": "WA coastal wild. Starts late Jul, peak Aug (most abundant summer mushroom). Continues into Oct. Grows deep in duff \u2014 reliable even in dry years."
     },
     {
       "name": "Matsutake",
@@ -2129,8 +2205,8 @@ const DATA = {
         3,
         0
       ],
-      "notes": "WA/OR wild. Quality improves with freezing nights (early Sep product often poor). Peak Oct with all grades. Volcanic-area fruit (late Sep) is best quality.",
-      "price_range": "#1: $21-27/#, #2-3: $10.50-17/#, #4: $10.50/#"
+      "price_range": "#1: $21-27/#, #2-3: $10.50-17/#, #4: $10.50/#",
+      "notes": "WA/OR wild. Quality improves with freezing nights (early Sep product often poor). Peak Oct with all grades. Volcanic-area fruit (late Sep) is best quality."
     },
     {
       "name": "Porcini / King Bolete",
@@ -2151,8 +2227,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Two seasons: spring (May-Jun, limited, WA/OR) and fall coastal flush (Oct, abundant). Moisture-loving — dry years produce almost nothing. Fall is the reliable window.",
-      "price_range": "#1: $22-34/#, #2: $14-18/#, #3: $8.50-10.50/#"
+      "price_range": "#1: $22-34/#, #2: $14-18/#, #3: $8.50-10.50/#",
+      "notes": "Two seasons: spring (May-Jun, limited, WA/OR) and fall coastal flush (Oct, abundant). Moisture-loving \u2014 dry years produce almost nothing. Fall is the reliable window."
     },
     {
       "name": "Cauliflower Mushroom",
@@ -2173,8 +2249,8 @@ const DATA = {
         3,
         3
       ],
-      "notes": "WA/OR wild. Sep-Oct available, Nov-Dec ending/limited. Final offerings from Oregon sources in Dec.",
-      "price_range": "$16.50/#"
+      "price_range": "$16.50/#",
+      "notes": "WA/OR wild. Sep-Oct available, Nov-Dec ending/limited. Final offerings from Oregon sources in Dec."
     },
     {
       "name": "Chicken of the Woods",
@@ -2195,8 +2271,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA wild. Mid-summer mushroom. Available Jul-Aug, ending early Sep. Small/sporadic quantities.",
-      "price_range": "$13.50/#"
+      "price_range": "$13.50/#",
+      "notes": "WA wild. Mid-summer mushroom. Available Jul-Aug, ending early Sep. Small/sporadic quantities."
     },
     {
       "name": "Wine Cap Mushroom",
@@ -2217,8 +2293,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA (Kitsap biodynamic farm). Semi-wild, brief spring window in Apr. Limited availability, lasts a few weeks.",
-      "price_range": "$12.50/#"
+      "price_range": "$12.50/#",
+      "notes": "WA (Kitsap biodynamic farm). Semi-wild, brief spring window in Apr. Limited availability, lasts a few weeks."
     },
     {
       "name": "Douglas Fir Truffle",
@@ -2239,8 +2315,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "PNW wild. Rare/premium. Black and white varieties. Mentioned Dec 2025 only — limited data. Seasonal window likely Nov-Jan.",
-      "price_range": "Black $185/#, White $120/#"
+      "price_range": "Black $185/#, White $120/#",
+      "notes": "PNW wild. Rare/premium. Black and white varieties. Mentioned Dec 2025 only \u2014 limited data. Seasonal window likely Nov-Jan."
     },
     {
       "name": "Bigleaf Maple Blossoms",
@@ -2261,162 +2337,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Wild foraged (WA). Spring blossoms for garnish. New on April 5 sheet.",
-      "price_range": "$18.50/#"
-    },
-    {
-      "name": "Halibut (New Season)",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        0,
-        0,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        1,
-        0,
-        0,
-        0
-      ],
-      "notes": "New season starting 3/30! H&G $15.95/lb, Skin-on fillet $25.95/lb. Alaska sourced.",
-      "price_range": "$15.95-$25.95/lb"
-    },
-    {
-      "name": "Black Cod",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-      ],
-      "notes": "Washington sourced. Available year-round.",
-      "price_range": "Check EC Wilson sheet"
-    },
-    {
-      "name": "Petrale Sole Fillet",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        1
-      ],
-      "notes": "Washington sourced. Winter/spring season.",
-      "price_range": "Check EC Wilson sheet"
-    },
-    {
-      "name": "Rockfish Fillet",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-      ],
-      "notes": "Washington sourced. Available year-round.",
-      "price_range": "Check EC Wilson sheet"
-    },
-    {
-      "name": "Manila Clams",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-      ],
-      "notes": "Washington sourced. Year-round availability.",
-      "price_range": "Check EC Wilson sheet"
-    },
-    {
-      "name": "Mussels",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-      ],
-      "notes": "Washington sourced (Penn Cove area). Year-round.",
-      "price_range": "Check EC Wilson sheet"
-    },
-    {
-      "name": "Oysters (Samish Pearl/Kusshi)",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-      ],
-      "notes": "Samish Pearl (WA) and Kusshi (Canada). Year-round.",
-      "price_range": "Check EC Wilson sheet"
+      "price_range": "$18.50/#",
+      "notes": "Wild foraged (WA). Spring blossoms for garnish. New on April 5 sheet."
     },
     {
       "name": "Sea Scallops",
@@ -2437,8 +2359,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Fresh dry pack: U10 $41.95/8lb, U12 $37.95/8lb, U14-15 $29.95/8lb (MA). Also IQF Weathervane AK scallops (wild, frozen). Year-round via Key City (Port Townsend). Sheet 4/8/26.",
-      "price_range": "$29.95-$41.95/8lb (fresh dry pack)"
+      "price_range": "$48.95/8lb fresh dry pack (U10-U15 MA), $39.95/5lb IQF USA",
+      "notes": "Fresh Dry Pack U10/U12/U14-U15 from MA at $48.95/8lb. IQF U10 at $39.95/5lb. AK Weathervane also available $25.99-$49.99 depending on size."
     },
     {
       "name": "Smoked Trout",
@@ -2459,8 +2381,8 @@ const DATA = {
         1,
         1
       ],
-      "notes": "From Key City Fish Co. Year-round availability.",
-      "price_range": "Check Key City sheet"
+      "price_range": "$24.99/2.5lb (G&D Smoked Trout)",
+      "notes": "G&D Smoked Trout. Key City also carries smoked salmon, black cod, halibut, albacore."
     },
     {
       "name": "English Peas",
@@ -2471,18 +2393,18 @@ const DATA = {
         0,
         0,
         1,
-        2,
-        2,
-        2,
         1,
+        1,
+        0,
+        2,
         0,
         0,
         0,
         0,
         0
       ],
-      "notes": "In stock but tight supply confirmed again on 4/6 sheet. Spring/summer seasonal.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "MEX Mar, CA Apr-May, gap Jun (CA done, wait for NW), WA Jul peak. Ended Aug."
     },
     {
       "name": "Fava Beans",
@@ -2493,18 +2415,18 @@ const DATA = {
         0,
         0,
         1,
-        2,
-        2,
-        2,
         1,
+        1,
+        1,
+        2,
         0,
         0,
         0,
         0,
         0
       ],
-      "notes": "In stock as of 3/23. Spring/summer seasonal.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "MEX Mar, CA Apr-Jun, WA Jul peak. WA ended Aug 4."
     },
     {
       "name": "Sugar Snap Peas",
@@ -2515,18 +2437,18 @@ const DATA = {
         0,
         0,
         1,
-        2,
-        2,
-        2,
         1,
+        1,
+        1,
+        0,
         0,
         0,
         0,
         0,
         0
       ],
-      "notes": "In stock as of 3/23.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "CA grown Mar-Jun. May 26 confirms CA supply."
     },
     {
       "name": "Snow Peas",
@@ -2537,18 +2459,18 @@ const DATA = {
         0,
         0,
         1,
-        2,
-        2,
-        2,
         1,
+        1,
+        1,
+        0,
         0,
         0,
         0,
         0,
         0
       ],
-      "notes": "In stock as of 3/23.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "CA grown Mar-Jun. Similar window to sugar snaps."
     },
     {
       "name": "Pea Vines",
@@ -2569,8 +2491,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "In stock as of 3/23. Delicate garnish green.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "In stock as of 3/23. Delicate garnish green."
     },
     {
       "name": "Hydro Chervil",
@@ -2591,8 +2513,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Hydroponic, Rain City WA. Featured on Franks 4/6 sheet. Delicate anise-flavored herb; excellent for spring plating.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "Hydroponic, Rain City WA. Featured on Franks 4/6 sheet. Delicate anise-flavored herb; excellent for spring plating."
     },
     {
       "name": "Hydro Frilly Mustard",
@@ -2613,8 +2535,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Hydroponic, Rain City WA. Featured on Franks 4/6 sheet. Specialty mustard green with frilly texture; good for garnish and salads.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "Hydroponic, Rain City WA. Featured on Franks 4/6 sheet. Specialty mustard green with frilly texture; good for garnish and salads."
     },
     {
       "name": "Asparagus",
@@ -2627,16 +2549,16 @@ const DATA = {
         1,
         2,
         2,
-        2,
-        1,
+        3,
+        0,
         0,
         0,
         0,
         0,
         0
       ],
-      "notes": "WA Asparagus still delayed as of 4/6 — freezing temps pushed back harvest. CA asparagus available meanwhile.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "CA Mar, WA Apr-May peak, WA winding down Jun. Apr 2026 delayed by freezing temps."
     },
     {
       "name": "Rhubarb (Hot House)",
@@ -2645,20 +2567,20 @@ const DATA = {
       "source": "vendor",
       "months": [
         0,
-        0,
-        1,
-        0,
         2,
         2,
-        1,
+        2,
+        2,
+        3,
+        0,
         0,
         0,
         0,
         0,
         0
       ],
-      "notes": "Hot house rhubarb ENDED as of 4/6. Field grown coming soon. Frozen slices (5lb/30lb packs) available as gap fill.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "WA Hot House starts Feb, peak Feb-May. Gap possible between hot house and field grown ~Apr. Field grown takes over. Done by Oct."
     },
     {
       "name": "Castelfranco",
@@ -2666,21 +2588,21 @@ const DATA = {
       "vendor": "Franks Quality Produce",
       "source": "vendor",
       "months": [
+        2,
+        2,
         1,
-        1,
-        1,
-        1,
         0,
         0,
         0,
         0,
         0,
-        0,
-        1,
-        1
+        2,
+        2,
+        2,
+        2
       ],
-      "notes": "Shortage still an issue confirmed on 4/6 sheet. Mid-April expected for regular supply.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "WA grown chicory variety. Part of mixed chicory cases Sep-Feb."
     },
     {
       "name": "Purple Sprouting Broccoli",
@@ -2701,8 +2623,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "From Bumblebee Farm (Fall City). 'Still flowin out of the fields' as of 4/7. Incredibly tender broccoli shoots. Short spring window.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Bumblebee Farm (Fall City). 'Still flowin out of the fields' as of 4/7. Incredibly tender broccoli shoots. Short spring window."
     },
     {
       "name": "Arugula (Local)",
@@ -2723,8 +2645,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Roquette variety from High & Dry Farm (Sultan). First local lettuce to market as of 4/7! Limited quantities this early. Mildly spicy.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "Roquette variety from High & Dry Farm (Sultan). First local lettuce to market as of 4/7! Limited quantities this early. Mildly spicy."
     },
     {
       "name": "Chives (Local)",
@@ -2745,8 +2667,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "From Steel Wheel Farm (Fall City). Spring chives with closed flower blossoms as of 4/7.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "From Steel Wheel Farm (Fall City). Spring chives with closed flower blossoms as of 4/7."
     },
     {
       "name": "Green Garlic",
@@ -2767,8 +2689,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available via Willamette Valley farms through Farmstand as of 3/24. Spring seasonal — override: not commodity garlic.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "notes": "Available via Willamette Valley farms through Farmstand as of 3/24. Spring seasonal \u2014 override: not commodity garlic."
     },
     {
       "name": "WA Wheatgrass",
@@ -2789,30 +2711,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Arriving week of 3/30! 20# cases. Washington-grown spring seasonal.",
-      "price_range": "Check Franks sheet"
-    },
-    {
-      "name": "Dover Sole Fillet",
-      "category": "sea",
-      "vendor": "EC Wilson",
-      "source": "vendor",
-      "months": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        1
-      ],
-      "notes": "Washington sourced. Available on 3/30 sheet. Winter/spring flatfish.",
-      "price_range": "Check EC Wilson sheet"
+      "price_range": "Check Franks sheet",
+      "notes": "Arriving week of 3/30! 20# cases. Washington-grown spring seasonal."
     },
     {
       "name": "Rhubarb (Farm)",
@@ -2833,8 +2733,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available from early April through June. One of the first farm crops of the season.",
-      "price_range": "N/A — our farm",
+      "price_range": "N/A \u2014 our farm",
+      "notes": "Available from early April through June. One of the first farm crops of the season. Confirmed in-season Apr 2026 across regional producers.",
       "available_2026": true
     },
     {
@@ -2856,8 +2756,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Purple and green varieties. 'Need to move soon' note on May 10 sheet. Early spring crop.",
-      "price_range": "N/A — our farm",
       "available_2026": false
     },
     {
@@ -2879,8 +2779,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available April–May. Classic spring foraged green.",
-      "price_range": "N/A — our farm",
+      "price_range": "N/A \u2014 our farm",
+      "notes": "Available April\u2013May. Classic spring foraged green.",
       "available_2026": true
     },
     {
@@ -2902,8 +2802,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Green French variety. Very lemony flavor. Becomes 'French sorrel' on June sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -2925,8 +2825,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Celery-like herb. Available April through summer, highlighted green (abundant) on June sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -2948,8 +2848,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Delicate salad green. Spring crop April–June.",
-      "price_range": "N/A — our farm",
+      "price_range": "N/A \u2014 our farm",
+      "notes": "Delicate salad green. Spring crop April\u2013June.",
       "available_2026": false
     },
     {
@@ -2971,8 +2871,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Garlic and regular varieties available by June. Highlighted green (abundant) on May and June sheets.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -2994,8 +2894,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Red stemmed variety. Available April through summer.",
-      "price_range": "N/A — our farm",
       "available_2026": false
     },
     {
@@ -3017,8 +2917,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on April 29 sheet onward. Highlighted green (abundant) on June sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3040,8 +2940,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on April 29 sheet. Seasonal cut flower / garnish.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3063,8 +2963,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Leaves and pods by June. Appears starting May 10 sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3086,8 +2986,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Pearl and pink varieties. Highlighted green (abundant) on May 10 sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3109,8 +3009,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Highlighted green (abundant) on May 10 sheet. Prolific grower.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3132,8 +3032,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Italian and golden varieties. Highlighted green (abundant) on June sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3155,8 +3055,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Available May through September. Perennial herb.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3178,8 +3078,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Leaves and pods by June. Anise-flavored herb.",
-      "price_range": "N/A — our farm",
       "available_2026": false
     },
     {
@@ -3201,8 +3101,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Highlighted green (abundant) on June sheet. Edible garnish.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3224,8 +3124,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Highlighted green (abundant) on June sheet. Sweet floral flavor.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3247,8 +3147,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Mix of violas by June. Various seasonal blooms May through September.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3270,8 +3170,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Leaves and flowers. Peppery flavor. Appears on June 23 sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3293,8 +3193,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on June 23 sheet. Great for teas and garnish.",
-      "price_range": "N/A — our farm",
       "available_2026": false
     },
     {
@@ -3316,8 +3216,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on June 23 sheet. Peak summer berry.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3339,8 +3239,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "'Only enough for farm dinner' note on June 23 sheet. Very limited supply.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3362,8 +3262,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Highlighted green (abundant) on June 23 sheet.",
-      "price_range": "N/A — our farm",
       "available_2026": false
     },
     {
@@ -3385,8 +3285,8 @@ const DATA = {
         1,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on June 23 sheet. Main season summer through fall.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3408,8 +3308,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on June 23 sheet. Ornamental and culinary herb.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3431,8 +3331,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on June 23 sheet. Perennial, peak in summer.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3454,8 +3354,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on June 23 sheet. Culinary and garnish use.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3477,8 +3377,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Appears on June 23 sheet. For wrapping and cooking.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3500,8 +3400,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Cut flowers. Available April–June. Spring bloom decorative use.",
-      "price_range": "N/A — our farm",
+      "price_range": "N/A \u2014 our farm",
+      "notes": "Cut flowers. Available April\u2013June. Spring bloom decorative use.",
       "available_2026": true
     },
     {
@@ -3523,8 +3423,8 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Available April through October from the farm.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3546,8 +3446,8 @@ const DATA = {
         1,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Available April through November from the farm.",
-      "price_range": "N/A — our farm",
       "available_2026": true
     },
     {
@@ -3555,7 +3455,6 @@ const DATA = {
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3570,15 +3469,15 @@ const DATA = {
         1,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Violetta and purple top varieties. Spring and fall crop from 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Potatoes (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": false,
       "months": [
         0,
         0,
@@ -3593,15 +3492,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "New potatoes by June. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": false
     },
     {
       "name": "Garlic Scapes",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3616,15 +3515,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Brief June-July window. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Beets (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": false,
       "months": [
         0,
         0,
@@ -3639,15 +3538,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Red and golden varieties. Bulls blood variety historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": false
     },
     {
       "name": "Snap/Snow Peas",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3662,15 +3561,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Mammoth variety. Includes pea shoots. Mixed colors historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Lettuce (Farm)",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3685,15 +3584,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Red romaine and salanova green mix. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Currants",
       "category": "berry",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3708,15 +3607,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Black and red varieties. Brief summer window. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Cabbage (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3731,15 +3630,15 @@ const DATA = {
         1,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Green and red varieties. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Zucchini (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3754,15 +3653,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Summer squash. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Dried Beans",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": false,
       "months": [
         0,
         0,
@@ -3777,15 +3676,15 @@ const DATA = {
         1,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Teggia, Pellegrini, Rattlesnake, Runner varieties historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": false
     },
     {
       "name": "Walla Walla Onions",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3800,15 +3699,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Walla Walla sweet and Cippolini varieties. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Tomatoes (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3823,15 +3722,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Heirloom slicers and saladettes. Cherry tomatoes (small and saladette). From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Sweet Peppers (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3846,15 +3745,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Nardello, Buena Mulata, Aji Crystal, Aleppo historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Padron/Shishito (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3869,15 +3768,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Also Poblano, Sugar Rush Peach historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Eggplant (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3892,15 +3791,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "From 2026 plan. Late summer crop.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "GCR Squash",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3915,15 +3814,15 @@ const DATA = {
         1,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Georgia Candy Roaster. Summer/winter squash crossover. LOTS historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Honeynut Squash",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3938,15 +3837,15 @@ const DATA = {
         2,
         1
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Winter squash. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Cucumber (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3961,15 +3860,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Silver slicer, Japanese, Persian (no lemon). From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Carrots (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -3984,15 +3883,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Deep purple variety. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Marjoram (Farm)",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4007,15 +3906,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Variegated variety historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Savory",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4030,15 +3929,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Lemon Verbena",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4053,15 +3952,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Basil (Farm)",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4076,15 +3975,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Cinnamon and Genovese varieties historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Dill (Farm)",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4099,15 +3998,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Dukat variety historically. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Marigolds",
       "category": "flower",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4122,15 +4021,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Edible flower. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Violas",
       "category": "flower",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4145,15 +4044,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Part of edible flowers mix. Spring bloom. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Calendula",
       "category": "flower",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4168,15 +4067,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Edible flower. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Cut Flowers (Farm)",
       "category": "flower",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4191,15 +4090,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Zinnia, Amaranth, Snapdragon, Cosmos, Dahlia. From 2026 plan.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Beef Shanks",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         1,
         1,
@@ -4214,15 +4113,15 @@ const DATA = {
         1,
         1
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "From freezer. Available now. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Beef Tenderloin",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         1,
         1,
@@ -4237,15 +4136,15 @@ const DATA = {
         1,
         1
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "From freezer. 3-4lbs total, small run of tartar. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Ground Beef / Bolo Meat",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         1,
         1,
@@ -4260,15 +4159,15 @@ const DATA = {
         1,
         1
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "From freezer. 425lbs. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Lamb Loin Chops",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         1,
         1,
@@ -4283,15 +4182,15 @@ const DATA = {
         1,
         1
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "From freezer. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Lamb-Pork Sausage",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4306,15 +4205,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "May-Jun. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Pork Belly",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4329,15 +4228,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "May-Jun. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Pork Chops",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4352,15 +4251,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "May-Jun. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Pork Shanks",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4375,15 +4274,15 @@ const DATA = {
         1,
         1
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "May onward. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Beef Primals",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4398,15 +4297,15 @@ const DATA = {
         1,
         1
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jul onward. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Guanciale (House-Cured)",
       "category": "protein",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4421,15 +4320,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jul-Aug after cure. Tim 2026 confirmed.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Cilantro (Farm)",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4444,15 +4343,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jul. Invoice history 2024.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Loganberries",
       "category": "berry",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4467,15 +4366,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Aug. Invoice history 2023.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Cherry Tomatoes (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4490,15 +4389,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jul-Sep. Small and saladette varieties.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Heirloom Tomatoes (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4513,15 +4412,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Aug-Oct. Peak late summer.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Apples (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4536,15 +4435,15 @@ const DATA = {
         1,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Sep-Nov. King variety and others.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Snow Peas",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4559,15 +4458,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jun-Jul.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Squash (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4582,15 +4481,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jul-Sep. Various summer varieties.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Peppers (Farm)",
       "category": "produce",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4605,15 +4504,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Sep. Various varieties incl. Nardello, Buena Mulata, Aji Crystal.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Mixed Berries (Farm)",
       "category": "berry",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4628,15 +4527,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jul-Sep. Raspberry, boysenberry, mulberry mix.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Chive Blossoms",
       "category": "flower",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4651,15 +4550,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jun. Invoice history 2023-2024.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Parsley (Farm)",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4674,15 +4573,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jun-Aug. Invoice history 2024.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Tarragon (Farm)",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4697,15 +4596,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jun-Aug. French variety.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Tomato Leaf",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4720,15 +4619,15 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Jun-Sep. For infusions and garnish.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Borage",
       "category": "green",
       "vendor": "Swan House Farms",
       "source": "farm",
-      "available_2026": true,
       "months": [
         0,
         0,
@@ -4743,8 +4642,9 @@ const DATA = {
         0,
         0
       ],
+      "price_range": "N/A \u2014 our farm",
       "notes": "Aug. Invoice history 2021.",
-      "price_range": "N/A — our farm"
+      "available_2026": true
     },
     {
       "name": "Chicories (Mixed)",
@@ -4754,19 +4654,19 @@ const DATA = {
       "months": [
         2,
         2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
         2,
-        1,
-        0,
-        0,
-        0,
-        0,
-        1,
         2,
         2,
         2
       ],
-      "notes": "Radicchio, Castelfranco, Treviso, Frisee, Escarole, Sugar Loaf. WA grown peak fall through winter. Jeff's mixed cases available Sep-Apr.",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA grown. Season starts Sep, peak Sep-Feb. Radicchio, Castelfranco, Sugar Loaf, Frisee, Escarole, Endive."
     },
     {
       "name": "Corn (Bi-Color)",
@@ -4780,15 +4680,15 @@ const DATA = {
         0,
         0,
         0,
-        1,
         2,
         2,
-        1,
+        3,
+        0,
         0,
         0
       ],
-      "notes": "CA first, then WA grown peak Aug-Sep. Jeff: 'Gorgeous Bi Color Corn from WA' (Aug 2025).",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA grown. Jul-Aug peak, Sep winding down."
     },
     {
       "name": "Cranberries (Fresh)",
@@ -4804,13 +4704,13 @@ const DATA = {
         0,
         0,
         0,
-        0,
+        1,
         2,
         2,
-        1
+        3
       ],
-      "notes": "WA grown, Ocean Spray label. Jeff: 'Fresh PNW Cranberries in stock' (Oct-Nov).",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA grown (Ocean Spray label). Arrives late Sep, peak Oct-Nov. Available through Dec."
     },
     {
       "name": "Heirloom Peppers",
@@ -4824,15 +4724,15 @@ const DATA = {
         0,
         0,
         0,
-        2,
-        2,
-        2,
         1,
+        2,
+        2,
+        3,
         0,
         0
       ],
-      "notes": "Nardellos, Shishitos, Gypsy, Fresno, Poblano, Anaheim, Hatch. WA grown Jul-Oct. 100+ invoices.",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "CA Nardellos start Jul. WA peak Aug-Sep. Winding down Oct. Carmen, Escamillo, Shishitos, Fresno, etc."
     },
     {
       "name": "Kumquats",
@@ -4841,20 +4741,20 @@ const DATA = {
       "source": "vendor",
       "months": [
         3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
         1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
+        2,
         2
       ],
-      "notes": "CA citrus. Jeff notes gapping issues Jan 2026. Season ~Nov-Mar.",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "CA citrus. Available Oct-Jan. Gapping in Jan 2026. Done by Feb."
     },
     {
       "name": "Meyer Lemon",
@@ -4875,8 +4775,8 @@ const DATA = {
         1,
         2
       ],
-      "notes": "CA citrus. Peak winter. Year-round conventional available but seasonal CA crop is best.",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "CA citrus. Peak winter. Year-round conventional available but seasonal CA crop is best."
     },
     {
       "name": "Peaches",
@@ -4890,15 +4790,15 @@ const DATA = {
         0,
         0,
         0,
-        1,
         2,
-        1,
+        2,
+        3,
         0,
         0,
         0
       ],
-      "notes": "WA stone fruit peak Aug. Jeff: 'WA grown stone fruits — peaches, nectarines, donut peaches'.",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA grown stone fruit. Jul-Aug peak, Sep limited."
     },
     {
       "name": "Persimmons (Fuyu)",
@@ -4919,8 +4819,8 @@ const DATA = {
         2,
         2
       ],
-      "notes": "CA crop Oct-Dec, import Jan hanging on. Jeff: 'Persimmons available until new year'.",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "CA crop Oct-Dec, import Jan hanging on. Jeff: 'Persimmons available until new year'."
     },
     {
       "name": "Plums & Pluots",
@@ -4934,15 +4834,15 @@ const DATA = {
         0,
         0,
         0,
-        1,
         2,
-        1,
+        2,
+        0,
         0,
         0,
         0
       ],
-      "notes": "WA stone fruit. Italian prune plums Aug. Jeff: 'Apricots, Peaches, Plums, Pluots all looking good' (Jul).",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA grown stone fruit. Jul-Aug peak."
     },
     {
       "name": "Strawberries (Local)",
@@ -4957,14 +4857,14 @@ const DATA = {
         1,
         2,
         2,
-        2,
-        1,
+        3,
+        0,
         0,
         0,
         0
       ],
-      "notes": "WA hydroponic start Apr, field Jun-Aug peak. Jeff: 'WA Grown Hydroponic Strawberries available' (Apr).",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA hydro starts Apr. Peak Jun-Jul. Fading Aug."
     },
     {
       "name": "Sunchokes",
@@ -4981,12 +4881,12 @@ const DATA = {
         0,
         0,
         0,
-        1,
+        2,
         2,
         2
       ],
-      "notes": "Newaukum Valley Farm, WA. Season Oct-May/June. Jeff: 'Out of season, back late fall' (May).",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA Newaukum Valley Farms. Oct-May. Out of season Jun-Sep. Jeff: only use these Nov-May."
     },
     {
       "name": "Watermelon",
@@ -4999,16 +4899,16 @@ const DATA = {
         0,
         0,
         0,
-        0,
         1,
+        2,
         2,
         3,
         0,
         0,
         0
       ],
-      "notes": "WA grown Yumi. Jeff: 'Watermelon season winding down' (Sep).",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA organic Yumi. Starts Jun, peak Jul-Aug, winding down Sep."
     },
     {
       "name": "Winter Squash",
@@ -5016,21 +4916,21 @@ const DATA = {
       "vendor": "Franks Quality Produce",
       "source": "vendor",
       "months": [
-        1,
-        1,
+        3,
         0,
         0,
         0,
         0,
         0,
         0,
-        1,
+        0,
+        2,
         2,
         2,
         2
       ],
-      "notes": "WA grown: Butternut, Kabocha, Acorn, Spaghetti, Sugar Pie, Winter Luxury, Kuri, Honeynut, Delicata. Kuri/Honeynut done by mid-Dec. Jan-Feb = CA/MEX stock.",
-      "price_range": "See invoice data"
+      "price_range": "See invoice data",
+      "notes": "WA grown. Arrives Sep, peak Sep-Dec. Red Kuri/Winter Luxury done by Jan. Other varieties linger. CA/MEX only after Jan."
     },
     {
       "name": "Apricots",
@@ -5044,15 +4944,15 @@ const DATA = {
         0,
         0,
         0,
-        1,
+        2,
         2,
         0,
         0,
         0,
         0
       ],
-      "notes": "WA peak Aug. Jeff: 'Apricots back to CA but ending soon' (Aug).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA stone fruit. Jul-Aug peak."
     },
     {
       "name": "Baby Artichokes",
@@ -5073,8 +4973,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "CA grown. Jeff: 'Baby Artichokes should be back soon' (Apr).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "CA grown. Jeff: 'Baby Artichokes should be back soon' (Apr)."
     },
     {
       "name": "Bergamot",
@@ -5095,8 +4995,8 @@ const DATA = {
         2,
         2
       ],
-      "notes": "CA specialty citrus. Jeff groups with buddha hand, yuzu, makrut (Oct start).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "CA specialty citrus. Jeff groups with buddha hand, yuzu, makrut (Oct start)."
     },
     {
       "name": "Buddha Hand",
@@ -5117,8 +5017,8 @@ const DATA = {
         2,
         2
       ],
-      "notes": "CA specialty citrus. On fresh sheet Oct-Feb.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "CA specialty citrus. On fresh sheet Oct-Feb."
     },
     {
       "name": "Garlic Scapes",
@@ -5139,8 +5039,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA grown. Short season. Jeff: 'Garlic Scapes in house!!' (Jun), 'run their course' (Jul).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown. Short season. Jeff: 'Garlic Scapes in house!!' (Jun), 'run their course' (Jul)."
     },
     {
       "name": "Green Beans",
@@ -5161,8 +5061,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA grown. Jeff: 'Green Beans, Yellow Wax, Romano around until September' (Jul).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown. Jeff: 'Green Beans, Yellow Wax, Romano around until September' (Jul)."
     },
     {
       "name": "Mission Figs",
@@ -5179,12 +5079,12 @@ const DATA = {
         2,
         2,
         2,
-        3,
+        2,
         3,
         0
       ],
-      "notes": "CA grown. Jeff: 'Figs winding down, couple weeks left' (Nov).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "CA grown. Arrives Jun, peak Jul-Oct. Done by late Nov."
     },
     {
       "name": "Nectarines",
@@ -5198,15 +5098,15 @@ const DATA = {
         0,
         0,
         0,
-        1,
         2,
-        1,
+        2,
+        0,
         0,
         0,
         0
       ],
-      "notes": "WA stone fruit. Same season as peaches.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown stone fruit. Jul-Aug peak."
     },
     {
       "name": "Parsley Root",
@@ -5227,8 +5127,8 @@ const DATA = {
         2,
         2
       ],
-      "notes": "WA grown. Jeff: 'Organic Parsley Root from WA, Boldly Grown Farm' (Nov).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown. Jeff: 'Organic Parsley Root from WA, Boldly Grown Farm' (Nov)."
     },
     {
       "name": "Pomegranate",
@@ -5236,6 +5136,9 @@ const DATA = {
       "vendor": "Franks Quality Produce",
       "source": "vendor",
       "months": [
+        0,
+        0,
+        1,
         1,
         0,
         0,
@@ -5243,14 +5146,11 @@ const DATA = {
         0,
         0,
         0,
-        1,
-        2,
-        2,
-        2,
-        1
+        0,
+        0
       ],
-      "notes": "CA crop Aug-Dec (better pricing than imports). Import available other months. Jeff: 'CA Pomegranate Season just started!' (Aug).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "Import. Available Mar-Apr. Not a seasonal highlight."
     },
     {
       "name": "Quince",
@@ -5267,12 +5167,12 @@ const DATA = {
         0,
         0,
         0,
-        2,
+        1,
         2,
         3
       ],
-      "notes": "CA grown. Jeff: 'Quince done for the season' (Jan). Short fall window.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "CA grown. Available Oct-Dec. Done by Dec 22."
     },
     {
       "name": "Rainier Cherries",
@@ -5285,7 +5185,7 @@ const DATA = {
         0,
         0,
         0,
-        0,
+        2,
         2,
         3,
         0,
@@ -5293,8 +5193,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA grown. Very short peak. Jeff: 'Rainier Cherries ending fast, guessing a week' (Aug).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown. Starts Jun, peak Jun-Jul. Ending fast early Aug, done by mid-Aug."
     },
     {
       "name": "Red Cherries",
@@ -5307,16 +5207,16 @@ const DATA = {
         0,
         0,
         0,
-        0,
         2,
         2,
-        1,
+        2,
+        3,
         0,
         0,
         0
       ],
-      "notes": "WA grown. Last longer than Rainiers. Jeff: 'Red cherries in some form for the next month' (after Rainiers end).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown. Starts Jun with Rainiers. Available in some form through Sep."
     },
     {
       "name": "Romano Beans",
@@ -5337,8 +5237,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA grown. Same season as green/wax beans. Jul-Sep.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown. Same season as green/wax beans. Jul-Sep."
     },
     {
       "name": "Tayberries",
@@ -5353,14 +5253,14 @@ const DATA = {
         0,
         0,
         2,
-        1,
+        3,
         0,
         0,
         0,
         0
       ],
-      "notes": "WA local berry. Short season. Jeff groups with local berry peak (Jul).",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA local berry. Jul peak, fading Aug."
     },
     {
       "name": "Yellow Wax Beans",
@@ -5381,8 +5281,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "WA grown. Same season as green/romano beans.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "WA grown. Same season as green/romano beans."
     },
     {
       "name": "Yuzu",
@@ -5403,13 +5303,14 @@ const DATA = {
         2,
         2
       ],
-      "notes": "CA specialty citrus. Jeff: 'Yuzu done for the season' (Jan). Oct-Dec peak.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "notes": "CA specialty citrus. Jeff: 'Yuzu done for the season' (Jan). Oct-Dec peak."
     },
     {
       "name": "Troll King Salmon",
       "category": "sea",
       "vendor": "Key City Fish",
+      "source": "vendor",
       "months": [
         0,
         0,
@@ -5424,13 +5325,14 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Fresh O/R Troll King Salmon, AK — confirmed available April 2026. Troll-caught wild; season runs spring through fall, peak May-Aug. Restaurant pricing: $19.95/lb whole, $28.95/lb fillet (sheet 4/8/26). Re-Fresh H&G also available BC $14.25/lb whole.",
-      "price_range": "$19.95/lb whole, $28.95/lb fillet"
+      "price_range": "$18.99/lb H&G, $25.95/lb fillet (Re-Fresh BC)",
+      "notes": "Re-Fresh 7-11 H&G Troll King Salmon from BC. Organic farmed also available at $16.99/$24.95."
     },
     {
       "name": "Troll Coho Salmon",
       "category": "sea",
       "vendor": "Key City Fish",
+      "source": "vendor",
       "months": [
         0,
         0,
@@ -5445,13 +5347,14 @@ const DATA = {
         1,
         0
       ],
-      "notes": "Troll-caught Coho, AK. Available Apr as re-fresh ($8.99/lb, $12.99/fillet). Peak fresh season Aug-Oct. Sheet 4/8/26.",
-      "price_range": "$8.99/lb whole, $12.99/lb fillet"
+      "price_range": "$11.99/lb H&G, $17.99/lb fillet (Re-Fresh AK)",
+      "notes": "Re-Fresh 4-6 H&G Troll Coho from AK."
     },
     {
       "name": "Dungeness Crab (Live, WA)",
       "category": "sea",
       "vendor": "Key City Fish",
+      "source": "vendor",
       "months": [
         2,
         2,
@@ -5466,13 +5369,14 @@ const DATA = {
         1,
         2
       ],
-      "notes": "Live WA/OR Dungeness Crab — prime Dec-Mar, available through June, unavailable Jul-Oct (molting). $17.99/lb live. Picked meat: $49.95/lb tub or $48.50/lb (5lb can). Key City, Port Townsend. Sheet 4/8/26.",
-      "price_range": "$17.99/lb live, $49.95/lb crabmeat"
+      "price_range": "$18.99/lb live, $59.75/lb crabmeat (1lb tub or 5lb can)",
+      "notes": "Live OR Dungeness Crab, WA. Fresh crabmeat WA/OR also available. Year-round PNW staple."
     },
     {
       "name": "Geoduck (WA, Live)",
       "category": "sea",
       "vendor": "Key City Fish",
+      "source": "vendor",
       "months": [
         1,
         1,
@@ -5487,47 +5391,1728 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Live WA Geoduck — pre-order required, dive harvest quota controlled. Best fall through spring. $36.95/lb. Sheet 4/8/26.",
-      "price_range": "$36.95/lb"
+      "price_range": "$39.95/lb live (pre-order required)",
+      "notes": "Live Geoduck, WA. Pre-order required. Frozen geoduck meat also at $19.99/10lb."
+    },
+    {
+      "name": "Black Cod (Sablefish)",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "price_range": "$12.99/lb whole j-cut, $18.99/lb fillet",
+      "notes": "Fresh NW j-cut from OR/WA. 2-3 and 3-4 sizes available. Peak summer catch. Frozen albacore tuna loins also available."
+    },
+    {
+      "name": "Halibut (AK)",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "price_range": "$18.99/lb whole, $32.95/lb fillet. Cheeks $29.95/lb IQF",
+      "notes": "Re-Fresh AK Halibut, 10-20 and 20-40 sizes. IQF cheeks at $29.95. Season typically March-November, peak summer."
+    },
+    {
+      "name": "Manila Clams",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "price_range": "$7.99/lb (Rock Point or Taylor United small)",
+      "notes": "Rock Point and Taylor United sources. Savory Clams also available at $5.99. Year-round PNW farmed shellfish."
+    },
+    {
+      "name": "Penn Cove Mussels",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "price_range": "$7.99/5lb bag",
+      "notes": "Penn Cove Pacific Mussels (5lb bags). Taylor Mediterranean Mussels also at $7.99/5lb. Peak quality spring-summer."
+    },
+    {
+      "name": "Overwintered Cauliflower",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "Check fresh sheet \u2014 Steel Wheel Farm direct",
+      "notes": "Steel Wheel Farm overwintered cauliflower \u2014 on 4/15 Farmstand sheet as 'Cauli Buds' feature. Distinct from commodity cauliflower: overwintered field growth yields denser, sweeter heads. Spring-only window, supply tightens by late May as fields turn over."
+    },
+    {
+      "name": "Blackmouth King Salmon",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "price_range": "Ask Rosa \u2014 varies with catch",
+      "notes": "Neah Bay-caught Blackmouth (resident winter/spring Chinook). Distinct from Troll King \u2014 leaner body fat, cleaner flavor profile, smaller average fish. Appeared on Key City 4/15 inventory. Best suited for crudo and light preparations vs. rich pasta sauces."
+    },
+    {
+      "name": "Green Garlic",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "WA grown. First shot Feb (limited), available into Mar."
+    },
+    {
+      "name": "Nasturtium Leaf",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "WA grown. Pre-order only Jan-Feb. Limited supply."
+    },
+    {
+      "name": "Chive Blossoms",
+      "category": "flower",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "WA grown. Starting May, lots Jun. Also pansies, chamomile in May."
+    },
+    {
+      "name": "Fiddleheads",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "PNW foraged. Pre-order Mar, readily available Apr, in stock May."
+    },
+    {
+      "name": "Ramps",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "PNW foraged. Pre-order Mar, readily available Apr, winding down May."
+    },
+    {
+      "name": "Nettles",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "PNW foraged. Pre-order Mar, readily available Apr, winding down May."
+    },
+    {
+      "name": "Miners Lettuce",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "PNW foraged. Pre-order only Mar-Apr."
+    },
+    {
+      "name": "Wood Sorrel",
+      "category": "green",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "PNW foraged. Pre-order only Mar-Apr."
+    },
+    {
+      "name": "Raspberries (Local)",
+      "category": "berry",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "WA local. Popping Jul, fading Aug. Order in multiples of 4 or 6 half-pints."
+    },
+    {
+      "name": "Blackberries (Local)",
+      "category": "berry",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "price_range": "",
+      "notes": "WA local. Popping Jul, some still Aug."
+    },
+    {
+      "name": "Winter Radishes",
+      "category": "produce",
+      "vendor": "Franks Quality Produce",
+      "source": "vendor",
+      "months": [
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+      ],
+      "price_range": "",
+      "notes": "WA grown. Oct-Feb. Purple Daikon, Green Meat, Black Radish, Watermelon radish."
     }
   ],
   "menu_planning": {
-    "current_month_summary": "Mid-April — peak spring foraging season. Last automated run: 4/12. All 8 vendors checked. F&F no new sheet since 4/5; Local Roots current 4/10; Farmstand current 4/7; Franks current 4/6; EC Wilson active (invoices confirm orders through 4/5 week) but no new fresh sheet since 3/30; Key City no new sheet since 3/11; Preserve Meat last contact 4/4 (bavette supply alert); Sea Breeze newsletters only, no fresh sheet. New this run: Frozen Tayberries added (Farmstand/Hayton Farms), Magnolia Buds downgraded to 'ending' (absent from 4/5 sheet). Preserve Meat vendor date updated to 4/4.",
+    "current_month_summary": "Mid-April \u2014 peak spring foraging season. Last automated run: 4/12. All 8 vendors checked. F&F no new sheet since 4/5; Local Roots current 4/10; Farmstand current 4/7; Franks current 4/6; EC Wilson active (invoices confirm orders through 4/5 week) but no new fresh sheet since 3/30; Key City no new sheet since 3/11; Preserve Meat last contact 4/4 (bavette supply alert); Sea Breeze newsletters only, no fresh sheet. New this run: Frozen Tayberries added (Farmstand/Hayton Farms), Magnolia Buds downgraded to 'ending' (absent from 4/5 sheet). Preserve Meat vendor date updated to 4/4.",
     "whats_peaking": [
-      "Stinging Nettles (Foraged & Found — 50# volume pricing at $7.50/#; also available through Franks)",
-      "Ramps (Foraged & Found — fully available, $19.50/#)",
-      "Fiddleheads (Foraged & Found — volume pricing for 20#+)",
-      "Wild Watercress (Foraged & Found — taking off for spring)",
-      "Purple Sprouting Broccoli (Farmstand/Bumblebee Farm — still flowing, act now)",
-      "Mixed Rapini (Local Roots — only rapini on 4/10 sheet, really awesome; Farmstand also has rapini)",
+      "Stinging Nettles (Foraged & Found \u2014 50# volume pricing at $7.50/#; also available through Franks)",
+      "Ramps (Foraged & Found \u2014 fully available, $19.50/#)",
+      "Fiddleheads (Foraged & Found \u2014 volume pricing for 20#+)",
+      "Wild Watercress (Foraged & Found \u2014 taking off for spring)",
+      "Purple Sprouting Broccoli (Farmstand/Bumblebee Farm \u2014 still flowing, act now)",
+      "Mixed Rapini (Local Roots \u2014 only rapini on 4/10 sheet, really awesome; Farmstand also has rapini)",
       "Beets (Local Roots on sale + Farmstand/Caruso Farm)",
-      "Halibut (EC Wilson — new season in full swing)"
+      "Halibut (EC Wilson \u2014 new season in full swing)"
     ],
     "whats_coming": [
-      "WA Asparagus (Franks — still delayed by freezing temps as of 4/6)",
-      "Field Grown Rhubarb (Franks — replacing ended hot house, coming soon)",
-      "Baby Artichokes (Franks — back soon, no date yet)",
-      "Local Roots replanted crops (baby lettuce, arugula, radishes, salad mix — mid-May)",
-      "Swan House Farms first crops (rhubarb, mustard greens, nettles, sorrel, mache — mid-April)",
-      "Morels (Foraged & Found — May)",
-      "Castelfranco regular supply (Franks — mid-April)"
+      "WA Asparagus (Franks \u2014 still delayed by freezing temps as of 4/6)",
+      "Field Grown Rhubarb (Franks \u2014 replacing ended hot house, coming soon)",
+      "Baby Artichokes (Franks \u2014 back soon, no date yet)",
+      "Local Roots replanted crops (baby lettuce, arugula, radishes, salad mix \u2014 mid-May)",
+      "Swan House Farms first crops (rhubarb, mustard greens, nettles, sorrel, mache \u2014 mid-April)",
+      "Morels (Foraged & Found \u2014 May)",
+      "Castelfranco regular supply (Franks \u2014 mid-April)"
     ],
     "whats_ending": [
-      "Magnolia Buds (Foraged & Found — not on 4/5 sheet, likely ended for the season)",
-      "Curly Kale Rapini (Local Roots — off 4/10 sheet, uncertain supply; only Mixed Rapini this week)",
-      "Hot House Rhubarb (Franks — ENDED as of 4/6, frozen slices available as bridge)",
-      "Watermelon Radish (Local Roots — gone)",
-      "Red Onions (Local Roots — gone)",
-      "Miner's Lettuce transitioning to higher elevations (Foraged & Found — limited)",
+      "Magnolia Buds (Foraged & Found \u2014 not on 4/5 sheet, likely ended for the season)",
+      "Curly Kale Rapini (Local Roots \u2014 off 4/10 sheet, uncertain supply; only Mixed Rapini this week)",
+      "Hot House Rhubarb (Franks \u2014 ENDED as of 4/6, frozen slices available as bridge)",
+      "Watermelon Radish (Local Roots \u2014 gone)",
+      "Red Onions (Local Roots \u2014 gone)",
+      "Miner's Lettuce transitioning to higher elevations (Foraged & Found \u2014 limited)",
       "Less-local organic supplementation winding down as local produce returns (Farmstand)"
     ],
     "alerts": [
       "Local Roots flood recovery: replanted greenhouses, warm/dry stretch expected to help. Crops 4-5 weeks out.",
-      "Basil market still recovering (Franks) — supply improving but pricing difficult.",
-      "Preserve Meat bavettes tight — Sean suggesting alternative cuts (ribeye, tenderloin, striploin, flat iron, culotte, outside skirt). May face back-orders.",
-      "Castelfranco shortage continues (Franks) — regular supply expected mid-April.",
+      "Basil market still recovering (Franks) \u2014 supply improving but pricing difficult.",
+      "Preserve Meat bavettes tight \u2014 Sean suggesting alternative cuts (ribeye, tenderloin, striploin, flat iron, culotte, outside skirt). May face back-orders.",
+      "Castelfranco shortage continues (Franks) \u2014 regular supply expected mid-April.",
       "WA Asparagus delayed by freezing temps (Franks)."
     ]
+  },
+  "weather": {
+    "last_fetched": "2026-04-19T23:29:47.535715",
+    "note": "Includes agricultural, foraging, rangeland, and marine regions. GDD applies to agricultural/foraging; marine uses ocean conditions. Vendor alerts are filtered by proximity tier (see vendor_intelligence section).",
+    "region_summary": {
+      "total_regions": 19,
+      "agricultural": 7,
+      "foraging": 7,
+      "rangeland": 2,
+      "marine": 3
+    },
+    "vendor_alerts": {
+      "Swan House Farms (Our Farm)": {
+        "proximity_tier": "direct_source",
+        "region_count": 1,
+        "detail_level": "granular",
+        "alerts_detail": [],
+        "region_count_affected": null,
+        "predictions": [],
+        "aggregated_note": null,
+        "raw_alert_regions": []
+      },
+      "Foraged & Found Edibles": {
+        "proximity_tier": "wide_network",
+        "region_count": 7,
+        "detail_level": "prediction",
+        "alerts_detail": [],
+        "region_count_affected": null,
+        "predictions": [],
+        "aggregated_note": "Foraged & Found Edibles is our expert on sourcing. These are product-availability predictions based on weather patterns across their 0 sourcing regions.",
+        "raw_alert_regions": []
+      },
+      "Local Roots Farm": {
+        "proximity_tier": "direct_source",
+        "region_count": 1,
+        "detail_level": "granular",
+        "alerts_detail": [],
+        "region_count_affected": null,
+        "predictions": [],
+        "aggregated_note": null,
+        "raw_alert_regions": []
+      },
+      "Farmstand Local Foods": {
+        "proximity_tier": "regional_network",
+        "region_count": 5,
+        "detail_level": "aggregated",
+        "alerts_detail": [],
+        "region_count_affected": 0,
+        "predictions": [],
+        "aggregated_note": null,
+        "raw_alert_regions": []
+      },
+      "Franks Quality Produce": {
+        "proximity_tier": "direct_source",
+        "region_count": 2,
+        "detail_level": "granular",
+        "alerts_detail": [],
+        "region_count_affected": null,
+        "predictions": [],
+        "aggregated_note": null,
+        "raw_alert_regions": []
+      },
+      "EC Wilson": {
+        "proximity_tier": "direct_source",
+        "region_count": 1,
+        "detail_level": "granular",
+        "alerts_detail": [],
+        "region_count_affected": null,
+        "predictions": [],
+        "aggregated_note": null,
+        "raw_alert_regions": []
+      },
+      "Key City Fish Co": {
+        "proximity_tier": "regional_network",
+        "region_count": 3,
+        "detail_level": "aggregated",
+        "alerts_detail": [],
+        "region_count_affected": 0,
+        "predictions": [],
+        "aggregated_note": null,
+        "raw_alert_regions": []
+      },
+      "Preserve Meat": {
+        "proximity_tier": "direct_source",
+        "region_count": 2,
+        "detail_level": "granular",
+        "alerts_detail": [],
+        "region_count_affected": null,
+        "predictions": [],
+        "aggregated_note": null,
+        "raw_alert_regions": []
+      }
+    },
+    "regions": {
+      "skagit_valley_wa": {
+        "name": "Skagit Valley, WA",
+        "category": "agricultural",
+        "current_conditions": {
+          "high_temp_f": 58,
+          "low_temp_f": 43,
+          "avg_temp_f": 49.714285714285715
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Slight Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 55,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Patchy Fog"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 58,
+            "temperatureUnit": "F",
+            "shortForecast": "Patchy Fog"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 54,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 43,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Swan House Farm",
+          "Local Roots Farm",
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "greens",
+          "brassicas",
+          "flowers",
+          "root_vegetables"
+        ]
+      },
+      "snoqualmie_valley_wa": {
+        "name": "Snoqualmie Valley, WA",
+        "category": "agricultural",
+        "current_conditions": {
+          "high_temp_f": 59,
+          "low_temp_f": 42,
+          "avg_temp_f": 49.57142857142857
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 55,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Patchy Fog"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 59,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Monday",
+            "temperature": 53,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 42,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Local Roots Farm",
+          "Farmstand Local Foods"
+        ],
+        "key_products": [
+          "greens",
+          "brassicas",
+          "root_vegetables"
+        ]
+      },
+      "snohomish_sammamish_valleys_wa": {
+        "name": "Snohomish/Sammamish Valleys, WA",
+        "category": "agricultural",
+        "current_conditions": {
+          "high_temp_f": 58,
+          "low_temp_f": 43,
+          "avg_temp_f": 49.42857142857143
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 54,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Patchy Fog"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 58,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 53,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 43,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Farmstand Local Foods"
+        ],
+        "key_products": [
+          "greens",
+          "flowers",
+          "berries"
+        ]
+      },
+      "puget_lowlands_seattle_wa": {
+        "name": "Puget Lowlands / Greater Seattle",
+        "category": "agricultural",
+        "current_conditions": {
+          "high_temp_f": 58,
+          "low_temp_f": 45,
+          "avg_temp_f": 51.0
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 49,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 55,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 47,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 58,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Sunny then Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 47,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 56,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Franks Produce",
+          "EC Wilson"
+        ],
+        "key_products": [
+          "greens",
+          "seasonal_produce",
+          "local_farms"
+        ]
+      },
+      "yakima_valley_wa": {
+        "name": "Yakima Valley, WA",
+        "category": "agricultural",
+        "current_conditions": {
+          "high_temp_f": 69,
+          "low_temp_f": 38,
+          "avg_temp_f": 53.0
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 66,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 41,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 69,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Sunny then Slight Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 43,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Partly Cloudy"
+          },
+          {
+            "name": "Monday",
+            "temperature": 66,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Sunny"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 38,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Farmstand Local Foods",
+          "Franks Produce"
+        ],
+        "key_products": [
+          "stone_fruit",
+          "apples",
+          "asparagus",
+          "berries"
+        ]
+      },
+      "columbia_basin_wa": {
+        "name": "Columbia Basin, WA",
+        "category": "agricultural",
+        "current_conditions": {
+          "high_temp_f": 68,
+          "low_temp_f": 41,
+          "avg_temp_f": 54.42857142857143
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 50,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 67,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 43,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Partly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 68,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 47,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 65,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Sunny"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 41,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Farmstand Local Foods"
+        ],
+        "key_products": [
+          "produce_irrigated",
+          "potatoes",
+          "root_vegetables"
+        ]
+      },
+      "okanogan_highlands_wa": {
+        "name": "Okanogan Highlands, WA",
+        "category": "agricultural",
+        "current_conditions": {
+          "high_temp_f": 66,
+          "low_temp_f": 40,
+          "avg_temp_f": 53.0
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 62,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 44,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 66,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy"
+          },
+          {
+            "name": "Monday",
+            "temperature": 66,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Sunny"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 40,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Farmstand Local Foods"
+        ],
+        "key_products": [
+          "apples",
+          "potatoes",
+          "grains"
+        ]
+      },
+      "cascade_range_forests": {
+        "name": "Cascade Range / Western WA Forests",
+        "category": "foraging",
+        "current_conditions": {
+          "high_temp_f": 48,
+          "low_temp_f": 34,
+          "avg_temp_f": 40.57142857142857
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 41,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 39,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 37,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Likely"
+          },
+          {
+            "name": "Monday",
+            "temperature": 40,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Snow Likely"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 34,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Likely"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "mushrooms_wild",
+          "wild_greens",
+          "fiddleheads"
+        ]
+      },
+      "eastern_wa_rangeland": {
+        "name": "Eastern WA Rangeland",
+        "category": "rangeland",
+        "current_conditions": {
+          "high_temp_f": 66,
+          "low_temp_f": 39,
+          "avg_temp_f": 52.42857142857143
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 50,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 65,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Showers And Thunderstorms"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 42,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Partly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 66,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Monday",
+            "temperature": 60,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 39,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Preservation Meat Collective"
+        ],
+        "key_products": [
+          "lamb",
+          "beef",
+          "pasture_raised"
+        ]
+      },
+      "olympic_peninsula_hood_canal": {
+        "name": "Olympic Peninsula / Hood Canal",
+        "category": "marine",
+        "current_conditions": {
+          "high_temp_f": 57,
+          "low_temp_f": 43,
+          "avg_temp_f": 49.714285714285715
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 49,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Light Rain Likely"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 54,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 46,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Patchy Fog"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 57,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 54,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 43,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          }
+        ],
+        "alerts": [],
+        "annotations": [
+          "[Olympic Peninsula / Hood Canal] Marine conditions: high 57F, low 43F. Check NOAA marine forecasts for sea state and fishing viability."
+        ],
+        "vendors": [
+          "Key City Fish Co"
+        ],
+        "key_products": [
+          "shellfish",
+          "oysters",
+          "clams",
+          "mussels",
+          "tideland_farmed"
+        ]
+      },
+      "neah_bay_strait_juan_de_fuca": {
+        "name": "Neah Bay / Strait of Juan de Fuca",
+        "category": "marine",
+        "current_conditions": {
+          "high_temp_f": 51,
+          "low_temp_f": 44,
+          "avg_temp_f": 47.285714285714285
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 46,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Slight Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 51,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 51,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Slight Chance Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 49,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 44,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain"
+          }
+        ],
+        "alerts": [],
+        "annotations": [
+          "[Neah Bay / Strait of Juan de Fuca] Marine conditions: high 51F, low 44F. Check NOAA marine forecasts for sea state and fishing viability."
+        ],
+        "vendors": [
+          "Key City Fish Co"
+        ],
+        "key_products": [
+          "halibut",
+          "black_cod",
+          "rockfish",
+          "tribal_fish"
+        ]
+      },
+      "port_townsend_puget_sound": {
+        "name": "Port Townsend / Puget Sound",
+        "category": "marine",
+        "current_conditions": {
+          "high_temp_f": 53,
+          "low_temp_f": 44,
+          "avg_temp_f": 48.42857142857143
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 47,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 52,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 46,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 53,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Sunny then Slight Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 52,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 44,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          }
+        ],
+        "alerts": [],
+        "annotations": [
+          "[Port Townsend / Puget Sound] Marine conditions: high 53F, low 44F. Check NOAA marine forecasts for sea state and fishing viability."
+        ],
+        "vendors": [
+          "Key City Fish Co"
+        ],
+        "key_products": [
+          "halibut",
+          "black_cod",
+          "sole",
+          "rockfish"
+        ]
+      },
+      "oregon_cascades": {
+        "name": "Oregon Cascades",
+        "category": "foraging",
+        "current_conditions": {
+          "high_temp_f": 48,
+          "low_temp_f": 31,
+          "avg_temp_f": 37.857142857142854
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 39,
+            "temperatureUnit": "F",
+            "shortForecast": "Showers And Thunderstorms"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Showers"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 37,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance T-storms"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 40,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Showers"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 33,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Showers"
+          },
+          {
+            "name": "Monday",
+            "temperature": 37,
+            "temperatureUnit": "F",
+            "shortForecast": "Snow Showers"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 31,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Likely"
+          }
+        ],
+        "alerts": [],
+        "annotations": [
+          "[Oregon Cascades] Freezing temps (31F low). Frost after rain may increase mushroom fruiting in 7-10 days."
+        ],
+        "vendors": [
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "mushrooms_wild",
+          "wild_edibles"
+        ]
+      },
+      "eastern_oregon_rangeland": {
+        "name": "Eastern Oregon Rangeland",
+        "category": "rangeland",
+        "current_conditions": {
+          "high_temp_f": 58,
+          "low_temp_f": 33,
+          "avg_temp_f": 44.0
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 43,
+            "temperatureUnit": "F",
+            "shortForecast": "Scattered Showers And Thunderstorms"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 58,
+            "temperatureUnit": "F",
+            "shortForecast": "Showers And Thunderstorms Likely"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 40,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Likely"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 50,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain then Showers And Thunderstorms"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 37,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 47,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Likely"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 33,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Preservation Meat Collective"
+        ],
+        "key_products": [
+          "lamb",
+          "beef",
+          "pasture_raised",
+          "grass_fed"
+        ]
+      },
+      "northern_ca_coast_forests": {
+        "name": "Northern California Coast/Forests",
+        "category": "foraging",
+        "current_conditions": {
+          "high_temp_f": 51,
+          "low_temp_f": 40,
+          "avg_temp_f": 45.714285714285715
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 46,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Showers Likely"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 49,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Showers"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 41,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Showers"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 51,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Showers"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 42,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Showers Likely"
+          },
+          {
+            "name": "Monday",
+            "temperature": 51,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Rain Showers then Partly Sunny"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 40,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "mushrooms_wild",
+          "winter_foraged"
+        ]
+      },
+      "northern_ca_interior": {
+        "name": "Northern California Interior",
+        "category": "foraging",
+        "current_conditions": {
+          "high_temp_f": 64,
+          "low_temp_f": 45,
+          "avg_temp_f": 52.42857142857143
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 51,
+            "temperatureUnit": "F",
+            "shortForecast": "Showers And Thunderstorms"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 58,
+            "temperatureUnit": "F",
+            "shortForecast": "Showers And Thunderstorms"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Showers And Thunderstorms then Rain"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 56,
+            "temperatureUnit": "F",
+            "shortForecast": "Showers And Thunderstorms"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 46,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Monday",
+            "temperature": 64,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 47,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "winter_mushrooms",
+          "wild_edibles"
+        ]
+      },
+      "southern_bc": {
+        "name": "Southern British Columbia",
+        "category": "foraging",
+        "current_conditions": {
+          "high_temp_f": 46,
+          "low_temp_f": 36,
+          "avg_temp_f": 41.714285714285715
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Mostly Cloudy then Slight Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 46,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Likely"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 40,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 45,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 38,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Likely"
+          },
+          {
+            "name": "Monday",
+            "temperature": 42,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow Likely then Rain And Snow"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 36,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "spring_foraged",
+          "mushrooms_wild"
+        ]
+      },
+      "western_montana": {
+        "name": "Western Montana",
+        "category": "foraging",
+        "current_conditions": {
+          "high_temp_f": 58,
+          "low_temp_f": 33,
+          "avg_temp_f": 44.857142857142854
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 43,
+            "temperatureUnit": "F",
+            "shortForecast": "Slight Chance Light Rain"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 58,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Showers And Thunderstorms"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 38,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Mostly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 58,
+            "temperatureUnit": "F",
+            "shortForecast": "Partly Sunny then Chance Light Rain"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 38,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain Likely"
+          },
+          {
+            "name": "Monday",
+            "temperature": 46,
+            "temperatureUnit": "F",
+            "shortForecast": "Rain And Snow"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 33,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Rain And Snow then Mostly Cloudy"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "morels",
+          "wild_edibles",
+          "spring_foraged"
+        ]
+      },
+      "northern_idaho": {
+        "name": "Northern Idaho",
+        "category": "foraging",
+        "current_conditions": {
+          "high_temp_f": 61,
+          "low_temp_f": 37,
+          "avg_temp_f": 46.714285714285715
+        },
+        "forecast_7day": [
+          {
+            "name": "Tonight",
+            "temperature": 44,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely"
+          },
+          {
+            "name": "Saturday",
+            "temperature": 54,
+            "temperatureUnit": "F",
+            "shortForecast": "Showers And Thunderstorms"
+          },
+          {
+            "name": "Saturday Night",
+            "temperature": 41,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Partly Cloudy"
+          },
+          {
+            "name": "Sunday",
+            "temperature": 61,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain Likely then Showers And Thunderstorms Likely"
+          },
+          {
+            "name": "Sunday Night",
+            "temperature": 42,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain"
+          },
+          {
+            "name": "Monday",
+            "temperature": 48,
+            "temperatureUnit": "F",
+            "shortForecast": "Light Rain"
+          },
+          {
+            "name": "Monday Night",
+            "temperature": 37,
+            "temperatureUnit": "F",
+            "shortForecast": "Chance Light Rain then Chance Rain And Snow"
+          }
+        ],
+        "alerts": [],
+        "annotations": [],
+        "vendors": [
+          "Foraged & Found Edibles"
+        ],
+        "key_products": [
+          "spring_foraged",
+          "mushrooms_wild"
+        ]
+      }
+    }
   }
 };
 
@@ -7116,41 +8701,87 @@ const PRICE_TRENDS = {
             sourceOrder.forEach(source => {
                 if (!grouped[source]) return;
 
+                // Wrap each vendor in a section so sticky scoping works
+                const vendorSection = document.createElement('div');
+                vendorSection.className = 'vendor-section';
+
                 const sourceHeader = document.createElement('div');
                 sourceHeader.className = 'source-header';
+                sourceHeader.style.display = 'flex';
+                sourceHeader.style.alignItems = 'center';
+
+                // Left side: label + optional Swan House toggle
+                const leftGroup = document.createElement('div');
+                leftGroup.style.cssText = 'display:flex;align-items:center;gap:10px;';
+
                 const sourceLabel = document.createElement('div');
                 sourceLabel.className = 'source-header-label';
+                sourceLabel.style.borderRight = 'none';
                 sourceLabel.textContent = source;
-                sourceHeader.appendChild(sourceLabel);
+                leftGroup.appendChild(sourceLabel);
 
-                // Swan House 2026/All toggle
+                // Swan House 2026 / Historical toggle
                 if (source === 'Swan House Farms') {
                     const toggleWrap = document.createElement('div');
-                    toggleWrap.style.cssText = 'display:flex;align-items:center;gap:6px;margin-left:auto;';
-                    const toggleBtn = document.createElement('button');
-                    toggleBtn.className = 'filter-btn swan-house-toggle';
-                    toggleBtn.style.cssText = 'font-size:11px;padding:2px 10px;margin:0;';
-                    toggleBtn.textContent = activeFilters.showSwanHouseAll ? 'Showing All (incl. historical)' : '2026 Plan';
-                    if (activeFilters.showSwanHouseAll) toggleBtn.classList.add('active');
-                    else toggleBtn.classList.add('active');
-                    toggleBtn.addEventListener('click', () => {
-                        activeFilters.showSwanHouseAll = !activeFilters.showSwanHouseAll;
-                        renderChart();
+                    toggleWrap.style.cssText = 'display:flex;align-items:center;gap:0;border:1px solid #555;border-radius:6px;overflow:hidden;';
+
+                    const btn2026 = document.createElement('button');
+                    btn2026.className = 'filter-btn swan-house-toggle';
+                    btn2026.style.cssText = 'font-size:11px;padding:4px 12px;margin:0;border:none;border-radius:0;';
+                    btn2026.textContent = '2026';
+                    if (!activeFilters.showSwanHouseAll) btn2026.classList.add('active');
+
+                    const btnHist = document.createElement('button');
+                    btnHist.className = 'filter-btn swan-house-toggle';
+                    btnHist.style.cssText = 'font-size:11px;padding:4px 12px;margin:0;border:none;border-left:1px solid #555;border-radius:0;';
+                    btnHist.textContent = 'Historical';
+                    if (activeFilters.showSwanHouseAll) btnHist.classList.add('active');
+
+                    btn2026.addEventListener('click', () => {
+                        if (activeFilters.showSwanHouseAll) {
+                            activeFilters.showSwanHouseAll = false;
+                            renderChart();
+                        }
                     });
-                    toggleWrap.appendChild(toggleBtn);
-                    sourceHeader.appendChild(toggleWrap);
-                    sourceHeader.style.display = 'flex';
-                    sourceHeader.style.alignItems = 'center';
+                    btnHist.addEventListener('click', () => {
+                        if (!activeFilters.showSwanHouseAll) {
+                            activeFilters.showSwanHouseAll = true;
+                            renderChart();
+                        }
+                    });
+
+                    toggleWrap.appendChild(btn2026);
+                    toggleWrap.appendChild(btnHist);
+                    leftGroup.appendChild(toggleWrap);
                 }
 
-                chartDiv.appendChild(sourceHeader);
+                sourceHeader.appendChild(leftGroup);
 
-                const categoryOrder = ['protein', 'mushroom', 'green', 'berry', 'sea', 'flower', 'produce'];
+                // Right side: back to top button
+                const topBtn = document.createElement('button');
+                topBtn.className = 'back-to-top-btn';
+                topBtn.innerHTML = '&#9650; Top';
+                topBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+                sourceHeader.appendChild(topBtn);
+
+                vendorSection.appendChild(sourceHeader);
+
+                // Sort categories by ingredient count (most to least) within this vendor
+                const categoryOrder = Object.keys(grouped[source]).sort((a, b) => {
+                    return grouped[source][b].length - grouped[source][a].length;
+                });
+                const isMobile = window.innerWidth <= 768;
                 categoryOrder.forEach(cat => {
-                    if (!grouped[source][cat]) return;
 
+                    const itemCount = grouped[source][cat].length;
                     const catHeader = document.createElement('div');
                     catHeader.className = 'category-header';
+                    if (isMobile) catHeader.classList.add('collapsed');
+                    catHeader.dataset.category = cat;
+                    catHeader.dataset.source = source;
+
                     const catLabel = document.createElement('div');
                     catLabel.className = 'category-header-label';
                     const dot = document.createElement('span');
@@ -7158,8 +8789,28 @@ const PRICE_TRENDS = {
                     dot.style.backgroundColor = CATEGORY_COLORS[cat];
                     catLabel.appendChild(dot);
                     catLabel.appendChild(document.createTextNode(cat.charAt(0).toUpperCase() + cat.slice(1)));
+
+                    const countSpan = document.createElement('span');
+                    countSpan.className = 'category-count';
+                    countSpan.textContent = '(' + itemCount + ')';
+                    catLabel.appendChild(countSpan);
+
+                    const chevron = document.createElement('span');
+                    chevron.className = 'category-chevron';
+                    chevron.textContent = '\u25BC';
+                    catLabel.appendChild(chevron);
+
                     catHeader.appendChild(catLabel);
-                    chartDiv.appendChild(catHeader);
+                    vendorSection.appendChild(catHeader);
+
+                    const rowsContainer = document.createElement('div');
+                    rowsContainer.className = 'category-rows';
+                    if (isMobile) rowsContainer.classList.add('collapsed');
+
+                    catHeader.addEventListener('click', function() {
+                        const isCollapsed = catHeader.classList.toggle('collapsed');
+                        rowsContainer.classList.toggle('collapsed', isCollapsed);
+                    });
 
                     grouped[source][cat].forEach(ing => {
                         const row = document.createElement('div');
@@ -7238,9 +8889,23 @@ const PRICE_TRENDS = {
                             row.appendChild(cell);
                         });
 
-                        chartDiv.appendChild(row);
+                        rowsContainer.appendChild(row);
                     });
+
+                    vendorSection.appendChild(rowsContainer);
                 });
+
+                chartDiv.appendChild(vendorSection);
+            });
+
+            // Measure the chart header and set CSS variable for sticky vendor headers
+            requestAnimationFrame(() => {
+                const chartHeader = chartDiv.querySelector('.chart-header');
+                if (chartHeader) {
+                    const h = chartHeader.offsetHeight;
+                    document.documentElement.style.setProperty('--header-h', h + 'px');
+                    document.documentElement.style.setProperty('--header-h-mobile', h + 'px');
+                }
             });
         }
 
@@ -7313,6 +8978,62 @@ const PRICE_TRENDS = {
             document.getElementById('tooltip').classList.remove('visible');
         }
 
+        // Parse ingredient name and vendor hint from menu planning text
+        // e.g. "Stinging Nettles (Foraged & Found — 50# ...)" => { name: "Stinging Nettles", vendorHint: "Foraged & Found" }
+        function parseMenuPlanningItem(text) {
+            const m = text.match(/^([^(]+?)\s*\(([^)—\u2014]+)/);
+            if (m) {
+                return { name: m[1].trim(), vendorHint: m[2].trim() };
+            }
+            return null;
+        }
+
+        // Find matching ingredient row in the chart and scroll to it
+        function jumpToIngredient(name, vendorHint) {
+            const rows = document.querySelectorAll('.ingredient-row');
+            let bestMatch = null;
+            const nameLower = name.toLowerCase();
+            const vendorLower = vendorHint ? vendorHint.toLowerCase() : '';
+
+            rows.forEach(row => {
+                const nameEl = row.querySelector('.ingredient-name span');
+                if (!nameEl) return;
+                const rowName = nameEl.textContent.trim().toLowerCase();
+                if (rowName.includes(nameLower) || nameLower.includes(rowName)) {
+                    // Check vendor context — walk up to find the vendor section
+                    const vendorSection = row.closest('.vendor-section');
+                    if (vendorSection) {
+                        const vendorLabel = vendorSection.querySelector('.source-header-label');
+                        const vendorName = vendorLabel ? vendorLabel.textContent.toLowerCase() : '';
+                        if (vendorHint && vendorName.includes(vendorLower.split('/')[0].split(' ')[0])) {
+                            bestMatch = row; // Vendor match — prefer this
+                            return;
+                        }
+                    }
+                    if (!bestMatch) bestMatch = row; // Fallback: name match without vendor
+                }
+            });
+
+            if (bestMatch) {
+                // Expand the category if collapsed
+                const rowsContainer = bestMatch.closest('.category-rows');
+                if (rowsContainer && rowsContainer.classList.contains('collapsed')) {
+                    rowsContainer.classList.remove('collapsed');
+                    const catHeader = rowsContainer.previousElementSibling;
+                    if (catHeader) catHeader.classList.remove('collapsed');
+                }
+                // Scroll with offset for sticky headers
+                const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
+                const sourceH = 50; // approximate source header height
+                const y = bestMatch.getBoundingClientRect().top + window.scrollY - headerH - sourceH - 8;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+                // Brief highlight
+                bestMatch.style.transition = 'background 0.3s ease';
+                bestMatch.style.background = 'rgba(220, 53, 69, 0.15)';
+                setTimeout(() => { bestMatch.style.background = ''; }, 1500);
+            }
+        }
+
         function renderMenuPlanning() {
             const cardsDiv = document.getElementById('menuPlanningCards');
             cardsDiv.innerHTML = '';
@@ -7338,7 +9059,23 @@ const PRICE_TRENDS = {
                 list.className = 'card-list';
                 DATA.menu_planning[section.key].forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = item;
+                    const parsed = parseMenuPlanningItem(item);
+                    if (parsed) {
+                        const link = document.createElement('a');
+                        link.className = 'menu-planning-link';
+                        link.href = '#';
+                        link.textContent = parsed.name;
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            jumpToIngredient(parsed.name, parsed.vendorHint);
+                        });
+                        // Rest of the text after the ingredient name
+                        const restText = item.substring(parsed.name.length);
+                        li.appendChild(link);
+                        li.appendChild(document.createTextNode(restText));
+                    } else {
+                        li.textContent = item;
+                    }
                     list.appendChild(li);
                 });
                 card.appendChild(list);
@@ -7906,6 +9643,13 @@ const PRICE_TRENDS = {
                 document.getElementById('chart').innerHTML = '<div style="padding:20px;color:#f66;">Error: ' + e.message + '</div>';
             }
         }
+
+        // Re-render on resize to update sticky heights and mobile collapse state
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() { renderChart(); }, 200);
+        });
     </script>
 </body>
 </html>
