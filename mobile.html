@@ -82,7 +82,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .portal-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 20px 0}
 .portal-prompt{font-family:var(--fd);font-size:28px;font-weight:400;color:var(--ink);
   margin-bottom:20px;line-height:1.15;
-  opacity:0;animation:fadeUp 0.4s var(--ease) 1.85s forwards}
+  opacity:0;animation:fadeUp 0.4s var(--ease) 2.35s forwards}
 .mode-cards{display:flex;flex-direction:column;gap:10px}
 .portal-footer{padding:16px 20px 34px;flex-shrink:0}
 
@@ -157,10 +157,14 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   transition:background var(--d),border-color var(--d);touch-action:manipulation}
 .bucket-btn.wide{grid-column:span 2}
 .bucket-btn:active,.bucket-btn.sel{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.date-input{width:100%;padding:12px 14px;border:1px solid var(--ink-12);border-radius:var(--r);
-  background:var(--bg-card);font-family:var(--fb);font-size:15px;color:var(--ink);
-  outline:none;-webkit-appearance:none;display:none}
-.date-input.show{display:block}
+/* Date picker overlay pattern — transparent input sits on top of the styled
+   button so a tap natively opens the iOS calendar. Avoids the showPicker()
+   silently-failing-on-display-none trap. */
+.date-pick-wrap{position:relative;grid-column:span 2}
+.date-pick-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;
+  cursor:pointer;-webkit-appearance:none;appearance:none;background:transparent;
+  border:none;padding:0;margin:0;font-size:16px;color:transparent;z-index:2}
+.date-pick-input::-webkit-date-and-time-value{text-align:left}
 .flow-results{margin-top:4px}
 .flow-filter-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
 .flow-filter-row{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;
@@ -7990,6 +7994,15 @@ var SEASONS=[
   {id:'winter', label:'Winter', months:[11,0,1]},  // Dec Jan Feb
 ];
 
+// Render a tap-anywhere date picker: visible button + transparent date input on top.
+function _datePickButton(containerId, mode, label){
+  return '<div class="date-pick-wrap">'+
+    '<button class="bucket-btn wide" tabindex="-1">'+label+'</button>'+
+    '<input type="date" class="date-pick-input" id="'+containerId+'-date" '+
+      'onchange="selectDate(\''+containerId+'\',\''+mode+'\',this.value)">'+
+  '</div>';
+}
+
 function buildFlow(containerId, mode){
   var el=document.getElementById(containerId);
   if(!el) return;
@@ -7998,7 +8011,7 @@ function buildFlow(containerId, mode){
   if(mode==='event'){
     html+='<div class="flow-question">When is the event?</div>'+
       '<div class="bucket-grid">'+
-        '<button class="bucket-btn wide" onclick="toggleDatePicker(\''+containerId+'\',\''+mode+'\',this)">Pick a date</button>'+
+        _datePickButton(containerId, mode, 'Pick a date')+
       '</div>';
   } else { // planning
     html+='<div class="flow-question">Which season are you planning for?</div>'+
@@ -8006,12 +8019,11 @@ function buildFlow(containerId, mode){
         SEASONS.map(function(s){
           return '<button class="bucket-btn" onclick="selectSeason(\''+containerId+'\',\''+s.id+'\',this)">'+s.label+'</button>';
         }).join('')+
-        '<button class="bucket-btn wide" onclick="toggleDatePicker(\''+containerId+'\',\''+mode+'\',this)">Or pick a date</button>'+
+        _datePickButton(containerId, mode, 'Or pick a date')+
       '</div>';
   }
 
-  html+='<input type="date" class="date-input" id="'+containerId+'-date" onchange="selectDate(\''+containerId+'\',\''+mode+'\',this.value)">'+
-    '<div class="flow-results" id="'+containerId+'-results"></div>';
+  html+='<div class="flow-results" id="'+containerId+'-results"></div>';
   el.innerHTML=html;
 }
 
@@ -8069,19 +8081,6 @@ function openDishDetail(dishName){
   }
   html+='<div class="dish-detail-stub">Remy will surface in-season substitutes for each component here. Coming next — let me know what you want this to actually do when you tap in.</div>';
   el.innerHTML=html;
-}
-
-function toggleDatePicker(containerId, mode, btn){
-  document.querySelectorAll('#'+containerId+' .bucket-btn').forEach(function(b){ b.classList.remove('sel'); });
-  btn.classList.add('sel');
-  var di=document.getElementById(containerId+'-date');
-  if(!di) return;
-  // open native calendar directly — no intermediate styled box
-  if(typeof di.showPicker==='function'){
-    try { di.showPicker(); return; } catch(e){ /* fall through to click fallback */ }
-  }
-  di.click();
-  if(di.focus) di.focus();
 }
 
 function selectDate(containerId, mode, val){
@@ -8367,7 +8366,7 @@ var MODE_DEFS=[
 function buildPortal(){
   var el=document.getElementById('mode-cards');
   if(!el) return;
-  var BASE_DELAY=2.05;
+  var BASE_DELAY=2.55;
   el.innerHTML=MODE_DEFS.map(function(def,i){
     return '<div class="mode-card" style="animation-delay:'+(BASE_DELAY+i*0.08)+'s" onclick="handleMode('+i+')">'+
       '<div class="mc-body">'+
@@ -8495,7 +8494,8 @@ function runIntroMorph(){
       var tx = (hr.left + hr.width/2) - (wr.left + wr.width/2);
       var ty = (hr.top + hr.height/2) - (wr.top + wr.height/2);
 
-      // Phase 1: hold center for ~650ms (intro opacity fade-in completes at ~0.65s)
+      // Phase 1: hold center for ~1150ms — longer linger before transformation
+      //          (intro opacity fade-in completes at ~0.65s, then ~500ms of presence)
       // Phase 2: morph for 950ms (matches CSS transition duration)
       // Phase 3: at end of morph, reveal header REMY + brand, fade overlay out
       setTimeout(function(){
@@ -8508,12 +8508,12 @@ function runIntroMorph(){
         word.style.transform = 'translate('+tx+'px, '+ty+'px) scale('+scale+')';
         // Same idea for the glow: shrink the text-shadow as it lands
         word.classList.add('landed');
-      }, 650);
+      }, 1150);
 
       setTimeout(function(){
         // Reveal the real header REMY at the exact spot the morph lands
         headerRemy.classList.add('in');
-      }, 1530);
+      }, 2030);
 
       setTimeout(function(){
         // San Fermo brand fades in alongside, just after REMY settles
@@ -8521,7 +8521,7 @@ function runIntroMorph(){
         // Fade the overlay (which contains the morphed intro word) so the
         // header REMY underneath is what stays visible
         intro.classList.add('gone');
-      }, 1620);
+      }, 2120);
     });
   });
 }
