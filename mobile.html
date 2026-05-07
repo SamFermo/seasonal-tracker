@@ -8206,6 +8206,15 @@ function _sortByAffinity(signals, keys){
   });
 }
 
+// Filter a signal list to only items with affinity > 0 for this dish.
+// When keys are defined but nothing matches, returns empty array (honest "(none)")
+// rather than passing irrelevant signals that confuse the pitch.
+// When no keys are defined (garnish dishes), passes everything through.
+function _filterByAffinity(signals, keys){
+  if(!keys || !keys.length) return signals;
+  return signals.filter(function(s){ return _affinityScore(s.ingredient, keys) > 0; });
+}
+
 
 var _pitchDish = null;
 
@@ -8242,12 +8251,16 @@ function fetchPitch(){
     }
   });
 
-  // Affinity pre-filter: re-rank signals by dish relevance so each dish sees
-  // the signals most likely to apply to it, not just the top seasonal prominence.
+  // Affinity filter: sort by dish relevance then drop items with score 0.
+  // Irrelevant items in peaking/arriving/fading were confusing the Worker —
+  // even after sorting, score-0 items (Fiddleheads, Braising Mix, etc.) were
+  // sent as the first items when no dish-relevant ingredient ranked higher.
+  // Now each bucket only contains ingredients that actually match this dish.
+  // Empty bucket → honest "(none)" signal. Available pool covers the rest.
   var _afKeys = DISH_AFFINITIES[(dish.name||'').toLowerCase()] || [];
-  peaking  = _sortByAffinity(peaking,  _afKeys);
-  arriving = _sortByAffinity(arriving, _afKeys);
-  fading   = _sortByAffinity(fading,   _afKeys);
+  peaking  = _filterByAffinity(_sortByAffinity(peaking,  _afKeys), _afKeys);
+  arriving = _filterByAffinity(_sortByAffinity(arriving, _afKeys), _afKeys);
+  fading   = _filterByAffinity(_sortByAffinity(fading,   _afKeys), _afKeys);
 
   // Available pool: in-season items not captured by peaking/arriving/fading.
   // Mid-season plateau items (available last month, this month, next month) fall
@@ -8265,7 +8278,8 @@ function fetchPitch(){
   });
   available = _sortByAffinity(available, _afKeys);
 
-  // Debug log — remove after confirming pools look right in the console
+  // Debug log — remove after confirming pools look right in the console.
+  // All four arrays shown are POST-filter (affinity>0 only for bucketed pools).
   console.log('[Remy pitch debug]', {
     dish: (dish.name||'').toLowerCase(),
     affinityKeys: _afKeys,
@@ -8275,6 +8289,10 @@ function fetchPitch(){
     fading: fading.map(function(s){return s.ingredient;}),
     availableTop8: available.slice(0,8).map(function(s){return s.ingredient;})
   });
+  // Expected for Risotto Funghi: peaking=[], arriving=[Porcini], fading=[Wine Cap],
+  //   available top = [Maitake, Morels, ...]
+  // Expected for Sea Scallops: peaking=[], arriving=[Snap/Snow Peas], fading=[English Peas, Blackmouth Salmon],
+  //   available top = [Oysters, Dungeness Crab, Halibut, ...]
 
   var components = (dish.components||[]).map(function(c){ return typeof c==='string'?{name:c}:c; });
   fetch(getWorkerUrl()+'/pitch', {
