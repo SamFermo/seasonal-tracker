@@ -201,6 +201,40 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   border:1px solid var(--ink-12);font-family:var(--fd);font-size:14px;font-style:italic;
   color:var(--ink-60);line-height:1.5}
 
+/* ── CREATIVE PITCH ── */
+.pitch-cta-btn{margin-top:22px;width:100%;padding:16px;background:var(--moon);
+  color:#0a1028;border:none;border-radius:var(--r);font-family:var(--fb);font-size:13px;
+  font-weight:500;letter-spacing:0.08em;text-align:center;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.pitch-cta-btn:active{opacity:0.82}
+.pitch-loading{margin-top:28px;font-family:var(--fd);font-size:15px;font-style:italic;
+  color:var(--ink-60);text-align:center;padding:28px 0}
+.pitch-result{margin-top:22px}
+.pitch-text{font-family:var(--fd);font-size:19px;color:var(--ink);line-height:1.6;
+  padding:18px;background:var(--bg-card);border-radius:var(--r);border:1px solid var(--ink-12)}
+.pitch-ing-hd{font-family:var(--fb);font-size:10px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--ink-30);padding:20px 0 8px;border-bottom:1px solid var(--ink-12)}
+.pitch-ing-list{list-style:none;padding:0;margin:0}
+.pitch-ing-item{display:flex;flex-direction:column;gap:3px;padding:10px 0;
+  border-bottom:1px solid var(--ink-6)}
+.pitch-ing-item:last-child{border-bottom:none}
+.pitch-ing-name{font-family:var(--fd);font-size:16px;color:var(--ink)}
+.pitch-ing-meta{font-family:var(--fb);font-size:11px;color:var(--ink-60);letter-spacing:0.04em}
+.pitch-outreach-btn{margin-top:20px;width:100%;padding:14px;background:none;
+  border:1px solid rgba(245,232,200,0.3);border-radius:var(--r);font-family:var(--fb);
+  font-size:11px;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink-60);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.pitch-outreach-btn:active{background:var(--ink-6)}
+
+/* ── WEATHER ALERT CARD ── */
+.weather-alert{margin-top:10px;background:rgba(123,155,209,0.07);border:1px solid rgba(123,155,209,0.22);
+  border-radius:6px;padding:14px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  display:none}
+.weather-alert.show{display:block}
+.wa-w-label{font-family:var(--fb);font-size:10px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--navy);margin-bottom:4px}
+.wa-w-body{font-family:var(--fd);font-size:15px;color:var(--ink)}
+
 /* ── INGREDIENT ROW ── */
 .ing-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px 20px 40px}
 .ing-row{display:flex;align-items:flex-start;gap:12px;padding:14px 0;
@@ -439,6 +473,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
     <div class="portal-prompt">How can Remy help today?</div>
     <div class="mode-cards" id="mode-cards"></div>
     <div class="vendor-alert" id="vendor-alert" onclick="showVendorAlert()"></div>
+    <div class="weather-alert" id="weather-alert" onclick="showWeatherAlert()"></div>
   </div>
 </div>
 
@@ -604,7 +639,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 
 <script>
 const DATA = {
-  "generated": "2026-05-04",
+  "generated": "2026-05-07",
   "ingredients": [
     {
       "name": "Beets",
@@ -1131,7 +1166,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available per Franks 5/2 but 'may take a few days to re-stock.' Confirmed also via F&F. Wild foraged spring green.",
+      "notes": "F&F 5/4: about three weeks left. Order ahead, picker only available a few days a week now. $10.50/#.",
       "price_range": "$10.50/#, $9.50/# for 20#+, $7.50/# for 50#+"
     },
     {
@@ -1166,7 +1201,7 @@ const DATA = {
         0,
         1,
         2,
-        2,
+        3,
         0,
         0,
         0,
@@ -1175,7 +1210,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available per F&F 4/26 \u2014 $10.50/#, $9.50/# for 20#+",
+      "notes": "F&F 5/4: last week for fiddleheads. $10.50/#.",
       "price_range": "$10.50/#, $9.50/# for 20#+"
     },
     {
@@ -1197,7 +1232,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available per F&F 4/26 \u2014 $10.50/#",
+      "notes": "F&F 5/4: still available. $10.50/#.",
       "price_range": "$10.50/#"
     },
     {
@@ -1276,7 +1311,7 @@ const DATA = {
         1,
         1,
         1,
-        0,
+        1,
         0,
         0,
         0,
@@ -1285,7 +1320,7 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Available per F&F 4/26 \u2014 $18.50/#",
+      "notes": "F&F 5/4: still available. $18.50/#.",
       "price_range": "$18.50/#"
     },
     {
@@ -1329,7 +1364,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Very early morel season per F&F 4/26 sheet \u2014 unlimited supply forward; prices expected to start coming down by end of week (cooler weather slowed start). May traditionally peak; we are weeks ahead. Coming from WA fire-burn areas, fast and earlier than expected.",
+      "notes": "F&F 5/4: still a bit sluggish, mid-elevation areas haven't started yet. Limited supply this week, similar pricing. $29.50/#. Porcini close behind, next few days heat will help push them along.",
       "price_range": "Black Conica (fresh WA): $29.50/#. Dried: A $120/#, B $85/#, Gray $135/#"
     },
     {
@@ -2209,7 +2244,7 @@ const DATA = {
         0,
         0,
         0,
-        2,
+        0,
         1,
         0,
         0,
@@ -2218,7 +2253,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Purple and green varieties. 'Need to move soon' note on May 10 sheet. Early spring crop. Kelly's 2026 sheet: Archive (not planting this year).",
+      "notes": "Purple and green varieties. 'Need to move soon' note on May 10 sheet. Early spring crop. Kelly's 2026 sheet: Archive (not planting this year). Kelly: out of season as of 2026-05-04 (off Kelly's 5/3 sheet).",
       "price_range": "N/A \u2014 our farm",
       "available_2026": false
     },
@@ -2232,7 +2267,7 @@ const DATA = {
         0,
         0,
         2,
-        1,
+        0,
         0,
         0,
         0,
@@ -2241,7 +2276,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available April\u2013May. Classic spring foraged green. Kelly 4/26: Peak (Limited only to what we can harvest).",
+      "notes": "Available April\u2013May. Classic spring foraged green. Kelly 4/26: Peak (Limited only to what we can harvest). Kelly: out of season as of 2026-05-04 (off Kelly's 5/3 sheet).",
       "price_range": "N/A \u2014 our farm",
       "available_2026": true
     },
@@ -2347,7 +2382,7 @@ const DATA = {
         0,
         0,
         0,
-        1,
+        0,
         1,
         1,
         1,
@@ -2356,7 +2391,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Red stemmed variety. Available April through summer. Kelly's 2026 sheet: Archive (not planting this year).",
+      "notes": "Red stemmed variety. Available April through summer. Kelly's 2026 sheet: Archive (not planting this year). Kelly: out of season as of 2026-05-04 (off Kelly's 5/3 sheet).",
       "price_range": "N/A \u2014 our farm",
       "available_2026": false
     },
@@ -2393,7 +2428,7 @@ const DATA = {
         0,
         0,
         2,
-        1,
+        0,
         0,
         0,
         0,
@@ -2402,7 +2437,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Appears on April 29 sheet. Seasonal cut flower / garnish. Kelly 4/26: Peak (Lilac blossoms/limited only to what we can harvest).",
+      "notes": "Appears on April 29 sheet. Seasonal cut flower / garnish. Kelly 4/26: Peak (Lilac blossoms/limited only to what we can harvest). Kelly: out of season as of 2026-05-04 (off Kelly's 5/3 sheet).",
       "price_range": "N/A \u2014 our farm",
       "available_2026": true
     },
@@ -2738,7 +2773,7 @@ const DATA = {
         0,
         0,
         4,
-        0,
+        1,
         1,
         2,
         2,
@@ -2747,7 +2782,7 @@ const DATA = {
         1,
         0
       ],
-      "notes": "Appears on June 23 sheet. Main season summer through fall.",
+      "notes": "Appears on June 23 sheet. Main season summer through fall. Kelly 5/3: now listed (spring kale starting).",
       "price_range": "N/A \u2014 our farm",
       "available_2026": true
     },
@@ -5311,7 +5346,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available per F&F 4/26 \u2014 $13.50/#. Sea vegetables expanding next week (seabeans, saltmarsh daisy expected).",
+      "notes": "F&F 5/4: at peak \u2014 first of sea vegetables. Seabeans, sea rocket, saltmarsh daisy expected next week. $13.50/#.",
       "price_range": "$13.50/#"
     },
     {
@@ -5368,7 +5403,7 @@ const DATA = {
         0,
         0,
         2,
-        2,
+        3,
         1,
         0,
         0,
@@ -5377,7 +5412,7 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Available per F&F 4/26 \u2014 $18.50/#",
+      "notes": "F&F 5/4: last week. $18.50/#. End of spring shoot season.",
       "price_range": "$18.50/# (limited)"
     },
     {
@@ -5776,18 +5811,104 @@ const DATA = {
       ],
       "notes": "Specialty import root, 10# cs. On Franks 5/4 sheet. Oyster/artichoke flavor profile, black skin, white flesh. Underused in PNW menus.",
       "price_range": "TBD \u2014 check at order"
+    },
+    {
+      "name": "Onion Tops",
+      "category": "produce",
+      "vendor": "Swan House Farms",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Spring onion tops. First appeared on Kelly's 5/3 sheet. Brief spring window."
+    },
+    {
+      "name": "Sitka Spruce Tips",
+      "category": "green",
+      "vendor": "Foraged & Found Edibles",
+      "months": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "F&F 5/4: here for next two weeks. Bright citrus-piney, infusions/oils, pickling, garnish. $15.50/#, $14.50/# for 20#+. Farmstand 5/6: also available from Bumblebee Farm (Redmond) \u2014 grapefruity flavor, simple syrups/whipped cream/jelly.",
+      "price_range": "$14.50-15.50/lb"
+    },
+    {
+      "name": "Apple Blossoms",
+      "category": "flower",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Farmstand 5/6: Bumblebee Farm (Redmond). Delicate white/light-pink petals, soft sweet fragrance. Salads, desserts, tea.",
+      "price_range": "n/a"
+    },
+    {
+      "name": "Tokyo Bekana",
+      "category": "green",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Farmstand 5/6: Caruso Farm (Snohomish). Light-green tender Asian green, crunchy stems, mild flavor. Subs for Napa.",
+      "price_range": "n/a"
     }
   ],
   "price_trends": [
     {
       "ingredient": "Asparagus",
       "latest_price": 3.27,
-      "latest_date": "2026-04-21",
+      "latest_date": "2026-04-27",
       "prev_30d_price": null,
       "trend_30d_pct": null,
       "trend_yoy_pct": null,
       "trend_season_pct": null,
-      "entry_count": 12,
+      "entry_count": 14,
       "vendor": "franks_produce",
       "unit": "cs",
       "price_range": {
@@ -5795,14 +5916,6 @@ const DATA = {
         "max": 5.45
       },
       "history": [
-        {
-          "date": "2025-06-12",
-          "price": 4.7273
-        },
-        {
-          "date": "2025-06-19",
-          "price": 4.7273
-        },
         {
           "date": "2025-06-20",
           "price": 4.7273
@@ -5825,6 +5938,14 @@ const DATA = {
         },
         {
           "date": "2026-04-21",
+          "price": 3.2727
+        },
+        {
+          "date": "2026-04-24",
+          "price": 3.2727
+        },
+        {
+          "date": "2026-04-27",
           "price": 3.2727
         }
       ]
@@ -5878,12 +5999,12 @@ const DATA = {
     {
       "ingredient": "Chicken Feet",
       "latest_price": 2.29,
-      "latest_date": "2026-04-07",
+      "latest_date": "2026-05-01",
       "prev_30d_price": null,
       "trend_30d_pct": null,
-      "trend_yoy_pct": -8.0,
+      "trend_yoy_pct": 0.0,
       "trend_season_pct": null,
-      "entry_count": 19,
+      "entry_count": 23,
       "vendor": "ec_wilson",
       "unit": "lb",
       "price_range": {
@@ -5891,22 +6012,6 @@ const DATA = {
         "max": 2.49
       },
       "history": [
-        {
-          "date": "2025-11-07",
-          "price": 2.09
-        },
-        {
-          "date": "2025-11-17",
-          "price": 2.09
-        },
-        {
-          "date": "2025-11-28",
-          "price": 2.09
-        },
-        {
-          "date": "2025-12-05",
-          "price": 2.09
-        },
         {
           "date": "2025-12-08",
           "price": 2.09
@@ -5921,6 +6026,22 @@ const DATA = {
         },
         {
           "date": "2026-04-07",
+          "price": 2.29
+        },
+        {
+          "date": "2026-04-20",
+          "price": 2.29
+        },
+        {
+          "date": "2026-04-24",
+          "price": 2.29
+        },
+        {
+          "date": "2026-04-27",
+          "price": 2.29
+        },
+        {
+          "date": "2026-05-01",
           "price": 2.29
         }
       ]
@@ -6345,13 +6466,13 @@ const DATA = {
     },
     {
       "ingredient": "Maitake Mushrooms",
-      "latest_price": 14.19,
-      "latest_date": "2026-04-16",
-      "prev_30d_price": null,
-      "trend_30d_pct": null,
+      "latest_price": 13.29,
+      "latest_date": "2026-04-24",
+      "prev_30d_price": 14.19,
+      "trend_30d_pct": -6.4,
       "trend_yoy_pct": null,
       "trend_season_pct": null,
-      "entry_count": 5,
+      "entry_count": 6,
       "vendor": "franks_produce",
       "unit": "cs",
       "price_range": {
@@ -6378,6 +6499,10 @@ const DATA = {
         {
           "date": "2026-04-16",
           "price": 14.1905
+        },
+        {
+          "date": "2026-04-24",
+          "price": 13.2857
         }
       ]
     },
@@ -7121,24 +7246,20 @@ const DATA = {
     },
     {
       "ingredient": "Sugar Snap Peas",
-      "latest_price": 4.92,
-      "latest_date": "2025-08-25",
+      "latest_price": 5.78,
+      "latest_date": "2026-04-30",
       "prev_30d_price": null,
       "trend_30d_pct": null,
       "trend_yoy_pct": null,
       "trend_season_pct": null,
-      "entry_count": 10,
-      "vendor": "franks",
+      "entry_count": 11,
+      "vendor": "franks_produce",
       "unit": "cs",
       "price_range": {
         "min": 4.92,
-        "max": 4.92
+        "max": 5.78
       },
       "history": [
-        {
-          "date": "2025-08-01",
-          "price": 4.925
-        },
         {
           "date": "2025-08-04",
           "price": 4.925
@@ -7166,6 +7287,10 @@ const DATA = {
         {
           "date": "2025-08-25",
           "price": 4.925
+        },
+        {
+          "date": "2026-04-30",
+          "price": 5.775
         }
       ]
     },
@@ -7531,38 +7656,42 @@ const DATA = {
       ]
     }
   ],
+  "weather": {
+    "vendor_alerts": {},
+    "last_fetched": "2026-05-06T01:58:46.087391"
+  },
   "metadata": {
     "vendor_coverage": {
       "Local Roots Farm": {
         "count": 18,
-        "last_seen": ""
+        "last_seen": "2026-04-09"
       },
       "Farmstand Local Foods": {
-        "count": 23,
-        "last_seen": ""
+        "count": 25,
+        "last_seen": "2026-04-21"
       },
       "Foraged & Found Edibles": {
-        "count": 27,
-        "last_seen": ""
+        "count": 28,
+        "last_seen": "2026-04-18"
       },
       "EC Wilson": {
         "count": 8,
-        "last_seen": ""
+        "last_seen": "2026-03-27"
       },
       "Key City Fish": {
         "count": 11,
-        "last_seen": ""
+        "last_seen": "2026-03-11"
       },
       "Franks Quality Produce": {
         "count": 59,
-        "last_seen": ""
+        "last_seen": "2026-04-20"
       },
       "Swan House Farms": {
-        "count": 85,
-        "last_seen": ""
+        "count": 86,
+        "last_seen": "2026-04-15"
       }
     },
-    "total_ingredients": 231,
+    "total_ingredients": 235,
     "menu_dishes": 15
   }
 };
@@ -7859,8 +7988,8 @@ function buildMarket(){
   var inSeasonNames={};
   ings.forEach(function(i){ if(sc(i,curM)>0) inSeasonNames[i.name]=i; });
 
-  // Watch out: price up > 8%
-  var watchout=trends.filter(function(t){ return (t.trend_30d_pct||0)>8 && t.latest_price; })
+  // Watch out: price up >= 5% (loosened 2026-05-06, was >8)
+  var watchout=trends.filter(function(t){ return (t.trend_30d_pct||0)>=5 && t.latest_price; })
     .sort(function(a,b){ return (b.trend_30d_pct||0)-(a.trend_30d_pct||0); });
   var woEl=document.getElementById('watchout-list');
   if(woEl){
@@ -8079,8 +8208,102 @@ function openDishDetail(dishName){
     });
     html+='</ul>';
   }
-  html+='<div class="dish-detail-stub">Remy will surface in-season substitutes for each component here. Coming next — let me know what you want this to actually do when you tap in.</div>';
+  _pitchDish = dish;
+  html+='<button class="pitch-cta-btn" onclick="fetchPitch()">&#10022; Get Remy\'s Take</button>';
+  html+='<div id="pitch-zone"></div>';
   el.innerHTML=html;
+}
+
+// ── CREATIVE PITCH ──────────────────────────────────────────────────────────
+var _pitchDish = null;
+
+function _escHtml(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fetchPitch(){
+  var dish = _pitchDish;
+  if(!dish) return;
+  var zone = document.getElementById('pitch-zone');
+  if(!zone) return;
+  zone.innerHTML = '<div class="pitch-loading">Remy is reading the signals…</div>';
+
+  var peaking=[], arriving=[], fading=[], price_moves=[];
+  (DATA.ingredients||[]).forEach(function(i){
+    var inSeason = sc(i,curM)>0 && sc(i,curM)!==4;
+    if(!inSeason) return;
+    var sig = {ingredient:i.name, vendor:i.vendor||'', notes:(i.notes||'').slice(0,100)};
+    if(isPeak(i) && isEnding(i)){
+      peaking.push(Object.assign({},sig,{action_hint:'peak ending soon'}));
+    } else if(isArriving(i)){
+      arriving.push(Object.assign({},sig,{score_label:isPeak(i)?'peak':'available'}));
+    } else if(isEnding(i)){
+      fading.push(Object.assign({},sig,{action_hint:'window closing'}));
+    }
+  });
+  (DATA.price_trends||[]).forEach(function(t){
+    if(Math.abs(t.trend_30d_pct||0)>=8){
+      price_moves.push({ingredient:t.ingredient, vendor:t.vendor||'',
+        notes:'$'+t.latest_price+'/'+(t.unit||'lb')+' ('+(t.trend_30d_pct>0?'+':'')+parseFloat(t.trend_30d_pct).toFixed(1)+'%)'});
+    }
+  });
+
+  var components = (dish.components||[]).map(function(c){ return typeof c==='string'?{name:c}:c; });
+  fetch(getWorkerUrl()+'/pitch', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      dishName: dish.name,
+      description: dish.description||'',
+      components: components,
+      signals: {
+        peaking: peaking.slice(0,8),
+        arriving: arriving.slice(0,8),
+        fading: fading.slice(0,6),
+        price_moves: price_moves.slice(0,4)
+      }
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(!data || data.error){
+      zone.innerHTML='<div class="pitch-loading">Remy hit a snag. Try again.</div>';
+      return;
+    }
+    var html='<div class="pitch-result">';
+    html+='<div class="pitch-text">'+_escHtml(data.pitch)+'</div>';
+    var ings = Array.isArray(data.ingredients)?data.ingredients:[];
+    if(ings.length){
+      html+='<div class="pitch-ing-hd">In the pitch</div>';
+      html+='<ul class="pitch-ing-list">';
+      var BADGE={peaking:'Peak now',arriving:'Arriving',fading:'Fading',price_move:'Price move'};
+      ings.forEach(function(ing){
+        var badge=BADGE[ing.status]||(ing.status||'');
+        var meta=[badge,_escHtml(ing.vendor||''),_escHtml(ing.note||'')].filter(Boolean).join(' · ');
+        html+='<li class="pitch-ing-item">'+
+          '<span class="pitch-ing-name">'+_escHtml(ing.name)+'</span>'+
+          '<span class="pitch-ing-meta">'+meta+'</span>'+
+        '</li>';
+      });
+      html+='</ul>';
+    }
+    var vendors=[];
+    ings.forEach(function(i){ if(i.vendor&&vendors.indexOf(i.vendor)<0) vendors.push(i.vendor); });
+    if(vendors.length){
+      html+='<button class="pitch-outreach-btn" onclick="_pitchOutreach('+
+        JSON.stringify(JSON.stringify(vendors))+')">Draft outreach for this dish →</button>';
+    }
+    html+='</div>';
+    zone.innerHTML=html;
+  })
+  .catch(function(){
+    zone.innerHTML='<div class="pitch-loading">Couldn\'t reach Remy. Check your connection.</div>';
+  });
+}
+
+function _pitchOutreach(vendorsJson){
+  var vendors=JSON.parse(vendorsJson);
+  if(vendors.length) draftOutreach(vendors[0]);
 }
 
 function selectDate(containerId, mode, val){
@@ -8322,6 +8545,30 @@ function copyOutreach(){
 }
 
 // ── VENDOR ALERT ─────────────────────────────────────────────────────
+function showWeatherAlert(){
+  goTo('market');
+}
+
+function initWeatherAlert(){
+  var wa=(DATA.weather||{}).vendor_alerts||{};
+  var active=Object.keys(wa).filter(function(v){
+    var d=wa[v]; return d&&((d.alerts||[]).length||(d.predictions||[]).length);
+  });
+  if(!active.length) return;
+  var el=document.getElementById('weather-alert');
+  if(!el) return;
+  var first=wa[active[0]];
+  var note=(first.alerts&&first.alerts[0])
+    ? (first.alerts[0].description||String(first.alerts[0])).slice(0,120)
+    : (first.predictions&&first.predictions[0])
+    ? (first.predictions[0].description||String(first.predictions[0])).slice(0,120)
+    : active.join(', ');
+  el.innerHTML='<div class="wa-w-label">&#9729; Weather Alert — '+active.length+
+    ' vendor'+(active.length>1?'s':'')+' affected</div>'+
+    '<div class="wa-w-body">'+_escHtml(note)+'</div>';
+  el.classList.add('show');
+}
+
 function checkVendorAlert(){
   var coverage=(DATA.metadata||{}).vendor_coverage||{};
   if(!Object.keys(coverage).length) return;
@@ -8466,6 +8713,7 @@ document.getElementById('fv-sheet').addEventListener('touchend',function(e){ if(
   buildFullView(ings);
   buildPortal();
   checkVendorAlert();
+  initWeatherAlert();
 
   // Intro → portal: continuous shrink-to-header morph.
   // Big REMY fades in at center, holds briefly, then morphs (translate + scale)
