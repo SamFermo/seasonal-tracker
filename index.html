@@ -6948,1381 +6948,1468 @@ const DATA = {
 };
 
 const PRICE_TRENDS = {
-  "Asparagus": {
-    "price": 4.73,
-    "date": "2025-06-26",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 4.14,
-      "max": 5.45
+  "last_updated": "2026-05-07",
+  "schema_version": "1.1",
+  "description": "Price trends per ingredient, vendor-scoped, relative to vendor history",
+  "trends": {
+    "Asparagus": {
+      "latest_price": 3.27,
+      "latest_date": "2026-04-27",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 14,
+      "vendor": "franks_produce",
+      "unit": "cs",
+      "price_range": {
+        "min": 3.27,
+        "max": 5.45
+      },
+      "history": [
+        {
+          "date": "2025-06-20",
+          "price": 4.7273
+        },
+        {
+          "date": "2025-06-21",
+          "price": 4.7273
+        },
+        {
+          "date": "2025-06-26",
+          "price": 4.7273
+        },
+        {
+          "date": "2026-04-16",
+          "price": 3.2727
+        },
+        {
+          "date": "2026-04-18",
+          "price": 3.2727
+        },
+        {
+          "date": "2026-04-21",
+          "price": 3.2727
+        },
+        {
+          "date": "2026-04-24",
+          "price": 3.2727
+        },
+        {
+          "date": "2026-04-27",
+          "price": 3.2727
+        }
+      ]
     },
-    "count": 9,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-06-04",
-        "price": 5.45
+    "Black Cod": {
+      "latest_price": 9.95,
+      "latest_date": "2025-12-17",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 7,
+      "vendor": "key_city_fish",
+      "unit": "lb",
+      "price_range": {
+        "min": 8.99,
+        "max": 11.95
       },
-      {
-        "date": "2025-06-05",
-        "price": 4.14
-      },
-      {
-        "date": "2025-06-06",
-        "price": 5.45
-      },
-      {
-        "date": "2025-06-12",
-        "price": 4.73
-      },
-      {
-        "date": "2025-06-19",
-        "price": 4.73
-      },
-      {
-        "date": "2025-06-20",
-        "price": 4.73
-      },
-      {
-        "date": "2025-06-21",
-        "price": 4.73
-      },
-      {
-        "date": "2025-06-26",
-        "price": 4.73
-      }
-    ]
-  },
-  "Black Cod": {
-    "price": 9.95,
-    "date": "2025-12-17",
-    "unit": "lb",
-    "vendor": "key_city_fish",
-    "range": {
-      "min": 8.99,
-      "max": 11.95
+      "history": [
+        {
+          "date": "2025-03-26",
+          "price": 8.99
+        },
+        {
+          "date": "2025-04-05",
+          "price": 11.95
+        },
+        {
+          "date": "2025-04-17",
+          "price": 11.95
+        },
+        {
+          "date": "2025-04-18",
+          "price": 11.95
+        },
+        {
+          "date": "2025-04-21",
+          "price": 8.99
+        },
+        {
+          "date": "2025-06-10",
+          "price": 8.99
+        },
+        {
+          "date": "2025-12-17",
+          "price": 9.95
+        }
+      ]
     },
-    "count": 7,
-    "t30": 10.7,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-03-26",
-        "price": 8.99
+    "Chicken Feet": {
+      "latest_price": 2.29,
+      "latest_date": "2026-04-07",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": -8.0,
+      "trend_season_pct": null,
+      "entry_count": 19,
+      "vendor": "ec_wilson",
+      "unit": "lb",
+      "price_range": {
+        "min": 0.85,
+        "max": 2.49
       },
-      {
-        "date": "2025-04-05",
-        "price": 11.95
-      },
-      {
-        "date": "2025-04-17",
-        "price": 11.95
-      },
-      {
-        "date": "2025-04-18",
-        "price": 11.95
-      },
-      {
-        "date": "2025-04-21",
-        "price": 8.99
-      },
-      {
-        "date": "2025-06-10",
-        "price": 8.99
-      },
-      {
-        "date": "2025-12-17",
-        "price": 9.95
-      }
-    ]
-  },
-  "Chicken Feet": {
-    "price": 2.09,
-    "date": "2025-12-13",
-    "unit": "lb",
-    "vendor": "ec_wilson",
-    "range": {
-      "min": 0.85,
-      "max": 2.49
+      "history": [
+        {
+          "date": "2025-11-07",
+          "price": 2.09
+        },
+        {
+          "date": "2025-11-17",
+          "price": 2.09
+        },
+        {
+          "date": "2025-11-28",
+          "price": 2.09
+        },
+        {
+          "date": "2025-12-05",
+          "price": 2.09
+        },
+        {
+          "date": "2025-12-08",
+          "price": 2.09
+        },
+        {
+          "date": "2025-12-13",
+          "price": 2.09
+        },
+        {
+          "date": "2026-04-03",
+          "price": 2.29
+        },
+        {
+          "date": "2026-04-07",
+          "price": 2.29
+        }
+      ]
     },
-    "count": 17,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-10-21",
-        "price": 2.09
+    "Chicories (Mixed)": {
+      "latest_price": 29.5,
+      "latest_date": "2026-04-13",
+      "prev_30d_price": 24.5,
+      "trend_30d_pct": 20.4,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 12,
+      "vendor": "franks_produce",
+      "unit": "cs",
+      "price_range": {
+        "min": 24.5,
+        "max": 34.5
       },
-      {
-        "date": "2025-11-03",
-        "price": 2.09
-      },
-      {
-        "date": "2025-11-07",
-        "price": 2.09
-      },
-      {
-        "date": "2025-11-17",
-        "price": 2.09
-      },
-      {
-        "date": "2025-11-28",
-        "price": 2.09
-      },
-      {
-        "date": "2025-12-05",
-        "price": 2.09
-      },
-      {
-        "date": "2025-12-08",
-        "price": 2.09
-      },
-      {
-        "date": "2025-12-13",
-        "price": 2.09
-      }
-    ]
-  },
-  "Chicories (Mixed)": {
-    "price": 29.5,
-    "date": "2026-03-23",
-    "unit": "cs",
-    "vendor": "franks",
-    "range": {
-      "min": 24.5,
-      "max": 34.5
+      "history": [
+        {
+          "date": "2025-06-23",
+          "price": 34.5
+        },
+        {
+          "date": "2025-07-01",
+          "price": 34.5
+        },
+        {
+          "date": "2025-08-14",
+          "price": 32.5
+        },
+        {
+          "date": "2025-08-15",
+          "price": 29.5
+        },
+        {
+          "date": "2026-03-13",
+          "price": 24.5
+        },
+        {
+          "date": "2026-03-23",
+          "price": 29.5
+        },
+        {
+          "date": "2026-04-03",
+          "price": 29.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 29.5
+        }
+      ]
     },
-    "count": 10,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-06-11",
-        "price": 34.5
+    "Corn (Bi-Color)": {
+      "latest_price": 42.0,
+      "latest_date": "2025-09-04",
+      "prev_30d_price": 43.73,
+      "trend_30d_pct": -4.0,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 28,
+      "vendor": "franks",
+      "unit": "cs",
+      "price_range": {
+        "min": 42.0,
+        "max": 44.0
       },
-      {
-        "date": "2025-06-16",
-        "price": 34.5
-      },
-      {
-        "date": "2025-06-23",
-        "price": 34.5
-      },
-      {
-        "date": "2025-07-01",
-        "price": 34.5
-      },
-      {
-        "date": "2025-08-14",
-        "price": 32.5
-      },
-      {
-        "date": "2025-08-15",
-        "price": 29.5
-      },
-      {
-        "date": "2026-03-13",
-        "price": 24.5
-      },
-      {
-        "date": "2026-03-23",
-        "price": 29.5
-      }
-    ]
-  },
-  "Corn (Bi-Color)": {
-    "price": 42.0,
-    "date": "2025-09-04",
-    "unit": "cs",
-    "vendor": "franks",
-    "range": {
-      "min": 42.0,
-      "max": 44.0
+      "history": [
+        {
+          "date": "2025-08-15",
+          "price": 42.0
+        },
+        {
+          "date": "2025-08-19",
+          "price": 42.0
+        },
+        {
+          "date": "2025-08-25",
+          "price": 42.0
+        },
+        {
+          "date": "2025-08-25",
+          "price": 42.0
+        },
+        {
+          "date": "2025-08-28",
+          "price": 42.0
+        },
+        {
+          "date": "2025-08-28",
+          "price": 42.0
+        },
+        {
+          "date": "2025-09-02",
+          "price": 42.0
+        },
+        {
+          "date": "2025-09-04",
+          "price": 42.0
+        }
+      ]
     },
-    "count": 26,
-    "t30": -4.5,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-08-11",
-        "price": 44.0
+    "Cranberries (Fresh)": {
+      "latest_price": 2.85,
+      "latest_date": "2025-12-20",
+      "prev_30d_price": 2.85,
+      "trend_30d_pct": 0.0,
+      "trend_yoy_pct": 3.6,
+      "trend_season_pct": null,
+      "entry_count": 12,
+      "vendor": "franks",
+      "unit": "bag_12oz",
+      "price_range": {
+        "min": 2.75,
+        "max": 2.85
       },
-      {
-        "date": "2025-08-14",
-        "price": 42.0
-      },
-      {
-        "date": "2025-08-15",
-        "price": 42.0
-      },
-      {
-        "date": "2025-08-19",
-        "price": 42.0
-      },
-      {
-        "date": "2025-08-25",
-        "price": 42.0
-      },
-      {
-        "date": "2025-08-28",
-        "price": 42.0
-      },
-      {
-        "date": "2025-09-02",
-        "price": 42.0
-      },
-      {
-        "date": "2025-09-04",
-        "price": 42.0
-      }
-    ]
-  },
-  "Cranberries (Fresh)": {
-    "price": 2.85,
-    "date": "2025-12-20",
-    "unit": "bag_12oz",
-    "vendor": "franks",
-    "range": {
-      "min": 2.75,
-      "max": 2.85
+      "history": [
+        {
+          "date": "2025-10-24",
+          "price": 2.85
+        },
+        {
+          "date": "2025-10-31",
+          "price": 2.85
+        },
+        {
+          "date": "2025-11-06",
+          "price": 2.85
+        },
+        {
+          "date": "2025-11-12",
+          "price": 2.85
+        },
+        {
+          "date": "2025-11-21",
+          "price": 2.85
+        },
+        {
+          "date": "2025-12-03",
+          "price": 2.85
+        },
+        {
+          "date": "2025-12-19",
+          "price": 2.85
+        },
+        {
+          "date": "2025-12-20",
+          "price": 2.85
+        }
+      ]
     },
-    "count": 12,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-10-24",
-        "price": 2.85
+    "Duck Breast, Culver Pekin": {
+      "latest_price": 12.59,
+      "latest_date": "2025-01-17",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 1,
+      "vendor": "ec_wilson",
+      "unit": "lb",
+      "price_range": {
+        "min": 12.59,
+        "max": 12.59
       },
-      {
-        "date": "2025-10-31",
-        "price": 2.85
-      },
-      {
-        "date": "2025-11-06",
-        "price": 2.85
-      },
-      {
-        "date": "2025-11-12",
-        "price": 2.85
-      },
-      {
-        "date": "2025-11-21",
-        "price": 2.85
-      },
-      {
-        "date": "2025-12-03",
-        "price": 2.85
-      },
-      {
-        "date": "2025-12-19",
-        "price": 2.85
-      },
-      {
-        "date": "2025-12-20",
-        "price": 2.85
-      }
-    ]
-  },
-  "Duck Breast, Culver Pekin": {
-    "price": 12.59,
-    "date": "2025-01-17",
-    "unit": "lb",
-    "vendor": "ec_wilson",
-    "range": {
-      "min": 12.59,
-      "max": 12.59
+      "history": [
+        {
+          "date": "2025-01-17",
+          "price": 12.59
+        }
+      ]
     },
-    "count": 1,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-01-17",
-        "price": 12.59
-      }
-    ]
-  },
-  "English Peas": {
-    "price": 2.98,
-    "date": "2025-07-25",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 1.21,
-      "max": 3.12
+    "English Peas": {
+      "latest_price": 2.74,
+      "latest_date": "2026-04-18",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 14,
+      "vendor": "franks_produce",
+      "unit": "cs",
+      "price_range": {
+        "min": 1.21,
+        "max": 3.12
+      },
+      "history": [
+        {
+          "date": "2025-07-09",
+          "price": 2.98
+        },
+        {
+          "date": "2025-07-12",
+          "price": 2.98
+        },
+        {
+          "date": "2025-07-15",
+          "price": 2.98
+        },
+        {
+          "date": "2025-07-18",
+          "price": 2.98
+        },
+        {
+          "date": "2025-07-19",
+          "price": 2.98
+        },
+        {
+          "date": "2025-07-22",
+          "price": 2.98
+        },
+        {
+          "date": "2025-07-25",
+          "price": 2.98
+        },
+        {
+          "date": "2026-04-18",
+          "price": 2.74
+        }
+      ]
     },
-    "count": 13,
-    "t30": -2.3,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-07-07",
-        "price": 2.98
+    "Golden Chanterelle (Wild)": {
+      "latest_price": 12.75,
+      "latest_date": "2025-11-06",
+      "prev_30d_price": 14.5,
+      "trend_30d_pct": -12.1,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 3,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 12.75,
+        "max": 15.5
       },
-      {
-        "date": "2025-07-09",
-        "price": 2.98
-      },
-      {
-        "date": "2025-07-12",
-        "price": 2.98
-      },
-      {
-        "date": "2025-07-15",
-        "price": 2.98
-      },
-      {
-        "date": "2025-07-18",
-        "price": 2.98
-      },
-      {
-        "date": "2025-07-19",
-        "price": 2.98
-      },
-      {
-        "date": "2025-07-22",
-        "price": 2.98
-      },
-      {
-        "date": "2025-07-25",
-        "price": 2.98
-      }
-    ]
-  },
-  "Golden Chanterelle (Wild)": {
-    "price": 12.75,
-    "date": "2025-11-06",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 12.75,
-      "max": 15.5
+      "history": [
+        {
+          "date": "2025-09-09",
+          "price": 15.5
+        },
+        {
+          "date": "2025-09-26",
+          "price": 13.5
+        },
+        {
+          "date": "2025-11-06",
+          "price": 12.75
+        }
+      ]
     },
-    "count": 3,
-    "t30": -5.6,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-09-09",
-        "price": 15.5
+    "Halibut (New Season)": {
+      "latest_price": 14.99,
+      "latest_date": "2025-12-19",
+      "prev_30d_price": 15.16,
+      "trend_30d_pct": -1.1,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 9,
+      "vendor": "key_city_fish",
+      "unit": "lb",
+      "price_range": {
+        "min": 14.95,
+        "max": 15.99
       },
-      {
-        "date": "2025-09-26",
-        "price": 13.5
-      },
-      {
-        "date": "2025-11-06",
-        "price": 12.75
-      }
-    ]
-  },
-  "Halibut (New Season)": {
-    "price": 14.99,
-    "date": "2025-12-19",
-    "unit": "lb",
-    "vendor": "key_city_fish",
-    "range": {
-      "min": 14.95,
-      "max": 15.99
+      "history": [
+        {
+          "date": "2025-09-23",
+          "price": 14.95
+        },
+        {
+          "date": "2025-09-26",
+          "price": 14.95
+        },
+        {
+          "date": "2025-09-29",
+          "price": 14.95
+        },
+        {
+          "date": "2025-10-21",
+          "price": 14.99
+        },
+        {
+          "date": "2025-11-01",
+          "price": 14.99
+        },
+        {
+          "date": "2025-11-07",
+          "price": 15.5
+        },
+        {
+          "date": "2025-12-17",
+          "price": 15.99
+        },
+        {
+          "date": "2025-12-19",
+          "price": 14.99
+        }
+      ]
     },
-    "count": 9,
-    "t30": -3.3,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-09-23",
-        "price": 14.95
+    "Heirloom Peppers": {
+      "latest_price": 3.5,
+      "latest_date": "2026-04-14",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": -53.3,
+      "trend_season_pct": null,
+      "entry_count": 51,
+      "vendor": "franks_produce",
+      "unit": "lb",
+      "price_range": {
+        "min": 1.25,
+        "max": 11.0
       },
-      {
-        "date": "2025-09-26",
-        "price": 14.95
-      },
-      {
-        "date": "2025-09-29",
-        "price": 14.95
-      },
-      {
-        "date": "2025-10-21",
-        "price": 14.99
-      },
-      {
-        "date": "2025-11-01",
-        "price": 14.99
-      },
-      {
-        "date": "2025-11-07",
-        "price": 15.5
-      },
-      {
-        "date": "2025-12-17",
-        "price": 15.99
-      },
-      {
-        "date": "2025-12-19",
-        "price": 14.99
-      }
-    ]
-  },
-  "Heirloom Peppers": {
-    "price": 9.75,
-    "date": "2026-03-30",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 1.25,
-      "max": 9.75
+      "history": [
+        {
+          "date": "2025-11-17",
+          "price": 2.5
+        },
+        {
+          "date": "2025-12-22",
+          "price": 2.99
+        },
+        {
+          "date": "2025-12-31",
+          "price": 5.0
+        },
+        {
+          "date": "2026-01-19",
+          "price": 8.0
+        },
+        {
+          "date": "2026-03-23",
+          "price": 8.0
+        },
+        {
+          "date": "2026-03-30",
+          "price": 9.75
+        },
+        {
+          "date": "2026-04-13",
+          "price": 11.0
+        },
+        {
+          "date": "2026-04-14",
+          "price": 3.5
+        }
+      ]
     },
-    "count": 47,
-    "t30": 21.9,
-    "tyoy": 30.0,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-11-03",
-        "price": 2.5
+    "Kumquats": {
+      "latest_price": 7.5,
+      "latest_date": "2025-06-05",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 1,
+      "vendor": "franks",
+      "unit": "lb",
+      "price_range": {
+        "min": 7.5,
+        "max": 7.5
       },
-      {
-        "date": "2025-11-05",
-        "price": 2.5
-      },
-      {
-        "date": "2025-11-17",
-        "price": 2.5
-      },
-      {
-        "date": "2025-12-22",
-        "price": 2.99
-      },
-      {
-        "date": "2025-12-31",
-        "price": 5.0
-      },
-      {
-        "date": "2026-01-19",
-        "price": 8.0
-      },
-      {
-        "date": "2026-03-23",
-        "price": 8.0
-      },
-      {
-        "date": "2026-03-30",
-        "price": 9.75
-      }
-    ]
-  },
-  "Kumquats": {
-    "price": 7.5,
-    "date": "2025-06-05",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 7.5,
-      "max": 7.5
+      "history": [
+        {
+          "date": "2025-06-05",
+          "price": 7.5
+        }
+      ]
     },
-    "count": 1,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-06-05",
-        "price": 7.5
-      }
-    ]
-  },
-  "Ladyfern Fiddleheads": {
-    "price": 10.5,
-    "date": "2025-04-29",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 10.5,
-      "max": 10.5
+    "Ladyfern Fiddleheads": {
+      "latest_price": 10.5,
+      "latest_date": "2025-04-29",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 1,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 10.5,
+        "max": 10.5
+      },
+      "history": [
+        {
+          "date": "2025-04-29",
+          "price": 10.5
+        }
+      ]
     },
-    "count": 1,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-04-29",
-        "price": 10.5
-      }
-    ]
-  },
-  "Lobster Mushroom": {
-    "price": 12.0,
-    "date": "2025-09-17",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 12.0,
-      "max": 12.0
+    "Lobster Mushroom": {
+      "latest_price": 12.0,
+      "latest_date": "2025-09-17",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 1,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 12.0,
+        "max": 12.0
+      },
+      "history": [
+        {
+          "date": "2025-09-17",
+          "price": 12.0
+        }
+      ]
     },
-    "count": 1,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-09-17",
-        "price": 12.0
-      }
-    ]
-  },
-  "Maitake Mushrooms": {
-    "price": 13.29,
-    "date": "2026-04-01",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 13.24,
-      "max": 14.19
+    "Maitake Mushrooms": {
+      "latest_price": 13.29,
+      "latest_date": "2026-04-24",
+      "prev_30d_price": 14.19,
+      "trend_30d_pct": -6.4,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 6,
+      "vendor": "franks_produce",
+      "unit": "cs",
+      "price_range": {
+        "min": 13.24,
+        "max": 14.19
+      },
+      "history": [
+        {
+          "date": "2026-03-20",
+          "price": 14.1905
+        },
+        {
+          "date": "2026-03-21",
+          "price": 14.1905
+        },
+        {
+          "date": "2026-03-26",
+          "price": 13.2381
+        },
+        {
+          "date": "2026-04-01",
+          "price": 13.2857
+        },
+        {
+          "date": "2026-04-16",
+          "price": 14.1905
+        },
+        {
+          "date": "2026-04-24",
+          "price": 13.2857
+        }
+      ]
     },
-    "count": 4,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2026-03-20",
-        "price": 14.19
+    "Manila Clams": {
+      "latest_price": 4.99,
+      "latest_date": "2025-06-19",
+      "prev_30d_price": 4.99,
+      "trend_30d_pct": 0.0,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 10,
+      "vendor": "key_city_fish",
+      "unit": "lb",
+      "price_range": {
+        "min": 4.99,
+        "max": 4.99
       },
-      {
-        "date": "2026-03-21",
-        "price": 14.19
-      },
-      {
-        "date": "2026-03-26",
-        "price": 13.24
-      },
-      {
-        "date": "2026-04-01",
-        "price": 13.29
-      }
-    ]
-  },
-  "Manila Clams": {
-    "price": 4.99,
-    "date": "2025-06-19",
-    "unit": "lb",
-    "vendor": "key_city_fish",
-    "range": {
-      "min": 4.99,
-      "max": 4.99
+      "history": [
+        {
+          "date": "2025-03-29",
+          "price": 4.99
+        },
+        {
+          "date": "2025-04-05",
+          "price": 4.99
+        },
+        {
+          "date": "2025-04-17",
+          "price": 4.99
+        },
+        {
+          "date": "2025-04-23",
+          "price": 4.99
+        },
+        {
+          "date": "2025-04-25",
+          "price": 4.99
+        },
+        {
+          "date": "2025-05-01",
+          "price": 4.99
+        },
+        {
+          "date": "2025-05-03",
+          "price": 4.99
+        },
+        {
+          "date": "2025-06-19",
+          "price": 4.99
+        }
+      ]
     },
-    "count": 10,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-03-29",
-        "price": 4.99
+    "Meyer Lemon": {
+      "latest_price": 2.56,
+      "latest_date": "2026-03-21",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 6,
+      "vendor": "franks",
+      "unit": "cs",
+      "price_range": {
+        "min": 2.56,
+        "max": 3.75
       },
-      {
-        "date": "2025-04-05",
-        "price": 4.99
-      },
-      {
-        "date": "2025-04-17",
-        "price": 4.99
-      },
-      {
-        "date": "2025-04-23",
-        "price": 4.99
-      },
-      {
-        "date": "2025-04-25",
-        "price": 4.99
-      },
-      {
-        "date": "2025-05-01",
-        "price": 4.99
-      },
-      {
-        "date": "2025-05-03",
-        "price": 4.99
-      },
-      {
-        "date": "2025-06-19",
-        "price": 4.99
-      }
-    ]
-  },
-  "Meyer Lemon": {
-    "price": 2.56,
-    "date": "2026-03-21",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 2.56,
-      "max": 3.75
+      "history": [
+        {
+          "date": "2025-07-07",
+          "price": 3.75
+        },
+        {
+          "date": "2025-07-18",
+          "price": 3.75
+        },
+        {
+          "date": "2025-08-07",
+          "price": 3.75
+        },
+        {
+          "date": "2025-09-20",
+          "price": 3.75
+        },
+        {
+          "date": "2026-01-15",
+          "price": 2.5556
+        },
+        {
+          "date": "2026-03-21",
+          "price": 2.5556
+        }
+      ]
     },
-    "count": 6,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-07-07",
-        "price": 3.75
+    "Morels (Wild)": {
+      "latest_price": 15.75,
+      "latest_date": "2025-06-12",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 4,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 15.75,
+        "max": 31.5
       },
-      {
-        "date": "2025-07-18",
-        "price": 3.75
-      },
-      {
-        "date": "2025-08-07",
-        "price": 3.75
-      },
-      {
-        "date": "2025-09-20",
-        "price": 3.75
-      },
-      {
-        "date": "2026-01-15",
-        "price": 2.56
-      },
-      {
-        "date": "2026-03-21",
-        "price": 2.56
-      }
-    ]
-  },
-  "Morels (Wild)": {
-    "price": 15.75,
-    "date": "2025-06-12",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 15.75,
-      "max": 31.5
+      "history": [
+        {
+          "date": "2025-05-16",
+          "price": 31.5
+        },
+        {
+          "date": "2025-05-28",
+          "price": 17.5
+        },
+        {
+          "date": "2025-06-04",
+          "price": 15.75
+        },
+        {
+          "date": "2025-06-12",
+          "price": 15.75
+        }
+      ]
     },
-    "count": 4,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-05-16",
-        "price": 31.5
+    "Palouse Pastured Chicken Eggs (Large)": {
+      "latest_price": 99.99,
+      "latest_date": "2026-04-10",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": 0.0,
+      "trend_season_pct": null,
+      "entry_count": 16,
+      "vendor": "preserve_meat",
+      "unit": "case",
+      "price_range": {
+        "min": 83.88,
+        "max": 99.99
       },
-      {
-        "date": "2025-05-28",
-        "price": 17.5
-      },
-      {
-        "date": "2025-06-04",
-        "price": 15.75
-      },
-      {
-        "date": "2025-06-12",
-        "price": 15.75
-      }
-    ]
-  },
-  "Palouse Pastured Chicken Eggs (Large)": {
-    "price": 99.99,
-    "date": "2025-07-21",
-    "unit": "case",
-    "vendor": "preserve_meat",
-    "range": {
-      "min": 83.88,
-      "max": 99.99
+      "history": [
+        {
+          "date": "2025-05-19",
+          "price": 99.99
+        },
+        {
+          "date": "2025-05-27",
+          "price": 99.99
+        },
+        {
+          "date": "2025-06-30",
+          "price": 99.99
+        },
+        {
+          "date": "2025-07-07",
+          "price": 99.99
+        },
+        {
+          "date": "2025-07-14",
+          "price": 99.99
+        },
+        {
+          "date": "2025-07-21",
+          "price": 99.99
+        },
+        {
+          "date": "2026-04-03",
+          "price": 99.99
+        },
+        {
+          "date": "2026-04-10",
+          "price": 99.99
+        }
+      ]
     },
-    "count": 14,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-05-07",
-        "price": 99.99
+    "Peaches": {
+      "latest_price": 2.67,
+      "latest_date": "2025-10-07",
+      "prev_30d_price": 2.91,
+      "trend_30d_pct": -8.2,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 20,
+      "vendor": "franks",
+      "unit": "cs",
+      "price_range": {
+        "min": 2.67,
+        "max": 3.06
       },
-      {
-        "date": "2025-05-12",
-        "price": 99.99
-      },
-      {
-        "date": "2025-05-19",
-        "price": 99.99
-      },
-      {
-        "date": "2025-05-27",
-        "price": 99.99
-      },
-      {
-        "date": "2025-06-30",
-        "price": 99.99
-      },
-      {
-        "date": "2025-07-07",
-        "price": 99.99
-      },
-      {
-        "date": "2025-07-14",
-        "price": 99.99
-      },
-      {
-        "date": "2025-07-21",
-        "price": 99.99
-      }
-    ]
-  },
-  "Peaches": {
-    "price": 2.67,
-    "date": "2025-10-07",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 2.67,
-      "max": 3.06
+      "history": [
+        {
+          "date": "2025-09-09",
+          "price": 2.8889
+        },
+        {
+          "date": "2025-09-10",
+          "price": 2.8889
+        },
+        {
+          "date": "2025-09-16",
+          "price": 2.6667
+        },
+        {
+          "date": "2025-09-18",
+          "price": 2.6667
+        },
+        {
+          "date": "2025-09-19",
+          "price": 2.6667
+        },
+        {
+          "date": "2025-09-26",
+          "price": 2.6667
+        },
+        {
+          "date": "2025-09-29",
+          "price": 2.6667
+        },
+        {
+          "date": "2025-10-07",
+          "price": 2.6667
+        }
+      ]
     },
-    "count": 17,
-    "t30": -7.6,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-09-09",
-        "price": 2.89
+    "Persimmons (Fuyu)": {
+      "latest_price": 38.0,
+      "latest_date": "2026-02-13",
+      "prev_30d_price": 38.0,
+      "trend_30d_pct": 0.0,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 10,
+      "vendor": "franks",
+      "unit": "cs",
+      "price_range": {
+        "min": 38.0,
+        "max": 39.5
       },
-      {
-        "date": "2025-09-10",
-        "price": 2.89
-      },
-      {
-        "date": "2025-09-16",
-        "price": 2.67
-      },
-      {
-        "date": "2025-09-18",
-        "price": 2.67
-      },
-      {
-        "date": "2025-09-19",
-        "price": 2.67
-      },
-      {
-        "date": "2025-09-26",
-        "price": 2.67
-      },
-      {
-        "date": "2025-09-29",
-        "price": 2.67
-      },
-      {
-        "date": "2025-10-07",
-        "price": 2.67
-      }
-    ]
-  },
-  "Persimmons (Fuyu)": {
-    "price": 38.0,
-    "date": "2026-02-13",
-    "unit": "cs",
-    "vendor": "franks",
-    "range": {
-      "min": 38.0,
-      "max": 39.5
+      "history": [
+        {
+          "date": "2026-01-08",
+          "price": 38.0
+        },
+        {
+          "date": "2026-01-10",
+          "price": 38.0
+        },
+        {
+          "date": "2026-01-17",
+          "price": 38.0
+        },
+        {
+          "date": "2026-01-26",
+          "price": 38.0
+        },
+        {
+          "date": "2026-01-28",
+          "price": 38.0
+        },
+        {
+          "date": "2026-02-05",
+          "price": 38.0
+        },
+        {
+          "date": "2026-02-07",
+          "price": 38.0
+        },
+        {
+          "date": "2026-02-13",
+          "price": 38.0
+        }
+      ]
     },
-    "count": 10,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2026-01-08",
-        "price": 38.0
+    "Plums & Pluots": {
+      "latest_price": 3.25,
+      "latest_date": "2025-11-26",
+      "prev_30d_price": 3.25,
+      "trend_30d_pct": 0.0,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 5,
+      "vendor": "franks",
+      "unit": "lb",
+      "price_range": {
+        "min": 2.5,
+        "max": 3.25
       },
-      {
-        "date": "2026-01-10",
-        "price": 38.0
-      },
-      {
-        "date": "2026-01-17",
-        "price": 38.0
-      },
-      {
-        "date": "2026-01-26",
-        "price": 38.0
-      },
-      {
-        "date": "2026-01-28",
-        "price": 38.0
-      },
-      {
-        "date": "2026-02-05",
-        "price": 38.0
-      },
-      {
-        "date": "2026-02-07",
-        "price": 38.0
-      },
-      {
-        "date": "2026-02-13",
-        "price": 38.0
-      }
-    ]
-  },
-  "Plums & Pluots": {
-    "price": 3.25,
-    "date": "2025-11-26",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 2.5,
-      "max": 3.25
+      "history": [
+        {
+          "date": "2025-09-03",
+          "price": 2.5
+        },
+        {
+          "date": "2025-10-16",
+          "price": 3.25
+        },
+        {
+          "date": "2025-10-23",
+          "price": 3.25
+        },
+        {
+          "date": "2025-10-30",
+          "price": 3.25
+        },
+        {
+          "date": "2025-11-26",
+          "price": 3.25
+        }
+      ]
     },
-    "count": 5,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-09-03",
-        "price": 2.5
+    "Porcini / King Bolete": {
+      "latest_price": 12.5,
+      "latest_date": "2025-06-27",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 2,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 12.5,
+        "max": 18.75
       },
-      {
-        "date": "2025-10-16",
-        "price": 3.25
-      },
-      {
-        "date": "2025-10-23",
-        "price": 3.25
-      },
-      {
-        "date": "2025-10-30",
-        "price": 3.25
-      },
-      {
-        "date": "2025-11-26",
-        "price": 3.25
-      }
-    ]
-  },
-  "Porcini / King Bolete": {
-    "price": 12.5,
-    "date": "2025-06-27",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 12.5,
-      "max": 18.75
+      "history": [
+        {
+          "date": "2025-06-20",
+          "price": 18.75
+        },
+        {
+          "date": "2025-06-27",
+          "price": 12.5
+        }
+      ]
     },
-    "count": 2,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-06-20",
-        "price": 18.75
+    "Pure Country Beef Chuck": {
+      "latest_price": 14.99,
+      "latest_date": "2025-06-27",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 1,
+      "vendor": "preserve_meat",
+      "unit": "lb",
+      "price_range": {
+        "min": 14.99,
+        "max": 14.99
       },
-      {
-        "date": "2025-06-27",
-        "price": 12.5
-      }
-    ]
-  },
-  "Pure Country Beef Chuck": {
-    "price": 14.99,
-    "date": "2025-06-27",
-    "unit": "lb",
-    "vendor": "preserve_meat",
-    "range": {
-      "min": 14.99,
-      "max": 14.99
+      "history": [
+        {
+          "date": "2025-06-27",
+          "price": 14.99
+        }
+      ]
     },
-    "count": 1,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-06-27",
-        "price": 14.99
-      }
-    ]
-  },
-  "Pure Country Beef Striploin": {
-    "price": 18.99,
-    "date": "2025-06-19",
-    "unit": "lb",
-    "vendor": "preserve_meat",
-    "range": {
-      "min": 18.99,
-      "max": 18.99
+    "Pure Country Beef Striploin": {
+      "latest_price": 18.99,
+      "latest_date": "2025-06-19",
+      "prev_30d_price": 18.99,
+      "trend_30d_pct": 0.0,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 4,
+      "vendor": "preserve_meat",
+      "unit": "lb",
+      "price_range": {
+        "min": 18.99,
+        "max": 18.99
+      },
+      "history": [
+        {
+          "date": "2025-05-16",
+          "price": 18.99
+        },
+        {
+          "date": "2025-05-21",
+          "price": 18.99
+        },
+        {
+          "date": "2025-05-23",
+          "price": 18.99
+        },
+        {
+          "date": "2025-06-19",
+          "price": 18.99
+        }
+      ]
     },
-    "count": 4,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-05-16",
-        "price": 18.99
+    "Pure Country GL Pork Rack": {
+      "latest_price": 6.5,
+      "latest_date": "2025-05-12",
+      "prev_30d_price": 6.2,
+      "trend_30d_pct": 4.8,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 15,
+      "vendor": "preserve_meat",
+      "unit": "lb",
+      "price_range": {
+        "min": 5.0,
+        "max": 6.5
       },
-      {
-        "date": "2025-05-21",
-        "price": 18.99
-      },
-      {
-        "date": "2025-05-23",
-        "price": 18.99
-      },
-      {
-        "date": "2025-06-19",
-        "price": 18.99
-      }
-    ]
-  },
-  "Pure Country GL Pork Rack": {
-    "price": 6.5,
-    "date": "2025-05-12",
-    "unit": "lb",
-    "vendor": "preserve_meat",
-    "range": {
-      "min": 5.0,
-      "max": 6.5
+      "history": [
+        {
+          "date": "2025-04-18",
+          "price": 6.5
+        },
+        {
+          "date": "2025-04-21",
+          "price": 6.5
+        },
+        {
+          "date": "2025-04-25",
+          "price": 6.5
+        },
+        {
+          "date": "2025-04-28",
+          "price": 6.5
+        },
+        {
+          "date": "2025-05-01",
+          "price": 6.5
+        },
+        {
+          "date": "2025-05-03",
+          "price": 6.5
+        },
+        {
+          "date": "2025-05-07",
+          "price": 6.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 6.5
+        }
+      ]
     },
-    "count": 15,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-04-18",
-        "price": 6.5
+    "Ramps (Wild)": {
+      "latest_price": 14.5,
+      "latest_date": "2025-05-13",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 1,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 14.5,
+        "max": 14.5
       },
-      {
-        "date": "2025-04-21",
-        "price": 6.5
-      },
-      {
-        "date": "2025-04-25",
-        "price": 6.5
-      },
-      {
-        "date": "2025-04-28",
-        "price": 6.5
-      },
-      {
-        "date": "2025-05-01",
-        "price": 6.5
-      },
-      {
-        "date": "2025-05-03",
-        "price": 6.5
-      },
-      {
-        "date": "2025-05-07",
-        "price": 6.5
-      },
-      {
-        "date": "2025-05-12",
-        "price": 6.5
-      }
-    ]
-  },
-  "Ramps (Wild)": {
-    "price": 14.5,
-    "date": "2025-05-13",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 14.5,
-      "max": 14.5
+      "history": [
+        {
+          "date": "2025-05-13",
+          "price": 14.5
+        }
+      ]
     },
-    "count": 1,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-05-13",
-        "price": 14.5
-      }
-    ]
-  },
-  "Rhubarb (Hot House)": {
-    "price": 3.5,
-    "date": "2025-06-23",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 3.5,
-      "max": 3.5
+    "Rhubarb (Hot House)": {
+      "latest_price": 3.99,
+      "latest_date": "2026-04-15",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 4,
+      "vendor": "franks_produce",
+      "unit": "lb",
+      "price_range": {
+        "min": 3.5,
+        "max": 3.99
+      },
+      "history": [
+        {
+          "date": "2025-06-07",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-16",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-23",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-15",
+          "price": 3.99
+        }
+      ]
     },
-    "count": 3,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-06-07",
-        "price": 3.5
+    "Sea Scallops": {
+      "latest_price": 41.95,
+      "latest_date": "2026-04-30",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 4,
+      "vendor": "key_city_fish",
+      "unit": "lb",
+      "price_range": {
+        "min": 37.95,
+        "max": 41.95
       },
-      {
-        "date": "2025-06-16",
-        "price": 3.5
-      },
-      {
-        "date": "2025-06-23",
-        "price": 3.5
-      }
-    ]
-  },
-  "Sitka Spruce Tips": {
-    "price": 16.5,
-    "date": "2025-05-16",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 16.5,
-      "max": 16.5
+      "history": [
+        {
+          "date": "2026-04-21",
+          "price": 41.95
+        },
+        {
+          "date": "2026-04-23",
+          "price": 41.95
+        },
+        {
+          "date": "2026-04-27",
+          "price": 37.95
+        },
+        {
+          "date": "2026-04-30",
+          "price": 41.95
+        }
+      ]
     },
-    "count": 2,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-05-13",
-        "price": 16.5
+    "Sitka Spruce Tips": {
+      "latest_price": 16.5,
+      "latest_date": "2025-05-16",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 2,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 16.5,
+        "max": 16.5
       },
-      {
-        "date": "2025-05-16",
-        "price": 16.5
-      }
-    ]
-  },
-  "Smoked Trout": {
-    "price": 8.49,
-    "date": "2025-08-30",
-    "unit": "lb",
-    "vendor": "key_city_fish",
-    "range": {
-      "min": 5.99,
-      "max": 8.49
+      "history": [
+        {
+          "date": "2025-05-13",
+          "price": 16.5
+        },
+        {
+          "date": "2025-05-16",
+          "price": 16.5
+        }
+      ]
     },
-    "count": 18,
-    "t30": 6.3,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-08-07",
-        "price": 7.99
+    "Smoked Trout": {
+      "latest_price": 8.49,
+      "latest_date": "2025-08-30",
+      "prev_30d_price": 7.12,
+      "trend_30d_pct": 19.3,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 18,
+      "vendor": "key_city_fish",
+      "unit": "lb",
+      "price_range": {
+        "min": 5.99,
+        "max": 8.49
       },
-      {
-        "date": "2025-08-09",
-        "price": 8.49
-      },
-      {
-        "date": "2025-08-14",
-        "price": 8.49
-      },
-      {
-        "date": "2025-08-18",
-        "price": 8.49
-      },
-      {
-        "date": "2025-08-23",
-        "price": 8.49
-      },
-      {
-        "date": "2025-08-28",
-        "price": 8.49
-      },
-      {
-        "date": "2025-08-29",
-        "price": 8.49
-      },
-      {
-        "date": "2025-08-30",
-        "price": 8.49
-      }
-    ]
-  },
-  "Snow Peas": {
-    "price": 4.4,
-    "date": "2025-08-25",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 4.4,
-      "max": 5.25
+      "history": [
+        {
+          "date": "2025-08-07",
+          "price": 7.99
+        },
+        {
+          "date": "2025-08-09",
+          "price": 8.49
+        },
+        {
+          "date": "2025-08-14",
+          "price": 8.49
+        },
+        {
+          "date": "2025-08-18",
+          "price": 8.49
+        },
+        {
+          "date": "2025-08-23",
+          "price": 8.49
+        },
+        {
+          "date": "2025-08-28",
+          "price": 8.49
+        },
+        {
+          "date": "2025-08-29",
+          "price": 8.49
+        },
+        {
+          "date": "2025-08-30",
+          "price": 8.49
+        }
+      ]
     },
-    "count": 18,
-    "t30": -16.2,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-07-25",
-        "price": 5.25
+    "Snow Peas": {
+      "latest_price": 4.4,
+      "latest_date": "2025-08-25",
+      "prev_30d_price": 5.25,
+      "trend_30d_pct": -16.2,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 19,
+      "vendor": "franks",
+      "unit": "cs",
+      "price_range": {
+        "min": 4.4,
+        "max": 5.25
       },
-      {
-        "date": "2025-07-29",
-        "price": 5.25
-      },
-      {
-        "date": "2025-07-30",
-        "price": 5.25
-      },
-      {
-        "date": "2025-08-08",
-        "price": 5.25
-      },
-      {
-        "date": "2025-08-09",
-        "price": 5.25
-      },
-      {
-        "date": "2025-08-16",
-        "price": 5.25
-      },
-      {
-        "date": "2025-08-18",
-        "price": 5.25
-      },
-      {
-        "date": "2025-08-25",
-        "price": 4.4
-      }
-    ]
-  },
-  "Stinging Nettles": {
-    "price": 9.5,
-    "date": "2025-04-29",
-    "unit": "lb",
-    "vendor": "foraged_found",
-    "range": {
-      "min": 9.5,
-      "max": 9.5
+      "history": [
+        {
+          "date": "2025-07-29",
+          "price": 5.25
+        },
+        {
+          "date": "2025-07-30",
+          "price": 5.25
+        },
+        {
+          "date": "2025-08-08",
+          "price": 5.25
+        },
+        {
+          "date": "2025-08-09",
+          "price": 5.25
+        },
+        {
+          "date": "2025-08-16",
+          "price": 5.25
+        },
+        {
+          "date": "2025-08-18",
+          "price": 5.25
+        },
+        {
+          "date": "2025-08-25",
+          "price": 4.4
+        },
+        {
+          "date": "2025-08-25",
+          "price": 4.4
+        }
+      ]
     },
-    "count": 2,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-04-11",
-        "price": 9.5
+    "Stinging Nettles": {
+      "latest_price": 9.5,
+      "latest_date": "2025-04-29",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 2,
+      "vendor": "foraged_found",
+      "unit": "lb",
+      "price_range": {
+        "min": 9.5,
+        "max": 9.5
       },
-      {
-        "date": "2025-04-29",
-        "price": 9.5
-      }
-    ]
-  },
-  "Strawberries (Local)": {
-    "price": 2.75,
-    "date": "2026-03-23",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 2.75,
-      "max": 3.69
+      "history": [
+        {
+          "date": "2025-04-11",
+          "price": 9.5
+        },
+        {
+          "date": "2025-04-29",
+          "price": 9.5
+        }
+      ]
     },
-    "count": 9,
-    "t30": -25.5,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-07-02",
-        "price": 3.06
+    "Strawberries (Local)": {
+      "latest_price": 2.75,
+      "latest_date": "2026-03-23",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 9,
+      "vendor": "franks",
+      "unit": "cs",
+      "price_range": {
+        "min": 2.75,
+        "max": 3.69
       },
-      {
-        "date": "2025-07-10",
-        "price": 3.56
-      },
-      {
-        "date": "2025-07-31",
-        "price": 3.56
-      },
-      {
-        "date": "2025-08-13",
-        "price": 3.56
-      },
-      {
-        "date": "2025-08-21",
-        "price": 3.56
-      },
-      {
-        "date": "2025-09-03",
-        "price": 3.69
-      },
-      {
-        "date": "2026-03-14",
-        "price": 2.75
-      },
-      {
-        "date": "2026-03-23",
-        "price": 2.75
-      }
-    ]
-  },
-  "Sugar Snap Peas": {
-    "price": 4.92,
-    "date": "2025-08-25",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 4.92,
-      "max": 4.92
+      "history": [
+        {
+          "date": "2025-07-02",
+          "price": 3.0625
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.5625
+        },
+        {
+          "date": "2025-07-31",
+          "price": 3.5625
+        },
+        {
+          "date": "2025-08-13",
+          "price": 3.5625
+        },
+        {
+          "date": "2025-08-21",
+          "price": 3.5625
+        },
+        {
+          "date": "2025-09-03",
+          "price": 3.6875
+        },
+        {
+          "date": "2026-03-14",
+          "price": 2.75
+        },
+        {
+          "date": "2026-03-23",
+          "price": 2.75
+        }
+      ]
     },
-    "count": 9,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-07-29",
-        "price": 4.92
+    "Sugar Snap Peas": {
+      "latest_price": 5.78,
+      "latest_date": "2026-04-30",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 11,
+      "vendor": "franks_produce",
+      "unit": "cs",
+      "price_range": {
+        "min": 4.92,
+        "max": 5.78
       },
-      {
-        "date": "2025-08-01",
-        "price": 4.92
-      },
-      {
-        "date": "2025-08-04",
-        "price": 4.92
-      },
-      {
-        "date": "2025-08-08",
-        "price": 4.92
-      },
-      {
-        "date": "2025-08-09",
-        "price": 4.92
-      },
-      {
-        "date": "2025-08-16",
-        "price": 4.92
-      },
-      {
-        "date": "2025-08-18",
-        "price": 4.92
-      },
-      {
-        "date": "2025-08-25",
-        "price": 4.92
-      }
-    ]
-  },
-  "Sunchokes": {
-    "price": 4.5,
-    "date": "2026-02-09",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 4.5,
-      "max": 4.5
+      "history": [
+        {
+          "date": "2025-08-04",
+          "price": 4.925
+        },
+        {
+          "date": "2025-08-08",
+          "price": 4.925
+        },
+        {
+          "date": "2025-08-09",
+          "price": 4.925
+        },
+        {
+          "date": "2025-08-16",
+          "price": 4.925
+        },
+        {
+          "date": "2025-08-18",
+          "price": 4.925
+        },
+        {
+          "date": "2025-08-25",
+          "price": 4.925
+        },
+        {
+          "date": "2025-08-25",
+          "price": 4.925
+        },
+        {
+          "date": "2026-04-30",
+          "price": 5.775
+        }
+      ]
     },
-    "count": 2,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2026-02-03",
-        "price": 4.5
+    "Sunchokes": {
+      "latest_price": 4.5,
+      "latest_date": "2026-02-09",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 2,
+      "vendor": "franks",
+      "unit": "lb",
+      "price_range": {
+        "min": 4.5,
+        "max": 4.5
       },
-      {
-        "date": "2026-02-09",
-        "price": 4.5
-      }
-    ]
-  },
-  "Watermelon": {
-    "price": 12.99,
-    "date": "2025-08-21",
-    "unit": "ea",
-    "vendor": "franks",
-    "range": {
-      "min": 12.99,
-      "max": 12.99
+      "history": [
+        {
+          "date": "2026-02-03",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-09",
+          "price": 4.5
+        }
+      ]
     },
-    "count": 2,
-    "t30": null,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2025-08-06",
-        "price": 12.99
+    "Watermelon": {
+      "latest_price": 12.99,
+      "latest_date": "2025-08-21",
+      "prev_30d_price": null,
+      "trend_30d_pct": null,
+      "trend_yoy_pct": null,
+      "trend_season_pct": null,
+      "entry_count": 2,
+      "vendor": "franks",
+      "unit": "ea",
+      "price_range": {
+        "min": 12.99,
+        "max": 12.99
       },
-      {
-        "date": "2025-08-21",
-        "price": 12.99
-      }
-    ]
-  },
-  "Winter Squash": {
-    "price": 1.5,
-    "date": "2026-02-11",
-    "unit": "lb",
-    "vendor": "franks",
-    "range": {
-      "min": 1.5,
-      "max": 1.75
+      "history": [
+        {
+          "date": "2025-08-06",
+          "price": 12.99
+        },
+        {
+          "date": "2025-08-21",
+          "price": 12.99
+        }
+      ]
     },
-    "count": 18,
-    "t30": 0.0,
-    "tyoy": null,
-    "tseason": null,
-    "history": [
-      {
-        "date": "2026-01-15",
-        "price": 1.5
+    "Winter Squash": {
+      "latest_price": 1.5,
+      "latest_date": "2026-02-11",
+      "prev_30d_price": 1.6,
+      "trend_30d_pct": -6.3,
+      "trend_yoy_pct": 0.0,
+      "trend_season_pct": null,
+      "entry_count": 18,
+      "vendor": "franks",
+      "unit": "lb",
+      "price_range": {
+        "min": 1.5,
+        "max": 1.75
       },
-      {
-        "date": "2026-01-16",
-        "price": 1.5
-      },
-      {
-        "date": "2026-01-17",
-        "price": 1.5
-      },
-      {
-        "date": "2026-01-22",
-        "price": 1.5
-      },
-      {
-        "date": "2026-01-29",
-        "price": 1.5
-      },
-      {
-        "date": "2026-02-02",
-        "price": 1.5
-      },
-      {
-        "date": "2026-02-05",
-        "price": 1.5
-      },
-      {
-        "date": "2026-02-11",
-        "price": 1.5
-      }
-    ]
+      "history": [
+        {
+          "date": "2026-01-15",
+          "price": 1.5
+        },
+        {
+          "date": "2026-01-16",
+          "price": 1.5
+        },
+        {
+          "date": "2026-01-17",
+          "price": 1.5
+        },
+        {
+          "date": "2026-01-22",
+          "price": 1.5
+        },
+        {
+          "date": "2026-01-29",
+          "price": 1.5
+        },
+        {
+          "date": "2026-02-02",
+          "price": 1.5
+        },
+        {
+          "date": "2026-02-05",
+          "price": 1.5
+        },
+        {
+          "date": "2026-02-11",
+          "price": 1.5
+        }
+      ]
+    }
   }
 };
 
