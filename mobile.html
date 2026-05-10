@@ -312,6 +312,33 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .market-pct.warn{color:var(--terra)}.market-pct.good{color:var(--olive)}
 .market-price{display:block;font-family:var(--fb);font-size:11px;font-weight:300;color:var(--ink-60);margin-top:2px}
 
+/* ── COMMODITY REFERENCE (Watch Out tab footer) — added 2026-05-09 Step 2 ── */
+.commodity-ref{padding:18px 0 24px;border-top:1px solid var(--ink-12);margin-top:18px}
+.commodity-ref-hd{font-family:var(--fb);font-size:10px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--ink-30);margin-bottom:10px}
+.commodity-row{display:flex;align-items:center;gap:14px;padding:9px 0;
+  border-bottom:1px solid var(--ink-6)}
+.commodity-row:last-child{border-bottom:none}
+.commodity-name{flex:1;font-family:var(--fd);font-size:15px;color:var(--ink)}
+.commodity-vnd{font-family:var(--fb);font-size:10px;font-weight:300;color:var(--ink-30);
+  margin-top:2px;letter-spacing:0.06em;text-transform:uppercase}
+.commodity-stat{font-family:var(--fb);font-size:13px;font-weight:400;color:var(--ink-60);text-align:right}
+.commodity-trend{margin-left:6px;font-family:var(--fb);font-size:11px}
+.commodity-trend.up{color:var(--terra)}.commodity-trend.down{color:var(--olive)}
+.commodity-trend.flat{color:var(--ink-30)}
+
+/* ── DISCOVER (3rd market tab) — added 2026-05-09 Step 2 ── */
+.discover-row{display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+  padding:13px 0;border-bottom:1px solid var(--ink-12);background:none;border-left:none;
+  border-right:none;border-top:none;width:100%;text-align:left;
+  -webkit-tap-highlight-color:transparent;color:var(--ink)}
+.discover-row:last-child{border-bottom:none}
+.discover-name{font-family:var(--fd);font-size:18px;color:var(--ink);line-height:1.15}
+.discover-meta{font-family:var(--fb);font-size:11px;font-weight:300;color:var(--ink-60);
+  margin-top:2px;letter-spacing:0.04em}
+.discover-products{font-family:var(--fd);font-size:13px;font-style:italic;
+  color:var(--ink-60);margin-top:3px;line-height:1.35}
+
 /* ── CART ── */
 .cart-empty{padding:60px 20px;text-align:center}
 .cart-empty-title{font-family:var(--fd);font-size:28px;font-weight:400;color:var(--ink);margin-bottom:8px}
@@ -439,6 +466,55 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes cardIn{to{opacity:1;transform:translateY(0)}}
 .mode-card{transform:translateY(8px)}
+
+/* ── HOW'S THE MENU? layout shell — base (mobile) hides the sidebar ── */
+.menuitem-layout{display:block}
+.menuitem-sidebar{display:none}
+.menuitem-mobile-only{display:block}
+
+/* ── DESKTOP LAYOUT (>=768px) — added 2026-05-09 for desktop portal rebuild ── */
+/* Self-contained block. To revert, delete this entire @media rule. */
+@media (min-width: 768px) {
+  /* Landing region: cap content, center, switch cards from flex column to adaptive grid */
+  .portal-scroll{padding:32px 32px 0}
+  .portal-prompt{max-width:960px;margin-left:auto;margin-right:auto;margin-bottom:24px}
+  .mode-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    max-width:960px;margin-left:auto;margin-right:auto;gap:14px}
+  .mode-card{max-width:380px;justify-self:stretch}
+  .vendor-alert,.weather-alert{max-width:960px;margin-left:auto;margin-right:auto}
+
+  /* Section screens: cap flow content, header, rule, filter rows to a centered column */
+  .sh{max-width:1000px;margin-left:auto;margin-right:auto;width:100%;
+    padding-left:32px;padding-right:32px;box-sizing:border-box}
+  .sh-rule{max-width:1000px;margin-left:auto;margin-right:auto}
+  .filter-strip{max-width:1000px;margin-left:auto;margin-right:auto;
+    padding-left:32px;padding-right:32px;box-sizing:border-box}
+  .flow-wrap{max-width:1000px;margin-left:auto;margin-right:auto;
+    padding-left:32px;padding-right:32px;box-sizing:border-box}
+
+  /* How's the Menu? — two-column dish list sidebar + pitch detail */
+  .menuitem-layout{display:flex;gap:32px;align-items:flex-start}
+  .menuitem-sidebar{display:block;width:240px;flex-shrink:0;
+    border-right:1px solid var(--ink-12);padding-right:16px;
+    max-height:70vh;overflow-y:auto}
+  .menuitem-main{flex:1;min-width:0}
+  .menuitem-mobile-only{display:none}
+  .menuitem-sidebar-hd{font-family:var(--fb);font-size:10px;font-weight:500;
+    letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-30);
+    margin:0 0 8px;padding:0}
+  .menuitem-sidebar-section{font-family:var(--fb);font-size:9px;font-weight:500;
+    letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-30);
+    margin:14px 0 4px;padding:0 10px}
+  .menuitem-sidebar-section:first-of-type{margin-top:6px}
+  .sidebar-dish-btn{display:block;width:100%;background:none;border:none;cursor:pointer;
+    text-align:left;font-family:var(--fd);font-size:14px;color:var(--ink-60);
+    padding:7px 10px;border-radius:4px;line-height:1.25;
+    transition:background var(--d),color var(--d);
+    -webkit-tap-highlight-color:transparent}
+  .sidebar-dish-btn:hover{background:var(--ink-6);color:var(--ink)}
+  .sidebar-dish-btn.active{background:var(--ink-6);color:var(--ink);
+    border-left:2px solid var(--olive);padding-left:8px}
+}
 </style>
 </head>
 <body>
@@ -574,9 +650,17 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   <div class="tab-bar">
     <button class="tab-btn active" id="tab-watchout" onclick="setMarketTab('watchout')">Watch Out</button>
     <button class="tab-btn" id="tab-opportunity" onclick="setMarketTab('opportunity')">Opportunity</button>
+    <button class="tab-btn" id="tab-discover" onclick="setMarketTab('discover')">Discover</button>
   </div>
-  <div class="tab-pane active" id="pane-watchout"><div class="price-scroll" id="watchout-list"></div></div>
+  <div class="tab-pane active" id="pane-watchout">
+    <div class="price-scroll" id="watchout-list"></div>
+    <div class="commodity-ref" id="commodity-ref"></div>
+  </div>
   <div class="tab-pane" id="pane-opportunity"><div class="ing-scroll" id="opportunity-list"></div></div>
+  <div class="tab-pane" id="pane-discover">
+    <div class="filter-strip" id="discover-pills"></div>
+    <div class="ing-scroll" id="discover-list"></div>
+  </div>
 </div>
 
 <!-- SCREEN: CART -->
@@ -7763,6 +7847,2981 @@ const DATA = {
     "vendor_alerts": {},
     "last_fetched": "2026-05-06T01:58:46.087391"
   },
+  "commodity": [
+    {
+      "id": "butter-unsalted",
+      "name": "Butter, Unsalted",
+      "category": "dairy",
+      "vendor": "franks",
+      "price": 117.5,
+      "unit": "36#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Case size pricing"
+    },
+    {
+      "id": "buttermilk",
+      "name": "Buttermilk",
+      "category": "dairy",
+      "vendor": "franks",
+      "price": 3.85,
+      "unit": "half gal",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "heavy-cream",
+      "name": "Heavy Cream",
+      "category": "dairy",
+      "vendor": "franks",
+      "price": 54.0,
+      "unit": "6x half-gal CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Case size pricing"
+    },
+    {
+      "id": "milk-whole",
+      "name": "Milk, Whole",
+      "category": "dairy",
+      "vendor": "franks",
+      "price": 11.5,
+      "unit": "2gal CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Case size pricing"
+    },
+    {
+      "id": "basil",
+      "name": "Basil",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 9.5,
+      "unit": "#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Range: $7-12/# depending on availability"
+    },
+    {
+      "id": "bay-leaf",
+      "name": "Bay Leaf",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 9.5,
+      "unit": "1/4#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $25/# in bulk"
+    },
+    {
+      "id": "chervil",
+      "name": "Chervil",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 11.75,
+      "unit": "1/4#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "chives",
+      "name": "Chives",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 6.0,
+      "unit": "1/4#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "dill-baby",
+      "name": "Dill (Baby)",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 2.5,
+      "unit": "mixed",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Range: $1.25/bn to $3.75/1/4#"
+    },
+    {
+      "id": "marjoram",
+      "name": "Marjoram",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 8.0,
+      "unit": "1/4-1/2#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Range: $6-10"
+    },
+    {
+      "id": "mint",
+      "name": "Mint",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 3.75,
+      "unit": "1/4#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "oregano",
+      "name": "Oregano",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 5.75,
+      "unit": "1/4-1/2#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Range: $3.99-7.50"
+    },
+    {
+      "id": "parsley-italian",
+      "name": "Parsley, Italian",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 0.99,
+      "unit": "bn",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "rosemary",
+      "name": "Rosemary",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 12.5,
+      "unit": "#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "tarragon",
+      "name": "Tarragon",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 8.5,
+      "unit": "1/4#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "thyme",
+      "name": "Thyme",
+      "category": "herbs",
+      "vendor": "franks",
+      "price": 7.5,
+      "unit": "1/4-1/2#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Range: $5.50-9.75"
+    },
+    {
+      "id": "carrot-jumbo",
+      "name": "Carrot, Jumbo",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 26.5,
+      "unit": "25#SK",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Sack pricing"
+    },
+    {
+      "id": "cauliflower-white",
+      "name": "Cauliflower, White",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 43.5,
+      "unit": "12CT CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also available at $3.50/ea"
+    },
+    {
+      "id": "celery",
+      "name": "Celery",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 1.99,
+      "unit": "ea",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "cucumber-english",
+      "name": "Cucumber, English",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 2.5,
+      "unit": "ea",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "fennel",
+      "name": "Fennel",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 45.0,
+      "unit": "24CT CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "garlic-peeled",
+      "name": "Garlic, Peeled",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 26.25,
+      "unit": "5# jar",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "grapefruit-ruby",
+      "name": "Grapefruit, Ruby",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 1.99,
+      "unit": "#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "lemon-choice",
+      "name": "Lemon, Choice",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 48.75,
+      "unit": "115CT CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Case size pricing"
+    },
+    {
+      "id": "leek-organic",
+      "name": "Leek, Organic",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 39.5,
+      "unit": "20#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $2.99/# for bulk"
+    },
+    {
+      "id": "lettuce-romaine-heart",
+      "name": "Lettuce, Romaine Heart",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 42.5,
+      "unit": "48CT CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Case size pricing"
+    },
+    {
+      "id": "melon-cantaloupe",
+      "name": "Melon, Cantaloupe",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 5.99,
+      "unit": "ea",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "onion-italian-red",
+      "name": "Onion, Italian Red",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 17.5,
+      "unit": "25#SK",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $0.99/# for bulk"
+    },
+    {
+      "id": "onion-shallots-peeled",
+      "name": "Onion, Shallots, Peeled",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 26.5,
+      "unit": "5# jar",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "oranges-navel",
+      "name": "Oranges, Navel",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 40.5,
+      "unit": "72CT CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Case size pricing"
+    },
+    {
+      "id": "peppers-bell-red",
+      "name": "Peppers, Bell Red",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 54.0,
+      "unit": "22#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $2.99/# for bulk"
+    },
+    {
+      "id": "peppers-bell-red-hothouse",
+      "name": "Peppers, Bell Red Hot-House",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 26.35,
+      "unit": "11#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $2.99/# for bulk"
+    },
+    {
+      "id": "peppers-fresno",
+      "name": "Peppers, Fresno",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 9.35,
+      "unit": "#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "peppers-jalapeno",
+      "name": "Peppers, Jalape\u00f1o",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 3.5,
+      "unit": "#",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "potato-fingerling",
+      "name": "Potato, Fingerling",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 37.75,
+      "unit": "20#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $2.50/# for bulk"
+    },
+    {
+      "id": "potato-yukon-gold",
+      "name": "Potato, Yukon Gold A",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 38.5,
+      "unit": "50#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $1.15/# for bulk"
+    },
+    {
+      "id": "spinach-baby-organic",
+      "name": "Spinach, Baby Organic",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 20.5,
+      "unit": "4#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "tomato-roma",
+      "name": "Tomato, Roma",
+      "category": "produce-staple",
+      "vendor": "franks",
+      "price": 62.0,
+      "unit": "25#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $3.50/# for bulk"
+    },
+    {
+      "id": "juice-lemon",
+      "name": "Juice, Lemon",
+      "category": "pantry",
+      "vendor": "franks",
+      "price": 62.75,
+      "unit": "4CT CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $17.85/gal"
+    },
+    {
+      "id": "juice-lime",
+      "name": "Juice, Lime",
+      "category": "pantry",
+      "vendor": "franks",
+      "price": 48.0,
+      "unit": "6CT CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Also $10.25/half gal"
+    },
+    {
+      "id": "peas-frozen-iqf",
+      "name": "Frozen Peas (IQF)",
+      "category": "pantry",
+      "vendor": "franks",
+      "price": 30.25,
+      "unit": "20#CS",
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": ""
+    },
+    {
+      "id": "mer-1galzip",
+      "name": "ZipLoc Brand 1 Gallon Storage Bags 682257",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "1GALZIP",
+      "brand": "Ziploc",
+      "price": 30.68,
+      "unit": "1/240 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Ziploc. 10-week order count: 2"
+    },
+    {
+      "id": "mer-36u",
+      "name": "Merlino Brand AA Unsalted Butter Prints (RED TAPE)",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "36U",
+      "brand": "Merlino",
+      "price": 2.76,
+      "unit": "36/1 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-aleppo",
+      "name": "Merlino L/S Aleppo Chili Ground",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "ALEPPO",
+      "brand": "Merlino",
+      "price": 13.67,
+      "unit": "1/1 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 4"
+    },
+    {
+      "id": "mer-almondfmarcona",
+      "name": "Sanniti Marcona Fried & Salted Almonds (Spain)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "ALMONDFMARCONA",
+      "brand": "Sanniti",
+      "price": 15.44,
+      "unit": "1/5 KG",
+      "broken_case": false,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sanniti. 10-week order count: 3"
+    },
+    {
+      "id": "mer-almondslice-brk",
+      "name": "Mandelin Natural Sliced Almonds",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "ALMONDSLICE",
+      "brand": "Mandelin",
+      "price": 5.96,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Mandelin. 10-week order count: 1"
+    },
+    {
+      "id": "mer-anch28-brk",
+      "name": "Maria Anchovy Fillets In Olive Oil 28Oz",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "ANCH28",
+      "brand": "Ambrosia",
+      "price": 19.91,
+      "unit": "1/28 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Ambrosia. 10-week order count: 4"
+    },
+    {
+      "id": "mer-anchwhite1kg",
+      "name": "Sanniti White Anchovies Marinated (From Italy)",
+      "category": "protein-staple",
+      "vendor": "merlinos",
+      "vendor_code": "ANCHWHITE1KG",
+      "brand": "Sanniti",
+      "price": 78.09,
+      "unit": "3/1 KG",
+      "broken_case": false,
+      "order_frequency_10wk": 12,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sanniti. 10-week order count: 12"
+    },
+    {
+      "id": "mer-anchwhite1kg-brk",
+      "name": "Sanniti White Anchovies Marinated (From Italy)",
+      "category": "protein-staple",
+      "vendor": "merlinos",
+      "vendor_code": "ANCHWHITE1KG",
+      "brand": "Sanniti",
+      "price": 26.03,
+      "unit": "1/1 KG",
+      "broken_case": true,
+      "order_frequency_10wk": 12,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sanniti. 10-week order count: 12"
+    },
+    {
+      "id": "mer-anchwhitematiz",
+      "name": "Matiz Boquerones White Anch  In Vinegar",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "ANCHWHITEMATIZ",
+      "brand": "Matiz",
+      "price": 124.64,
+      "unit": "4/20 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 22,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Matiz. 10-week order count: 22"
+    },
+    {
+      "id": "mer-anchwhitematiz-brk",
+      "name": "Matiz Boquerones White Anch  In Vinegar",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "ANCHWHITEMATIZ",
+      "brand": "Matiz",
+      "price": 31.96,
+      "unit": "1/20 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 22,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Matiz. 10-week order count: 22"
+    },
+    {
+      "id": "mer-artquart-brk",
+      "name": "Merlino/Maria Artichoke Hearts Quartered",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "ARTQUART",
+      "brand": "Merlino",
+      "price": 11.79,
+      "unit": "1/3 KG",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-balsamicblkorg-brk",
+      "name": "Merlino Brand  Balsamic Vinegar Premium No Caramel Color",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "BALSAMICBLKORG",
+      "brand": "Merlino",
+      "price": 31.3,
+      "unit": "1/5 LTR",
+      "broken_case": true,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 2"
+    },
+    {
+      "id": "mer-bayleafblk",
+      "name": "Merlino Bay Leaf Whole (Bulk)",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "BAYLEAFBLK",
+      "brand": "Merlino",
+      "price": 11.62,
+      "unit": "1/10 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-blackmust",
+      "name": "Merlino Mustard Seed Black/Brown",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "BLACKMUST",
+      "brand": "Merlino",
+      "price": 8.47,
+      "unit": "1/24 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-bresolaimp",
+      "name": "Bresaola Air Dried Beef Imported",
+      "category": "protein-staple",
+      "vendor": "merlinos",
+      "vendor_code": "BRESOLAIMP",
+      "brand": "Bernina",
+      "price": 19.73,
+      "unit": "4/2.5 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Bernina. 10-week order count: 2"
+    },
+    {
+      "id": "mer-brownsugar241-brk",
+      "name": "C&H Golden Brown Sugar Pure Cane Retail Box",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "BROWNSUGAR241",
+      "brand": "C & H",
+      "price": 1.81,
+      "unit": "1/1 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 14,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: C & H. 10-week order count: 14"
+    },
+    {
+      "id": "mer-buttermilkdari",
+      "name": "Darigold Buttermilk PL HG GREEN LID YELLOW TAPE",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "BUTTERMILKDARI",
+      "brand": "Darigold",
+      "price": 14.1,
+      "unit": "6/64 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 0,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Darigold. 10-week order count: 0"
+    },
+    {
+      "id": "mer-calbitterppist-brk",
+      "name": "Callebaut Bittersweet Pistole (Callet) 60.3%",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CALBITTERPPIST",
+      "brand": "Callebaut",
+      "price": 219.17,
+      "unit": "1/22 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Callebaut. 10-week order count: 1"
+    },
+    {
+      "id": "mer-canoil",
+      "name": "Restaurants Pride Canola Salad Oil (Bulk)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CANOIL",
+      "brand": "Sunora",
+      "price": 35.98,
+      "unit": "1/35 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 6,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sunora. 10-week order count: 6"
+    },
+    {
+      "id": "mer-canolive61",
+      "name": "Merlino Canola Olive Oil Blend 75/25 Fiordicampo",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CANOLIVE61",
+      "brand": "Merlino",
+      "price": 91.1,
+      "unit": "6/1 GAL",
+      "broken_case": false,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 4"
+    },
+    {
+      "id": "mer-capersalt32-brk",
+      "name": "Sanniti / Merlino Capers (Cured And Packed In Salt)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CAPERSALT32",
+      "brand": "Sanniti",
+      "price": 12.54,
+      "unit": "1/32 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sanniti. 10-week order count: 4"
+    },
+    {
+      "id": "mer-cashewwholeraw-brk",
+      "name": "Spiceworks Whole Raw Cashews WW320 50355",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CASHEWWHOLERAW",
+      "brand": "Newport",
+      "price": 8.4,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Newport. 10-week order count: 2"
+    },
+    {
+      "id": "mer-castelf",
+      "name": "Sanniti Fresh Castelvetrano Olives (Refrigerated)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CASTELF",
+      "brand": "Sanniti",
+      "price": 111.04,
+      "unit": "2/10 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 5,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sanniti. 10-week order count: 5"
+    },
+    {
+      "id": "mer-castelf-brk",
+      "name": "Sanniti Fresh Castelvetrano Olives (Refrigerated)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CASTELF",
+      "brand": "Sanniti",
+      "price": 55.52,
+      "unit": "1/10 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 5,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sanniti. 10-week order count: 5"
+    },
+    {
+      "id": "mer-champbis",
+      "name": "Balacco Savoiardi  Dry Lady Fingers",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CHAMPBIS",
+      "brand": "Balocco",
+      "price": 67.39,
+      "unit": "10/500 GR",
+      "broken_case": false,
+      "order_frequency_10wk": 7,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Balocco. 10-week order count: 7"
+    },
+    {
+      "id": "mer-champvin41mer-brk",
+      "name": "Merlino Champagne Vinegar Plastic",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CHAMPVIN41MER",
+      "brand": "Merlino",
+      "price": 16.65,
+      "unit": "1 GAL",
+      "broken_case": true,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 4"
+    },
+    {
+      "id": "mer-cheesecloth",
+      "name": "Cheese Cloth Grade 10 (36\" X 80 Yards)",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "CHEESECLOTH",
+      "brand": "San Jamar",
+      "price": 95.5,
+      "unit": "1/80 YRD",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: San Jamar. 10-week order count: 1"
+    },
+    {
+      "id": "mer-cherrylux-brk",
+      "name": "Luxardo Maraschino Cherries Bulk (890 Cherries Per Can)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CHERRYLUX",
+      "brand": "Luxardo",
+      "price": 146.73,
+      "unit": "1/5.6 KG",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Luxardo. 10-week order count: 1"
+    },
+    {
+      "id": "mer-cherrytart-brk",
+      "name": "Washington Cherries Tart Dried",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CHERRYTART",
+      "brand": "TPG",
+      "price": 11.18,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: TPG. 10-week order count: 1"
+    },
+    {
+      "id": "mer-chevrecapretta",
+      "name": "Capretta Chevre Chef Tubs (CA)Kosher Goat",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "CHEVRECAPRETTA",
+      "brand": "Capretta",
+      "price": 8.31,
+      "unit": "2/4 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 6,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Capretta. 10-week order count: 6"
+    },
+    {
+      "id": "mer-chevrecapretta-brk",
+      "name": "Capretta Chevre Chef Tubs (CA)Kosher Goat",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "CHEVRECAPRETTA",
+      "brand": "Capretta",
+      "price": 8.31,
+      "unit": "1/4 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 6,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Capretta. 10-week order count: 6"
+    },
+    {
+      "id": "mer-cidervinmer-brk",
+      "name": "Merlino Apple Cider Vinegar",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CIDERVINMER",
+      "brand": "Merlino",
+      "price": 7.71,
+      "unit": "1/1 GAL",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-cinnstick",
+      "name": "Merlino Cinnamon Sticks Korintji 2 3/4 Inch",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "CINNSTICK",
+      "brand": "Merlino",
+      "price": 8.1,
+      "unit": "1/8 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-colsherry-brk",
+      "name": "Columela Sherry Vinegar (Spain) 13210",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "COLSHERRY",
+      "brand": "Columela",
+      "price": 6.88,
+      "unit": "1/25.4 oz",
+      "broken_case": true,
+      "order_frequency_10wk": 27,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Columela. 10-week order count: 27"
+    },
+    {
+      "id": "mer-cornmealfinegoya-brk",
+      "name": "Goya Fine Corn Meal Retail Bag",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "CORNMEALFINEGOYA",
+      "brand": "Goya",
+      "price": 2.93,
+      "unit": "1/24 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 12,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Goya. 10-week order count: 12"
+    },
+    {
+      "id": "mer-cornstarch241-brk",
+      "name": "Argo Cornstarch (Retail Box) 2001561 77132",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "CORNSTARCH241",
+      "brand": "Argo",
+      "price": 1.79,
+      "unit": "1/1 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Argo. 10-week order count: 3"
+    },
+    {
+      "id": "mer-cream3-brk",
+      "name": "Restaurants Pride Cream Cheese",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "CREAM3",
+      "brand": "Restaurants Pride",
+      "price": 2.64,
+      "unit": "1/3 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 8,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Restaurants Pride. 10-week order count: 8"
+    },
+    {
+      "id": "mer-crushredpepblk",
+      "name": "Merlino Crushed Red Pepper Bulk PC5",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "CRUSHREDPEPBLK",
+      "brand": "Merlino",
+      "price": 20.87,
+      "unit": "1/3 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-dijon-brk",
+      "name": "Merlino/Roland Dijon Extra Strong (France)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "DIJON",
+      "brand": "Merlino",
+      "price": 34.92,
+      "unit": "1/9.25 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 3"
+    },
+    {
+      "id": "mer-drymilk22oz-brk",
+      "name": "Carnation Instant Nonfat Dry Milk",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "DRYMILK22OZ",
+      "brand": "Carnation",
+      "price": 23.73,
+      "unit": "1/22.75 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 0,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Carnation. 10-week order count: 0"
+    },
+    {
+      "id": "mer-fennelblk",
+      "name": "Merlino Fennel Seed Whole (Bulk)",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "FENNELBLK",
+      "brand": "Merlino",
+      "price": 5.53,
+      "unit": "1/4.5 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 2"
+    },
+    {
+      "id": "mer-fennelpollen-brk",
+      "name": "Wild Fennel Pollen Imported",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "FENNELPOLLEN",
+      "brand": "Borghini",
+      "price": 45.0,
+      "unit": "1/7.05 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Borghini. 10-week order count: 3"
+    },
+    {
+      "id": "mer-filbertblanch-brk",
+      "name": "Whole Blanched Hazelnuts",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "FILBERTBLANCH",
+      "brand": "Packer",
+      "price": 14.26,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Packer. 10-week order count: 1"
+    },
+    {
+      "id": "mer-film12",
+      "name": "Restaurant's Pride Foodservice Film 12\"X2000'",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "FILM12",
+      "brand": "Restaurants Pride",
+      "price": 17.81,
+      "unit": "1/2000 FT",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Restaurants Pride. 10-week order count: 1"
+    },
+    {
+      "id": "mer-film18",
+      "name": "Restaurant's Pride Foodservice Film 18\"X3000' 90382/183FA",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "FILM18",
+      "brand": "Restaurants Pride",
+      "price": 35.16,
+      "unit": "1/3000 FT",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Restaurants Pride. 10-week order count: 1"
+    },
+    {
+      "id": "mer-fontina-brk",
+      "name": "Belgioioso Fontina Halves Italian Style",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "FONTINA",
+      "brand": "Belgioioso",
+      "price": 4.67,
+      "unit": "1/10 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Belgioioso. 10-week order count: 1"
+    },
+    {
+      "id": "mer-garbflour-brk",
+      "name": "Bob's Red Mill Garbanzo Flour",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "GARBFLOUR",
+      "brand": "Bobs Red Mill",
+      "price": 2.03,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 8,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Bobs Red Mill. 10-week order count: 8"
+    },
+    {
+      "id": "mer-glovelgsub",
+      "name": "Ammex LX346100 Latex Large PF Gloves",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "GLOVELGSUB",
+      "brand": "Ammex",
+      "price": 47.3,
+      "unit": "10/100 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 5,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Ammex. 10-week order count: 5"
+    },
+    {
+      "id": "mer-glovenitrilemedsub",
+      "name": "Ammex BX344100 Black Nitrile Medium PF Gloves",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "GLOVENITRILEMEDSUB",
+      "brand": "Ammex",
+      "price": 47.8,
+      "unit": "10/100 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 8,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Ammex. 10-week order count: 8"
+    },
+    {
+      "id": "mer-glovenitrilexlsub",
+      "name": "Ammex BX348100 Black Nitrile Extra Large PF Gloves",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "GLOVENITRILEXLSUB",
+      "brand": "Ammex",
+      "price": 47.8,
+      "unit": "10/100 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Ammex. 10-week order count: 4"
+    },
+    {
+      "id": "mer-glovesmsub",
+      "name": "Ammex LX342100 Latex Small PF Gloves",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "GLOVESMSUB",
+      "brand": "Ammex",
+      "price": 47.3,
+      "unit": "10/100 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 5,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Ammex. 10-week order count: 5"
+    },
+    {
+      "id": "mer-goldraisin-brk",
+      "name": "California Golden Seedless Raisins 0050D",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "GOLDRAISIN",
+      "brand": "National",
+      "price": 3.45,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: National. 10-week order count: 1"
+    },
+    {
+      "id": "mer-gorgital-brk",
+      "name": "Igor/Castelli Dolce Gorgonzola (Italy)",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "GORGITAL",
+      "brand": "Igor",
+      "price": 11.03,
+      "unit": "1/3.5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 11,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Igor. 10-week order count: 11"
+    },
+    {
+      "id": "mer-halfhalfdarigold",
+      "name": "Darigold Half &Half 64oz PURPLE CARTON",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "HALFHALFDARIGOLD",
+      "brand": "Darigold",
+      "price": 35.18,
+      "unit": "6/64 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 0,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Darigold. 10-week order count: 0"
+    },
+    {
+      "id": "mer-heavywhipdg",
+      "name": "Darigold Heavy Whip Cream 40% Not UP BLACK LID ORANGE TAPE",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "HEAVYWHIPDG",
+      "brand": "Darigold",
+      "price": 35.1,
+      "unit": "6/64 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 0,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Darigold. 10-week order count: 0"
+    },
+    {
+      "id": "mer-honey-brk",
+      "name": "Restaurant Pride Light Clover Honey (Raw) 71607",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "HONEY",
+      "brand": "Restaurants Pride",
+      "price": 21.02,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Restaurants Pride. 10-week order count: 4"
+    },
+    {
+      "id": "mer-koshersaltnp",
+      "name": "Diamond Crystal Kosher Salt",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "KOSHERSALTNP",
+      "brand": "Diamond Crystal",
+      "price": 69.38,
+      "unit": "9/3 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Diamond Crystal. 10-week order count: 3"
+    },
+    {
+      "id": "mer-mascarponeblkbel",
+      "name": "Belgioioso Mascarpone Bulk Tubs (Domestic)",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "MASCARPONEBLKBEL",
+      "brand": "Belgioioso",
+      "price": 4.77,
+      "unit": "4/5 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 31,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Belgioioso. 10-week order count: 31"
+    },
+    {
+      "id": "mer-mascarponeblkbel-brk",
+      "name": "Belgioioso Mascarpone Bulk Tubs (Domestic)",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "MASCARPONEBLKBEL",
+      "brand": "Belgioioso",
+      "price": 4.77,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 31,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Belgioioso. 10-week order count: 31"
+    },
+    {
+      "id": "mer-medportionbagsub",
+      "name": "Food Storage Portion Bags Small 7 Day 6.375\"x7\" #5731",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "MEDPORTIONBAGSUB",
+      "brand": "Pak-Sher",
+      "price": 29.75,
+      "unit": "1/2000 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Pak-Sher. 10-week order count: 1"
+    },
+    {
+      "id": "mer-microlite32",
+      "name": "Karat Round 32 Oz Clear Plastic Deli Container FP-DC32-PP",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "MICROLITE32",
+      "brand": "Karat",
+      "price": 55.68,
+      "unit": "1/500 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Karat. 10-week order count: 1"
+    },
+    {
+      "id": "mer-microlitelid",
+      "name": "ProKal Round Deli Container Lid Fits 8-32 Oz 9505261",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "MICROLITELID",
+      "brand": "FabriKal",
+      "price": 58.89,
+      "unit": "10/50 CT",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: FabriKal. 10-week order count: 1"
+    },
+    {
+      "id": "mer-milkdariwm",
+      "name": "Darigold Whole Milk Gallons 4 Per Case RED LID",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "MILKDARIWM",
+      "brand": "Darigold",
+      "price": 16.32,
+      "unit": "4/1 GAL",
+      "broken_case": false,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Darigold. 10-week order count: 2"
+    },
+    {
+      "id": "mer-milkdariwm-brk",
+      "name": "Darigold Whole Milk Gallons 4 Per Case RED LID",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "MILKDARIWM",
+      "brand": "Darigold",
+      "price": 4.08,
+      "unit": "1/1 GAL",
+      "broken_case": true,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Darigold. 10-week order count: 2"
+    },
+    {
+      "id": "mer-misowhiteshira-brk",
+      "name": "Shirakiku L/S White Miso 27912",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "MISOWHITESHIRA",
+      "brand": "Shirakiku",
+      "price": 5.76,
+      "unit": "1/2.2LB",
+      "broken_case": true,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Shirakiku. 10-week order count: 3"
+    },
+    {
+      "id": "mer-mozzshredg-brk",
+      "name": "Grande Shredded Whole Milk Low Moisture Mozzarella 703",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "MOZZSHREDG",
+      "brand": "Grande",
+      "price": 3.63,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 5,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Grande. 10-week order count: 5"
+    },
+    {
+      "id": "mer-mustardseed",
+      "name": "Merlino Mustard Seed Yellow",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "MUSTARDSEED",
+      "brand": "Merlino",
+      "price": 10.38,
+      "unit": "1/24 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-oat-brk",
+      "name": "Grain Miller Regular Rolled Oats #5",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "OAT",
+      "brand": "Richardson",
+      "price": 6.05,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Richardson. 10-week order count: 1"
+    },
+    {
+      "id": "mer-olddutchghir",
+      "name": "Ghirardelli Majestic Cocoa Powder 20-22 %",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "OLDDUTCHGHIR",
+      "brand": "Ghirardelli",
+      "price": 352.2,
+      "unit": "1/25 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 0,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Ghirardelli. 10-week order count: 0"
+    },
+    {
+      "id": "mer-oopasta",
+      "name": "Caputo Imported Pasta (Naples)Flour",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "OOPASTA",
+      "brand": "Caputo",
+      "price": 53.72,
+      "unit": "1/25 KG",
+      "broken_case": false,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Caputo. 10-week order count: 3"
+    },
+    {
+      "id": "mer-oreganolg",
+      "name": "Merlino Oregano Whole (Bulk)",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "OREGANOLG",
+      "brand": "Merlino",
+      "price": 16.24,
+      "unit": "1/24 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 1"
+    },
+    {
+      "id": "mer-passatastan",
+      "name": "IL Mulino Divino Passata Fresh Milled(Stanislaus)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "PASSATASTAN",
+      "brand": "Stanislaus",
+      "price": 35.65,
+      "unit": "6/10 CN",
+      "broken_case": false,
+      "order_frequency_10wk": 0,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Stanislaus. 10-week order count: 0"
+    },
+    {
+      "id": "mer-pastrybag",
+      "name": "KopyKake Disposable Pastry Piping Bag 20\" MasterCs=1k 190721",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "PASTRYBAG",
+      "brand": "KopyKake",
+      "price": 25.97,
+      "unit": "100/20 IN",
+      "broken_case": false,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: KopyKake. 10-week order count: 2"
+    },
+    {
+      "id": "mer-pecorino-brk",
+      "name": "Sanniti/Packer Pecorino Romano",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "PECORINO",
+      "brand": "Sanniti",
+      "price": 9.86,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sanniti. 10-week order count: 2"
+    },
+    {
+      "id": "mer-pepwholeblk",
+      "name": "Merlino Black Peppercorn Whole (Bulk)",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "PEPWHOLEBLK",
+      "brand": "Merlino",
+      "price": 59.13,
+      "unit": "1/6.25 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 2"
+    },
+    {
+      "id": "mer-pinejuice486",
+      "name": "Dole Pineapple Juice (Individual Small Cans) 38900 00914",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "PINEJUICE486",
+      "brand": "Dole",
+      "price": 40.27,
+      "unit": "48/6 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Dole. 10-week order count: 1"
+    },
+    {
+      "id": "mer-pinenut-brk",
+      "name": "Grade A Pine Nuts",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "PINENUT",
+      "brand": "Capitol Foods",
+      "price": 19.01,
+      "unit": "1/2 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Capitol Foods. 10-week order count: 1"
+    },
+    {
+      "id": "mer-piquillo63-brk",
+      "name": "Maria/Roland Piquillo Peppers D0274",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "PIQUILLO63",
+      "brand": "Maria",
+      "price": 19.22,
+      "unit": "1/3 KG",
+      "broken_case": true,
+      "order_frequency_10wk": 4,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Maria. 10-week order count: 4"
+    },
+    {
+      "id": "mer-pistachions-brk",
+      "name": "Setton Raw Whole Pistachios",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "PISTACHIONS",
+      "brand": "Setton Farms",
+      "price": 16.16,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 5,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Setton Farms. 10-week order count: 5"
+    },
+    {
+      "id": "mer-pm41-brk",
+      "name": "Mead Pure Maple Syrup Grade A Dark",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "PM41",
+      "brand": "Mead & Mead",
+      "price": 69.67,
+      "unit": "1/1 GAL",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Mead & Mead. 10-week order count: 1"
+    },
+    {
+      "id": "mer-powdersug241-brk",
+      "name": "C&H Powder Sugar 10X (Retail Boxes) 404852",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "POWDERSUG241",
+      "brand": "C & H",
+      "price": 1.93,
+      "unit": "1/1 lb",
+      "broken_case": true,
+      "order_frequency_10wk": 49,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: C & H. 10-week order count: 49"
+    },
+    {
+      "id": "mer-pumpkinseed-brk",
+      "name": "Hulled Pumpkin Seeds (Pepitas)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "PUMPKINSEED",
+      "brand": "Merlino",
+      "price": 4.61,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 2"
+    },
+    {
+      "id": "mer-rice-brk",
+      "name": "Riceland Long Grain Rice",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "RICE",
+      "brand": "Riceland",
+      "price": 4.54,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Riceland. 10-week order count: 1"
+    },
+    {
+      "id": "mer-ricevin41-brk",
+      "name": "Nakano Seasoned Rice Vinegar 7357529702",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "RICEVIN41",
+      "brand": "Nakano",
+      "price": 17.43,
+      "unit": "1/1 GAL",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Nakano. 10-week order count: 1"
+    },
+    {
+      "id": "mer-ricottapolly",
+      "name": "Polly-O Whole Milk Ricotta",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "RICOTTAPOLLY",
+      "brand": "Pollio",
+      "price": 3.09,
+      "unit": "6/5 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 30,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Pollio. 10-week order count: 30"
+    },
+    {
+      "id": "mer-ricottapolly-brk",
+      "name": "Polly-O Whole Milk Ricotta",
+      "category": "dairy",
+      "vendor": "merlinos",
+      "vendor_code": "RICOTTAPOLLY",
+      "brand": "Pollio",
+      "price": 3.09,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 30,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Pollio. 10-week order count: 30"
+    },
+    {
+      "id": "mer-riso-brk",
+      "name": "Toro/Spizzuli  Arborio Riso",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "RISO",
+      "brand": "Margherita/Spizzuli",
+      "price": 7.4,
+      "unit": "1/1 KG",
+      "broken_case": true,
+      "order_frequency_10wk": 47,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Margherita/Spizzuli. 10-week order count: 47"
+    },
+    {
+      "id": "mer-rosewater-brk",
+      "name": "Al Wadi Rose Flower Water   111",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "ROSEWATER",
+      "brand": "Alwadi",
+      "price": 3.87,
+      "unit": "1/14 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Alwadi. 10-week order count: 2"
+    },
+    {
+      "id": "mer-saffron-brk",
+      "name": "Merlino Spanish ISO 1 Saffron (New Pack Size)",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "SAFFRON",
+      "brand": "Merlino",
+      "price": 79.41,
+      "unit": "1/1 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 12,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Merlino. 10-week order count: 12"
+    },
+    {
+      "id": "mer-saltmaldonblk",
+      "name": "Maldon Sea Salt Flakes Bulk Tub",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "SALTMALDONBLK",
+      "brand": "Maldon",
+      "price": 30.12,
+      "unit": "1/3.1 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Maldon. 10-week order count: 2"
+    },
+    {
+      "id": "mer-semolinashep",
+      "name": "Shepherds Grain Semolina",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "SEMOLINASHEP",
+      "brand": "Shepherd's",
+      "price": 35.91,
+      "unit": "1/50 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 19,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Shepherd's. 10-week order count: 19"
+    },
+    {
+      "id": "mer-specprin",
+      "name": "Gasser Spec Alto Adige",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "SPECPRIN",
+      "brand": "Recla",
+      "price": 10.38,
+      "unit": "2/4.45 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 10,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Recla. 10-week order count: 10"
+    },
+    {
+      "id": "mer-specprin-brk",
+      "name": "Gasser Spec Alto Adige",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "SPECPRIN",
+      "brand": "Recla",
+      "price": 10.38,
+      "unit": "1/4.45 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 10,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Recla. 10-week order count: 10"
+    },
+    {
+      "id": "mer-squidink500g-brk",
+      "name": "Sanniti Squid Ink-Black Food Color",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "SQUIDINK500G",
+      "brand": "Nortindal",
+      "price": 24.08,
+      "unit": "1/500 GR",
+      "broken_case": true,
+      "order_frequency_10wk": 2,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Nortindal. 10-week order count: 2"
+    },
+    {
+      "id": "mer-sugar50",
+      "name": "White Satin Fine Sugar",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "SUGAR50",
+      "brand": "White Satin",
+      "price": 39.57,
+      "unit": "1/50 LB",
+      "broken_case": false,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: White Satin. 10-week order count: 3"
+    },
+    {
+      "id": "mer-sunflowern-s-brk",
+      "name": "Raw Unsalted Sunflower Seeds",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "SUNFLOWERN/S",
+      "brand": "Sunshine",
+      "price": 19.67,
+      "unit": "1/10 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 1,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sunshine. 10-week order count: 1"
+    },
+    {
+      "id": "mer-sweetydrop",
+      "name": "Sweety Drop Peruvian Red Sweet Peppers (Very Small)",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "SWEETYDROP",
+      "brand": "Sweety Drop",
+      "price": 56.5,
+      "unit": "6/28 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 9,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sweety Drop. 10-week order count: 9"
+    },
+    {
+      "id": "mer-sweetydrop-brk",
+      "name": "Sweety Drop Peruvian Red Sweet Peppers (Very Small)",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "SWEETYDROP",
+      "brand": "Sweety Drop",
+      "price": 10.27,
+      "unit": "1/28 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 9,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Sweety Drop. 10-week order count: 9"
+    },
+    {
+      "id": "mer-tapiocaflourp-brk",
+      "name": "Golden Anchor Tapioca Starch (Flour)",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "TAPIOCAFLOURP",
+      "brand": "Golden",
+      "price": 2.35,
+      "unit": "1/14 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 0,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Golden. 10-week order count: 0"
+    },
+    {
+      "id": "mer-vanillabean4oz",
+      "name": "Vanilla Beans-Madagascar 4OZ",
+      "category": "herbs",
+      "vendor": "merlinos",
+      "vendor_code": "VANILLABEAN4OZ",
+      "brand": "Packer",
+      "price": 279.8,
+      "unit": "1/4 OZ",
+      "broken_case": false,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Packer. 10-week order count: 3"
+    },
+    {
+      "id": "mer-vegalenenc-brk",
+      "name": "Vegalene 57434 Pan Release Spray Premium 3 Oil Blend",
+      "category": "supplies",
+      "vendor": "merlinos",
+      "vendor_code": "VEGALENENC",
+      "brand": "Vegalene",
+      "price": 5.69,
+      "unit": "1/17 OZ",
+      "broken_case": true,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Vegalene. 10-week order count: 3"
+    },
+    {
+      "id": "mer-walnut5-brk",
+      "name": "Cal Best Walnut Halves & Pieces",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "WALNUT5",
+      "brand": "Cal Best",
+      "price": 4.12,
+      "unit": "1/5 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 3,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Cal Best. 10-week order count: 3"
+    },
+    {
+      "id": "mer-xvpart",
+      "name": "Partanna Extra Virgin Olive Oil",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "XVPART",
+      "brand": "Partanna",
+      "price": 209.68,
+      "unit": "4/3 LTR",
+      "broken_case": false,
+      "order_frequency_10wk": 9,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Partanna. 10-week order count: 9"
+    },
+    {
+      "id": "mer-yeastcomppag-brk",
+      "name": "Red Star Compressed Fresh Yeast (Wet) 9132",
+      "category": "pantry",
+      "vendor": "merlinos",
+      "vendor_code": "YEASTCOMPPAG",
+      "brand": "Red Star",
+      "price": 3.01,
+      "unit": "1/1 LB",
+      "broken_case": true,
+      "order_frequency_10wk": 5,
+      "last_updated": "2026-04-20",
+      "trend": "flat",
+      "notes": "Brand: Red Star. 10-week order count: 5"
+    }
+  ],
+  "discovery": [
+    {
+      "title": "21 Acres Farm",
+      "location": "Woodinville, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/woodinville/21-acres-farm/"
+    },
+    {
+      "title": "Aash Farms",
+      "location": "Woodinville, WA",
+      "type": "Retail & Distribution",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/woodinville/aash-farms/"
+    },
+    {
+      "title": "Alluvial Farms",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Meat & Poultry, Grains & Pulses, Vegetables & Herbs, Preserved & Pantry Items",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/everson/alluvial-farms/"
+    },
+    {
+      "title": "Amadeus Farm Management LLC",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Meat & Poultry, Grains & Pulses, Vegetables & Herbs, Dairy Products",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/olympia/amadeus-farm-management-llc/"
+    },
+    {
+      "title": "Arado Farms",
+      "location": "Burlington, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/burlington/arado-farms/"
+    },
+    {
+      "title": "Avenue Bread & Deli",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Bakery Items, Beverages, Non-alcoholic",
+      "category": "bakery",
+      "link": "https://eatlocalfirst.org/listing/bellingham/avenue-bread-deli/"
+    },
+    {
+      "title": "Bainbridge Island Vineyards & Winery",
+      "location": "Bainbridge Island, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bainbridge-island/bainbridge-island-vineyards-winery/"
+    },
+    {
+      "title": "Barnwood Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/everson/barnwood-farm/"
+    },
+    {
+      "title": "Bear Creek Cattle Company",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Meat & Poultry",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/bellingham/bear-creek-cattle-company/"
+    },
+    {
+      "title": "Bellingham Country Gardens",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/bellingham-country-gardens/"
+    },
+    {
+      "title": "Bellingham Urban Garden Syndicate (BUGS)",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/bellingham-urban-garden-syndicate-bugs/"
+    },
+    {
+      "title": "Bluebird Grain Farms",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Grains & Pulses, Preserved & Pantry Items",
+      "category": "grains_nuts",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/bluebird-grain-farms/"
+    },
+    {
+      "title": "Boldly Grown Farm",
+      "location": "Bow, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bow/boldly-grown-farm/"
+    },
+    {
+      "title": "Breadfarm Bakery",
+      "location": "Bow, WA",
+      "type": "Producer",
+      "products": "Bakery Items",
+      "category": "bakery",
+      "link": "https://eatlocalfirst.org/listing/bow/breadfarm-bakery/"
+    },
+    {
+      "title": "Broad Leaf Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/broad-leaf-farm/"
+    },
+    {
+      "title": "C&N Farms",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/bellingham/cn-farms/"
+    },
+    {
+      "title": "Cascadian Home Farm",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Meat & Poultry, Vegetables & Herbs, Preserved & Pantry Items",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/olympia/cascadian-home-farm/"
+    },
+    {
+      "title": "Cedarville Farm",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/olympia/cedarville-farm/"
+    },
+    {
+      "title": "Cloudview Farm",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Seeds & Starts, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/cloudview-farm/"
+    },
+    {
+      "title": "Colinwood Farm",
+      "location": "Ferndale, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/ferndale/colinwood-farm/"
+    },
+    {
+      "title": "Deep Harvest Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/deep-harvest-farm/"
+    },
+    {
+      "title": "Dragonfly Farm",
+      "location": "Lynden, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/lynden/dragonfly-farm/"
+    },
+    {
+      "title": "Eagleson Holly Farm",
+      "location": "Burlington, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/burlington/eagleson-holly-farm/"
+    },
+    {
+      "title": "Ellendale Farm",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Eggs, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/olympia/ellendale-farm/"
+    },
+    {
+      "title": "Elodie Farms",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Grains & Pulses, Nuts, Vegetables & Herbs, Preserved & Pantry Items",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/elodie-farms/"
+    },
+    {
+      "title": "Emmalea Farms",
+      "location": "Redmond, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/redmond/emmalea-farms/"
+    },
+    {
+      "title": "Fall City Farms",
+      "location": "Fall City, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/fall-city/fall-city-farms/"
+    },
+    {
+      "title": "Farm Friend",
+      "location": "Bellingham, WA",
+      "type": "Retail & Distribution",
+      "products": "Eggs, Fruit & Berries, Meat & Poultry, Vegetables & Herbs, Dairy Products, Preserved & Pantry Items",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/farm-friend/"
+    },
+    {
+      "title": "Farrington Farm",
+      "location": "Burlington, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/burlington/farrington-farm/"
+    },
+    {
+      "title": "Finnriver Farm & Cidery",
+      "location": "Carnation, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/carnation/finnriver-farm-cidery-2/"
+    },
+    {
+      "title": "Flying F Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/flying-f-farm/"
+    },
+    {
+      "title": "Full Bloom Farm",
+      "location": "Carnation, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/carnation/full-bloom-farm/"
+    },
+    {
+      "title": "Full Circle",
+      "location": "Carnation, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/carnation/full-circle/"
+    },
+    {
+      "title": "Garden Treasures",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/garden-treasures/"
+    },
+    {
+      "title": "Glenora Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/everson/glenora-farm/"
+    },
+    {
+      "title": "Golden Glen Creamery",
+      "location": "Bow, WA",
+      "type": "Producer",
+      "products": "Dairy Products",
+      "category": "dairy",
+      "link": "https://eatlocalfirst.org/listing/bow/golden-glen-creamery/"
+    },
+    {
+      "title": "Gomez Flower Farm",
+      "location": "Woodinville, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/woodinville/gomez-flower-farm/"
+    },
+    {
+      "title": "Grace Harbor Farms",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Dairy Products",
+      "category": "dairy",
+      "link": "https://eatlocalfirst.org/listing/olympia/grace-harbor-farms/"
+    },
+    {
+      "title": "Green Digs Nursery",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/green-digs-nursery/"
+    },
+    {
+      "title": "Growing Washington",
+      "location": "Mount Vernon, WA",
+      "type": "Nonprofit",
+      "products": "Eggs, Fruit & Berries, Meat & Poultry, Grains & Pulses, Vegetables & Herbs, Dairy Products, Preserved & Pantry Items",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/growing-washington/"
+    },
+    {
+      "title": "Hayton Farms Berries",
+      "location": "Burlington, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/burlington/hayton-farms-berries/"
+    },
+    {
+      "title": "Hemly Cider & Creamery",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Dairy Products",
+      "category": "dairy",
+      "link": "https://eatlocalfirst.org/listing/olympia/hemly-cider-creamery/"
+    },
+    {
+      "title": "Heritage Farm Stand",
+      "location": "Olympia, WA",
+      "type": "Retail & Distribution",
+      "products": "Eggs, Fruit & Berries, Meat & Poultry, Vegetables & Herbs, Dairy Products, Local Food Box",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/olympia/heritage-farm-stand/"
+    },
+    {
+      "title": "Harmony Fields",
+      "location": "Bow, WA",
+      "type": "Producer",
+      "products": "Meat & Poultry, Dairy Products",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/bow/harmony-fields/"
+    },
+    {
+      "title": "Hearth & Haven Farm",
+      "location": "Monroe, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/monroe/hearth-haven-farm/"
+    },
+    {
+      "title": "Hedlin Farms",
+      "location": "La Conner, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Grains & Pulses, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/la-conner/hedlin-farms/"
+    },
+    {
+      "title": "Holmquist Hazelnut Orchards LLC",
+      "location": "Lynden, WA",
+      "type": "Producer",
+      "products": "Grains & Pulses, Nuts",
+      "category": "grains_nuts",
+      "link": "https://eatlocalfirst.org/listing/lynden/holmquist-hazelnut-orchards-llc/"
+    },
+    {
+      "title": "Hopewell Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/hopewell-farm-llc/"
+    },
+    {
+      "title": "Infinity Farm Issaquah",
+      "location": "Issaquah, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/issaquah/infinity-farm-issaquah/"
+    },
+    {
+      "title": "Inspiration Farm",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/inspiration-farm/"
+    },
+    {
+      "title": "Island Farmcrafts",
+      "location": "Bainbridge Island, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bainbridge-island/island-farmcrafts/"
+    },
+    {
+      "title": "Joe's Garden",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/joes-garden/"
+    },
+    {
+      "title": "Jonquil Farm",
+      "location": "Carnation, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/carnation/jonquil-farm/"
+    },
+    {
+      "title": "Kacamba Farm",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/kacamba-farm/"
+    },
+    {
+      "title": "Kate's Greens",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/kates-greens/"
+    },
+    {
+      "title": "Kirsop Farm",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Meat & Poultry",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/olympia/kirsop-farm/"
+    },
+    {
+      "title": "Knutzen Family Farms",
+      "location": "Kent, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/kent/knutzen-family-farms/"
+    },
+    {
+      "title": "Little Brown Farm",
+      "location": "Carnation, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Meat & Poultry, Vegetables & Herbs, Dairy Products",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/carnation/little-brown-farm/"
+    },
+    {
+      "title": "Local Tide",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Seafood",
+      "category": "seafood",
+      "link": "https://eatlocalfirst.org/listing/bellingham/local-tide/"
+    },
+    {
+      "title": "Lone Hemlock Farm",
+      "location": "Woodinville, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/woodinville/lone-hemlock-farm/"
+    },
+    {
+      "title": "Lopez Island Creamery",
+      "location": "Woodinville, WA",
+      "type": "Producer",
+      "products": "Dairy Products",
+      "category": "dairy",
+      "link": "https://eatlocalfirst.org/listing/woodinville/lopez-island-creamery/"
+    },
+    {
+      "title": "Lummi Island Wild Co-op",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Seafood",
+      "category": "seafood",
+      "link": "https://eatlocalfirst.org/listing/bellingham/lummi-island-wild/"
+    },
+    {
+      "title": "Mama May's Kitchen",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Preserved & Pantry Items",
+      "category": "pantry",
+      "link": "https://eatlocalfirst.org/listing/bellingham/mama-mays-kitchen/"
+    },
+    {
+      "title": "Mariposa Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/mariposa-farm/"
+    },
+    {
+      "title": "Mountain Bounty Farm",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/mountain-bounty-farm/"
+    },
+    {
+      "title": "Mt. Townsend Creamery",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Dairy Products",
+      "category": "dairy",
+      "link": "https://eatlocalfirst.org/listing/bellingham/mt-townsend-creamery/"
+    },
+    {
+      "title": "Mutiny Bay Blues",
+      "location": "Everett, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everett/mutiny-bay-blues/"
+    },
+    {
+      "title": "Nana's Produce",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/nanas-produce/"
+    },
+    {
+      "title": "NABC Farm",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/nabc-farm/"
+    },
+    {
+      "title": "Nash's Organic Produce",
+      "location": "Sedro-Woolley, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Grains & Pulses, Vegetables & Herbs, Preserved & Pantry Items",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/sedro-woolley/nashs-organic-produce/"
+    },
+    {
+      "title": "Noon Hour Dairy Goats",
+      "location": "Ferndale, WA",
+      "type": "Producer",
+      "products": "Dairy Products",
+      "category": "dairy",
+      "link": "https://eatlocalfirst.org/listing/ferndale/noon-hour-dairy-goats/"
+    },
+    {
+      "title": "North Sound Homestead",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/north-sound-homestead/"
+    },
+    {
+      "title": "NW Mushrooms and More",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/nw-mushrooms-and-more/"
+    },
+    {
+      "title": "O'Brien Legacy Farm",
+      "location": "Snohomish, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/snohomish/obrien-legacy-farm/"
+    },
+    {
+      "title": "Olsen Farms",
+      "location": "Burlington, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/burlington/olsen-farms/"
+    },
+    {
+      "title": "Osprey Hill Farm",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/olympia/osprey-hill-farm/"
+    },
+    {
+      "title": "Pacific Rim Mushrooms",
+      "location": "Auburn, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/auburn/pacific-rim-mushrooms/"
+    },
+    {
+      "title": "Pleasant Ridge Farm",
+      "location": "Lynden, WA",
+      "type": "Producer",
+      "products": "Meat & Poultry",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/lynden/pleasant-ridge-farm/"
+    },
+    {
+      "title": "Plum Forest Farm",
+      "location": "North Bend, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/north-bend/plum-forest-farm/"
+    },
+    {
+      "title": "Puyallup Watershed (Puyallup Tribe)",
+      "location": "Tacoma, WA",
+      "type": "Nonprofit",
+      "products": "Seafood",
+      "category": "seafood",
+      "link": "https://eatlocalfirst.org/listing/tacoma/puyallup-watershed/"
+    },
+    {
+      "title": "Ralph's Greenhouse",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/ralphs-greenhouse/"
+    },
+    {
+      "title": "Ravenwood Farm",
+      "location": "Ferndale, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/ferndale/ravenwood-farm/"
+    },
+    {
+      "title": "Red Dog Farm",
+      "location": "Carnation, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/carnation/red-dog-farm/"
+    },
+    {
+      "title": "Rock Island Farm",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/rock-island-farm/"
+    },
+    {
+      "title": "Rockridge Orchards",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/rockridge-orchards/"
+    },
+    {
+      "title": "Root Connection",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/root-connection/"
+    },
+    {
+      "title": "Rusty Plow Farm",
+      "location": "Duvall, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/duvall/rusty-plow-farm/"
+    },
+    {
+      "title": "Salt Pepper & Oil",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Preserved & Pantry Items",
+      "category": "pantry",
+      "link": "https://eatlocalfirst.org/listing/bellingham/salt-pepper-oil/"
+    },
+    {
+      "title": "Samish Bay Cheese",
+      "location": "Bow, WA",
+      "type": "Producer",
+      "products": "Meat & Poultry, Dairy Products, Preserved & Pantry Items",
+      "category": "dairy",
+      "link": "https://eatlocalfirst.org/listing/bow/samish-bay-cheese/"
+    },
+    {
+      "title": "Schuh Family Farms",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Eggs, Fruit & Berries, Vegetables & Herbs, Dairy Products",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/schuh-family-farms/"
+    },
+    {
+      "title": "Seedfolx Farm",
+      "location": "Woodinville, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/woodinville/seedfolx-farm/"
+    },
+    {
+      "title": "Shambala Bakery and Bistro",
+      "location": "Mount Vernon, WA",
+      "type": "Food & Beverage Service",
+      "products": "Bakery Items, Preserved & Pantry Items",
+      "category": "bakery",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/shambala-bakery-and-bistro/"
+    },
+    {
+      "title": "Shrub Farm",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/shrub-farm/"
+    },
+    {
+      "title": "Sidhu Farms",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/olympia/sidhu-farms/"
+    },
+    {
+      "title": "Skagit River Ranch",
+      "location": "Sedro-Woolley, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/sedro-woolley/skagit-river-ranch/"
+    },
+    {
+      "title": "Skagit Sun Works",
+      "location": "Mount Vernon, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs, Preserved & Pantry Items",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/skagit-sun-works/"
+    },
+    {
+      "title": "Skagit Valley Brewing",
+      "location": "Burlington, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/burlington/skagit-valley-brewing/"
+    },
+    {
+      "title": "Skagit Valley Malting",
+      "location": "Burlington, WA",
+      "type": "Producer",
+      "products": "Grains & Pulses",
+      "category": "grains_nuts",
+      "link": "https://eatlocalfirst.org/listing/burlington/skagit-valley-malting/"
+    },
+    {
+      "title": "Snohomish Mushrooms",
+      "location": "Snohomish, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/snohomish/snohomish-mushrooms/"
+    },
+    {
+      "title": "Soft Star Farm",
+      "location": "Stanwood, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/stanwood/soft-star-farm/"
+    },
+    {
+      "title": "Sonlight Farms",
+      "location": "Lynden, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/lynden/sonlight-farms/"
+    },
+    {
+      "title": "Space Needle Farm",
+      "location": "Seattle, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/seattle/space-needle-farm/"
+    },
+    {
+      "title": "Starvation Alley Farms",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/olympia/starvation-alley-farms/"
+    },
+    {
+      "title": "Stillheart Farm",
+      "location": "Redmond, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/redmond/stillheart-farm/"
+    },
+    {
+      "title": "Summer Run Farm",
+      "location": "Tacoma, WA",
+      "type": "Producer",
+      "products": "Eggs, Meat & Poultry, Vegetables & Herbs",
+      "category": "protein",
+      "link": "https://eatlocalfirst.org/listing/tacoma/summer-run-farm/"
+    },
+    {
+      "title": "Sunshine Organic",
+      "location": "Everson, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/everson/sunshine-organic/"
+    },
+    {
+      "title": "Sunseed Farm",
+      "location": "Bow, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bow/sunseed-farm/"
+    },
+    {
+      "title": "Sweet Earth Farm",
+      "location": "Lynden, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/lynden/sweet-earth-farm/"
+    },
+    {
+      "title": "The London Plane",
+      "location": "Seattle, WA",
+      "type": "Food & Beverage Service",
+      "products": "Bakery Items, Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/seattle/the-london-plane/"
+    },
+    {
+      "title": "The Pantry",
+      "location": "Seattle, WA",
+      "type": "Retail & Distribution",
+      "products": "Preserved & Pantry Items",
+      "category": "pantry",
+      "link": "https://eatlocalfirst.org/listing/seattle/the-pantry/"
+    },
+    {
+      "title": "Tiny's Organic",
+      "location": "Woodinville, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/woodinville/tinys-organic/"
+    },
+    {
+      "title": "TopLeaf Microgreens",
+      "location": "Redmond, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/redmond/topleaf-microgreens/"
+    },
+    {
+      "title": "Trout Lake Farm",
+      "location": "Olympia, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/olympia/trout-lake-farm/"
+    },
+    {
+      "title": "Twin Sisters Farm",
+      "location": "Bellingham, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bellingham/twin-sisters-farm/"
+    },
+    {
+      "title": "Viva Farms",
+      "location": "Mount Vernon, WA",
+      "type": "Nonprofit",
+      "products": "Fruit & Berries, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/mount-vernon/viva-farms/"
+    },
+    {
+      "title": "Wandering Goose Farm",
+      "location": "Bainbridge Island, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries, Vegetables & Herbs, Preserved & Pantry Items",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bainbridge-island/wandering-goose-farm/"
+    },
+    {
+      "title": "Whistling Train Farm",
+      "location": "Kent, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/kent/whistling-train-farm/"
+    },
+    {
+      "title": "Willowood Farm",
+      "location": "Bow, WA",
+      "type": "Producer",
+      "products": "Grains & Pulses, Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/bow/willowood-farm/"
+    },
+    {
+      "title": "Woodring Northwest Specialties",
+      "location": "Ferndale, WA",
+      "type": "Producer",
+      "products": "Fruit & Berries",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/ferndale/woodring-northwest-specialties/"
+    },
+    {
+      "title": "Zephyr Mushrooms",
+      "location": "Auburn, WA",
+      "type": "Producer",
+      "products": "Vegetables & Herbs",
+      "category": "produce",
+      "link": "https://eatlocalfirst.org/listing/auburn/zephyr-mushrooms/"
+    }
+  ],
   "metadata": {
     "vendor_coverage": {
       "Local Roots Farm": {
@@ -7795,7 +10854,9 @@ const DATA = {
       }
     },
     "total_ingredients": 241,
-    "menu_dishes": 15
+    "menu_dishes": 15,
+    "commodity_items": 145,
+    "discovery_items": 120
   }
 };
 
@@ -8126,11 +11187,68 @@ function buildMarket(){
 }
 
 function setMarketTab(tab){
-  ['watchout','opportunity'].forEach(function(t){
-    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
-    document.getElementById('pane-'+t).classList.toggle('active',t===tab);
+  ['watchout','opportunity','discover'].forEach(function(t){
+    var tabEl=document.getElementById('tab-'+t);
+    var paneEl=document.getElementById('pane-'+t);
+    if(tabEl) tabEl.classList.toggle('active',t===tab);
+    if(paneEl) paneEl.classList.toggle('active',t===tab);
   });
 }
+
+// ── COMMODITY REFERENCE (Watch Out tab footer) — added 2026-05-09 Step 2 ──
+function buildCommodityRef(){
+  var el=document.getElementById('commodity-ref'); if(!el) return;
+  var rows=(DATA.commodity||[]).slice();
+  if(!rows.length){ el.innerHTML=''; return; }
+  rows.sort(function(a,b){ return (b.last_updated||'').localeCompare(a.last_updated||''); });
+  var top=rows.slice(0,10);
+  var html='<div class="commodity-ref-hd">Pricing reference &middot; '+rows.length+' commodity items</div>';
+  html+=top.map(function(c){
+    var trend=c.trend||'flat';
+    var arrow=trend==='up'?'&uarr;':trend==='down'?'&darr;':'&middot;';
+    return '<div class="commodity-row">'+
+      '<div class="commodity-name">'+_escHtml(c.name||'')+
+        '<div class="commodity-vnd">'+_escHtml(c.vendor||'')+'</div>'+
+      '</div>'+
+      '<div class="commodity-stat">$'+_escHtml(String(c.price||''))+' / '+_escHtml(c.unit||'')+
+        ' <span class="commodity-trend '+trend+'">'+arrow+'</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  el.innerHTML=html;
+}
+
+// ── DISCOVER (3rd market tab) — added 2026-05-09 Step 2 ──
+var _discoverState={category:'all'};
+function buildDiscover(){
+  var listEl=document.getElementById('discover-list');
+  var pillsEl=document.getElementById('discover-pills');
+  if(!listEl||!pillsEl) return;
+  var items=(DATA.discovery||[]).slice();
+  if(!items.length){
+    pillsEl.innerHTML='';
+    listEl.innerHTML='<div class="empty-msg" style="padding:32px 0;text-align:center">Discovery data not yet loaded.</div>';
+    return;
+  }
+  var cats={};
+  items.forEach(function(d){ var c=d.category||'other'; cats[c]=(cats[c]||0)+1; });
+  var catKeys=Object.keys(cats).sort(function(a,b){ return cats[b]-cats[a]; });
+  var pillsHtml='<button class="pill '+(_discoverState.category==='all'?'active':'')+'" onclick="setDiscoverCat(\'all\')">All <span style="opacity:0.55;margin-left:4px">'+items.length+'</span></button>';
+  pillsHtml+=catKeys.map(function(k){
+    return '<button class="pill '+(_discoverState.category===k?'active':'')+'" onclick="setDiscoverCat(\''+k+'\')">'+_escHtml(k.replace(/_/g,' '))+' <span style="opacity:0.55;margin-left:4px">'+cats[k]+'</span></button>';
+  }).join('');
+  pillsEl.innerHTML=pillsHtml;
+  var filtered=_discoverState.category==='all'?items:items.filter(function(d){ return (d.category||'other')===_discoverState.category; });
+  filtered.sort(function(a,b){ return (a.title||'').localeCompare(b.title||''); });
+  listEl.innerHTML=filtered.map(function(d){
+    return '<div class="discover-row">'+
+      '<div class="discover-name">'+_escHtml(d.title||'')+'</div>'+
+      '<div class="discover-meta">'+_escHtml(d.location||'')+(d.type?' &middot; '+_escHtml(d.type):'')+'</div>'+
+      (d.products?'<div class="discover-products">'+_escHtml(d.products)+'</div>':'')+
+    '</div>';
+  }).join('')||'<div class="empty-msg" style="padding:32px 0;text-align:center">No matches in this category.</div>';
+}
+function setDiscoverCat(cat){ _discoverState.category=cat; buildDiscover(); }
 
 // ── GOT SHORTED ─────────────────────────────────────────────────────
 function matchKeyword(term){
@@ -8299,22 +11417,41 @@ function openDishDetail(dishName){
     sec.dishes.forEach(function(d){ if(d.name===dishName) dish=d; });
   });
   if(!dish){ buildSwapDishList(); return; }
-  var html='<button class="dish-back-btn" onclick="buildSwapDishList()">&#8592; All dishes</button>'+
-    '<div class="dish-detail-name">'+dish.name+'</div>';
-  if(dish.description) html+='<div class="dish-detail-desc">'+dish.description+'</div>';
+  _pitchDish = dish;
+
+  // Sidebar (visible on desktop only via CSS): all dishes grouped by section,
+  // active dish highlighted. Clicking re-renders the detail in place.
+  var sidebarHtml='<div class="menuitem-sidebar-hd">Menu</div>';
+  (DATA.menu||[]).forEach(function(sec){
+    if(sec.section) sidebarHtml+='<div class="menuitem-sidebar-section">'+_escHtml(sec.section)+'</div>';
+    sec.dishes.forEach(function(d){
+      var safeName=(d.name||'').replace(/'/g,"\\'");
+      var active=d.name===dishName?' active':'';
+      sidebarHtml+='<button class="sidebar-dish-btn'+active+'" onclick="openDishDetail(\''+safeName+'\')">'+_escHtml(d.name||'')+'</button>';
+    });
+  });
+
+  // Main pane: existing detail content. Back button is mobile-only since
+  // the sidebar provides navigation on desktop.
+  var mainHtml='<button class="dish-back-btn menuitem-mobile-only" onclick="buildSwapDishList()">&#8592; All dishes</button>'+
+    '<div class="dish-detail-name">'+_escHtml(dish.name)+'</div>';
+  if(dish.description) mainHtml+='<div class="dish-detail-desc">'+_escHtml(dish.description)+'</div>';
   if(dish.components && dish.components.length){
-    html+='<div class="dish-detail-hd">Components</div>';
-    html+='<ul class="dish-comp-list">';
+    mainHtml+='<div class="dish-detail-hd">Components</div>';
+    mainHtml+='<ul class="dish-comp-list">';
     dish.components.forEach(function(c){
       var nm=(typeof c==='string')?c:(c.name||'');
-      if(nm) html+='<li>'+nm+'</li>';
+      if(nm) mainHtml+='<li>'+_escHtml(nm)+'</li>';
     });
-    html+='</ul>';
+    mainHtml+='</ul>';
   }
-  _pitchDish = dish;
-  html+='<button class="pitch-cta-btn" onclick="fetchPitch()">&#10022; Get Remy\'s Take</button>';
-  html+='<div id="pitch-zone"></div>';
-  el.innerHTML=html;
+  mainHtml+='<button class="pitch-cta-btn" onclick="fetchPitch()">&#10022; Get Remy\'s Take</button>';
+  mainHtml+='<div id="pitch-zone"></div>';
+
+  el.innerHTML='<div class="menuitem-layout">'+
+    '<div class="menuitem-sidebar">'+sidebarHtml+'</div>'+
+    '<div class="menuitem-main">'+mainHtml+'</div>'+
+  '</div>';
 }
 
 // ── CREATIVE PITCH ──────────────────────────────────────────────────────────
@@ -8431,22 +11568,6 @@ function fetchPitch(){
     available.push({ingredient:i.name, vendor:i.vendor||'', notes:(i.notes||'').slice(0,100)});
   });
   available = _sortByAffinity(available, _afKeys);
-
-  // Debug log — remove after confirming pools look right in the console.
-  // All four arrays shown are POST-filter (affinity>0 only for bucketed pools).
-  console.log('[Remy pitch debug]', {
-    dish: (dish.name||'').toLowerCase(),
-    affinityKeys: _afKeys,
-    pools: { peaking: peaking.length, arriving: arriving.length, fading: fading.length, available: available.length },
-    peaking: peaking.map(function(s){return s.ingredient;}),
-    arriving: arriving.map(function(s){return s.ingredient;}),
-    fading: fading.map(function(s){return s.ingredient;}),
-    availableTop8: available.slice(0,8).map(function(s){return s.ingredient;})
-  });
-  // Expected for Risotto Funghi: peaking=[], arriving=[Porcini], fading=[Wine Cap],
-  //   available top = [Maitake, Morels, ...]
-  // Expected for Sea Scallops: peaking=[], arriving=[Snap/Snow Peas], fading=[English Peas, Blackmouth Salmon],
-  //   available top = [Oysters, Dungeness Crab, Halibut, ...]
 
   var components = (dish.components||[]).map(function(c){ return typeof c==='string'?{name:c}:c; });
   fetch(getWorkerUrl()+'/pitch', {
@@ -8912,6 +12033,8 @@ document.getElementById('fv-sheet').addEventListener('touchend',function(e){ if(
   buildPills('ending-pills','ending-list',_browse.ending,'var(--gold)');
   buildPrices();
   buildMarket();
+  buildCommodityRef();
+  buildDiscover();
   buildFullView(ings);
   buildPortal();
   checkVendorAlert();
