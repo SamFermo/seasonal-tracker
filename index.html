@@ -1424,6 +1424,128 @@
             margin-top: 20px;
             font-style: italic;
         }
+
+        /* ── CREATIVE PITCH (How's the Menu?) ─────────────────────── */
+        .pitch-layout {
+            display: flex;
+            gap: 24px;
+            min-height: 500px;
+        }
+        .pitch-sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            border-right: 1px solid #2a2a2a;
+            padding-right: 16px;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+        .pitch-main { flex: 1; min-width: 0; }
+        .pitch-section-hd {
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #555;
+            padding: 14px 0 6px 0;
+            border-bottom: 1px solid #1e1e1e;
+            margin-bottom: 4px;
+        }
+        .pitch-dish-btn {
+            display: block;
+            width: 100%;
+            background: none;
+            border: none;
+            color: #b0b0b0;
+            text-align: left;
+            padding: 8px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.87rem;
+            transition: background 0.12s;
+        }
+        .pitch-dish-btn:hover { background: #1a1a1a; color: #e0e0e0; }
+        .pitch-dish-btn.active {
+            background: #1c1c1c;
+            color: #e8e8e8;
+            border-left: 2px solid #7a9a7a;
+            padding-left: 8px;
+        }
+        .pitch-placeholder {
+            color: #444;
+            font-size: 0.9rem;
+            padding: 40px 0;
+        }
+        .pitch-detail-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #e8e8e8;
+            margin-bottom: 6px;
+        }
+        .pitch-detail-desc {
+            font-size: 0.84rem;
+            color: #777;
+            margin-bottom: 16px;
+        }
+        .pitch-detail-hd {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .pitch-comp-list {
+            margin: 0 0 18px 0;
+            padding: 0 0 0 16px;
+            color: #888;
+            font-size: 0.83rem;
+            line-height: 1.7;
+        }
+        .pitch-cta-btn {
+            background: #7a9a7a;
+            color: #0a0a0a;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.87rem;
+            font-weight: 600;
+            margin-bottom: 22px;
+            transition: background 0.15s;
+        }
+        .pitch-cta-btn:hover { background: #8aaa8a; }
+        .pitch-loading {
+            color: #555;
+            font-size: 0.87rem;
+            padding: 20px 0;
+        }
+        .pitch-result { margin-top: 4px; }
+        .pitch-text {
+            font-size: 0.93rem;
+            color: #d0d0d0;
+            line-height: 1.65;
+            margin-bottom: 20px;
+            padding: 16px 18px;
+            background: #111;
+            border-radius: 6px;
+            border-left: 3px solid #7a9a7a;
+        }
+        .pitch-ing-hd {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .pitch-ing-list { list-style: none; margin: 0; padding: 0; }
+        .pitch-ing-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 7px 0;
+            border-bottom: 1px solid #1a1a1a;
+            gap: 12px;
+        }
+        .pitch-ing-name { font-size: 0.87rem; color: #c0c0c0; }
+        .pitch-ing-meta { font-size: 0.77rem; color: #555; text-align: right; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -1438,6 +1560,7 @@
             <button class="tab-btn active" data-tab="seasonal" onclick="switchTab('seasonal')">Seasonal Tracker</button>
             <button class="tab-btn" data-tab="commodity" onclick="switchTab('commodity')">Commodity Pricing <span class="tab-count" id="commodityCount"></span></button>
             <button class="tab-btn" data-tab="discovery" onclick="switchTab('discovery')">Vendor Discovery <span class="tab-count" id="discoveryCount"></span></button>
+            <button class="tab-btn" data-tab="pitch" onclick="switchTab('pitch')">How's the Menu?</button>
         </div>
 
         <div id="panel-seasonal" class="tab-panel active">
@@ -1548,6 +1671,15 @@
             </div>
             <div class="commodity-updated" id="commodityUpdated"></div>
         </div><!-- end panel-commodity -->
+
+        <div id="panel-pitch" class="tab-panel">
+            <div class="pitch-layout">
+                <div class="pitch-sidebar" id="pitch-sidebar"></div>
+                <div class="pitch-main" id="pitch-main">
+                    <div class="pitch-placeholder">← Select a dish to see what Remy recommends</div>
+                </div>
+            </div>
+        </div><!-- end panel-pitch -->
 
     </div>
 
@@ -6037,6 +6169,7 @@ const PRICE_TRENDS = {
             document.getElementById(`panel-${tab}`).classList.add('active');
             if (tab === 'discovery') renderDiscovery();
             if (tab === 'commodity') renderCommodity();
+            if (tab === 'pitch') renderPitchPanel();
         }
 
         function getDiscoveryFiltered() {
@@ -6342,6 +6475,245 @@ const PRICE_TRENDS = {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(function() { renderChart(); }, 200);
         });
+
+        // ── CREATIVE PITCH (How's the Menu?) ─────────────────────────────────
+
+        const PITCH_WORKER_URL = 'https://remy-outreach.sam-d1f.workers.dev';
+
+        const MENU_SECTIONS = [
+          {section: 'Antipasti', dishes: [
+            {name: 'Sea Wolf Bakery Baguette', description: 'les pres sales butter, Maldon sea salt', brief: 'table bread — no seasonal pitch', components: ['Sea Wolf baguette', 'les pres sales butter', 'Maldon sea salt']},
+            {name: 'Castelvetrano Olives', description: 'fennel pollen, citrus, chili', brief: 'pantry snack — no seasonal pitch', components: ['castelvetrano olives', 'citrus peel', 'garlic', 'chili flake', 'olive oil', 'fennel pollen']},
+            {name: 'Marcona Almonds', description: 'fried rosemary, Maldon sea salt', brief: 'pantry snack — no seasonal pitch', components: ['marcona almonds', 'Maldon sea salt', 'fried rosemary', 'rosemary frying oil']},
+            {name: 'Farinata', description: 'chickpea flatbread, house cagliatta, rhubarb caramelized onion jam, thyme', brief: 'savory chickpea crepe; topping layer (currently onion jam + cagliatta) is the seasonal canvas; stays earthy, Italian, composed', components: ['chickpea flour', 'rosemary olive oil', 'housemade cagliatta', 'rhubarb caramelized onion jam', 'thyme leaves']},
+            {name: 'House Caesar', description: 'anchovy, parmigiano reggiano, red wine croutons', brief: 'classic plated salad; dressing, crouton, and anchovy are fixed; seasonal move is a green swap or herb finish — it stays a Caesar', components: ['romaine lettuce', 'caesar dressing', 'parmigiano reggiano', 'lemon', 'black pepper', 'boquerones anchovies', 'red wine croutons']},
+            {name: 'Endive Salad', description: 'smoked trout, frisee, fresno chili, oregano vinaigrette, marcona almonds', brief: 'bitter greens salad with no fixed anchor — the entire dish can shift to a different salad format if the season calls for it', components: ['endive', 'frisee', 'smoked trout', 'oregano vinaigrette', 'fresno chili', 'chives', 'parsley', 'marcona almonds']},
+            {name: 'Burrata', description: 'english peas, mint, dill, bresaola, crostini', brief: "composed cheese plate; the fruit/veg/herb accompaniment changes weekly and is the dish's identity — wide latitude in direction", components: ['burrata', 'english peas', 'snap peas', 'mint', 'dill', 'english pea puree', 'bresaola', 'crostini', 'Maldon sea salt', 'black pepper', 'olive oil']},
+            {name: 'Bruschetta', description: 'ricotta, roasted peppers, peruvian pickled peppers, basil, balsamic', brief: '3 long grilled bread pieces, 4-5 bites each; bread is the only anchor; dish can become any antipasto entirely — no fixed ingredients', components: ['grilled bread', 'ricotta', 'roasted red peppers', 'peruvian pickled peppers', 'basil', 'balsamic vinegar', 'Maldon sea salt', 'black pepper', 'olive oil']},
+          ]},
+          {section: 'Primi & Secondi', dishes: [
+            {name: 'Saffron Spaghetti Bolognese', description: 'pork, veal, rosemary, fennel, tomato, parmigiano reggiano', brief: 'this dish never changes — no pitch', components: ['saffron spaghetti', 'pork and veal bolognese ragu', 'parmigiano reggiano', 'oregano']},
+            {name: 'Agnolotti del Plin', description: 'lemon ricotta, preserved lemon, nettle pesto, pistachio, parmigiano', brief: 'stuffed pasta format is the only anchor; filling, sauce, and garnish can all shift; 2 of 3 elements should be seasonal', components: ['egg pasta dough', 'lemon ricotta filling', 'nettle pesto', 'preserved lemon peel', 'pistachios', 'parmigiano reggiano']},
+            {name: 'Mafaldine Aglio e Olio', description: 'olive oil, garlic, seasonal vegetable, parmigiano reggiano', brief: 'extruded pasta is the anchor — mafaldine, paccheri, bucatini, spaghetti, conchiglioni, or creste de gallo; not limited to vegetarian; 1-2 seasonal ingredients should shine; anything goes in the composition', components: ['mafaldine pasta', 'olive oil', 'garlic', 'seasonal vegetable', 'parmigiano reggiano', 'parsley']},
+            {name: "Paccheri all'Amatriciana", description: 'guanciale, marinara, pecorino romano, red onion', brief: 'Roman pasta technique is the anchor — carbonara, amatriciana, alla gricia, or cacio e pepe all work; slight seasonal upgrades acceptable but the Roman style is fixed', components: ['paccheri pasta', 'guanciale', 'marinara sauce', 'pecorino romano', 'black pepper', 'red onions']},
+            {name: 'Risotto Funghi', description: 'marinated maitake mushrooms, marjoram, goat cheese, fried leeks', brief: "gluten-free is the only anchor; everything else can swing freely; should be modifiable to vegetarian but doesn't have to start there", components: ['par-cooked risotto base', 'roasted cultivated mushrooms', 'butter', 'lemon', 'goat cheese', 'fried leeks', 'marjoram', 'marinated maitake mushrooms']},
+            {name: 'Sea Scallops', description: 'asparagus, fingerling potatoes, ramps, butter lemon stock', brief: 'seafood is the anchor and the specific seafood rotates seasonally; at least one ingredient in the set should shine; complete flexibility in composition and style; when the dish changes the protein changes', components: ['sea scallops', 'asparagus', 'fingerling potatoes', 'ramps', 'butter lemon braising stock', 'thyme', 'parsley']},
+            {name: 'Filet Mignon', description: 'polenta, creamed spinach, horseradish gremolata', brief: 'non-seafood protein is the anchor and the specific protein can rotate; at least one ingredient in the set should shine; complete flexibility in composition and style; when the dish changes the protein changes', components: ['beef tenderloin', 'polenta', 'creamed spinach', 'horseradish gremolata']},
+          ]},
+        ];
+
+        const DISH_AFFINITIES = {
+          'agnolotti del plin':          ['nettle','pea','fava','herb','sorrel','spinach','fiddlehead','fern','lemon','greens','shoots'],
+          'mafaldine aglio e olio':      [],
+          "paccheri all'amatriciana":    ['tomato','pepper','fennel','guanciale','pork','chili'],
+          'saffron spaghetti bolognese': ['tomato','fennel','pork','veal','mushroom','herb','rosemary','morel','wine cap'],
+          'risotto funghi':              [],
+          'sea scallops':                ['scallop','crab','shrimp','prawn','salmon','halibut','cod','rockfish','lingcod','oyster','clam','dungeness','lobster','tomato','corn','basil','pea','herb'],
+          'filet mignon':                [],
+          'grilled bavette':             [],
+          'farinata':                    ['herb','nettle','pea','sorrel','greens','mushroom','squash','flower','ramp'],
+          'house caesar':                ['anchovy','fish','salmon','herb','greens','lettuce','ramp','allium'],
+          'endive salad':                [],
+          'burrata':                     [],
+          'bruschetta':                  [],
+          'castelvetrano olives':        [],
+          'marcona almonds':             [],
+          'sea wolf bakery baguette':    [],
+        };
+
+        // Month helpers — currentMonth already defined above
+        const _pPrevM = (currentMonth + 11) % 12;
+        const _pNextM = (currentMonth + 1)  % 12;
+
+        function sc(ing, mi) {
+            var ms = ing.months || [];
+            if (mi < 0 || mi >= ms.length) return 0;
+            return ms[mi] || 0;
+        }
+        function isPeak(ing)    { return sc(ing, currentMonth) === 2; }
+        function isArriving(ing) {
+            var c = sc(ing, currentMonth);
+            if (c === 0 || c === 4) return false;
+            var p = sc(ing, _pPrevM);
+            return p === 0 || p === 4;
+        }
+        function isEnding(ing) {
+            var c = sc(ing, currentMonth); if (c === 0 || c === 4) return false;
+            var n = sc(ing, _pNextM); return n === 0 || n === 4;
+        }
+
+        function _affinityScore(ingredientName, keys) {
+            if (!keys || !keys.length) return 0;
+            var n = (ingredientName || '').toLowerCase(), s = 0;
+            for (var i = 0; i < keys.length; i++) { if (n.indexOf(keys[i]) >= 0) s++; }
+            return s;
+        }
+        function _sortByAffinity(signals, keys) {
+            if (!keys || !keys.length) return signals;
+            return signals.slice().sort(function(a, b) {
+                return _affinityScore(b.ingredient, keys) - _affinityScore(a.ingredient, keys);
+            });
+        }
+        function _filterByAffinity(signals, keys) {
+            if (!keys || !keys.length) return signals;
+            return signals.filter(function(s) { return _affinityScore(s.ingredient, keys) > 0; });
+        }
+
+        function _pEsc(s) {
+            return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        var _pitchSelectedDish = null;
+
+        function renderPitchPanel() {
+            var sidebar = document.getElementById('pitch-sidebar');
+            if (!sidebar || sidebar.innerHTML) return; // already rendered
+            var html = '';
+            MENU_SECTIONS.forEach(function(sec) {
+                html += '<div class="pitch-section-hd">' + sec.section + '</div>';
+                sec.dishes.forEach(function(d) {
+                    var safe = d.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                    html += '<button class="pitch-dish-btn" onclick="selectPitchDish(\'' + safe + '\')">' + _pEsc(d.name) + '</button>';
+                });
+            });
+            sidebar.innerHTML = html;
+        }
+
+        function selectPitchDish(dishName) {
+            var dish = null;
+            MENU_SECTIONS.forEach(function(sec) {
+                sec.dishes.forEach(function(d) { if (d.name === dishName) dish = d; });
+            });
+            if (!dish) return;
+            _pitchSelectedDish = dish;
+
+            document.querySelectorAll('.pitch-dish-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.textContent === dishName);
+            });
+
+            var main = document.getElementById('pitch-main');
+            if (!main) return;
+            var html = '<div class="pitch-detail-name">' + _pEsc(dish.name) + '</div>';
+            if (dish.description) html += '<div class="pitch-detail-desc">' + _pEsc(dish.description) + '</div>';
+            if (dish.components && dish.components.length) {
+                html += '<div class="pitch-detail-hd">Components</div>';
+                html += '<ul class="pitch-comp-list">';
+                dish.components.forEach(function(c) {
+                    var nm = typeof c === 'string' ? c : (c.name || '');
+                    if (nm) html += '<li>' + _pEsc(nm) + '</li>';
+                });
+                html += '</ul>';
+            }
+            html += '<button class="pitch-cta-btn" onclick="fetchPitchDesktop()">&#10022; Get Remy\'s Take</button>';
+            html += '<div id="pitch-zone"></div>';
+            main.innerHTML = html;
+        }
+
+        function fetchPitchDesktop() {
+            var dish = _pitchSelectedDish;
+            if (!dish) return;
+            var zone = document.getElementById('pitch-zone');
+            if (!zone) return;
+            zone.innerHTML = '<div class="pitch-loading">Remy is reading the signals…</div>';
+
+            var peaking = [], arriving = [], fading = [], price_moves = [];
+            var _inSeason = {};
+
+            (DATA.ingredients || []).forEach(function(i) {
+                var cur = sc(i, currentMonth);
+                if (cur === 0 || cur === 4) return;
+                _inSeason[i.name] = true;
+                var sig = {ingredient: i.name, vendor: i.vendor || '', notes: (i.notes || '').slice(0, 100)};
+                if (isPeak(i) && isEnding(i)) {
+                    peaking.push(Object.assign({}, sig, {action_hint: 'peak ending soon'}));
+                } else if (isArriving(i)) {
+                    arriving.push(Object.assign({}, sig, {score_label: isPeak(i) ? 'peak' : 'available'}));
+                } else if (isEnding(i)) {
+                    fading.push(Object.assign({}, sig, {action_hint: 'window closing'}));
+                }
+            });
+
+            // Desktop uses PRICE_TRENDS.trends dict (not DATA.price_trends array)
+            var trends = (PRICE_TRENDS && PRICE_TRENDS.trends) || {};
+            Object.keys(trends).forEach(function(ingName) {
+                var t = trends[ingName];
+                if (Math.abs(t.trend_30d_pct || 0) >= 5) {
+                    price_moves.push({
+                        ingredient: ingName,
+                        vendor: t.vendor || '',
+                        notes: '$' + t.latest_price + '/' + (t.unit || 'lb') +
+                               ' (' + (t.trend_30d_pct > 0 ? '+' : '') +
+                               parseFloat(t.trend_30d_pct).toFixed(1) + '%)'
+                    });
+                }
+            });
+
+            var _afKeys = DISH_AFFINITIES[(dish.name || '').toLowerCase()] || [];
+            peaking  = _filterByAffinity(_sortByAffinity(peaking,  _afKeys), _afKeys);
+            arriving = _filterByAffinity(_sortByAffinity(arriving, _afKeys), _afKeys);
+            fading   = _filterByAffinity(_sortByAffinity(fading,   _afKeys), _afKeys);
+
+            var _bucketed = {};
+            peaking.forEach(function(s) { _bucketed[s.ingredient] = true; });
+            arriving.forEach(function(s) { _bucketed[s.ingredient] = true; });
+            fading.forEach(function(s)   { _bucketed[s.ingredient] = true; });
+            var available = [];
+            (DATA.ingredients || []).forEach(function(i) {
+                if (_bucketed[i.name] || !_inSeason[i.name]) return;
+                available.push({ingredient: i.name, vendor: i.vendor || '', notes: (i.notes || '').slice(0, 100)});
+            });
+            available = _sortByAffinity(available, _afKeys);
+
+            var components = (dish.components || []).map(function(c) {
+                return typeof c === 'string' ? {name: c} : c;
+            });
+
+            fetch(PITCH_WORKER_URL + '/pitch', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    dishName: dish.name,
+                    description: dish.description || '',
+                    brief: dish.brief || '',
+                    components: components,
+                    signals: {
+                        peaking:     peaking.slice(0, 8),
+                        arriving:    arriving.slice(0, 8),
+                        fading:      fading.slice(0, 6),
+                        available:   available.slice(0, 8),
+                        price_moves: price_moves.slice(0, 4)
+                    }
+                })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (!data || data.error) {
+                    zone.innerHTML = '<div class="pitch-loading">Remy hit a snag. Try again.</div>';
+                    return;
+                }
+                var html = '<div class="pitch-result">';
+                html += '<div class="pitch-text">' + _pEsc(data.pitch) + '</div>';
+                var ings = Array.isArray(data.ingredients) ? data.ingredients : [];
+                if (ings.length) {
+                    html += '<div class="pitch-ing-hd">In the pitch</div><ul class="pitch-ing-list">';
+                    var BADGE = {peaking: 'Peak now', arriving: 'Arriving', fading: 'Fading', price_move: 'Price move', available: 'In season'};
+                    ings.forEach(function(ing) {
+                        var badge = BADGE[ing.status] || (ing.status || '');
+                        var meta = [badge, _pEsc(ing.vendor || ''), _pEsc(ing.note || '')].filter(Boolean).join(' · ');
+                        html += '<li class="pitch-ing-item">' +
+                            '<span class="pitch-ing-name">' + _pEsc(ing.name) + '</span>' +
+                            '<span class="pitch-ing-meta">' + meta + '</span>' +
+                            '</li>';
+                    });
+                    html += '</ul>';
+                }
+                html += '</div>';
+                zone.innerHTML = html;
+            })
+            .catch(function() {
+                zone.innerHTML = '<div class="pitch-loading">Couldn\'t reach Remy. Check your connection.</div>';
+            });
+        }
     </script>
 </body>
 </html>
