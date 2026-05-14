@@ -13082,6 +13082,26 @@ function buildDishGraph(dish){
   var container=document.getElementById('dish-graph');
   if(!container || typeof vis==='undefined') return;
 
+  // Build top-level lookup maps for node de-duplication.
+  // Two merge rules apply when handling sub-recipe ingredients:
+  //   1. Key match — sub-recipe ingredient key === top-level component key
+  //   2. Canonical match — sub-recipe ingredient resolves to the same canonical
+  //      match name as a top-level canonical component
+  // In both cases, draw an edge from the sub-recipe parent to the existing top-level
+  // node instead of creating a duplicate child node. Reflects chef mental model:
+  // one ingredient, multiple uses in the dish.
+  var topCompKeys=(dish.components||[]).map(_normKey);
+  var canonicalOwnerByMatch={};
+  (dish.components||[]).forEach(function(c){
+    var k=_normKey(c);
+    var kc=_classification(k);
+    if(kc && kc.kind==='canonical'){
+      (kc.matches||[]).forEach(function(m){
+        if(!canonicalOwnerByMatch[m]) canonicalOwnerByMatch[m]=k;
+      });
+    }
+  });
+
   var nodes=[{id:'dish',label:dish.name,shape:'dot',size:30,
     color:{background:'#1d2546',border:'#a8b97e'},borderWidth:2,
     font:{size:18,color:'#f5e8c8',face:'Cormorant Garamond'}}];
@@ -13146,10 +13166,35 @@ function buildDishGraph(dish){
         font:{size:13,color:'#f5e8c8'},
         _key:key,_kind:'sub_recipe'});
       edges.push({from:'dish',to:nodeId,color:{color:'rgba(168,185,126,0.3)'},width:1.5});
+      // Sub-recipe ingredient loop with two merge rules to avoid duplicate nodes:
+      //   Rule 1: ingredient key matches an existing top-level component key → link to that
+      //   Rule 2: ingredient resolves to a canonical match that a top-level component owns → link to that
       (cls.ingredients||[]).forEach(function(ing){
         var ingKey=_normKey(ing);
-        var ingId='i_'+nodeId+'_'+ingKey.replace(/[^a-z0-9]+/g,'_');
         var ingCls=_classification(ingKey);
+
+        // Rule 1: same component key
+        if(topCompKeys.indexOf(ingKey)>=0){
+          var t1='c_'+ingKey.replace(/[^a-z0-9]+/g,'_');
+          edges.push({from:nodeId,to:t1,color:{color:'rgba(168,185,126,0.40)'},width:1});
+          return;
+        }
+        // Rule 2: same canonical match name owned by a top-level component
+        if(ingCls && ingCls.kind==='canonical' && ingCls.matches){
+          var ownerKey=null;
+          for(var mi=0;mi<ingCls.matches.length;mi++){
+            var owner=canonicalOwnerByMatch[ingCls.matches[mi]];
+            if(owner && owner!==ingKey){ ownerKey=owner; break; }
+          }
+          if(ownerKey){
+            var t2='c_'+ownerKey.replace(/[^a-z0-9]+/g,'_');
+            edges.push({from:nodeId,to:t2,color:{color:'rgba(168,185,126,0.40)'},width:1});
+            return;
+          }
+        }
+
+        // Default: render as a child node under the sub-recipe (no top-level overlap)
+        var ingId='i_'+nodeId+'_'+ingKey.replace(/[^a-z0-9]+/g,'_');
         var bg='#3a4470',bd='#3a4470';
         var dashed=false;
         if(!ingCls){bg='rgba(245,232,200,0.05)';bd='#a89c80';dashed=true;}
