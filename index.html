@@ -531,7 +531,8 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   width:24px;height:24px;border-radius:var(--r);cursor:pointer;font-size:14px;line-height:1;padding:0}
 .graph-zoom button:hover{border-color:var(--olive)}
 .graph-zoom input[type=range]{width:80px;accent-color:var(--olive)}
-@media (max-width:520px){.graph-zoom input[type=range]{width:50px}}
+/* Mobile: hide the zoom slider entirely — pinch-to-zoom is enabled natively below 768px */
+@media (max-width:767px){.graph-zoom{display:none}}
 .dish-graph-legend{position:absolute;bottom:8px;left:10px;right:10px;
   display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:flex-start;
   background:rgba(5,9,24,0.85);padding:6px 9px;border-radius:var(--r);
@@ -585,6 +586,26 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .side-hide-btn:active{background:var(--ink-6)}
 .show-hidden-btn{margin-left:auto}
 .show-hidden-btn.active{background:var(--olive)!important;color:var(--bg)!important;border-color:var(--olive)!important}
+
+/* ── HIDE BAR (multi-select hide flow) ── */
+.hide-bar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;align-items:center;min-height:0}
+.hide-bar:empty{display:none}
+.hide-bar-btn{background:var(--bg-card-h);border:1px solid var(--ink-12);color:var(--ink);
+  padding:7px 12px;border-radius:var(--r);font-family:var(--fb);font-size:12.5px;cursor:pointer}
+.hide-bar-btn:hover{border-color:var(--olive)}
+.hide-bar-btn[disabled]{opacity:0.4;cursor:not-allowed}
+.hide-bar-btn.primary{background:var(--olive);color:var(--bg);border-color:var(--olive);font-weight:600}
+.hide-bar-btn.count{background:rgba(168,185,126,0.12);color:var(--olive);border-color:rgba(168,185,126,0.4)}
+
+/* ── VIEW TOGGLE (slider pill pattern for sub-view switching) ── */
+.view-toggle{display:flex;gap:0;margin:10px 16px 12px;padding:3px;
+  background:var(--bg-card);border:1px solid var(--ink-12);border-radius:99px;
+  align-self:flex-start;max-width:fit-content}
+.vt-pill{background:transparent;border:none;color:var(--ink-60);
+  padding:7px 16px;border-radius:99px;font-family:var(--fb);font-size:12.5px;
+  cursor:pointer;font-weight:500;letter-spacing:0.02em;white-space:nowrap}
+.vt-pill:hover{color:var(--ink)}
+.vt-pill.active{background:var(--olive);color:var(--bg);font-weight:600}
 
 /* ── CLASSIFIER MODAL (4-button picker + vendor pills + sub-recipe input) ── */
 .clsf-backdrop{position:fixed;inset:0;background:rgba(2,4,13,0.78);
@@ -794,6 +815,20 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   <div class="flow-wrap" id="planning-flow"></div>
 </div>
 
+<!-- SCREEN: PLAN AHEAD (combined event + planning, toggle via slider) -->
+<div class="ss" id="screen-plan">
+  <div class="sh">
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
+    <span class="sh-title">Plan Ahead</span>
+  </div>
+  <div class="sh-rule"></div>
+  <div class="view-toggle">
+    <button class="vt-pill active" id="plan-pill-event" onclick="setPlanMode('event')">Specific date</button>
+    <button class="vt-pill" id="plan-pill-season" onclick="setPlanMode('planning')">Season change</button>
+  </div>
+  <div class="flow-wrap" id="plan-flow"></div>
+</div>
+
 <!-- SCREEN: SWAP A DISH (current menu) -->
 <div class="ss" id="screen-menuitem">
   <div class="sh">
@@ -801,6 +836,10 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
     <span class="sh-title">How's the Menu?</span>
   </div>
   <div class="sh-rule"></div>
+  <div class="view-toggle">
+    <button class="vt-pill active" onclick="goTo('menuitem')">Dish list</button>
+    <button class="vt-pill" onclick="goTo('brainweb');setTimeout(buildBrainWeb,40)">Full menu brain web</button>
+  </div>
   <div class="flow-wrap" id="menuitem-wrap"></div>
 </div>
 
@@ -850,13 +889,27 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   <div id="outreach-inner" style="flex:1;display:flex;flex-direction:column;overflow:hidden"></div>
 </div>
 
+<!-- SCREEN: WEATHER DETAIL -->
+<div class="ss" id="screen-weather">
+  <div class="sh">
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
+    <span class="sh-title">Weather Alerts</span>
+  </div>
+  <div class="sh-rule"></div>
+  <div class="flow-wrap" id="weather-detail"></div>
+</div>
+
 <!-- SCREEN: BRAIN WEB (full-menu graph view) -->
 <div class="ss" id="screen-brainweb">
   <div class="sh">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
-    <span class="sh-title">Menu Brain Web</span>
+    <span class="sh-title">How's the Menu?</span>
   </div>
   <div class="sh-rule"></div>
+  <div class="view-toggle">
+    <button class="vt-pill" onclick="goTo('menuitem');setTimeout(buildSwapDishList,40)">Dish list</button>
+    <button class="vt-pill active" onclick="goTo('brainweb');setTimeout(buildBrainWeb,40)">Full menu brain web</button>
+  </div>
   <div class="filter-strip" id="bw-filters">
     <button class="pill active" data-bw="all" onclick="setBrainWebFilter('all')">All</button>
     <button class="pill" data-bw="flagged" onclick="setBrainWebFilter('flagged')">Flagged only</button>
@@ -864,6 +917,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
     <button class="pill" data-bw="vendor" onclick="setBrainWebFilter('vendor')">Vendor concentration</button>
     <button class="pill show-hidden-btn" id="show-hidden-btn" onclick="toggleShowHidden()">Show hidden</button>
   </div>
+  <div class="hide-bar" id="hide-bar-brain" style="margin:0 16px 8px"></div>
   <div class="brainweb-wrap"><div id="brainweb-graph"></div>
     <div class="brainweb-stats" id="brainweb-stats"></div>
     <div class="graph-zoom">
@@ -12978,6 +13032,7 @@ function openDishDetail(dishName){
   if(dish.brief){
     mainHtml+='<div class="dish-brief">'+_escHtml(dish.brief)+'</div>';
   }
+  mainHtml+='<div class="hide-bar" id="hide-bar-dish"></div>';
   mainHtml+='<div class="dish-graph-wrap"><div id="dish-graph"></div>'+
     '<div class="graph-zoom">'+
       '<button onclick="zoomDishGraph(-0.15)" title="Zoom out">−</button>'+
@@ -13225,8 +13280,14 @@ function buildDishGraph(dish){
     var nodeId='c_'+key.replace(/[^a-z0-9]+/g,'_');
     var cls=_classification(key);
 
-    // Skip hidden components unless "Show hidden" toggle is on (chef explicitly hid these)
-    if(_isHidden(key) && !_showHidden) return;
+    // Visibility rules:
+    //  - "Manage hidden" mode shows ONLY hidden items (so chef can tap to unhide).
+    //  - Otherwise skip hidden unless "Show hidden" toggle is on.
+    if(_manageHiddenMode.dish){
+      if(!_isHidden(key)) return;
+    } else if(_isHidden(key) && !_showHidden){
+      return;
+    }
 
     if(!cls){
       // unclassified
@@ -13333,7 +13394,7 @@ function buildDishGraph(dish){
   if(_dishNetwork) _dishNetwork.destroy();
   _dishNetwork=new vis.Network(container,{nodes:nodes,edges:edges},{
     physics:{stabilization:{iterations:220},barnesHut:{gravitationalConstant:-3200,springLength:110,springConstant:0.045}},
-    interaction:{hover:true,dragView:true,zoomView:false,tooltipDelay:200},
+    interaction:{hover:true,dragView:true,zoomView:_isMobileViewport(),tooltipDelay:200},
     nodes:{borderWidthSelected:3},
     edges:{smooth:{type:'continuous'}},
     layout:{improvedLayout:true}
@@ -13343,10 +13404,23 @@ function buildDishGraph(dish){
     if(!id || id==='dish'){ _renderSide(null); return; }
     var node=_nodesArr.find(function(n){return n.id===id;});
     if(!node) return;
+    if(node._key && _consumedByHideMode('dish', node._key)) return;
     _renderSide(node);
   });
-  _dishNetwork.on('deselectNode',function(){ _renderSide(null); });
+  _dishNetwork.on('deselectNode',function(){ if(!_hideMode.dish) _renderSide(null); });
   _renderSide(null);
+  _applyHideSelectionRings('dish');
+  _refreshHideBars();
+}
+
+function _applyHideSelectionRings(view){
+  var net = view==='dish'? _dishNetwork : _bwNetwork;
+  if(!net) return;
+  var sel = _hideSelected[view] || {};
+  // Pre-select node ids whose _key is in the selection map.
+  var nodesArr = view==='dish'? _nodesArr : _bwNodes;
+  var ids = nodesArr.filter(function(n){return n._key && sel[n._key];}).map(function(n){return n.id;});
+  try { net.selectNodes(ids, false); } catch(e){}
 }
 
 function _renderSide(node){
@@ -13576,6 +13650,144 @@ function openClassifier(componentKey){
   };
 }
 
+// ===== PLAN AHEAD (combined event + planning screen with slider toggle) =====
+function setPlanMode(mode){
+  // mode: 'event' (specific date) or 'planning' (season change)
+  document.getElementById('plan-pill-event').classList.toggle('active', mode==='event');
+  document.getElementById('plan-pill-season').classList.toggle('active', mode==='planning');
+  buildFlow('plan-flow', mode);
+}
+
+// ===== HIDE MODE (multi-select hide flow) =====
+// Hide mode is per-network state. When active, tapping nodes toggles selection
+// rather than opening the side panel. A floating "Hide selection (N)" button
+// appears once any node is selected. After hiding, those nodes are persisted
+// hidden:true via /classify and the graph re-renders without them.
+// A persistent "Hidden items (N)" pill in each filter strip surfaces what's
+// currently hidden — tap to enter "manage hidden" mode and selectively unhide.
+
+var _hideMode = { dish: false, brain: false };
+var _hideSelected = { dish: {}, brain: {} }; // map key -> true
+var _manageHiddenMode = { dish: false, brain: false }; // when on, the graph shows ONLY hidden nodes for unhiding
+
+function enterHideMode(view){
+  _hideMode[view] = true;
+  _hideSelected[view] = {};
+  _refreshHideBars();
+  // Re-render so click handlers swap to selection mode
+  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
+  if(view==='brain' && _bwNetwork) buildBrainWeb();
+}
+function exitHideMode(view){
+  _hideMode[view] = false;
+  _hideSelected[view] = {};
+  _refreshHideBars();
+  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
+  if(view==='brain' && _bwNetwork) buildBrainWeb();
+}
+function _toggleSelectInHideMode(view, key){
+  if(_hideSelected[view][key]) delete _hideSelected[view][key];
+  else _hideSelected[view][key] = true;
+  _refreshHideBars();
+  // Re-render to flash the selection ring on selected nodes
+  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
+  if(view==='brain' && _bwNetwork) buildBrainWeb();
+}
+
+function _refreshHideBars(){
+  // Updates the floating action bar(s) at bottom of dish-graph / brainweb screens.
+  ['dish','brain'].forEach(function(view){
+    var bar = document.getElementById('hide-bar-'+view);
+    if(!bar) return;
+    var inMode = _hideMode[view];
+    var selected = Object.keys(_hideSelected[view]||{});
+    var hiddenCount = _countHidden();
+    var html='';
+    if(inMode){
+      html='<button class="hide-bar-btn primary" '+(selected.length===0?'disabled':'')+
+        ' onclick="commitHideSelection(\''+view+'\')">Hide selection ('+selected.length+')</button>'+
+        '<button class="hide-bar-btn" onclick="exitHideMode(\''+view+'\')">Cancel</button>';
+    } else {
+      html='<button class="hide-bar-btn" onclick="enterHideMode(\''+view+'\')">Hide items from graph</button>';
+      if(hiddenCount>0) html+='<button class="hide-bar-btn count" onclick="toggleManageHidden(\''+view+'\')">'+
+        (_manageHiddenMode[view]?'Done managing hidden':'Hidden items ('+hiddenCount+')')+'</button>';
+    }
+    bar.innerHTML=html;
+  });
+}
+
+function _countHidden(){
+  var n=0; for(var k in _links){ if(_links[k] && _links[k].hidden===true) n++; } return n;
+}
+
+function commitHideSelection(view){
+  var keys=Object.keys(_hideSelected[view]||{});
+  if(!keys.length){ _clsfToast('Nothing selected'); return; }
+  // Persist each. Parallel POST is fine but for simplicity do them sequentially via the existing _toggleHidden.
+  // To avoid a render-per-keystroke during the batch, set hidden directly on _links then send all POSTs.
+  keys.forEach(function(k){
+    var cur=_links[k]; if(!cur) return;
+    cur.hidden=true;
+    // Fire-and-forget POST; KV will eventually-consistently reflect.
+    fetch(getClassifyUrl(),{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({key:k, entry:cur})
+    }).catch(function(){});
+  });
+  _clsfToast('Hidden '+keys.length+' item'+(keys.length>1?'s':''));
+  exitHideMode(view);
+}
+
+function toggleManageHidden(view){
+  _manageHiddenMode[view] = !_manageHiddenMode[view];
+  _refreshHideBars();
+  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
+  if(view==='brain' && _bwNetwork) buildBrainWeb();
+}
+
+function unhideAll(){
+  var n=0;
+  Object.keys(_links).forEach(function(k){
+    if(_links[k] && _links[k].hidden===true){
+      delete _links[k].hidden;
+      fetch(getClassifyUrl(),{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({key:k, entry:_links[k]})
+      }).catch(function(){});
+      n++;
+    }
+  });
+  _clsfToast(n? 'Unhid '+n+' item'+(n>1?'s':'') : 'Nothing was hidden');
+  ['dish','brain'].forEach(function(v){ _manageHiddenMode[v]=false; });
+  _refreshHideBars();
+  if(_currentDish) buildDishGraph(_currentDish);
+  if(_bwNetwork) buildBrainWeb();
+}
+
+// Called from the graph's selectNode handler. Returns true if the tap was consumed
+// by hide mode (so the regular side-panel rendering should skip).
+function _consumedByHideMode(view, key){
+  if(_manageHiddenMode[view] && _links[key] && _links[key].hidden===true){
+    // Tap unhides
+    delete _links[key].hidden;
+    fetch(getClassifyUrl(),{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({key:key, entry:_links[key]})
+    }).catch(function(){});
+    _clsfToast('Unhid: '+_displayName(key));
+    _refreshHideBars();
+    if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
+    if(view==='brain' && _bwNetwork) buildBrainWeb();
+    return true;
+  }
+  if(_hideMode[view]){
+    if(!_links[key] || !_links[key].kind){ _clsfToast('Classify before hiding'); return true; }
+    _toggleSelectInHideMode(view, key);
+    return true;
+  }
+  return false;
+}
+
 // ===== SOURCED → CANONICAL SUGGESTION =====
 // When a sourced component has a strong name (or name+vendor) match against a
 // canonical ingredient in seasonal-data.json, surface the suggestion. Strong
@@ -13607,7 +13819,12 @@ function _reclassifyAsCanonical(componentKey, canonicalName, displayName){
   _saveClassification(componentKey, {kind:'canonical', matches:[canonicalName]}, displayName);
 }
 
-// ===== ZOOM CONTROLS (decouples graph zoom from page scroll) =====
+// ===== ZOOM CONTROLS =====
+// Mobile (<768px): pinch-to-zoom enabled natively, no slider (hidden via CSS).
+// Desktop (>=768px): pinch/wheel zoom disabled, slider provides manual zoom — page scroll stays as page scroll.
+function _isMobileViewport(){
+  return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+}
 function setDishGraphZoom(val){
   if(!_dishNetwork) return;
   _dishNetwork.moveTo({scale: parseFloat(val)});
@@ -13716,8 +13933,12 @@ function buildBrainWeb(){
       (d.components||[]).forEach(function(comp){
         var k=_normKey(comp);
         var cls=_classification(k);
-        // Skip hidden components unless "Show hidden" toggle is on
-        if(_isHidden(k) && !_showHidden) return;
+        // Manage-hidden mode: show only hidden. Otherwise skip hidden unless "Show hidden" is on.
+        if(_manageHiddenMode.brain){
+          if(!_isHidden(k)) return;
+        } else if(_isHidden(k) && !_showHidden){
+          return;
+        }
         var shared = componentDishes[k] && componentDishes[k].length>1;
         if(_bwFilter==='shared' && !shared) return;
         if(_bwFilter==='flagged' && !compHasFlag(k)){
@@ -13778,7 +13999,7 @@ function buildBrainWeb(){
   _bwNetwork=new vis.Network(container,{nodes:nodes,edges:edges},{
     physics:{stabilization:{iterations:300},
       barnesHut:{gravitationalConstant:-2800,springLength:90,springConstant:0.04,avoidOverlap:0.2}},
-    interaction:{hover:true,dragView:true,zoomView:false,tooltipDelay:200},
+    interaction:{hover:true,dragView:true,zoomView:_isMobileViewport(),tooltipDelay:200},
     nodes:{borderWidthSelected:3},
     edges:{smooth:{type:'continuous'}},
     layout:{improvedLayout:true}
@@ -13786,9 +14007,12 @@ function buildBrainWeb(){
   _bwNetwork.on('selectNode',function(e){
     var id=e.nodes[0];
     var n=_bwNodes.find(function(x){return x.id===id;});
+    if(n && n._key && _consumedByHideMode('brain', n._key)) return;
     _renderBrainWebSide(n);
   });
-  _bwNetwork.on('deselectNode',function(){ _renderBrainWebSide(null); });
+  _bwNetwork.on('deselectNode',function(){ if(!_hideMode.brain) _renderBrainWebSide(null); });
+  _applyHideSelectionRings('brain');
+  _refreshHideBars();
 
   // stats badge
   var dishCount=nodes.filter(function(n){return n._kind==='dish';}).length;
@@ -13851,15 +14075,13 @@ function _renderBrainWebSide(node){
       '<div class="side-vendor">'+n+' component'+(n!==1?'s':'')+' across the menu sourced through this vendor.</div>';
     return;
   }
-  // component node — defer to existing _renderSide treatment
-  var fake={_key:node._key,_kind:node._kind};
-  // borrow logic from _renderSide by faking the side container
-  // Simpler: inline a brief detail card
+  // component node — show classification detail + Edit/Hide buttons (same affordances as dish view side panel)
   var cls=_classification(node._key);
   var display=_displayName(node._key);
+  var key=node._key;
   var dishesUsing=[];
   (DATA.menu||[]).forEach(function(sec){(sec.dishes||[]).forEach(function(d){
-    (d.components||[]).forEach(function(c){ if(_normKey(c)===node._key) dishesUsing.push(d.name); });
+    (d.components||[]).forEach(function(c){ if(_normKey(c)===key) dishesUsing.push(d.name); });
   });});
   var html='<div class="side-title">'+_escHtml(display)+
     '<span class="side-pill '+(cls?cls.kind:'unclassified')+'">'+(cls?cls.kind.replace('_',' '):'unclassified')+'</span></div>';
@@ -13873,6 +14095,19 @@ function _renderBrainWebSide(node){
     var prim=(cls.matches||[])[0]||display;
     var st=_statusForCanonical(prim);
     html+='<div class="side-vendor">'+STATUS_LABEL[st.cls]+(st.vendor?' · from <b>'+_escHtml(st.vendor)+'</b>':'')+'</div>';
+  }
+  // Flag reason if any
+  var fr=_flagReason(key);
+  if(fr){
+    var col=fr.level==='out'?'var(--terra)':(fr.level==='ending'?'var(--gold)':(fr.level==='price'?'var(--terra)':'var(--ink-60)'));
+    html+='<div class="side-notes" style="color:'+col+'">'+_escHtml(fr.reason)+'</div>';
+  }
+  // Action buttons
+  if(cls){
+    html+='<button class="side-classify-btn" onclick="openClassifier(\''+key.replace(/\'/g,"\\'")+'\')">Edit classification</button>'+
+      ' <button class="side-classify-btn side-hide-btn" onclick="_toggleHidden(\''+key.replace(/\'/g,"\\'")+'\',\''+display.replace(/\'/g,"\\'")+'\')">'+(_isHidden(key)?'Show in graph':'Hide from graph')+'</button>';
+  } else {
+    html+='<button class="side-classify-btn" onclick="openClassifier(\''+key.replace(/\'/g,"\\'")+'\')">Classify component</button>';
   }
   side.innerHTML=html;
 }
@@ -13892,6 +14127,11 @@ function _saveClassification(key, entry, displayName){
 
 function _persistClassification(key, entry, displayName){
   // POST to Worker /classify (backed by KV); fall back to local-only if it fails
+  function _refreshActive(){
+    // Rebuild whichever view(s) are currently showing — dish detail and/or brain web.
+    if(_currentDish && document.getElementById('dish-graph')) buildDishGraph(_currentDish);
+    if(_bwNetwork && document.getElementById('brainweb-graph')) buildBrainWeb();
+  }
   fetch(getClassifyUrl(),{
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -13900,13 +14140,13 @@ function _persistClassification(key, entry, displayName){
   .then(function(r){ return r.ok? r.json() : null; })
   .then(function(){
     closeClassifier();
-    _clsfToast(entry?'Classified: '+displayName:'Cleared: '+displayName);
-    if(_currentDish) buildDishGraph(_currentDish);
+    _clsfToast(entry?(entry.hidden?'Hidden: '+displayName:'Classified: '+displayName):'Cleared: '+displayName);
+    _refreshActive();
   })
   .catch(function(){
     closeClassifier();
     _clsfToast('Saved locally (Worker offline)');
-    if(_currentDish) buildDishGraph(_currentDish);
+    _refreshActive();
   });
 }
 
@@ -14219,25 +14459,90 @@ function copyOutreach(){
 
 // ── VENDOR ALERT ─────────────────────────────────────────────────────
 function showWeatherAlert(){
-  goTo('market');
+  buildWeatherDetail();
+  goTo('weather');
+}
+
+function buildWeatherDetail(){
+  var el=document.getElementById('weather-detail');
+  if(!el) return;
+  var wa=(DATA.weather||{}).vendor_alerts||{};
+  var keys=Object.keys(wa).filter(function(k){
+    var d=wa[k]; return d && ((d.alerts||[]).length || (d.predictions||[]).length || d.aggregated_note);
+  });
+  if(!keys.length){
+    el.innerHTML='<div style="padding:24px;color:var(--ink-60);font-style:italic;text-align:center">No active weather alerts.</div>';
+    return;
+  }
+  var fetched=(DATA.weather||{}).last_fetched || '';
+  var html='<div style="padding:0 16px 12px;color:var(--ink-60);font-size:12.5px">'+
+    keys.length+' region'+(keys.length>1?'s':'')+' with active alerts or predictions'+
+    (fetched?' · last fetched '+_escHtml(String(fetched).slice(0,10)):'')+
+    '</div>';
+  keys.forEach(function(k){
+    var d=wa[k];
+    var displayName=k.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+    var tier=d.proximity_tier||'';
+    var alerts=d.alerts||[];
+    var preds=d.predictions||[];
+    var note=d.aggregated_note||'';
+    var color = tier==='severe'?'var(--terra)':(tier==='moderate'?'var(--gold)':'var(--navy)');
+    html+='<div style="margin:0 16px 14px;padding:14px 16px;background:var(--bg-card);border:1px solid var(--ink-12);border-left:3px solid '+color+';border-radius:var(--r)">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px">'+
+        '<div style="font-family:var(--fd);font-size:20px;color:var(--ink)">'+_escHtml(displayName)+'</div>'+
+        (tier?'<span class="side-pill '+(tier==='severe'?'out':(tier==='moderate'?'ending':'available'))+'">'+_escHtml(tier)+'</span>':'')+
+      '</div>';
+    if(note) html+='<div style="font-size:13px;color:var(--ink);line-height:1.5;margin-bottom:8px">'+_escHtml(note)+'</div>';
+    if(alerts.length){
+      html+='<div style="font-family:var(--fb);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-60);margin-top:10px;margin-bottom:4px">Alerts ('+alerts.length+')</div>';
+      alerts.forEach(function(a){
+        var summary=a.summary||a.text||a.description||(typeof a==='string'?a:'');
+        var region=a.region||'';
+        var severity=a.severity||'';
+        if(!summary) return;
+        html+='<div style="font-size:12.5px;color:var(--ink-60);line-height:1.5;padding:5px 0;border-top:1px solid var(--ink-12)">';
+        if(severity) html+='<span style="font-weight:600;color:var(--ink);margin-right:6px">'+_escHtml(severity)+'</span>';
+        if(region) html+='<span style="color:var(--ink-30);margin-right:6px">'+_escHtml(region)+' · </span>';
+        html+=_escHtml(summary)+'</div>';
+      });
+    }
+    if(preds.length){
+      html+='<div style="font-family:var(--fb);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-60);margin-top:10px;margin-bottom:4px">Predictions ('+preds.length+')</div>';
+      preds.forEach(function(p){
+        var summary=p.summary||p.text||p.description||(typeof p==='string'?p:'');
+        if(!summary) return;
+        html+='<div style="font-size:12.5px;color:var(--ink-60);line-height:1.5;padding:5px 0;border-top:1px solid var(--ink-12)">'+_escHtml(summary)+'</div>';
+      });
+    }
+    html+='</div>';
+  });
+  el.innerHTML=html;
 }
 
 function initWeatherAlert(){
   var wa=(DATA.weather||{}).vendor_alerts||{};
   var active=Object.keys(wa).filter(function(v){
-    var d=wa[v]; return d&&((d.alerts||[]).length||(d.predictions||[]).length);
+    var d=wa[v]; return d&&((d.alerts||[]).length||(d.predictions||[]).length||d.aggregated_note);
   });
   if(!active.length) return;
   var el=document.getElementById('weather-alert');
   if(!el) return;
+  // Surface the strongest signal we have for the first region: aggregated_note > first alert summary > first prediction summary
   var first=wa[active[0]];
-  var note=(first.alerts&&first.alerts[0])
-    ? (first.alerts[0].description||String(first.alerts[0])).slice(0,120)
-    : (first.predictions&&first.predictions[0])
-    ? (first.predictions[0].description||String(first.predictions[0])).slice(0,120)
-    : active.join(', ');
+  var note='';
+  if(first.aggregated_note) note=first.aggregated_note;
+  else if(first.alerts && first.alerts[0]){
+    var a=first.alerts[0]; note=a.summary||a.text||a.description||String(a);
+  } else if(first.predictions && first.predictions[0]){
+    var p=first.predictions[0]; note=p.summary||p.text||p.description||String(p);
+  }
+  if(note.length>140) note=note.slice(0,137)+'…';
+  if(!note){
+    // Fallback to humanized region name(s)
+    note=active.map(function(k){return k.replace(/_/g,' ');}).join(', ');
+  }
   el.innerHTML='<div class="wa-w-label">&#9729; Weather Alert — '+active.length+
-    ' vendor'+(active.length>1?'s':'')+' affected</div>'+
+    ' region'+(active.length>1?'s':'')+' affected · Tap for detail</div>'+
     '<div class="wa-w-body">'+_escHtml(note)+'</div>';
   el.classList.add('show');
 }
@@ -14276,10 +14581,8 @@ function showVendorAlert(){
 // ── PORTAL CARDS ─────────────────────────────────────────────────────
 var MODE_DEFS=[
   {id:'shorted',  label:'Got Shorted',         desc:'Find what\'s available to replace an ingredient now.',           action:function(){ resetShorted(); goTo('shorted'); setTimeout(function(){ var el=document.getElementById('shorted-input'); if(el) el.focus(); },320); }},
-  {id:'event',    label:'Event Coming Up',     desc:'Pick a date — see what will be at peak when you need it.',       action:function(){ goTo('event');    buildFlow('event-flow','event'); }},
-  {id:'planning', label:'Planning a Menu Change',desc:'Big seasonal shift. Spring, summer, fall, winter.',             action:function(){ goTo('planning'); buildFlow('planning-flow','planning'); }},
-  {id:'menuitem', label:"How's the Menu?",         desc:'Pick from your current menu. See what to swap with what\'s in season.', action:function(){ goTo('menuitem'); buildSwapDishList(); }},
-  {id:'brainweb', label:'Menu Brain Web',      desc:'Whole menu as one graph. Vendor concentration, shared ingredients, flag clusters.', action:function(){ goTo('brainweb'); buildBrainWeb(); }},
+  {id:'plan',     label:'Plan Ahead',          desc:'Pick a specific date for an event, or pick a season for a menu change.',   action:function(){ goTo('plan'); setPlanMode('event'); }},
+  {id:'menuitem', label:"How's the Menu?",         desc:'Browse your menu as a list or as a full brain web. See what to swap with what\'s in season.', action:function(){ goTo('menuitem'); buildSwapDishList(); }},
   {id:'market',   label:'How\'s the Market?',  desc:'Cost creep and value plays this week.',                          action:function(){ goTo('market'); }},
   {id:'browse',   label:'Just Browsing',       desc:'Arriving, peaking, ending, and price moves.',                    action:function(){ goTo('browse'); }},
 ];
