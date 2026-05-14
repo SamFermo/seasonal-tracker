@@ -607,6 +607,13 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .vt-pill:hover{color:var(--ink)}
 .vt-pill.active{background:var(--olive);color:var(--bg);font-weight:600}
 
+/* ── PLAN AHEAD date input ── */
+.plan-date-row{margin:14px 16px}
+.plan-date-input{display:block;width:100%;padding:14px 16px;
+  background:var(--bg-card);border:1px solid var(--ink-12);border-radius:var(--r);
+  color:var(--ink);font-family:var(--fb);font-size:16px;cursor:pointer}
+.plan-date-input:focus{outline:none;border-color:var(--olive)}
+
 /* ── CLASSIFIER MODAL (4-button picker + vendor pills + sub-recipe input) ── */
 .clsf-backdrop{position:fixed;inset:0;background:rgba(2,4,13,0.78);
   display:none;align-items:flex-end;justify-content:center;z-index:600;
@@ -823,7 +830,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   </div>
   <div class="sh-rule"></div>
   <div class="view-toggle">
-    <button class="vt-pill active" id="plan-pill-event" onclick="setPlanMode('event')">Specific date</button>
+    <button class="vt-pill active" id="plan-pill-event" onclick="setPlanMode('event')">Planned event</button>
     <button class="vt-pill" id="plan-pill-season" onclick="setPlanMode('planning')">Season change</button>
   </div>
   <div class="flow-wrap" id="plan-flow"></div>
@@ -12953,9 +12960,10 @@ function buildFlow(containerId, mode){
   var html='';
 
   if(mode==='event'){
-    html+='<div class="flow-question">When is the event?</div>'+
-      '<div class="bucket-grid">'+
-        _datePickButton(containerId, mode, 'Pick a date')+
+    html+='<div class="flow-question">Pick the date of your event</div>'+
+      '<div class="plan-date-row">'+
+        '<input type="date" class="plan-date-input" id="'+containerId+'-date" '+
+          'onchange="selectDate(\''+containerId+'\',\''+mode+'\',this.value)">'+
       '</div>';
   } else { // planning
     html+='<div class="flow-question">Which season are you planning for?</div>'+
@@ -13656,6 +13664,18 @@ function setPlanMode(mode){
   document.getElementById('plan-pill-event').classList.toggle('active', mode==='event');
   document.getElementById('plan-pill-season').classList.toggle('active', mode==='planning');
   buildFlow('plan-flow', mode);
+  if(mode==='event'){
+    // Pop the native date picker immediately on entry. showPicker requires user activation;
+    // this setPlanMode call originates from a tap so it's within the activation window.
+    var inp=document.getElementById('plan-flow-date');
+    if(inp){
+      if(typeof inp.showPicker==='function'){
+        try{ inp.showPicker(); }catch(e){ inp.focus(); }
+      } else {
+        inp.focus();
+      }
+    }
+  }
 }
 
 // ===== HIDE MODE (multi-select hide flow) =====
@@ -13674,24 +13694,21 @@ function enterHideMode(view){
   _hideMode[view] = true;
   _hideSelected[view] = {};
   _refreshHideBars();
-  // Re-render so click handlers swap to selection mode
-  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
-  if(view==='brain' && _bwNetwork) buildBrainWeb();
+  // No graph rebuild — selection state is overlay only. Click handler reads _hideMode at tap time.
+  _applyHideSelectionRings(view);
 }
 function exitHideMode(view){
   _hideMode[view] = false;
   _hideSelected[view] = {};
   _refreshHideBars();
-  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
-  if(view==='brain' && _bwNetwork) buildBrainWeb();
+  _applyHideSelectionRings(view);
 }
 function _toggleSelectInHideMode(view, key){
   if(_hideSelected[view][key]) delete _hideSelected[view][key];
   else _hideSelected[view][key] = true;
   _refreshHideBars();
-  // Re-render to flash the selection ring on selected nodes
-  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
-  if(view==='brain' && _bwNetwork) buildBrainWeb();
+  // No rebuild — just update the visual selection ring via vis.js selectNodes API.
+  _applyHideSelectionRings(view);
 }
 
 function _refreshHideBars(){
@@ -13707,10 +13724,14 @@ function _refreshHideBars(){
       html='<button class="hide-bar-btn primary" '+(selected.length===0?'disabled':'')+
         ' onclick="commitHideSelection(\''+view+'\')">Hide selection ('+selected.length+')</button>'+
         '<button class="hide-bar-btn" onclick="exitHideMode(\''+view+'\')">Cancel</button>';
+    } else if(_manageHiddenMode[view]){
+      // Manage-hidden mode: tap nodes to unhide, or unhide all at once.
+      html='<button class="hide-bar-btn count" disabled>'+hiddenCount+' hidden — tap to unhide</button>'+
+        '<button class="hide-bar-btn" onclick="unhideAll()">Unhide all</button>'+
+        '<button class="hide-bar-btn primary" onclick="toggleManageHidden(\''+view+'\')">Done</button>';
     } else {
       html='<button class="hide-bar-btn" onclick="enterHideMode(\''+view+'\')">Hide items from graph</button>';
-      if(hiddenCount>0) html+='<button class="hide-bar-btn count" onclick="toggleManageHidden(\''+view+'\')">'+
-        (_manageHiddenMode[view]?'Done managing hidden':'Hidden items ('+hiddenCount+')')+'</button>';
+      if(hiddenCount>0) html+='<button class="hide-bar-btn count" onclick="toggleManageHidden(\''+view+'\')">Hidden items ('+hiddenCount+')</button>';
     }
     bar.innerHTML=html;
   });
@@ -13912,10 +13933,19 @@ function buildBrainWeb(){
     return hit;
   }
 
+  // In manage-hidden mode, only include dishes that have at least one hidden component
+  // (otherwise we'd render a cloud of orphaned dish nodes with no edges, confusing).
+  function _dishHasHiddenComp(d){
+    return (d.components||[]).some(function(c){ return _isHidden(_normKey(c)); });
+  }
+
   // Build dish nodes
   (DATA.menu||[]).forEach(function(sec){
     (sec.dishes||[]).forEach(function(d){
-      if(_bwFilter==='flagged' && !dishHasFlag(d.name)) return;
+      // In manage-hidden mode, override other filters: show only dishes with hidden components.
+      if(_manageHiddenMode.brain){
+        if(!_dishHasHiddenComp(d)) return;
+      } else if(_bwFilter==='flagged' && !dishHasFlag(d.name)) return;
       nodes.push({id:'d_'+d.name.replace(/[^a-z0-9]+/gi,'_'),
         label:d.name,shape:'dot',size:24,
         color:{background:'#1d2546',border:'#a8b97e'},
@@ -13970,8 +14000,8 @@ function buildBrainWeb(){
         }
         edges.push({from:dishId,to:cId,color:{color:'rgba(245,232,200,0.12)'},width:1});
 
-        // vendor mode: pull vendor from classification
-        if(_bwFilter==='vendor'){
+        // vendor mode: pull vendor from classification (skipped in manage-hidden to declutter)
+        if(_bwFilter==='vendor' && !_manageHiddenMode.brain){
           var v=null;
           if(cls && cls.kind==='sourced') v=cls.vendor;
           else if(cls && cls.kind==='canonical'){
