@@ -614,6 +614,25 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   color:var(--ink);font-family:var(--fb);font-size:16px;cursor:pointer}
 .plan-date-input:focus{outline:none;border-color:var(--olive)}
 
+/* ── DISH CARD VIEW ── */
+.dish-view-toggle{margin-bottom:8px}
+.dish-cards-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.dish-card{background:var(--bg-card);border:1px solid var(--ink-12);
+  border-radius:var(--r);padding:14px 16px}
+.dish-card .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.dish-card .card-title{font-family:var(--fd);font-size:20px;color:var(--ink);line-height:1.2}
+.dish-card .card-vendor{font-family:var(--fb);font-size:12.5px;color:var(--ink-60);margin-bottom:4px}
+.dish-card .card-vendor b{color:var(--ink)}
+.dish-card .card-trend{font-family:var(--fb);font-size:13px;color:var(--ink);margin-bottom:4px}
+.dish-card .card-trend .delta{font-size:11px;padding:1px 6px;border-radius:3px;margin-left:6px;font-weight:600}
+.dish-card .card-trend .delta.up{background:rgba(224,135,99,0.18);color:var(--terra)}
+.dish-card .card-trend .delta.down{background:rgba(168,185,126,0.18);color:var(--olive)}
+.dish-card .card-trend .delta.flat{color:var(--ink-30)}
+.dish-card .card-flag{font-size:12.5px;margin-top:4px;font-weight:500}
+.dish-card .card-notes{font-family:var(--fb);font-size:11.5px;color:var(--ink-60);
+  font-style:italic;margin-top:6px;line-height:1.5}
+.dish-card .card-actions{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+
 /* ── CLASSIFIER MODAL (4-button picker + vendor pills + sub-recipe input) ── */
 .clsf-backdrop{position:fixed;inset:0;background:rgba(2,4,13,0.78);
   display:none;align-items:flex-end;justify-content:center;z-index:600;
@@ -13040,8 +13059,13 @@ function openDishDetail(dishName){
   if(dish.brief){
     mainHtml+='<div class="dish-brief">'+_escHtml(dish.brief)+'</div>';
   }
+  mainHtml+='<div class="view-toggle dish-view-toggle">'+
+    '<button class="vt-pill '+(_dishViewMode==='graph'?'active':'')+'" onclick="setDishViewMode(\'graph\')">Graph</button>'+
+    '<button class="vt-pill '+(_dishViewMode==='cards'?'active':'')+'" onclick="setDishViewMode(\'cards\')">Cards</button>'+
+  '</div>';
   mainHtml+='<div class="hide-bar" id="hide-bar-dish"></div>';
-  mainHtml+='<div class="dish-graph-wrap"><div id="dish-graph"></div>'+
+  mainHtml+='<div class="dish-cards-wrap" id="dish-cards-wrap" style="display:'+(_dishViewMode==='cards'?'block':'none')+'"></div>';
+  mainHtml+='<div class="dish-graph-wrap" style="display:'+(_dishViewMode==='graph'?'block':'none')+'"><div id="dish-graph"></div>'+
     '<div class="graph-zoom">'+
       '<button onclick="zoomDishGraph(-0.15)" title="Zoom out">−</button>'+
       '<input type="range" id="dish-zoom-slider" min="0.3" max="2.5" step="0.05" value="1" oninput="setDishGraphZoom(this.value)">'+
@@ -13065,7 +13089,8 @@ function openDishDetail(dishName){
     '<div class="menuitem-main">'+mainHtml+'</div>'+
   '</div>';
 
-  buildDishGraph(dish);
+  if(_dishViewMode==='cards') renderDishCards(dish);
+  else buildDishGraph(dish);
 }
 
 // ── GRAPH VIEW / CLASSIFIER (Creative Pitch retired 2026-05-14) ─────────────
@@ -13238,6 +13263,106 @@ function _trendFor(canonicalName){
 var _dishNetwork=null;
 var _currentDish=null;
 var _nodesArr=[];
+// Dish-detail view mode: 'graph' (vis.js force-directed, default) or 'cards' (stacked card list).
+// Persists for the session via localStorage; chef preference, not classification state.
+var _dishViewMode = (function(){ try { return localStorage.getItem('remy_dish_view') || 'graph'; } catch(e){ return 'graph'; } })();
+function setDishViewMode(mode){
+  _dishViewMode = mode;
+  try { localStorage.setItem('remy_dish_view', mode); } catch(e){}
+  if(_currentDish) openDishDetail(_currentDish.name);
+}
+
+// Stacked-card view of a dish's components. One card per top-level component with
+// classification pill, vendor, price trend, flag reason, and Edit/Hide buttons —
+// same info as the graph side panel but visible all at once.
+function renderDishCards(dish){
+  var el = document.getElementById('dish-cards-wrap');
+  if(!el) return;
+  var html = '';
+  (dish.components||[]).forEach(function(comp){
+    var key = _normKey(comp);
+    if(_isHidden(key) && !_showHidden) return;
+    var cls = _classification(key);
+    var display = comp;
+    var pill, statusLine='', trendLine='', flagLine='', notesLine='', extraLine='';
+    if(!cls){
+      pill = '<span class="side-pill unclassified">unclassified</span>';
+      statusLine = '<div class="card-vendor">No classification yet.</div>';
+    } else if(cls.kind==='canonical'){
+      var primary = (cls.matches||[])[0]||display;
+      var st = _statusForCanonical(primary);
+      pill = '<span class="side-pill '+st.cls+'">'+(STATUS_LABEL[st.cls]||st.cls)+'</span>';
+      if(st.vendor) statusLine = '<div class="card-vendor">from <b>'+_escHtml(st.vendor)+'</b></div>';
+      var tr = _trendFor(primary);
+      if(tr){
+        var bits = ['$'+tr.latest_price.toFixed(2)+'/'+(tr.unit||'lb')];
+        if(tr.trend_30d_pct!==null && tr.trend_30d_pct!==undefined){
+          var p = tr.trend_30d_pct, cl = p>0?'up':(p<0?'down':'flat'), ar = p>0?'▲':(p<0?'▼':'→');
+          bits.push('<span class="delta '+cl+'">'+ar+' '+(p>=0?'+':'')+p.toFixed(0)+'% 30d</span>');
+        }
+        trendLine = '<div class="card-trend">'+bits.join(' ')+'</div>';
+      }
+      if(st.ing && st.ing.notes) notesLine = '<div class="card-notes">'+_escHtml(st.ing.notes.slice(0,160))+'</div>';
+    } else if(cls.kind==='sourced'){
+      pill = '<span class="side-pill sourced">sourced</span>';
+      statusLine = '<div class="card-vendor">from <b>'+_escHtml(cls.vendor||'?')+'</b></div>';
+    } else if(cls.kind==='sub_recipe'){
+      pill = '<span class="side-pill sub_recipe">sub-recipe</span>';
+      statusLine = '<div class="card-vendor">'+_escHtml((cls.ingredients||[]).slice(0,8).join(', ')+((cls.ingredients||[]).length>8?'…':''))+'</div>';
+    } else {
+      pill = '<span class="side-pill pantry">pantry</span>';
+      statusLine = '<div class="card-vendor">Not seasonally tracked.</div>';
+    }
+    var fr = _flagReason(key);
+    if(fr){
+      var col = fr.level==='out'?'var(--terra)':(fr.level==='ending'?'var(--gold)':(fr.level==='price'?'var(--terra)':'var(--ink-60)'));
+      flagLine = '<div class="card-flag" style="color:'+col+'">● '+_escHtml(fr.reason)+'</div>';
+    }
+    var actions = cls
+      ? '<button class="side-classify-btn" onclick="openClassifier(\''+key.replace(/\'/g,"\\'")+'\')">Edit</button>'+
+        ' <button class="side-classify-btn side-hide-btn" onclick="_toggleHidden(\''+key.replace(/\'/g,"\\'")+'\',\''+display.replace(/\'/g,"\\'")+'\')">'+(_isHidden(key)?'Show':'Hide')+'</button>'
+      : '<button class="side-classify-btn" onclick="openClassifier(\''+key.replace(/\'/g,"\\'")+'\')">Classify</button>';
+    html += '<div class="dish-card">'+
+      '<div class="card-head"><div class="card-title">'+_escHtml(display)+'</div>'+pill+'</div>'+
+      statusLine + trendLine + flagLine + notesLine + extraLine +
+      '<div class="card-actions">'+actions+'</div>'+
+    '</div>';
+  });
+  if(!html) html = '<div style="padding:24px;color:var(--ink-60);font-style:italic;text-align:center">No visible components.</div>';
+  el.innerHTML = html;
+}
+// Saved positions per dish (dish name) and per brain-web filter mode.
+// Persist across navigation so the chef sees the same layout each time and can
+// drag-rearrange permanently. Cleared by reload (in-memory).
+var _dishPositions={};
+var _bwPositions={};
+
+function _seedPositions(nodes, posMap){
+  if(!posMap) return;
+  nodes.forEach(function(n){
+    var p = posMap[n.id];
+    if(p){ n.x = p.x; n.y = p.y; }
+  });
+}
+function _capturePositions(network, posMap){
+  if(!network || !posMap) return;
+  try {
+    var p = network.getPositions();
+    Object.keys(p).forEach(function(k){ posMap[k] = {x: p[k].x, y: p[k].y}; });
+  } catch(e){}
+}
+
+// Physics options vary by viewport: desktop gets more spread (larger spring length,
+// stronger repulsion) because we have screen real estate; mobile keeps tighter layout.
+function _physicsForView(){
+  var mobile = _isMobileViewport();
+  return {
+    stabilization: { iterations: 220 },
+    barnesHut: mobile
+      ? { gravitationalConstant: -3200, springLength: 110, springConstant: 0.045, avoidOverlap: 0.15 }
+      : { gravitationalConstant: -7000, springLength: 200, springConstant: 0.025, avoidOverlap: 0.35 }
+  };
+}
 
 function buildDishGraph(dish){
   _currentDish=dish;
@@ -13399,14 +13524,25 @@ function buildDishGraph(dish){
   });
 
   _nodesArr=nodes;
+  var dishKey = dish.name || 'dish';
+  var posMap = _dishPositions[dishKey] = _dishPositions[dishKey] || {};
+  _seedPositions(nodes, posMap);
+
   if(_dishNetwork) _dishNetwork.destroy();
   _dishNetwork=new vis.Network(container,{nodes:nodes,edges:edges},{
-    physics:{stabilization:{iterations:220},barnesHut:{gravitationalConstant:-3200,springLength:110,springConstant:0.045}},
+    physics: _physicsForView(),
     interaction:{hover:true,dragView:true,zoomView:_isMobileViewport(),tooltipDelay:200},
     nodes:{borderWidthSelected:3},
     edges:{smooth:{type:'continuous'}},
     layout:{improvedLayout:true}
   });
+  // After initial physics settle: capture positions, freeze physics so nothing reshuffles.
+  _dishNetwork.once('stabilizationIterationsDone', function(){
+    _capturePositions(_dishNetwork, posMap);
+    try { _dishNetwork.setOptions({physics:{enabled:false}}); } catch(e){}
+  });
+  // After a drag: capture new positions so the next visit shows the chef's arrangement.
+  _dishNetwork.on('dragEnd', function(){ _capturePositions(_dishNetwork, posMap); });
   _dishNetwork.on('selectNode',function(e){
     var id=e.nodes[0];
     if(!id || id==='dish'){ _renderSide(null); return; }
@@ -13665,16 +13801,21 @@ function setPlanMode(mode){
   document.getElementById('plan-pill-season').classList.toggle('active', mode==='planning');
   buildFlow('plan-flow', mode);
   if(mode==='event'){
-    // Pop the native date picker immediately on entry. showPicker requires user activation;
-    // this setPlanMode call originates from a tap so it's within the activation window.
-    var inp=document.getElementById('plan-flow-date');
-    if(inp){
+    // Wait one paint so the input has a real bounding rect — fixes the "calendar pops
+    // in the corner" issue on desktop (showPicker anchors to current input position).
+    // showPicker preserves user-gesture context across one rAF; further deferral loses it.
+    requestAnimationFrame(function(){
+      var inp=document.getElementById('plan-flow-date');
+      if(!inp) return;
       if(typeof inp.showPicker==='function'){
-        try{ inp.showPicker(); }catch(e){ inp.focus(); }
-      } else {
-        inp.focus();
+        try{ inp.showPicker(); }catch(e){ /* fall through to focus */ }
       }
-    }
+      // On mobile, focus is the more reliable trigger (iOS Safari doesn't support showPicker well).
+      if(_isMobileViewport()){
+        try{ inp.click(); }catch(e){}
+        try{ inp.focus(); }catch(e){}
+      }
+    });
   }
 }
 
@@ -13757,6 +13898,9 @@ function commitHideSelection(view){
   });
   _clsfToast('Hidden '+keys.length+' item'+(keys.length>1?'s':''));
   exitHideMode(view);
+  // Rebuild now that the underlying visibility changed — hidden nodes should drop out.
+  if(view==='dish' && _currentDish) buildDishGraph(_currentDish);
+  if(view==='brain' && _bwNetwork) buildBrainWeb();
 }
 
 function toggleManageHidden(view){
@@ -14025,15 +14169,30 @@ function buildBrainWeb(){
   });
 
   _bwNodes=nodes;
+  // Position key includes filter + manage-hidden state since each shows a different subset of nodes.
+  var bwKey = _bwFilter + (_manageHiddenMode.brain?':manage':'');
+  var bwPos = _bwPositions[bwKey] = _bwPositions[bwKey] || {};
+  _seedPositions(nodes, bwPos);
+
+  // Brain web has more nodes so physics tuning is different. Desktop still gets more spread.
+  var mobile = _isMobileViewport();
+  var bwPhysics = mobile
+    ? { stabilization:{iterations:300}, barnesHut:{gravitationalConstant:-2800,springLength:90,springConstant:0.04,avoidOverlap:0.2} }
+    : { stabilization:{iterations:300}, barnesHut:{gravitationalConstant:-7500,springLength:170,springConstant:0.018,avoidOverlap:0.4} };
+
   if(_bwNetwork) _bwNetwork.destroy();
   _bwNetwork=new vis.Network(container,{nodes:nodes,edges:edges},{
-    physics:{stabilization:{iterations:300},
-      barnesHut:{gravitationalConstant:-2800,springLength:90,springConstant:0.04,avoidOverlap:0.2}},
+    physics: bwPhysics,
     interaction:{hover:true,dragView:true,zoomView:_isMobileViewport(),tooltipDelay:200},
     nodes:{borderWidthSelected:3},
     edges:{smooth:{type:'continuous'}},
     layout:{improvedLayout:true}
   });
+  _bwNetwork.once('stabilizationIterationsDone', function(){
+    _capturePositions(_bwNetwork, bwPos);
+    try { _bwNetwork.setOptions({physics:{enabled:false}}); } catch(e){}
+  });
+  _bwNetwork.on('dragEnd', function(){ _capturePositions(_bwNetwork, bwPos); });
   _bwNetwork.on('selectNode',function(e){
     var id=e.nodes[0];
     var n=_bwNodes.find(function(x){return x.id===id;});
