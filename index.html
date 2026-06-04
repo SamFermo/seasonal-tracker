@@ -992,7 +992,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 
 <script>
 const DATA = {
-  "generated": "2026-06-03",
+  "generated": "2026-06-04",
   "ingredients": [
     {
       "name": "Black Cod",
@@ -4015,9 +4015,14 @@ const DATA = {
         1,
         0
       ],
-      "notes": "Fresh NW Halibut from WA + AK landings. Two grades active 4/29: 10-20 lb ($14.99 whole / $24.95 filet), 20-40 lb ($15.50 whole / $25.95 filet). Cheeks appear sporadically: 4/22 $19.95/lb, 5/13 $18.99/lb 5lb min. Halibut off the 5/20 sheet, may indicate supply gap. Season March-November, peak summer.",
+      "notes": "KC 6/3: Fresh WASHINGTON halibut this week, $14.99 whole / $24.95 filet, \"super fresh\" (invoices ran BC the last 4 weeks; source rotates). Fresh NW Halibut from WA + AK landings. Two grades active 4/29: 10-20 lb ($14.99 whole / $24.95 filet), 20-40 lb ($15.50 whole / $25.95 filet). Cheeks appear sporadically: 4/22 $19.95/lb, 5/13 $18.99/lb 5lb min. Halibut off the 5/20 sheet, may indicate supply gap. Season March-November, peak summer.",
       "price_range": "$14.99-$15.50/lb whole; $24.95-$25.95/lb filet; cheeks $18.99-19.95/lb",
-      "last_seen_fresh_sheet": "2026-05-13 (cheeks); 2026-04-29 (whole, last appearance)"
+      "last_seen_fresh_sheet": "2026-05-13 (cheeks); 2026-04-29 (whole, last appearance)",
+      "last_source": {
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "WA source this week"
+      }
     },
     {
       "name": "Manila Clams",
@@ -4082,8 +4087,13 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Fresh Dry Pack U10/U12/U14-U15 from MA at $48.95/8lb. IQF U10 at $39.95/5lb. AK Weathervane also available $25.99-$49.99 depending on size.",
-      "price_range": "$48.95/8lb fresh dry pack (U10-U15 MA), $39.95/5lb IQF USA"
+      "notes": "KC 6/3: fresh East Coast dry-pack per-lb pricing U10 $41.95 / U12 $37.95 / U15 $29.95, 8lb tubs, flown in from New Bedford MA. Fresh Dry Pack U10/U12/U14-U15 from MA at $48.95/8lb. IQF U10 at $39.95/5lb. AK Weathervane also available $25.99-$49.99 depending on size.",
+      "price_range": "U10 $41.95 / U12 $37.95 / U15 $29.95 per lb (6/3)",
+      "last_source": {
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "per-lb graded pricing"
+      }
     },
     {
       "name": "Smoked Trout",
@@ -7445,13 +7455,13 @@ const DATA = {
         1,
         1
       ],
-      "notes": "Farmstand 5/26: Sidhu Farms (Puyallup WA) Albion + Sweet Sunrise picked at peak ripeness, not meant to be stored. Farmstand 5/20: Albion variety from Gonzalez Farm sold out instantly; Groundworks strawberries currently available. WA season opening. More WA-grown in coming days.",
+      "notes": "Farmstand 6/3: flowing in from Gonzalez, Tualco, and Sidhu Farms; raspberries \"just around the corner.\" Farmstand 5/26: Sidhu Farms (Puyallup WA) Albion + Sweet Sunrise picked at peak ripeness, not meant to be stored. Farmstand 5/20: Albion variety from Gonzalez Farm sold out instantly; Groundworks strawberries currently available. WA season opening. More WA-grown in coming days.",
       "price_range": "",
       "chart_hidden": false,
       "last_source": {
-        "date": "2026-05-28",
-        "channel": "body",
-        "note": "Sidhu Albion + Sweet Sunrise via Farmstand"
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "multi-farm volume"
       }
     },
     {
@@ -7671,12 +7681,12 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Key City 5/27: FIRST OF SEASON Fresh Copper River Sockeye Salmon $18.99/lb whole, $27.95/lb filet. Heart of premium PNW salmon season runs May into early Jul.",
-      "price_range": "$18.99 whole / $27.95 filet per lb",
+      "notes": "KC 6/3: price DROP to $15.99 whole / $22.95 filet (was $18.99/$27.95 at 5/27 season open). Key City 5/27: FIRST OF SEASON Fresh Copper River Sockeye Salmon $18.99/lb whole, $27.95/lb filet. Heart of premium PNW salmon season runs May into early Jul.",
+      "price_range": "$15.99 whole / $22.95 filet per lb (6/3)",
       "last_source": {
-        "date": "2026-05-28",
-        "channel": "body",
-        "note": "KC 5/27 First of Season"
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "KC weekly catalog, price drop"
       }
     },
     {
@@ -7886,6 +7896,114 @@ const DATA = {
         "channel": "voice",
         "note": "Kelly voice 5/27: sprouting, with lettuce"
       }
+    },
+    {
+      "name": "Quileute River King Salmon",
+      "category": "sea",
+      "vendor": "Key City Fish",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "KC 6/3: FIRST LISTING. Fresh WA Quileute River king, $16.99 whole / $24.95 filet. \"Silver bullet firm and bright.\" River fishery, distinct from troll king.",
+      "price_range": "$16.99 whole / $24.95 filet per lb",
+      "last_source": {
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "first listing"
+      }
+    },
+    {
+      "name": "WA Sweet Cherries (OPMA)",
+      "category": "berry",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Farmstand 6/3: FIRST OF SEASON from Okanogan Producers Marketing Association, certified organic. SUPPLY WARNING: warm early spring then 20s during bloom killed many flowers; OPMA says the season is \"looking rough,\" growers seeking disaster relief. Expect tight supply and firm pricing all season.",
+      "price_range": "Check Farmstand shop",
+      "last_source": {
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "first of season + frost damage warning"
+      }
+    },
+    {
+      "name": "Snow Peas (Farmstand)",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Farmstand 6/3: Alvarez Organic Farm (Yakima WA), flat tender pods, crunchy edible skins.",
+      "price_range": "Check Farmstand shop",
+      "last_source": {
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "new vendor attribution"
+      }
+    },
+    {
+      "name": "Easter Egg Radishes",
+      "category": "produce",
+      "vendor": "Farmstand Local Foods",
+      "source": "vendor",
+      "months": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Farmstand 6/3: Westwind Organics (Carnation WA), multicolored. Ending-soon heat signal: \"won't be long before it's too hot for crispy cool radishes.\"",
+      "price_range": "Check Farmstand shop",
+      "last_source": {
+        "date": "2026-06-03",
+        "channel": "sheet",
+        "note": "ending-soon heat warning"
+      }
     }
   ],
   "price_trends": [
@@ -7988,12 +8106,12 @@ const DATA = {
     {
       "ingredient": "Chicken Feet",
       "latest_price": 2.59,
-      "latest_date": "2026-05-20",
+      "latest_date": "2026-05-26",
       "prev_30d_price": 2.29,
       "trend_30d_pct": 13.1,
       "trend_yoy_pct": 23.9,
       "trend_season_pct": null,
-      "entry_count": 28,
+      "entry_count": 29,
       "vendor": "ec_wilson",
       "unit": "lb",
       "price_range": {
@@ -8001,10 +8119,6 @@ const DATA = {
         "max": 2.59
       },
       "history": [
-        {
-          "date": "2026-04-24",
-          "price": 2.29
-        },
         {
           "date": "2026-04-27",
           "price": 2.29
@@ -8031,6 +8145,10 @@ const DATA = {
         },
         {
           "date": "2026-05-20",
+          "price": 2.59
+        },
+        {
+          "date": "2026-05-26",
           "price": 2.59
         }
       ]
@@ -13893,6 +14011,15 @@ const DATA = {
       "category": "produce",
       "contact": "via Red Dog Farm distribution (John, 425-218-7756)",
       "source_notes": "Co-distributes with Red Dog through Key City Fish delivery channel. Discovery candidate added 2026-05-19."
+    },
+    {
+      "title": "Faithbeyond Farm",
+      "location": "Enumclaw, WA",
+      "type": "Producer",
+      "products": "Collard greens, curly kale, romaine, mustard greens (season runs now through December)",
+      "category": "produce",
+      "link": "https://shop.farmstandlocalfoods.com/Producer/f3941450-493f-4452-8161-ec9e0ea3218c",
+      "source_note": "Farmstand 6/3 fresh sheet \u2014 first product of season; farmers Elizabeth and Francis, Enumclaw plateau"
     }
   ],
   "metadata": {
@@ -13902,7 +14029,7 @@ const DATA = {
         "last_seen": "2026-03-27"
       },
       "Farmstand Local Foods": {
-        "count": 31,
+        "count": 34,
         "last_seen": "2026-04-21"
       },
       "Foraged & Found Edibles": {
@@ -13914,7 +14041,7 @@ const DATA = {
         "last_seen": "2026-04-20"
       },
       "Key City Fish": {
-        "count": 24,
+        "count": 25,
         "last_seen": "2026-03-11"
       },
       "Local Roots Farm": {
@@ -13954,10 +14081,10 @@ const DATA = {
         "last_seen": ""
       }
     },
-    "total_ingredients": 287,
+    "total_ingredients": 291,
     "menu_dishes": 15,
     "commodity_items": 145,
-    "discovery_items": 123,
+    "discovery_items": 124,
     "component_links_count": 90,
     "component_links_version": "1.1"
   }
