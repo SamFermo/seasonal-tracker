@@ -1,0 +1,1096 @@
+{
+ "generated": "2026-06-09T23:31:45-07:00",
+ "month": "June",
+ "source": "seasonal-data.json (Kelly's sheet via Monday reconcile + voice notes)",
+ "kelly_last_touch": "2026-06-03",
+ "all_units": [
+  "#",
+  "gal bag",
+  "bunch",
+  "case",
+  "each",
+  "qt",
+  "pint",
+  "flat",
+  "dozen"
+ ],
+ "items": [
+  {
+   "name": "Chamomile",
+   "display": "Chamomile",
+   "category": "flower",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Chive Blossoms",
+   "display": "Chive Blossoms",
+   "category": "flower",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-05-26",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Chives",
+   "display": "Chives",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Kale (Farm)",
+   "display": "Kale",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Kohlrabi",
+   "display": "Kohlrabi",
+   "category": "produce",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Lettuce (Farm)",
+   "display": "Lettuce",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Lovage",
+   "display": "Lovage",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Marjoram (Farm)",
+   "display": "Marjoram",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Mint",
+   "display": "Mint",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Parsley (Farm)",
+   "display": "Parsley",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Sweet Cicely",
+   "display": "Sweet Cicely",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Tomato Leaf",
+   "display": "Tomato Leaf",
+   "category": "green",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "Peak",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Violas",
+   "display": "Violas",
+   "category": "flower",
+   "score": 2,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Beef Shanks",
+   "display": "Beef Shanks",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Beef Tenderloin",
+   "display": "Beef Tenderloin",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Beets (Farm)",
+   "display": "Beets",
+   "category": "produce",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Bronze Fennel",
+   "display": "Bronze Fennel",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Chard",
+   "display": "Chard",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Chicken Eggs",
+   "display": "Chicken Eggs",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Cut Flowers (Farm)",
+   "display": "Cut Flowers",
+   "category": "flower",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Duck Eggs",
+   "display": "Duck Eggs",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Edible Flowers",
+   "display": "Edible Flowers",
+   "category": "flower",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Endive (Farm)",
+   "display": "Endive",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Kelly voice 5/27: sprouting, with lettuce",
+   "last_touch": "2026-05-27",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Fennel Fronds",
+   "display": "Fennel Fronds",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Grape Leaves",
+   "display": "Grape Leaves",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Green Garlic",
+   "display": "Green Garlic",
+   "category": "produce",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Ground Beef / Bolo Meat",
+   "display": "Ground Beef / Bolo Meat",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Honeysuckle",
+   "display": "Honeysuckle",
+   "category": "flower",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Lamb Loin Chops",
+   "display": "Lamb Loin Chops",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Lamb-Pork Sausage",
+   "display": "Lamb-Pork Sausage",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Lemon Balm (Farm)",
+   "display": "Lemon Balm",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Mache",
+   "display": "Mache",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Mustard Greens",
+   "display": "Mustard Greens",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Onion Tops",
+   "display": "Onion Tops",
+   "category": "produce",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Oregano",
+   "display": "Oregano",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Pea Shoots",
+   "display": "Pea Shoots",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Pork Belly",
+   "display": "Pork Belly",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Pork Chops",
+   "display": "Pork Chops",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Pork Shanks",
+   "display": "Pork Shanks",
+   "category": "protein",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Potatoes (Farm)",
+   "display": "Potatoes",
+   "category": "produce",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Rose Petals",
+   "display": "Rose Petals",
+   "category": "flower",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Rosemary",
+   "display": "Rosemary",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Snow Peas",
+   "display": "Snow Peas",
+   "category": "produce",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Sorrel (French)",
+   "display": "Sorrel (French)",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Thyme",
+   "display": "Thyme",
+   "category": "green",
+   "score": 1,
+   "coming": false,
+   "kelly_note": "Available",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Angelica",
+   "display": "Angelica",
+   "category": "green",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Basil (Farm)",
+   "display": "Basil",
+   "category": "green",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Beef Primals",
+   "display": "Beef Primals",
+   "category": "protein",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Cabbage (Farm)",
+   "display": "Cabbage",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Coming Soon",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Calendula",
+   "display": "Calendula",
+   "category": "flower",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-06-03",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Carrots (Farm)",
+   "display": "Carrots",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Cherry Tomatoes (Farm)",
+   "display": "Cherry Tomatoes",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Cilantro (Farm)",
+   "display": "Cilantro",
+   "category": "green",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Cucumber (Farm)",
+   "display": "Cucumber",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Currants",
+   "display": "Currants",
+   "category": "berry",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "flat",
+    "pint"
+   ]
+  },
+  {
+   "name": "Dill (Farm)",
+   "display": "Dill",
+   "category": "green",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Coming Soon",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Garlic Scapes",
+   "display": "Garlic Scapes",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Coming Soon",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Guanciale (House-Cured)",
+   "display": "Guanciale (House-Cured)",
+   "category": "protein",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Lavender",
+   "display": "Lavender",
+   "category": "flower",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Coming Soon",
+   "last_touch": "2026-06-03",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Lemon Verbena",
+   "display": "Lemon Verbena",
+   "category": "green",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Marigolds",
+   "display": "Marigolds",
+   "category": "flower",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Mixed Berries (Farm)",
+   "display": "Mixed Berries",
+   "category": "berry",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "flat",
+    "pint"
+   ]
+  },
+  {
+   "name": "Nasturtium",
+   "display": "Nasturtium",
+   "category": "flower",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Coming Soon",
+   "last_touch": "2026-06-03",
+   "units": [
+    "bunch",
+    "#",
+    "stems",
+    "gal bag"
+   ]
+  },
+  {
+   "name": "Padron/Shishito (Farm)",
+   "display": "Padron/Shishito",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "",
+   "last_touch": "",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Radish",
+   "display": "Radish",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Done",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Raspberries",
+   "display": "Raspberries",
+   "category": "berry",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Coming Soon",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "flat",
+    "pint"
+   ]
+  },
+  {
+   "name": "Savory",
+   "display": "Savory",
+   "category": "green",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Snap/Snow Peas",
+   "display": "Snap/Snow Peas",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Coming Soon",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Squash (Farm)",
+   "display": "Squash",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Tarragon (Farm)",
+   "display": "Tarragon",
+   "category": "green",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-06-03",
+   "units": [
+    "#",
+    "gal bag",
+    "bunch",
+    "case"
+   ]
+  },
+  {
+   "name": "Walla Walla Onions",
+   "display": "Walla Walla Onions",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  },
+  {
+   "name": "Zucchini (Farm)",
+   "display": "Zucchini",
+   "category": "produce",
+   "score": 0,
+   "coming": true,
+   "kelly_note": "Not Yet",
+   "last_touch": "2026-05-20",
+   "units": [
+    "#",
+    "case",
+    "each",
+    "bunch"
+   ]
+  }
+ ]
+}
