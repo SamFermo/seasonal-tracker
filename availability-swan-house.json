@@ -1,17 +1,23 @@
 {
- "generated": "2026-06-12T08:39:36-07:00",
+ "generated": "2026-06-12T09:16:54-07:00",
  "month": "June",
  "source": "seasonal-data.json (Kelly's sheet via Monday reconcile + voice notes)",
  "kelly_last_touch": "2026-06-10",
  "all_units": [
-  "#",
-  "gal bag",
-  "bunch",
-  "case",
-  "each",
-  "qt",
+  "cup",
   "pint",
+  "quart",
+  "1/4 lb",
+  "1/2 lb",
+  "lb",
   "flat",
+  "case",
+  "bunch",
+  "gallon bag",
+  "medium cooler",
+  "large cooler",
+  "each",
+  "pack",
   "dozen"
  ],
  "items": [
@@ -25,9 +31,10 @@
    "last_touch": "",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -40,9 +47,10 @@
    "last_touch": "2026-05-26",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -54,10 +62,13 @@
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -69,10 +80,12 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -84,10 +97,13 @@
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -99,10 +115,13 @@
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -114,10 +133,13 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -129,10 +151,13 @@
    "kelly_note": "Peak",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -144,10 +169,13 @@
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -159,10 +187,13 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -174,10 +205,13 @@
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -190,9 +224,10 @@
    "last_touch": "",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -204,9 +239,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -219,9 +255,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -234,10 +271,12 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -249,10 +288,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -264,10 +306,12 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -279,10 +323,13 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -294,9 +341,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -309,10 +357,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -325,9 +376,10 @@
    "last_touch": "",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -339,10 +391,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -354,9 +409,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -370,9 +426,10 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -384,10 +441,13 @@
    "kelly_note": "Kelly voice 5/27: sprouting, with lettuce",
    "last_touch": "2026-05-27",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -399,10 +459,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -414,10 +477,12 @@
    "kelly_note": "Trickling",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -429,10 +494,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -444,9 +512,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -460,9 +529,10 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -474,9 +544,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -489,9 +560,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -505,9 +577,10 @@
    "last_touch": "2026-06-10",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -519,10 +592,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -534,10 +610,13 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -549,10 +628,13 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -565,9 +647,10 @@
    "last_touch": "2026-06-10",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -579,10 +662,12 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -594,10 +679,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -609,10 +697,13 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -624,9 +715,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -639,9 +731,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -654,9 +747,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -669,10 +763,12 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -685,9 +781,10 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -699,10 +796,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -714,10 +814,12 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -729,10 +831,12 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -744,10 +848,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -759,10 +866,13 @@
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -774,10 +884,12 @@
    "kelly_note": "Trickling",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -789,10 +901,13 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -804,10 +919,13 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -819,9 +937,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -835,9 +954,10 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -849,10 +969,12 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -864,10 +986,12 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -879,10 +1003,13 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -894,10 +1021,12 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -909,9 +1038,11 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
+    "pint",
+    "quart",
     "flat",
-    "pint"
+    "lb",
+    "cup"
    ]
   },
   {
@@ -923,10 +1054,12 @@
    "kelly_note": "Done",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -938,9 +1071,10 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
-    "gal bag",
-    "bunch",
+    "lb",
+    "each",
+    "dozen",
+    "pack",
     "case"
    ]
   },
@@ -953,10 +1087,13 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -969,9 +1106,10 @@
    "last_touch": "",
    "units": [
     "bunch",
-    "#",
-    "stems",
-    "gal bag"
+    "each",
+    "cup",
+    "pint",
+    "pack"
    ]
   },
   {
@@ -983,9 +1121,11 @@
    "kelly_note": "Coming Soon",
    "last_touch": "2026-06-10",
    "units": [
-    "#",
+    "pint",
+    "quart",
     "flat",
-    "pint"
+    "lb",
+    "cup"
    ]
   },
   {
@@ -997,10 +1137,12 @@
    "kelly_note": "",
    "last_touch": "",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -1012,10 +1154,12 @@
    "kelly_note": "Done",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -1027,9 +1171,11 @@
    "kelly_note": "Coming Soon",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
+    "pint",
+    "quart",
     "flat",
-    "pint"
+    "lb",
+    "cup"
    ]
   },
   {
@@ -1041,10 +1187,13 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -1056,10 +1205,12 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -1071,10 +1222,13 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
-    "#",
-    "gal bag",
+    "lb",
+    "1/2 lb",
+    "1/4 lb",
+    "gallon bag",
     "bunch",
-    "case"
+    "case",
+    "cup"
    ]
   },
   {
@@ -1086,10 +1240,12 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   },
   {
@@ -1101,10 +1257,12 @@
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
-    "#",
+    "lb",
     "case",
     "each",
-    "bunch"
+    "flat",
+    "medium cooler",
+    "large cooler"
    ]
   }
  ]
