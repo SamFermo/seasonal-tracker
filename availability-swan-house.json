@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-12T09:16:54-07:00",
+ "generated": "2026-06-12T09:38:35-07:00",
  "month": "June",
  "source": "seasonal-data.json (Kelly's sheet via Monday reconcile + voice notes)",
  "kelly_last_touch": "2026-06-10",
@@ -11,8 +11,11 @@
   "1/2 lb",
   "lb",
   "flat",
+  "half-flat",
   "case",
   "bunch",
+  "stems",
+  "head",
   "gallon bag",
   "medium cooler",
   "large cooler",
@@ -31,6 +34,7 @@
    "last_touch": "",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -47,6 +51,7 @@
    "last_touch": "2026-05-26",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -67,6 +72,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -83,6 +89,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -102,6 +109,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -120,6 +128,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -138,6 +147,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -156,6 +166,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -174,6 +185,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -192,6 +204,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -210,6 +223,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -224,6 +238,7 @@
    "last_touch": "",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -274,6 +289,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -293,6 +309,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -309,6 +326,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -328,6 +346,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -362,6 +381,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -376,6 +396,7 @@
    "last_touch": "",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -396,6 +417,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -426,6 +448,7 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -446,6 +469,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -464,6 +488,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -480,6 +505,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -499,6 +525,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -529,6 +556,7 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -577,6 +605,7 @@
    "last_touch": "2026-06-10",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -597,6 +626,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -615,6 +645,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -633,6 +664,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -647,6 +679,7 @@
    "last_touch": "2026-06-10",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -665,6 +698,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -684,6 +718,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -702,6 +737,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -766,6 +802,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -781,6 +818,7 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -801,6 +839,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -817,6 +856,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -834,6 +874,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -853,6 +894,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -871,6 +913,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -887,6 +930,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -906,6 +950,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -924,6 +969,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -954,6 +1000,7 @@
    "last_touch": "2026-06-03",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -972,6 +1019,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -989,6 +1037,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -1008,6 +1057,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -1024,6 +1074,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -1041,6 +1092,7 @@
     "pint",
     "quart",
     "flat",
+    "half-flat",
     "lb",
     "cup"
    ]
@@ -1057,6 +1109,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -1092,6 +1145,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -1106,6 +1160,7 @@
    "last_touch": "",
    "units": [
     "bunch",
+    "stems",
     "each",
     "cup",
     "pint",
@@ -1124,6 +1179,7 @@
     "pint",
     "quart",
     "flat",
+    "half-flat",
     "lb",
     "cup"
    ]
@@ -1140,6 +1196,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -1157,6 +1214,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -1174,6 +1232,7 @@
     "pint",
     "quart",
     "flat",
+    "half-flat",
     "lb",
     "cup"
    ]
@@ -1192,6 +1251,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -1208,6 +1268,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -1227,6 +1288,7 @@
     "1/4 lb",
     "gallon bag",
     "bunch",
+    "head",
     "case",
     "cup"
    ]
@@ -1243,6 +1305,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
@@ -1260,6 +1323,7 @@
     "lb",
     "case",
     "each",
+    "head",
     "flat",
     "medium cooler",
     "large cooler"
