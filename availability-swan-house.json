@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-12T09:38:35-07:00",
+ "generated": "2026-06-12T11:02:21-07:00",
  "month": "June",
  "source": "seasonal-data.json (Kelly's sheet via Monday reconcile + voice notes)",
  "kelly_last_touch": "2026-06-10",
@@ -30,6 +30,7 @@
    "category": "flower",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -47,6 +48,7 @@
    "category": "flower",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Peak",
    "last_touch": "2026-05-26",
    "units": [
@@ -64,6 +66,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
@@ -83,6 +86,7 @@
    "category": "produce",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -101,6 +105,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
@@ -120,6 +125,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
@@ -139,6 +145,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -158,6 +165,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Peak",
    "last_touch": "2026-05-20",
    "units": [
@@ -177,6 +185,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
@@ -196,6 +205,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -215,6 +225,7 @@
    "category": "green",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Peak",
    "last_touch": "2026-06-03",
    "units": [
@@ -234,6 +245,7 @@
    "category": "flower",
    "score": 2,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -251,6 +263,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -267,6 +280,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -283,6 +297,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -301,6 +316,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -320,6 +336,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
@@ -338,6 +355,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -357,6 +375,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -373,6 +392,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
@@ -392,6 +412,7 @@
    "category": "flower",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -409,6 +430,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
@@ -428,6 +450,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -444,6 +467,7 @@
    "category": "flower",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -461,6 +485,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Kelly voice 5/27: sprouting, with lettuce",
    "last_touch": "2026-05-27",
    "units": [
@@ -480,6 +505,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -499,6 +525,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Trickling",
    "last_touch": "2026-06-10",
    "units": [
@@ -517,6 +544,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -536,6 +564,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -552,6 +581,7 @@
    "category": "flower",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -569,6 +599,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -585,6 +616,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -601,6 +633,7 @@
    "category": "flower",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
@@ -618,6 +651,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -637,6 +671,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -656,6 +691,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -675,6 +711,7 @@
    "category": "flower",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
@@ -692,6 +729,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -710,6 +748,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -729,6 +768,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -748,6 +788,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -764,6 +805,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -780,6 +822,7 @@
    "category": "protein",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -796,6 +839,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -814,6 +858,7 @@
    "category": "flower",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -831,6 +876,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -850,6 +896,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-10",
    "units": [
@@ -868,6 +915,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -886,6 +934,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -905,6 +954,7 @@
    "category": "green",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Available",
    "last_touch": "2026-06-03",
    "units": [
@@ -924,6 +974,7 @@
    "category": "produce",
    "score": 1,
    "coming": false,
+   "ntm": false,
    "kelly_note": "Trickling",
    "last_touch": "2026-06-10",
    "units": [
@@ -942,6 +993,7 @@
    "category": "green",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
@@ -961,6 +1013,7 @@
    "category": "green",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
@@ -980,6 +1033,7 @@
    "category": "protein",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -996,6 +1050,7 @@
    "category": "flower",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
@@ -1013,6 +1068,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -1031,6 +1087,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
@@ -1049,6 +1106,7 @@
    "category": "green",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
@@ -1068,6 +1126,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
@@ -1086,6 +1145,7 @@
    "category": "berry",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -1103,6 +1163,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Done",
    "last_touch": "2026-06-10",
    "units": [
@@ -1121,6 +1182,7 @@
    "category": "protein",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -1137,6 +1199,7 @@
    "category": "green",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
@@ -1156,6 +1219,7 @@
    "category": "flower",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -1173,6 +1237,7 @@
    "category": "berry",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Coming Soon",
    "last_touch": "2026-06-10",
    "units": [
@@ -1190,6 +1255,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "",
    "last_touch": "",
    "units": [
@@ -1208,6 +1274,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Done",
    "last_touch": "2026-06-03",
    "units": [
@@ -1226,6 +1293,7 @@
    "category": "berry",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Coming Soon",
    "last_touch": "2026-06-03",
    "units": [
@@ -1243,6 +1311,7 @@
    "category": "green",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
@@ -1262,6 +1331,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
@@ -1280,6 +1350,7 @@
    "category": "green",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-06-03",
    "units": [
@@ -1299,6 +1370,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
@@ -1317,6 +1389,7 @@
    "category": "produce",
    "score": 0,
    "coming": true,
+   "ntm": false,
    "kelly_note": "Not Yet",
    "last_touch": "2026-05-20",
    "units": [
