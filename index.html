@@ -247,6 +247,17 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .ing-note{font-family:var(--fd);font-size:13px;font-style:italic;color:var(--ink-60);
   margin-top:4px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;
   -webkit-box-orient:vertical;overflow:hidden}
+.ing-offers{margin-top:7px;font-family:var(--fb)}
+.ing-offers summary{cursor:pointer;font-size:11px;font-weight:600;letter-spacing:0.03em;color:var(--olive);list-style:none;display:inline-block}
+.ing-offers summary::-webkit-details-marker{display:none}
+.ing-offers summary:before{content:'\25B8\00a0'}
+.ing-offers[open] summary:before{content:'\25BE\00a0'}
+.off-list{margin-top:5px;border-left:2px solid rgba(168,185,126,0.5);padding-left:10px;display:flex;flex-direction:column;gap:2px}
+.off-row{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;line-height:1.4}
+.off-who{color:var(--ink-60)}
+.off-row.off-primary .off-who{color:var(--ink);font-weight:600}
+.off-via{color:var(--ink-60);font-size:10.5px;opacity:0.8}
+.off-pr{font-family:var(--fb);font-weight:700;color:var(--ink);white-space:nowrap}
 .ing-aside{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;padding-top:1px}
 .trend-badge{font-family:var(--fb);font-size:10px;font-weight:500;letter-spacing:0.05em;
   padding:3px 7px;border-radius:3px;white-space:nowrap}
@@ -1247,7 +1258,26 @@ const DATA = {
         0
       ],
       "notes": "From Steel Wheel Farm (Fall City). Spring chives with closed flower blossoms as of 4/7.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "offers": [
+        {
+          "vendor": "Farmstand Local Foods",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$30.03",
+          "unit": "12 ct",
+          "norm": "$2.5/each",
+          "remaining": "10",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Cultured Butter",
@@ -1599,7 +1629,26 @@ const DATA = {
         0
       ],
       "notes": "From Bumblebee Farm (Fall City). 'Still flowin out of the fields' as of 4/7. Incredibly tender broccoli shoots. Short spring window.",
-      "price_range": "Check Farmstand shop"
+      "price_range": "Check Farmstand shop",
+      "offers": [
+        {
+          "vendor": "Farmstand Local Foods",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Westwind Organics",
+          "price": "$39.60",
+          "unit": "18 ct",
+          "norm": "$2.2/each",
+          "remaining": "26",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Quelite Cenizo (Wild Spinach)",
@@ -2614,7 +2663,7 @@ const DATA = {
         0,
         0,
         1,
-        1,
+        0,
         2,
         2,
         0,
@@ -2622,13 +2671,8 @@ const DATA = {
         0,
         0
       ],
-      "notes": "Farmstand 6/17: first non-cherry stone fruit of season, Collins Family Orchard (Selah, WA) Robada apricots fresh in. Franks 5/25: Stone fruits starting up \u2014 Apricots available. WA stone fruit. Jul-Aug peak.",
-      "price_range": "Check fresh sheet",
-      "last_source": {
-        "date": "2026-06-17",
-        "channel": "email",
-        "note": "Farmstand 6/17 fresh sheet: Robada apricots first stone fruit"
-      }
+      "notes": "Franks 5/25: Stone fruits starting up \u2014 Apricots available. WA stone fruit. Jul-Aug peak.",
+      "price_range": "Check fresh sheet"
     },
     {
       "name": "Asparagus",
@@ -3536,7 +3580,26 @@ const DATA = {
         0
       ],
       "notes": "WA local. Popping Jul, fading Aug. Order in multiples of 4 or 6 half-pints.",
-      "price_range": ""
+      "price_range": "",
+      "offers": [
+        {
+          "vendor": "Franks Quality Produce",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hayton Farms Berries",
+          "price": "$17.03",
+          "unit": "1/3 Flat",
+          "norm": "$51.09/flat",
+          "remaining": "581",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Red Cherries",
@@ -3585,7 +3648,26 @@ const DATA = {
         0
       ],
       "notes": "WA field grown. Confirmed on Franks 5/4 sheet, 15-20# cs.",
-      "price_range": "Check Franks sheet"
+      "price_range": "Check Franks sheet",
+      "offers": [
+        {
+          "vendor": "Franks Quality Produce",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Ralph's Greenhouse",
+          "price": "$44.54",
+          "unit": "15 lb",
+          "norm": "$2.97/lb",
+          "remaining": "20",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Romano Beans",
@@ -3678,7 +3760,59 @@ const DATA = {
         "date": "2026-06-06",
         "channel": "email",
         "note": "Franks 6/6 fresh sheet (June 8th)"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Franks Quality Produce",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hayton Farms Berries",
+          "price": "$20.96",
+          "unit": "1/2 Flat",
+          "norm": "$41.92/flat",
+          "remaining": "1555",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Our Family Farm",
+          "price": "$23.58",
+          "unit": "Half Flat- 6 pints",
+          "norm": "$47.16/flat",
+          "remaining": "147",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Josh Farms",
+          "price": "$32.75",
+          "unit": "1/2 Flat",
+          "norm": "$65.5/flat",
+          "remaining": "18",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hayton Farms Berries",
+          "price": "$14.41",
+          "unit": "1/3 Flat",
+          "norm": "$43.23/flat",
+          "remaining": "84",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Sugar Snap Peas",
@@ -3749,7 +3883,26 @@ const DATA = {
         0
       ],
       "notes": "WA local berry. Jul peak, fading Aug.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "offers": [
+        {
+          "vendor": "Franks Quality Produce",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hayton Farms Berries",
+          "price": "$17.03",
+          "unit": "1/3 flat",
+          "norm": "$51.09/flat",
+          "remaining": "499",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Treviso Radicchio",
@@ -4209,7 +4362,37 @@ const DATA = {
         0
       ],
       "notes": "Re-Fresh 4-6 H&G Troll Coho from AK.",
-      "price_range": "$11.99/lb H&G, $17.99/lb fillet (Re-Fresh AK)"
+      "price_range": "$11.99/lb H&G, $17.99/lb fillet (Re-Fresh AK)",
+      "offers": [
+        {
+          "vendor": "Key City Fish",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$208.29",
+          "unit": "10 LB/ 6 oz Portions",
+          "norm": "$20.83/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$221.39",
+          "unit": "15 LB - Fillets",
+          "norm": "$14.76/lb",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Troll King Salmon",
@@ -4231,7 +4414,37 @@ const DATA = {
       ],
       "notes": "Key City 5/20: Fresh WA Marbled Troll King Salmon Filets $17.50/lb. Unique to North Olympic Peninsula Coast; mix of red and white flesh, higher fat content, incredible flavor. Scale + pin bone on request, no extra charge.",
       "price_range": "$17.50/lb (5/20 filets)",
-      "last_seen_fresh_sheet": "2026-05-20"
+      "last_seen_fresh_sheet": "2026-05-20",
+      "offers": [
+        {
+          "vendor": "Key City Fish",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$286.89",
+          "unit": "10 LB",
+          "norm": "$28.69/lb",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$145.41",
+          "unit": "12/ 6 oz",
+          "norm": "$32.31/lb",
+          "remaining": "16",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Arugula (Local Roots)",
@@ -4640,7 +4853,26 @@ const DATA = {
         1
       ],
       "notes": "Limited for weeks, gone as of 3/27. Storage crop.",
-      "price_range": "Check fresh sheet"
+      "price_range": "Check fresh sheet",
+      "offers": [
+        {
+          "vendor": "Local Roots Farm",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Westwind Organics",
+          "price": "$30.36",
+          "unit": "10 lb Bulk",
+          "norm": "$3.04/lb",
+          "remaining": "9",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Red Radishes",
@@ -4914,7 +5146,26 @@ const DATA = {
         0
       ],
       "notes": "Red and golden varieties. Bulls blood variety historically. From 2026 plan. Kelly's 2026 sheet: Archive (not planting this year).",
-      "price_range": "N/A \u2014 our farm"
+      "price_range": "N/A \u2014 our farm",
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Ralph's Greenhouse",
+          "price": "$27.72",
+          "unit": "12 ct",
+          "norm": "$2.31/each",
+          "remaining": "7",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Borage",
@@ -5230,7 +5481,26 @@ const DATA = {
         "date": "2026-05-20",
         "channel": "sheet",
         "note": "Not Yet"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$50.16",
+          "unit": "30 ct",
+          "norm": "$1.67/each",
+          "remaining": "61",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Cucumber (Farm)",
@@ -5258,7 +5528,37 @@ const DATA = {
         "date": "2026-05-20",
         "channel": "sheet",
         "note": "Not Yet"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin Farm",
+          "price": "$50.16",
+          "unit": "15 lb",
+          "norm": "$3.34/lb",
+          "remaining": "2",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin Farm",
+          "price": "$50.16",
+          "unit": "15 lb",
+          "norm": "$3.34/lb",
+          "remaining": "3",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Currants",
@@ -5332,7 +5632,48 @@ const DATA = {
         "date": "2026-06-10",
         "channel": "sheet",
         "note": "Available"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$20.46",
+          "unit": "12 ct",
+          "norm": "$1.71/each",
+          "remaining": "12",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Boldly Grown Farm",
+          "price": "$39.60",
+          "unit": "24ct",
+          "norm": "$1.65/each",
+          "remaining": "22",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$25.74",
+          "unit": "12 ct",
+          "norm": "$2.15/each",
+          "remaining": "29",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Dried Beans",
@@ -5689,7 +6030,37 @@ const DATA = {
         "date": "2026-05-20",
         "channel": "sheet",
         "note": "Not Yet"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin Farm",
+          "price": "$66.53",
+          "unit": "10 lb",
+          "norm": "$6.65/lb",
+          "remaining": "13",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin Farm",
+          "price": "$39.60",
+          "unit": "10 lbs",
+          "norm": "$3.96/lb",
+          "remaining": "2",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Honeynut Squash",
@@ -5768,7 +6139,70 @@ const DATA = {
         "date": "2026-06-03",
         "channel": "sheet",
         "note": "Peak"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$59.40",
+          "unit": "24 ct",
+          "norm": "$2.48/each",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Westwind Organics",
+          "price": "$33.00",
+          "unit": "24 ct",
+          "norm": "$1.38/each",
+          "remaining": "16",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Westwind Organics",
+          "price": "$33.00",
+          "unit": "24 ct",
+          "norm": "$1.38/each",
+          "remaining": "21",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$52.80",
+          "unit": "24 ct",
+          "norm": "$2.2/each",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Westwind Organics",
+          "price": "$33.00",
+          "unit": "24 ct",
+          "norm": "$1.38/each",
+          "remaining": "21",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Kohlrabi",
@@ -5791,7 +6225,26 @@ const DATA = {
       ],
       "notes": "Highlighted green (abundant) on June 23 sheet. Kelly's 2026 sheet: Archive (not planting this year).",
       "price_range": "N/A \u2014 our farm",
-      "available_2026": false
+      "available_2026": false,
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$46.20",
+          "unit": "12 ct",
+          "norm": "$3.85/each",
+          "remaining": "2",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Lamb Loin Chops",
@@ -5949,7 +6402,136 @@ const DATA = {
         "date": "2026-06-03",
         "channel": "sheet",
         "note": "Peak"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$42.24",
+          "unit": "24 ct",
+          "norm": "$1.76/each",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$58.83",
+          "unit": "10/ 8 oz",
+          "norm": "$11.77/lb",
+          "remaining": "8",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin's Family Farm",
+          "price": "$49.95",
+          "unit": "24 ct",
+          "norm": "$2.08/each",
+          "remaining": "40",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$42.24",
+          "unit": "24 ct",
+          "norm": "$1.76/each",
+          "remaining": "17",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$36.96",
+          "unit": "18 ct",
+          "norm": "$2.05/each",
+          "remaining": "16",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin's Family Farm",
+          "price": "$55.78",
+          "unit": "24 ct",
+          "norm": "$2.32/each",
+          "remaining": "25",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin's Family Farm",
+          "price": "$49.95",
+          "unit": "24 ct",
+          "norm": "$2.08/each",
+          "remaining": "20",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Josh Farms",
+          "price": "$66.00",
+          "unit": "24 ct",
+          "norm": "$2.75/each",
+          "remaining": "10",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin's Family Farm",
+          "price": "$49.95",
+          "unit": "24 count",
+          "norm": "$2.08/each",
+          "remaining": "60",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$48.84",
+          "unit": "5 lb",
+          "norm": "$9.77/lb",
+          "remaining": "7",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cabrera Farms",
+          "price": "$59.40",
+          "unit": "5 lbs.",
+          "norm": "$11.88/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Lilacs",
@@ -6286,7 +6868,26 @@ const DATA = {
         "date": "2026-06-03",
         "channel": "sheet",
         "note": "Available"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$16.50",
+          "unit": "6 ct",
+          "norm": "$2.75/each",
+          "remaining": "10",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Padron/Shishito (Farm)",
@@ -6360,7 +6961,26 @@ const DATA = {
       ],
       "notes": "Kelly 5/12: 'a little tough, plenty of them' \u2014 past tender stage but still in volume. Spring crop, narrow window. Added to tracker from 5/12 voice memo.",
       "price_range": "N/A \u2014 our farm",
-      "available_2026": true
+      "available_2026": true,
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mom's Micro Garden",
+          "price": "$79.20",
+          "unit": "Chef Size 4 x 3oz",
+          "norm": "$105.6/lb",
+          "remaining": "20",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Peppers (Farm)",
@@ -6508,7 +7128,37 @@ const DATA = {
         "date": "2026-06-03",
         "channel": "sheet",
         "note": "Done"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Ralph's Greenhouse",
+          "price": "$22.44",
+          "unit": "12 ct",
+          "norm": "$1.87/each",
+          "remaining": "14",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Four Elements Farm",
+          "price": "$36.96",
+          "unit": "24 ct",
+          "norm": "$1.54/each",
+          "remaining": "12",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Raspberries",
@@ -6620,7 +7270,26 @@ const DATA = {
         "date": "2026-06-03",
         "channel": "sheet",
         "note": "Available"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Swan House Farms",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$30.03",
+          "unit": "12 ct",
+          "norm": "$2.5/each",
+          "remaining": "18",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Savory",
@@ -7535,7 +8204,59 @@ const DATA = {
       ],
       "notes": "Key City 5/20: Bristol Bay IVP Frozen Sockeye Filets pbo, Alaska USA. $13.75/lb (25lb case) or $14.75/lb (broken case). Year-round freezer stock; fresh BB sockeye opens late June.",
       "price_range": "$13.75-14.75/lb",
-      "chart_hidden": false
+      "chart_hidden": false,
+      "offers": [
+        {
+          "vendor": "Key City Fish",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$213.53",
+          "unit": "10 LB",
+          "norm": "$21.35/lb",
+          "remaining": "11",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$107.42",
+          "unit": "12/6 oz",
+          "norm": "$23.87/lb",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Wild Bay Seafood Co.",
+          "price": "$212.88",
+          "unit": "10 lb.",
+          "norm": "$21.29/lb",
+          "remaining": "12",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Wild Bay Seafood Co.",
+          "price": "$626.84",
+          "unit": "30 lb. (1.5-2 lbs.)",
+          "norm": "$20.89/lb",
+          "remaining": "12",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Ranger Free-Range Fryers (WA)",
@@ -7640,7 +8361,48 @@ const DATA = {
         "date": "2026-05-30",
         "channel": "sheet",
         "note": "Local Roots 5/30 (delivery 6/3)"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Local Roots Farm",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$8.58",
+          "unit": "3 oz bag",
+          "norm": "$45.76/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$50.16",
+          "unit": "5 lb Bulk",
+          "norm": "$10.03/lb",
+          "remaining": "56",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Grace Harbor Farms",
+          "price": "$31.68",
+          "unit": "8 / 2 ounce units",
+          "norm": "$31.68/lb",
+          "remaining": "2",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Live Crawfish (Washington)",
@@ -7820,7 +8582,26 @@ const DATA = {
         "date": "2026-05-28",
         "channel": "body",
         "note": "Farmstand 5/26 new vendor signal"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Farmstand Local Foods",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "First Cut Farm",
+          "price": "$50.16",
+          "unit": "20 lb",
+          "norm": "$2.51/lb",
+          "remaining": "53",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Costata Romanesco Summer Squash",
@@ -7898,7 +8679,26 @@ const DATA = {
         "date": "2026-05-28",
         "channel": "body",
         "note": "Farmstand 5/26 Theary returns"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Farmstand Local Foods",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$47.78",
+          "unit": "18 ct",
+          "norm": "$2.65/each",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Garlic Scapes (Farmstand)",
@@ -8085,7 +8885,70 @@ const DATA = {
         "date": "2026-06-14",
         "channel": "sheet",
         "note": "peak, heaps"
-      }
+      },
+      "offers": [
+        {
+          "vendor": "Local Roots Farm",
+          "producer": null,
+          "source": "invoice",
+          "primary": true
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Broomstick Farm",
+          "price": "$55.44",
+          "unit": "20 bunch case",
+          "norm": "$2.77/each",
+          "remaining": "2",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Pure Nelida",
+          "price": "$71.28",
+          "unit": "12 ct",
+          "norm": "$5.94/each",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$66.00",
+          "unit": "10 lb",
+          "norm": "$6.6/lb",
+          "remaining": "10",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Boldly Grown Farm",
+          "price": "$59.40",
+          "unit": "24 ct",
+          "norm": "$2.48/each",
+          "remaining": "24",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        },
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin's Family Farm",
+          "price": "$79.20",
+          "unit": "5 lb case",
+          "norm": "$15.84/lb",
+          "remaining": "2",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": false
+        }
+      ]
     },
     {
       "name": "Heirloom Tomatoes",
@@ -8465,30 +9328,1824 @@ const DATA = {
       }
     },
     {
-      "name": "Tayberries (Farmstand)",
-      "category": "berry",
-      "vendor": "Farmstand Local Foods",
+      "name": "Aquaponics, Green Leaf Lettuce",
+      "category": "produce",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
       "months": [
         0,
         0,
         0,
         0,
         0,
-        1,
-        2,
-        1,
+        0,
+        0,
+        0,
         0,
         0,
         0,
         0
       ],
-      "notes": "Farmstand 6/17: fresh Hayton Farms (Fir Island, WA) tayberries now, first of season. Blackberry x raspberry cross, juicy sweet zing.",
-      "price_range": "Check Farmstand shop",
-      "last_source": {
-        "date": "2026-06-17",
-        "channel": "email",
-        "note": "Farmstand 6/17 fresh sheet: fresh tayberries first of season"
-      }
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mejia Romero Farm",
+          "price": "$50.16",
+          "unit": "24 ct.",
+          "norm": "$2.09/each",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Spinach, Bulk",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Ralph's Greenhouse",
+          "price": "$33.00",
+          "unit": "5 lb",
+          "norm": "$6.6/lb",
+          "remaining": "22",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Salmon, BULK Reefnet Pink Fraser River",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$129.69",
+          "unit": "10 LB",
+          "norm": "$12.97/lb",
+          "remaining": "7",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Salmon, Baker River Whole Side Fillets",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$299.99",
+          "unit": "15lbs",
+          "norm": "$20.0/lb",
+          "remaining": "8",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Salmon, Coho, Salish Sea",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$81.22",
+          "unit": "12/ 6 oz",
+          "norm": "$18.05/lb",
+          "remaining": "4",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Salmon, Keta, Reefnet-Caught, Legoe Bay",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$157.20",
+          "unit": "15 LB IQF Fillets, Boneless, Skin-On",
+          "norm": "$10.48/lb",
+          "remaining": "45",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Shiitake",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$39.60",
+          "unit": "5 lb",
+          "norm": "$7.92/lb",
+          "remaining": "26",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Baby/Petite Shiitake",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$36.30",
+          "unit": "5 lb",
+          "norm": "$7.26/lb",
+          "remaining": "35",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Blue Oyster",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$39.60",
+          "unit": "5 lb",
+          "norm": "$7.92/lb",
+          "remaining": "21",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Chef's Mix",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$43.56",
+          "unit": "5 lb",
+          "norm": "$8.71/lb",
+          "remaining": "39",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Combo Case",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$53.86",
+          "unit": "12 /6 oz",
+          "norm": "$11.97/lb",
+          "remaining": "7",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Coral Tooth",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$46.20",
+          "unit": "5 lb",
+          "norm": "$9.24/lb",
+          "remaining": "8",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Lion's Mane",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$46.20",
+          "unit": "5 lb",
+          "norm": "$9.24/lb",
+          "remaining": "11",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Medley",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$53.86",
+          "unit": "12/6 oz",
+          "norm": "$11.97/lb",
+          "remaining": "27",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$33.00",
+          "unit": "5 lb",
+          "norm": "$6.6/lb",
+          "remaining": "20",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mushrooms, Petite Shiitake 6oz",
+      "category": "mushroom",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Cascadia Mushrooms",
+          "price": "$53.86",
+          "unit": "12/6 oz",
+          "norm": "$11.97/lb",
+          "remaining": "22",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Greens, Bulk Spring Mix",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mama Bird Farm",
+          "price": "$59.40",
+          "unit": "5 lb",
+          "norm": "$11.88/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Greens, Malachai Asian Greens",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mejia Romero Farm",
+          "price": "$63.36",
+          "unit": "24 ct",
+          "norm": "$2.64/each",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Greens, Mustard, Frizzy Joe",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mejia Romero Farm",
+          "price": "$33.00",
+          "unit": "12 ct",
+          "norm": "$2.75/each",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Greens, Spring Mix",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$46.20",
+          "unit": "5 lb",
+          "norm": "$9.24/lb",
+          "remaining": "13",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Greens, Spring Mix",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mama Bird Farm",
+          "price": "$79.20",
+          "unit": "12/10 oz bags",
+          "norm": "$10.56/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Microgreens, Broccoli Shoots RETAIL",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Better Boat Farms",
+          "price": "$31.68",
+          "unit": "6 / 1.75oz packs",
+          "norm": "$48.27/lb",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Microgreens, Chef's Mix",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mom's Micro Garden",
+          "price": "$79.20",
+          "unit": "Chef Size 4 x 3oz",
+          "norm": "$105.6/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Microgreens, Mom's Mix",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mom's Micro Garden",
+          "price": "$79.20",
+          "unit": "Chef Size 4 x 3oz",
+          "norm": "$105.6/lb",
+          "remaining": "30",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Microgreens, Sunflower Shoots",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Grace Harbor Farms",
+          "price": "$22.44",
+          "unit": "Case 8/ 2oz",
+          "norm": "$22.44/lb",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Microgreens, Sunflower shoots",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Grace Harbor Farms",
+          "price": "$22.44",
+          "unit": "1 Pound Box",
+          "norm": "$22.44/lb",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Tomatoes, Beefsteak",
+      "category": "vegetable",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin Farm",
+          "price": "$52.60",
+          "unit": "10 lb",
+          "norm": "$5.26/lb",
+          "remaining": "9",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Tomatoes, Seconds",
+      "category": "vegetable",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Hedlin Farm",
+          "price": "$33.66",
+          "unit": "10 lb",
+          "norm": "$3.37/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Spinach",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Ralph's Greenhouse",
+          "price": "$29.04",
+          "unit": "12 ct",
+          "norm": "$2.42/each",
+          "remaining": "48",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Spinach",
+      "category": "green",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Westwind Organics",
+          "price": "$25.08",
+          "unit": "12ct",
+          "norm": "$2.09/each",
+          "remaining": "17",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Sablefish (Black Cod) Fillets",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$267.24",
+          "unit": "15 lb Whole Sides",
+          "norm": "$17.82/lb",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Sablefish, BULK, (Black Cod)",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$255.45",
+          "unit": "10 LB",
+          "norm": "$25.54/lb",
+          "remaining": "2",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Sablefish, RETAIL, (Black Cod)",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$129.69",
+          "unit": "12/ 6 oz",
+          "norm": "$28.82/lb",
+          "remaining": "3",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Broccoli, Baby",
+      "category": "vegetable",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Westwind Organics",
+          "price": "$36.96",
+          "unit": "18 ct",
+          "norm": "$2.05/each",
+          "remaining": "49",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Chives, Garlic",
+      "category": "produce",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$16.50",
+          "unit": "6 ct.",
+          "norm": "$2.75/each",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Cod, BULK Pacific Cod Portions",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$176.85",
+          "unit": "10 lb/ 6 oz",
+          "norm": "$17.68/lb",
+          "remaining": "3",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Cod, RETAIL Pacific Cod Portions",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$90.39",
+          "unit": "12/ 6 oz",
+          "norm": "$20.09/lb",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Tuna, Albacore Loins",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$324.88",
+          "unit": "15 lb",
+          "norm": "$21.66/lb",
+          "remaining": "4",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Tuna, Albacore Medallions",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$103.49",
+          "unit": "12/ 6 oz",
+          "norm": "$23.0/lb",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Halibut, BULK Salish Sea Portions",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$391.69",
+          "unit": "10 LB",
+          "norm": "$39.17/lb",
+          "remaining": "37",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Halibut, Salish Sea, Roasts",
+      "category": "seafood",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Lummi Island Wild Coop",
+          "price": "$255.45",
+          "unit": "8/ 18-22 OZ Roasts",
+          "norm": "$25.54/lb",
+          "remaining": "4",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Broccolini",
+      "category": "vegetable",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Mejia Romero Farm",
+          "price": "$67.98",
+          "unit": "18 CT.",
+          "norm": "$3.78/each",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Anise Hyssop",
+      "category": "herb",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Blanchard Mountain Farm",
+          "price": "$19.54",
+          "unit": "1 lb",
+          "norm": "$19.54/lb",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mint, Peppermint",
+      "category": "herb",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Osprey Hill Farm",
+          "price": "$15.84",
+          "unit": "6 ct",
+          "norm": "$2.64/each",
+          "remaining": "1",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Savory, Winter",
+      "category": "herb",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$16.50",
+          "unit": "6 Bunch Case",
+          "norm": "$2.75/each",
+          "remaining": "5",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Spearmint",
+      "category": "herb",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$27.00",
+          "unit": "12 ct",
+          "norm": "$2.25/each",
+          "remaining": "3",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Tarragon, French",
+      "category": "herb",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$16.50",
+          "unit": "6 ct",
+          "norm": "$2.75/each",
+          "remaining": "9",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Mentuccia Romana",
+      "category": "herb",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "The Crows Farm",
+          "price": "$16.50",
+          "unit": "6 bunch case",
+          "norm": "$2.75/each",
+          "remaining": "26",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Flowers, Peonies",
+      "category": "flower",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Spring Time Farm, LLC",
+          "price": "$23.58",
+          "unit": "10stem bunch",
+          "norm": "$2.36/each",
+          "remaining": "6",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Fruit, Apple Puree",
+      "category": "produce",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Sauk Farm",
+          "price": "$24.38",
+          "unit": "12/ 3.5 oz",
+          "norm": "$9.29/lb",
+          "remaining": "137",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Beans, Garbanzo",
+      "category": "pantry",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Central Bean Co.",
+          "price": "$24.92",
+          "unit": "25 lb bag",
+          "norm": "$1.0/lb",
+          "remaining": "69",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "name": "Pork, Leaf Lard",
+      "category": "protein",
+      "vendor": "Puget Sound Food Hub",
+      "source": "psfh-2026-06-17",
+      "months": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "seasonality": "unconfirmed",
+      "availability_note": "In stock at PSFH 2026-06-17; seasonality not yet mapped",
+      "offers": [
+        {
+          "vendor": "Puget Sound Food Hub",
+          "producer": "Skagit River Ranch",
+          "price": "$52.40",
+          "unit": "10 lb",
+          "norm": "$5.24/lb",
+          "remaining": "3",
+          "source": "live",
+          "captured": "2026-06-17",
+          "primary": true
+        }
+      ]
     }
   ],
   "price_trends": [
@@ -15716,7 +18373,7 @@ const DATA = {
         "last_seen": "2026-03-27"
       },
       "Farmstand Local Foods": {
-        "count": 39,
+        "count": 38,
         "last_seen": "2026-04-21"
       },
       "Foraged & Found Edibles": {
@@ -15766,9 +18423,13 @@ const DATA = {
       "Key City Fish / Draper Valley": {
         "count": 1,
         "last_seen": ""
+      },
+      "Puget Sound Food Hub": {
+        "count": 52,
+        "last_seen": ""
       }
     },
-    "total_ingredients": 306,
+    "total_ingredients": 357,
     "menu_dishes": 15,
     "commodity_items": 145,
     "discovery_items": 130,
@@ -15957,6 +18618,34 @@ function saveSettings(){
   closeSettings();
 }
 
+// ── MULTI-VENDOR OFFERS (expandable per-ingredient comparison) ──────
+function ingOffers(ing){
+  var offers=(ing.offers||[]);
+  if(offers.length<2) return '';
+  function pnum(s){ var m=(s||'').match(/\$([\d.]+)/); return m?parseFloat(m[1]):null; }
+  function punit(s){ var m=(s||'').match(/\/([A-Za-z]+)/); return m?m[1]:''; }
+  // primary invoice offer carries no norm; pull its latest price from the trend map
+  var t=trendFor(ing.name);
+  var rows=offers.map(function(o){
+    var pr=o.norm||'';
+    if(o.primary && !pr && t && t.latest_price){ pr='$'+t.latest_price+'/'+(t.unit||'lb'); }
+    if(!pr && o.price){ pr=o.price; }
+    var who;
+    if(o.producer){ who=_escHtml(o.producer)+' <span class="off-via">via PSFH</span>'; }
+    else { who=_escHtml(o.vendor||''); }
+    return '<div class="off-row'+(o.primary?' off-primary':'')+'">'+
+      '<span class="off-who">'+(o.primary?'★ ':'')+who+'</span>'+
+      '<span class="off-pr">'+_escHtml(pr)+'</span></div>';
+  }).join('');
+  // summary: vendor count + comparable price range when units agree
+  var ns=offers.map(function(o){return pnum(o.norm);}).filter(function(n){return n!=null;});
+  var us=offers.map(function(o){return punit(o.norm);}).filter(Boolean);
+  var sameUnit=us.length>1 && us.every(function(u){return u===us[0];});
+  var sum=offers.length+' vendors';
+  if(sameUnit && ns.length>1){ var lo=Math.min.apply(null,ns), hi=Math.max.apply(null,ns); if(lo!==hi) sum+=' &middot; $'+lo+'–$'+hi+'/'+us[0]; }
+  return '<details class="ing-offers"><summary>'+sum+' &middot; compare</summary><div class="off-list">'+rows+'</div></details>';
+}
+
 // ── INGREDIENT ROW ──────────────────────────────────────────────────
 function ingRow(ing, dotColor){
   var t=trendFor(ing.name);
@@ -15972,6 +18661,7 @@ function ingRow(ing, dotColor){
       '<div class="ing-name">'+ing.name+'</div>'+
       '<div class="ing-sub">'+(ing.vendor||'')+(t&&t.latest_price?' &middot; $'+t.latest_price+'/'+(t.unit||'lb'):'')+'</div>'+
       (ing.notes?'<div class="ing-note">'+ing.notes+'</div>':'')+
+      ingOffers(ing)+
     '</div>'+
     '<div class="ing-aside">'+badge+
       '<button class="mark-btn'+(marked?' marked':'')+'" data-mark="'+ing.name+'" onclick="toggleCartByName(\''+ing.name.replace(/'/g,"\\'")+'\')">'+
