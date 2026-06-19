@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-18",
+ "generated": "2026-06-19",
  "premium_pct": 20,
  "items": {
   "Apples": {
@@ -34,7 +34,7 @@
    "unit": "lb",
    "vendor": "Preservation Meats",
    "date": "2026-05-19",
-   "freshness": "FRESH",
+   "freshness": "AGING",
    "source": "catalogue",
    "needs_check": false,
    "climb": -21.1,
@@ -77,7 +77,7 @@
     "unit": "lb",
     "vendor": "Preservation Meats",
     "date": "2026-05-19",
-    "freshness": "FRESH",
+    "freshness": "AGING",
     "confidence": "high"
    }
   },
@@ -87,7 +87,7 @@
    "unit": "lb",
    "vendor": "composite",
    "date": "2026-05-19",
-   "freshness": "FRESH",
+   "freshness": "AGING",
    "source": "composite (derived)",
    "needs_check": false,
    "swan_per_lb": 5.99,
@@ -148,7 +148,7 @@
     "unit": "dozen",
     "vendor": "Preservation Meats",
     "date": "2026-05-19",
-    "freshness": "FRESH",
+    "freshness": "AGING",
     "confidence": "high"
    }
   },
@@ -285,7 +285,7 @@
     "unit": "lb",
     "vendor": "composite",
     "date": "2026-05-19",
-    "freshness": "FRESH",
+    "freshness": "AGING",
     "confidence": "derived"
    }
   },
@@ -455,7 +455,7 @@
     "unit": "lb",
     "vendor": "Preservation Meats",
     "date": "2026-05-19",
-    "freshness": "FRESH",
+    "freshness": "AGING",
     "confidence": "high"
    }
   },
@@ -479,7 +479,7 @@
     "unit": "lb",
     "vendor": "Preservation Meats",
     "date": "2026-05-19",
-    "freshness": "FRESH",
+    "freshness": "AGING",
     "confidence": "low"
    }
   },
