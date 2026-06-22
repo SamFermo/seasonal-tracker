@@ -738,6 +738,54 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 #screen-brainweb{display:flex;flex-direction:column}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.6/standalone/umd/vis-network.min.js"></script>
+<style>
+/* ── KITCHEN pill-slider + Trending Prices (2026-06-21) ── */
+.kpill-bar{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  padding:4px 2px 12px;margin:0 0 6px;scrollbar-width:none}
+.kpill-bar::-webkit-scrollbar{display:none}
+.kpill{flex:0 0 auto;font-family:var(--fb);font-size:13px;font-weight:500;letter-spacing:0.02em;
+  color:var(--ink-60);background:var(--ink-6);border:1px solid var(--ink-12);border-radius:30px;
+  padding:9px 16px;cursor:pointer;white-space:nowrap;transition:all .2s var(--ease)}
+.kpill:hover{color:var(--ink);border-color:var(--ink-30)}
+.kpill.active{color:#0a1028;background:var(--ink);border-color:var(--ink)}
+.tr-head{display:flex;align-items:baseline;gap:10px;margin:4px 0 6px}
+.tr-title{font-family:var(--fd);font-size:30px;font-weight:500;color:var(--ink);line-height:1}
+.tr-sub{font-family:var(--fb);font-size:11px;letter-spacing:0.06em;color:var(--ink-30)}
+.tr-sec-hd{font-family:var(--fb);font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--ink-60);margin:24px 0 10px}
+.tr-none{font-family:var(--fd);font-style:italic;font-size:15px;color:var(--ink-30);padding:2px 0 4px}
+.tr-card{background:var(--bg-card);border:1px solid var(--ink-12);border-radius:9px;padding:13px 15px;margin-bottom:9px}
+.tr-card.warn{border-color:rgba(224,135,99,0.42)}
+.tr-row{display:flex;align-items:center;gap:10px}
+.tr-name{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);flex:1;line-height:1.05}
+.tr-pct{font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:0.02em;white-space:nowrap}
+.tr-pct.up{color:var(--terra)}
+.tr-pct.dn{color:var(--olive)}
+.tr-pct.flat{color:var(--ink-30)}
+.tr-meta{font-family:var(--fb);font-size:11.5px;color:var(--ink-60);margin-top:6px;letter-spacing:0.02em}
+.tr-meta b{color:var(--ink);font-weight:500}
+.tr-dishes{font-family:var(--fd);font-style:italic;font-size:13px;color:var(--ink-60);margin-top:3px}
+.tr-vbtn{margin-top:9px;font-family:var(--fb);font-size:11px;font-weight:500;letter-spacing:0.04em;
+  color:var(--ink-60);background:var(--ink-6);border:1px solid var(--ink-12);border-radius:18px;
+  padding:5px 11px;cursor:pointer}
+.tr-vbtn:hover{color:var(--ink);border-color:var(--ink-30)}
+.tr-vendors{display:none;margin-top:9px;border-top:1px solid var(--ink-6);padding-top:9px}
+.tr-vendors.open{display:block}
+.tr-vrow{display:flex;align-items:baseline;gap:8px;padding:4px 0}
+.tr-vrow .vn{font-family:var(--fd);font-size:15px;color:var(--ink);flex:1}
+.tr-vrow .vn .vp{font-family:var(--fb);font-style:normal;font-size:10.5px;color:var(--ink-30);letter-spacing:0.03em}
+.tr-vrow .vpr{font-family:var(--fb);font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap}
+.tr-vrow.primary .vpr{color:var(--olive)}
+.tr-vone{font-family:var(--fb);font-size:12px;color:var(--ink-60)}
+.tr-push{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--ink-6)}
+.tr-push .pn{font-family:var(--fd);font-size:17px;color:var(--ink);flex:1}
+.tr-push .ptag{font-family:var(--fb);font-size:9.5px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;
+  border-radius:14px;padding:3px 9px;white-space:nowrap}
+.tr-push .ptag.arr{color:var(--olive);border:1px solid rgba(168,185,126,0.4)}
+.tr-push .ptag.peak{color:var(--terra);border:1px solid rgba(224,135,99,0.4)}
+.tr-push .pv{font-family:var(--fb);font-size:11px;color:var(--ink-30);white-space:nowrap}
+.tr-empty{font-family:var(--fd);font-style:italic;font-size:16px;color:var(--ink-30);padding:20px 0}
+</style>
 </head>
 <body>
 
@@ -1028,10 +1076,11 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
     </div>
   </div>
   <div class="portal-scroll">
-    <div class="portal-prompt">How can Remy help today?</div>
-    <div class="mode-cards" id="mode-cards"></div>
+    <div class="kpill-bar" id="kitchen-pills"></div>
+    <div id="trending-home"></div>
     <div class="vendor-alert" id="vendor-alert" onclick="showVendorAlert()"></div>
     <div class="weather-alert" id="weather-alert" onclick="showWeatherAlert()"></div>
+    <div class="mode-cards" id="mode-cards" style="display:none"></div>
   </div>
 </div>
 
@@ -1263,7 +1312,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 
 <script>
 const DATA = {
-  "generated": "2026-06-21",
+  "generated": "2026-06-22",
   "ingredients": [
     {
       "name": "Black Cod",
@@ -15629,6 +15678,373 @@ const DATA = {
       "in_season": true
     }
   },
+  "menu_price_board": {
+    "generated": "2026-06-22",
+    "source": "sf-staff-portal live menu",
+    "menu_date": "2026-06-18",
+    "menu_captured": "2026-06-22",
+    "threshold_pct": 10.0,
+    "warnings": [
+      {
+        "ingredient": "Asparagus",
+        "dishes": [
+          "Pan Roasted Halibut"
+        ],
+        "pct_30d": 30.0,
+        "latest_price": 4.86,
+        "unit": "cs",
+        "prev_30d_price": 3.74,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 4.86,
+            "unit": "cs",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Basil",
+        "dishes": [
+          "Risotto alle Zucchine"
+        ],
+        "pct_30d": 17.8,
+        "latest_price": 9.25,
+        "unit": "1/2#",
+        "prev_30d_price": 7.85,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 9.25,
+            "unit": "1/2#",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Halibut (New Season)",
+        "dishes": [
+          "Pan Roasted Halibut"
+        ],
+        "pct_30d": 10.6,
+        "latest_price": 16.95,
+        "unit": "lb",
+        "prev_30d_price": 15.33,
+        "vendors": [
+          {
+            "vendor": "Key City Fish Co",
+            "price": 16.95,
+            "unit": "lb",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      }
+    ],
+    "in_use": [
+      {
+        "ingredient": "Asparagus",
+        "dishes": [
+          "Pan Roasted Halibut"
+        ],
+        "pct_30d": 30.0,
+        "latest_price": 4.86,
+        "unit": "cs",
+        "prev_30d_price": 3.74,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 4.86,
+            "unit": "cs",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Basil",
+        "dishes": [
+          "Risotto alle Zucchine"
+        ],
+        "pct_30d": 17.8,
+        "latest_price": 9.25,
+        "unit": "1/2#",
+        "prev_30d_price": 7.85,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 9.25,
+            "unit": "1/2#",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Halibut (New Season)",
+        "dishes": [
+          "Pan Roasted Halibut"
+        ],
+        "pct_30d": 10.6,
+        "latest_price": 16.95,
+        "unit": "lb",
+        "prev_30d_price": 15.33,
+        "vendors": [
+          {
+            "vendor": "Key City Fish Co",
+            "price": 16.95,
+            "unit": "lb",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "English Peas",
+        "dishes": [
+          "Pan Roasted Halibut"
+        ],
+        "pct_30d": 8.8,
+        "latest_price": 2.98,
+        "unit": "cs",
+        "prev_30d_price": 2.74,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 2.98,
+            "unit": "cs",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Pure Country GL Pork Rack",
+        "dishes": [
+          "Pure Country Pork Chop"
+        ],
+        "pct_30d": 4.8,
+        "latest_price": 6.5,
+        "unit": "lb",
+        "prev_30d_price": 6.2,
+        "vendors": [
+          {
+            "vendor": "Preserve Meat",
+            "price": 6.5,
+            "unit": "lb",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Rosemary",
+        "dishes": [
+          "Castelvetrano Olives",
+          "Marcona Almonds",
+          "Swan House Bolognese"
+        ],
+        "pct_30d": 0.0,
+        "latest_price": 12.5,
+        "unit": "#",
+        "prev_30d_price": 12.5,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 12.5,
+            "unit": "#",
+            "source": "trend",
+            "primary": true
+          },
+          {
+            "vendor": "Swan House Farms",
+            "producer": null,
+            "price": null,
+            "unit": null,
+            "source": "invoice",
+            "primary": true
+          },
+          {
+            "vendor": "Puget Sound Food Hub",
+            "producer": "The Crows Farm",
+            "price": "$30.03",
+            "unit": "12 ct",
+            "source": "live",
+            "primary": false
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Thyme",
+        "dishes": [
+          "Farinata"
+        ],
+        "pct_30d": 0.0,
+        "latest_price": 9.75,
+        "unit": "1/2#",
+        "prev_30d_price": 9.75,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 9.75,
+            "unit": "1/2#",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Parsley",
+        "dishes": [
+          "Pan Roasted Halibut"
+        ],
+        "pct_30d": 0.0,
+        "latest_price": 0.99,
+        "unit": "bn",
+        "prev_30d_price": 0.99,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 0.99,
+            "unit": "bn",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Cucumber",
+        "dishes": [
+          "Chilled Cherry Gazpacho"
+        ],
+        "pct_30d": -30.0,
+        "latest_price": 1.75,
+        "unit": "each",
+        "prev_30d_price": 2.5,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 1.75,
+            "unit": "each",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Strawberries (Local)",
+        "dishes": [
+          "Burrata",
+          "Pavlova"
+        ],
+        "pct_30d": null,
+        "latest_price": 3.94,
+        "unit": "cs",
+        "prev_30d_price": null,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 3.94,
+            "unit": "cs",
+            "source": "trend",
+            "primary": true
+          },
+          {
+            "vendor": "Puget Sound Food Hub",
+            "producer": "Hayton Farms Berries",
+            "price": "$20.96",
+            "unit": "1/2 Flat",
+            "source": "live",
+            "primary": false
+          },
+          {
+            "vendor": "Puget Sound Food Hub",
+            "producer": "Our Family Farm",
+            "price": "$23.58",
+            "unit": "Half Flat- 6 pints",
+            "source": "live",
+            "primary": false
+          },
+          {
+            "vendor": "Puget Sound Food Hub",
+            "producer": "Josh Farms",
+            "price": "$32.75",
+            "unit": "1/2 Flat",
+            "source": "live",
+            "primary": false
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Morels (Wild)",
+        "dishes": [
+          "Paccheri"
+        ],
+        "pct_30d": null,
+        "latest_price": 15.75,
+        "unit": "lb",
+        "prev_30d_price": null,
+        "vendors": [
+          {
+            "vendor": "foraged_found",
+            "price": 15.75,
+            "unit": "lb",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Zucchini",
+        "dishes": [
+          "Risotto alle Zucchine"
+        ],
+        "pct_30d": null,
+        "latest_price": 26.25,
+        "unit": "CS",
+        "prev_30d_price": null,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 26.25,
+            "unit": "CS",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      }
+    ],
+    "candidates": [
+      "bell pepper",
+      "bing cherry",
+      "charred spring onion",
+      "citrus",
+      "fennel",
+      "lemon",
+      "nectarines",
+      "red onion",
+      "sea bean",
+      "shallot",
+      "tomato"
+    ]
+  },
   "weather": {
     "vendor_alerts": {},
     "last_fetched": "2026-06-19T16:23:00.437717"
@@ -21483,6 +21899,103 @@ applyState(lsLoad());
 renderPush();renderPick();renderList();
 fbInit();
 
+})();
+</script>
+<script>
+/* ── KITCHEN Trending Prices + pill nav (2026-06-21) ── */
+(function(){
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function money(p,u){
+    if(p==null||p==='')return '<span class="vp">no price</span>';
+    var s=(typeof p==='number')?('$'+p.toFixed(2)):esc(String(p));
+    return s+(u?(' <span class="vp">/'+esc(u)+'</span>'):'');
+  }
+  function pctTag(pct){
+    if(pct==null)return '<span class="tr-pct flat">no 30d trend</span>';
+    var cls=pct>=10?'up':(pct<=-10?'dn':'flat');
+    var arrow=pct>0?'▲':(pct<0?'▼':'→');
+    var sign=pct>0?'+':'';
+    return '<span class="tr-pct '+cls+'">'+arrow+' '+sign+pct+'%</span>';
+  }
+  function vendorsBlock(r,id){
+    var vs=r.vendors||[];
+    if(vs.length<=1){
+      var v=vs[0];
+      if(!v)return '';
+      return '<div class="tr-vendors open" style="border:none;padding-top:6px"><div class="tr-vone">'+
+        esc(v.vendor)+' &middot; '+money(v.price,v.unit)+'</div></div>';
+    }
+    var rows=vs.map(function(v){
+      var who=esc(v.vendor)+(v.producer?(' <span class="vp">/ '+esc(v.producer)+'</span>'):'');
+      return '<div class="tr-vrow'+(v.primary?' primary':'')+'"><span class="vn">'+who+'</span>'+
+        '<span class="vpr">'+money(v.price,v.unit)+'</span></div>';
+    }).join('');
+    return '<button class="tr-vbtn" onclick="trToggle(\''+id+'\')">Compare vendors ('+vs.length+')</button>'+
+      '<div class="tr-vendors" id="'+id+'">'+rows+'</div>';
+  }
+  function card(r,id,warn){
+    var dishes=(r.dishes||[]).join(', ');
+    var price=(r.latest_price!=null)?('<b>'+money(r.latest_price,r.unit)+'</b>'):'';
+    return '<div class="tr-card'+(warn?' warn':'')+'">'+
+      '<div class="tr-row"><span class="tr-name">'+esc(r.ingredient)+'</span>'+pctTag(r.pct_30d)+'</div>'+
+      (price?('<div class="tr-meta">'+price+'</div>'):'')+
+      (dishes?('<div class="tr-dishes">on '+esc(dishes)+'</div>'):'')+
+      vendorsBlock(r,id)+
+    '</div>';
+  }
+  window.trToggle=function(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');};
+
+  function pushingList(){
+    var arr=(window._browse&&_browse.arriving)?_browse.arriving.slice(0,3):[];
+    var pk =(window._browse&&_browse.peak)?_browse.peak.slice(0,3):[];
+    var items=arr.map(function(i){return {i:i,tag:'arr',lbl:'Arriving'};})
+              .concat(pk.map(function(i){return {i:i,tag:'peak',lbl:'Peaking'};}));
+    if(!items.length)return '<div class="tr-none">No fresh-sheet highlights right now.</div>';
+    return items.map(function(o){
+      return '<div class="tr-push"><span class="pn">'+esc(o.i.name)+'</span>'+
+        '<span class="ptag '+o.tag+'">'+o.lbl+'</span>'+
+        '<span class="pv">'+esc(o.i.vendor||'')+'</span></div>';
+    }).join('');
+  }
+
+  window.renderTrending=function(){
+    var host=document.getElementById('trending-home');if(!host)return;
+    var b=DATA.menu_price_board;
+    if(!b){host.innerHTML='<div class="tr-empty">No menu price data yet.</div>';return;}
+    var warned={};(b.warnings||[]).forEach(function(w){warned[w.ingredient]=1;});
+    var h='<div class="tr-head"><span class="tr-title">Trending Prices</span>'+
+          '<span class="tr-sub">menu as of '+esc(b.menu_date||'?')+'</span></div>';
+    h+='<div class="tr-sec-hd">Watch your costs</div>';
+    if((b.warnings||[]).length){
+      b.warnings.forEach(function(w,i){h+=card(w,'wv'+i,true);});
+    }else{h+='<div class="tr-none">Nothing creeping past '+(b.threshold_pct||10)+'% this week.</div>';}
+    h+='<div class="tr-sec-hd">Vendors are pushing</div>'+pushingList();
+    var rest=(b.in_use||[]).filter(function(r){return !warned[r.ingredient];});
+    if(rest.length){
+      h+='<div class="tr-sec-hd">On your menu</div>';
+      rest.forEach(function(r,i){h+=card(r,'mv'+i,false);});
+    }
+    host.innerHTML=h;
+  };
+
+  // pill bar: Trending Prices (default) + the existing MODE_DEFS tools
+  window.showTrending=function(){
+    document.querySelectorAll('.ss').forEach(function(s){s.classList.remove('active');});
+    if(typeof screenHistory!=='undefined')screenHistory.length=0;
+    document.querySelectorAll('#kitchen-pills .kpill').forEach(function(p){p.classList.toggle('active',p.dataset.k==='trending');});
+  };
+  function buildKitchenPills(){
+    var bar=document.getElementById('kitchen-pills');if(!bar)return;
+    var h='<button class="kpill active" data-k="trending" onclick="showTrending()">Trending Prices</button>';
+    (window.MODE_DEFS||[]).forEach(function(def,i){
+      h+='<button class="kpill" data-k="'+def.id+'" onclick="handleMode('+i+')">'+esc(def.label)+'</button>';
+    });
+    bar.innerHTML=h;
+  }
+
+  function start(){ buildKitchenPills(); renderTrending(); }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);
+  else start();
 })();
 </script>
 </body>
