@@ -756,6 +756,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .tr-none{font-family:var(--fd);font-style:italic;font-size:15px;color:var(--ink-30);padding:2px 0 4px}
 .tr-card{background:var(--bg-card);border:1px solid var(--ink-12);border-radius:9px;padding:13px 15px;margin-bottom:9px}
 .tr-card.warn{border-color:rgba(224,135,99,0.42)}
+.tr-card.good{border-color:rgba(168,185,126,0.42)}
 .tr-row{display:flex;align-items:center;gap:10px}
 .tr-name{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);flex:1;line-height:1.05}
 .tr-pct{font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:0.02em;white-space:nowrap}
@@ -795,6 +796,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .vpill:hover{color:var(--ink);border-color:var(--ink-30)}
 .vpill.active{color:#0a1028;background:var(--olive);border-color:var(--olive)}
 .vpill.sm{font-size:11px;padding:5px 11px}
+.vpill.wrap{white-space:normal;text-align:center;line-height:1.05;max-width:112px}
 .vsort-bar{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 12px}
 .vlist{display:flex;flex-direction:column}
 .vrow{display:flex;align-items:center;gap:10px;padding:11px 2px;border-bottom:1px solid var(--ink-6)}
@@ -805,6 +807,7 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .vtag.off{color:var(--ink-30);border:1px solid var(--ink-12)}
 .vrow .vpr{font-family:var(--fb);font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;text-align:right}
 .vrow .vpr .vu{color:var(--ink-30);font-weight:400;font-size:10.5px}
+.vpr.awaiting{font-weight:400;font-style:italic;color:var(--ink-30);font-size:11px}
 .vrow .vclimb{font-family:var(--fb);font-size:11px;font-weight:600;white-space:nowrap}
 .vclimb.up{color:var(--terra)}
 .vclimb.dn{color:var(--olive)}
@@ -20451,12 +20454,6 @@ const DATA = {
       ]
     },
     {
-      "key": "sea_breeze_farm",
-      "display": "Sea Breeze Farm / Magic Meat Truck",
-      "tier": "",
-      "aliases": []
-    },
-    {
       "key": "swan_house_farms",
       "display": "Swan House Farms",
       "tier": "family",
@@ -21786,6 +21783,26 @@ const DATA = {
             "vendor": "Franks Quality Produce",
             "price": 4.86,
             "unit": "lb",
+            "source": "trend",
+            "primary": true
+          }
+        ],
+        "no_trend": false
+      },
+      {
+        "ingredient": "Cucumber",
+        "dishes": [
+          "Chilled Cherry Gazpacho"
+        ],
+        "pct_30d": -30.0,
+        "latest_price": 1.75,
+        "unit": "each",
+        "prev_30d_price": 2.5,
+        "vendors": [
+          {
+            "vendor": "Franks Quality Produce",
+            "price": 1.75,
+            "unit": "each",
             "source": "trend",
             "primary": true
           }
@@ -30520,10 +30537,11 @@ fbInit();
     return '<button class="tr-vbtn" onclick="trToggle(\''+id+'\')">Compare vendors ('+vs.length+')</button>'+
       '<div class="tr-vendors" id="'+id+'">'+rows+'</div>';
   }
-  function card(r,id,warn){
+  function card(r,id,dir){
     var dishes=(r.dishes||[]).join(', ');
     var price=(r.latest_price!=null)?('<b>'+money(r.latest_price,r.unit)+'</b>'):'';
-    return '<div class="tr-card'+(warn?' warn':'')+'">'+
+    var cls=dir==='up'?' warn':(dir==='down'?' good':'');
+    return '<div class="tr-card'+cls+'">'+
       '<div class="tr-row"><span class="tr-name">'+esc(r.ingredient)+'</span>'+pctTag(r.pct_30d)+'</div>'+
       (price?('<div class="tr-meta">'+price+'</div>'):'')+
       (dishes?('<div class="tr-dishes">on '+esc(dishes)+'</div>'):'')+
@@ -30533,8 +30551,8 @@ fbInit();
   window.trToggle=function(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');};
 
   function pushingList(){
-    var arr=(window._browse&&_browse.arriving)?_browse.arriving.slice(0,3):[];
-    var pk =(window._browse&&_browse.peak)?_browse.peak.slice(0,3):[];
+    var arr=(window._browse&&_browse.arriving)?_browse.arriving.slice(0,12):[];
+    var pk =(window._browse&&_browse.peak)?_browse.peak.slice(0,12):[];
     var items=arr.map(function(i){return {i:i,tag:'arr',lbl:'Arriving'};})
               .concat(pk.map(function(i){return {i:i,tag:'peak',lbl:'Peaking'};}));
     if(!items.length)return '<div class="tr-none">No fresh-sheet highlights right now.</div>';
@@ -30549,20 +30567,14 @@ fbInit();
     var host=document.getElementById('trending-home');if(!host)return;
     var b=DATA.menu_price_board;
     if(!b){host.innerHTML='<div class="tr-empty">No menu price data yet.</div>';return;}
-    var warned={};(b.warnings||[]).forEach(function(w){warned[w.ingredient]=1;});
     var h='<div class="tr-head"><span class="tr-title">Trending Prices</span>'+
           '<span class="tr-sub">menu as of '+esc(b.menu_date||'?')+'</span></div>';
-    h+='<div class="tr-sec-hd">Watch your costs</div>';
-    if((b.warnings||[]).length){
-      b.warnings.forEach(function(w,i){h+=card(w,'wv'+i,true);});
-    }else{h+='<div class="tr-none">Nothing creeping past '+(b.threshold_pct||10)+'% this week.</div>';}
+    h+='<div class="tr-sec-hd">Price alerts</div>';
+    var al=(b.warnings||[]);
+    if(al.length){
+      al.forEach(function(w,i){h+=card(w,'wv'+i,(w.pct_30d!=null&&w.pct_30d<0)?'down':'up');});
+    }else{h+='<div class="tr-none">Nothing moved more than '+(b.threshold_pct||10)+'% (up or down) this week.</div>';}
     h+='<div class="tr-sec-hd">Vendors are pushing</div>'+pushingList();
-    var rest=(b.in_use||[]).filter(function(r){return !warned[r.ingredient];});
-    rest.sort(function(a,b2){var pa=(a.pct_30d==null)?-1e9:a.pct_30d,pb=(b2.pct_30d==null)?-1e9:b2.pct_30d;return (pb!==pa)?(pb-pa):((a.ingredient||'').localeCompare(b2.ingredient||''));});
-    if(rest.length){
-      h+='<div class="tr-sec-hd">On your menu</div>';
-      rest.forEach(function(r,i){h+=card(r,'mv'+i,false);});
-    }
     host.innerHTML=h;
   };
 
@@ -30612,7 +30624,7 @@ fbInit();
   var VENDORS=[['Swan House Farms','Swan House'],['Franks Quality Produce','Franks'],
     ['Foraged & Found Edibles','Foraged & Found'],['Local Roots Farm','Local Roots'],
     ['Farmstand Local Foods','Farmstand'],['EC Wilson','EC Wilson'],['Key City Fish','Key City'],
-    ['Preserve Meat','Preserve Meat'],['Puget Sound Food Hub','PSFH'],['Sea Breeze Farm','Sea Breeze']];
+    ['Preserve Meat','Preserve Meat'],['Puget Sound Food Hub','Puget Sound Food Hub']];
   var _vSel=0,_vSort='peaking',_pmCat=null;
   function vIngs(vk){return (DATA.ingredients||[]).filter(function(it){var v=it.vendor||'';return v===vk||v.indexOf(vk)===0;});}
   window.selVendor=function(i){_vSel=i;_pmCat=null;_vSort='peaking';renderVendors();};
@@ -30621,18 +30633,19 @@ fbInit();
   function isComing(it){return (typeof isArriving==='function')&&isArriving(it);}
 
   function climbHtml(name){var t=trMap()[name];if(!t||t.trend_30d_pct==null)return '';var p=t.trend_30d_pct;var cls=p>=10?'up':(p<=-10?'dn':'');var ar=p>0?'▲':(p<0?'▼':'');return cls?('<span class="vclimb '+cls+'">'+ar+' '+(p>0?'+':'')+p+'%</span>'):'';}
-  function priceHtml(it){var t=trMap()[it.name];if(t&&t.latest_price!=null)return '<span class="vpr">$'+Number(t.latest_price).toFixed(2)+(t.unit?(' <span class="vu">/'+esc(t.unit)+'</span>'):'')+'</span>';if(it.price_range)return '<span class="vpr" style="font-weight:400;color:var(--ink-60);font-size:11.5px">'+esc(it.price_range)+'</span>';return '';}
+  function priceHtml(it){var t=trMap()[it.name];if(t&&t.latest_price!=null)return '<span class="vpr">$'+Number(t.latest_price).toFixed(2)+(t.unit?(' <span class="vu">/'+esc(t.unit)+'</span>'):'')+'</span>';if(it.price_range&&/\d/.test(it.price_range))return '<span class="vpr" style="font-weight:400;color:var(--ink-60);font-size:11.5px">'+esc(it.price_range)+'</span>';return '';}
   function tagHtml(it){var st=isComing(it)?'coming':statusOf(it);var m={peak:['peak','Peak'],avail:['avail','Available'],coming:['avail','Coming Soon'],off:['off','Off']};var x=m[st]||m.off;return '<span class="vtag '+x[0]+'">'+x[1]+'</span>';}
 
   function vendorList(vk){
     var ings=vIngs(vk);
-    if(_vSort==='peaking')ings=ings.filter(function(i){return statusOf(i)==='peak';});
-    else if(_vSort==='available')ings=ings.filter(function(i){var s=statusOf(i);return s==='peak'||s==='avail';});
+    // coming-soon items belong only in the Coming Soon view — never mixed into Peak/Available
+    if(_vSort==='peaking')ings=ings.filter(function(i){return statusOf(i)==='peak'&&!isComing(i);});
+    else if(_vSort==='available')ings=ings.filter(function(i){var s=statusOf(i);return (s==='peak'||s==='avail')&&!isComing(i);});
     else if(_vSort==='coming')ings=ings.filter(isComing);
     if(_vSort==='costly'){ings.sort(function(a,b){var ta=trMap()[a.name],tb=trMap()[b.name];var pa=(ta&&ta.trend_30d_pct!=null)?ta.trend_30d_pct:-999;var pb=(tb&&tb.trend_30d_pct!=null)?tb.trend_30d_pct:-999;return pb-pa;});}
     else ings.sort(function(a,b){return (a.name||'').localeCompare(b.name||'');});
     if(!ings.length)return '<div class="vempty">Nothing in this view right now.</div>';
-    return ings.map(function(it){return '<div class="vrow"><span class="vn">'+esc(it.name)+'</span>'+tagHtml(it)+climbHtml(it.name)+priceHtml(it)+'</div>';}).join('');
+    return ings.map(function(it){var pr=priceHtml(it)||'<span class="vpr awaiting">Awaiting price lock</span>';return '<div class="vrow"><span class="vn">'+esc(it.name)+'</span>'+tagHtml(it)+climbHtml(it.name)+pr+'</div>';}).join('');
   }
 
   // Preserve Meat: group by supplier, strip code prefix + low-stock suffix, badge low stock, guard Goose
@@ -30678,7 +30691,7 @@ fbInit();
     var body=order.map(function(k,gi){
       var items=groups[k].map(function(p){return '<div class="vrow"><span class="vn">'+esc(cleanPMName(p))+(pmLow(p)?' <span class="vtag off">low</span>':'')+'</span>'+(p.price?('<span class="vpr">'+esc(p.price)+(p.unit&&p.unit!=='Each'?(' <span class="vu">/'+esc(p.unit)+'</span>'):'')+'</span>'):'')+'</div>';}).join('');
       var gid='pmg-'+gi;
-      return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">▾</span><span>'+esc(k)+'</span><span class="pmn">'+groups[k].length+'</span></button><div class="pmitems" id="'+gid+'">'+items+'</div></div>';
+      return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">&#9656;</span><span>'+esc(k)+'</span><span class="pmn">'+groups[k].length+'</span></button><div class="pmitems" id="'+gid+'" style="display:none">'+items+'</div></div>';
     }).join('');
     var note=hidden>0?('<div class="vhint" style="margin-top:8px">+'+hidden+' low-stock item'+(hidden===1?'':'s')+' hidden — product names not captured by the catalog scrape yet.</div>'):'';
     return '<div class="vsort-bar">'+sub+'</div>'+body+note;
@@ -30719,7 +30732,13 @@ fbInit();
   }
   window.renderVendors=function(){
     var h=host();if(!h)return;
-    var vp=VENDORS.map(function(v,i){return '<button class="vpill'+(i===_vSel?' active':'')+'" onclick="selVendor('+i+')">'+esc(v[1])+'</button>';}).join('');
+    // preserve horizontal scroll of the filter rows so selecting a pill doesn't jump back to the left
+    var scrolls=[].map.call(h.querySelectorAll('.vp-bar,.vsort-bar'),function(e){return e.scrollLeft;});
+    var vp=VENDORS.map(function(v,i){
+      var psfh=(v[0]==='Puget Sound Food Hub');
+      var lbl=psfh?'Puget Sound<br>Food Hub':esc(v[1]);
+      return '<button class="vpill'+(psfh?' wrap':'')+(i===_vSel?' active':'')+'" onclick="selVendor('+i+')">'+lbl+'</button>';
+    }).join('');
     var v=VENDORS[_vSel];
     var out='<div class="vp-bar">'+vp+'</div>';
     if(v[0]==='Preserve Meat'){out+=pmView();}
@@ -30735,6 +30754,7 @@ fbInit();
       out+='<div class="vlist">'+vendorList(v[0])+'</div>';
     }
     h.innerHTML=out;
+    [].forEach.call(h.querySelectorAll('.vp-bar,.vsort-bar'),function(e,i){if(scrolls[i]!=null)e.scrollLeft=scrolls[i];});
   };
   window.showVendors=function(){clearScreens();renderVendors();setActive('vendors');};
 
@@ -30752,9 +30772,10 @@ fbInit();
     var btns=DAIS.map(function(s){return '<button class="season-btn s-'+s[0]+' pos'+s[2]+'" onclick="planSeason(\''+s[0]+'\',this)">'+SG[s[0]]+'<span>'+s[1]+'</span></button>';}).join('');
     h.innerHTML='<div class="plan-h">Plan Ahead</div><div class="plan-sub">Pick a season, or a specific date.</div>'+
       '<div class="plan-dais"><div class="dais">'+btns+
-      '<button class="season-btn center" onclick="planDate()">'+SG.cal+'<span>Pick a date</span></button>'+
-      '<input type="date" id="plan-inline-date" style="position:absolute;left:50%;top:50%;width:1px;height:1px;opacity:0;border:0;padding:0" '+
-      'onchange="if(window.selectDate)selectDate(\'plan-inline\',\'event\',this.value)"></div></div>'+
+      '<button class="season-btn center" tabindex="-1" aria-hidden="true">'+SG.cal+'<span>Pick a date</span></button>'+
+      '<input type="date" id="plan-inline-date" aria-label="Pick a date" onclick="planDate()" '+
+      'onchange="if(window.selectDate)selectDate(\'plan-inline\',\'event\',this.value)" '+
+      'style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:112px;height:112px;border-radius:50%;opacity:0;border:0;padding:0;margin:0;cursor:pointer;z-index:5;-webkit-appearance:none;background:transparent"></div></div>'+
       '<div class="flow-wrap"><div class="flow-results" id="plan-inline-results"></div></div>';
   };
   window.planSeason=function(id,btn){
