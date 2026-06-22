@@ -844,6 +844,65 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .pmhdr .pmn{margin-left:auto;color:var(--ink-30);font-weight:400;font-size:11px}
 .pmitems{padding:2px 6px 8px}
 .pmitems .vrow{padding:8px 4px}
+/* ── THE MENU (Pass B) — chef-facing dish→ingredient→vendor→price mapping ── */
+.tm-dish{border-bottom:1px solid var(--ink-6)}
+.tm-dhd{display:flex;align-items:center;gap:10px;padding:12px 2px;cursor:pointer;width:100%;background:none;border:none;text-align:left}
+.tm-dhd .tm-dn{font-family:var(--fd);font-size:18px;color:var(--ink);flex:1;line-height:1.15}
+.tm-dhd .tm-dn small{display:block;font-family:var(--fd);font-style:italic;font-size:12px;color:var(--ink-30);margin-top:2px}
+.tm-cnt{font-family:var(--fb);font-size:10.5px;font-weight:600;letter-spacing:0.04em;color:var(--ink-30);white-space:nowrap}
+.tm-cnt.full{color:var(--olive)}
+.tm-car{color:var(--ink-30);font-size:11px;transition:transform .2s var(--ease)}
+.tm-dish.open .tm-car{transform:rotate(90deg)}
+.tm-body{display:none;padding:2px 0 14px}
+.tm-dish.open .tm-body{display:block}
+.tm-ing{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:9px 8px;margin-bottom:6px;
+  background:var(--ink-6);border:1px solid var(--ink-12);border-radius:8px}
+.tm-ing.mapped{border-color:rgba(168,185,126,0.32)}
+.tm-iname{font-family:var(--fb);font-size:13.5px;color:var(--ink);font-weight:500;flex:1 1 100%;display:flex;align-items:center;gap:7px}
+.tm-kind{font-family:var(--fb);font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  border-radius:10px;padding:2px 7px;white-space:nowrap}
+.tm-kind.tracked{color:var(--olive);border:1px solid rgba(168,185,126,0.45)}
+.tm-kind.sourced{color:#c9a978;border:1px solid rgba(201,169,120,0.45)}
+.tm-kind.untracked{color:var(--ink-60);border:1px solid var(--ink-12)}
+.tm-kind.pantry{color:var(--ink-30);border:1px solid var(--ink-12)}
+.tm-kind.sub_recipe{color:#7b9bd1;border:1px solid rgba(123,155,209,0.45)}
+.tm-kind.prose{color:var(--ink-30);border:1px dashed var(--ink-12)}
+.tm-irm{margin-left:auto;background:none;border:none;color:var(--ink-30);font-size:16px;cursor:pointer;line-height:1;padding:0 4px}
+.tm-irm:hover{color:var(--terra)}
+.tm-fld{position:relative;flex:1 1 46%;min-width:120px}
+.tm-fld.price{flex:1 1 26%;min-width:78px}
+.tm-fld.unit{flex:0 0 86px}
+.tm-inp{width:100%;font-family:var(--fb);font-size:12.5px;color:var(--ink);background:rgba(245,232,200,0.04);
+  border:1px solid var(--ink-12);border-radius:6px;padding:7px 9px;outline:none;box-sizing:border-box}
+.tm-inp:focus{border-color:var(--olive)}
+.tm-inp::placeholder{color:var(--ink-30)}
+select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
+.tm-ac{position:absolute;left:0;right:0;top:calc(100% + 2px);z-index:40;background:#0e1726;
+  border:1px solid var(--ink-30);border-radius:7px;max-height:188px;overflow-y:auto;box-shadow:0 10px 28px -8px rgba(0,0,0,0.7)}
+.tm-aci{padding:8px 10px;font-family:var(--fb);font-size:12.5px;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--ink-6)}
+.tm-aci:hover,.tm-aci.hot{background:var(--ink-6)}
+.tm-aci .tm-amini{font-size:9px;color:var(--olive);border:1px solid rgba(168,185,126,0.4);border-radius:8px;padding:1px 6px;margin-left:auto}
+.tm-aci .tm-anew{font-size:9px;color:var(--ink-30);margin-left:auto;font-style:italic}
+.tm-add{margin-top:8px}
+.tm-addbtn{font-family:var(--fb);font-size:12px;font-weight:500;color:var(--olive);background:none;
+  border:1px dashed rgba(168,185,126,0.45);border-radius:8px;padding:9px 12px;cursor:pointer;width:100%}
+.tm-addbtn:hover{background:var(--ink-6)}
+.tm-fin{display:flex;align-items:center;gap:12px;margin-top:14px}
+.tm-finbtn{font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:0.02em;color:#0a1028;
+  background:var(--olive);border:none;border-radius:8px;padding:11px 18px;cursor:pointer}
+.tm-finbtn:disabled{opacity:0.45;cursor:default}
+.tm-stamp{font-family:var(--fb);font-size:11.5px;color:var(--olive);opacity:0;transition:opacity .3s var(--ease)}
+.tm-stamp.show{opacity:1}
+.tm-stamp.err{color:var(--terra)}
+.tm-sub{margin-top:10px;border-top:1px solid var(--ink-6);padding-top:8px}
+.tm-subhd{width:100%;text-align:left;background:var(--ink-6);border:1px solid var(--ink-12);border-radius:7px;
+  color:var(--ink-60);font-family:var(--fb);font-size:11.5px;font-weight:600;letter-spacing:0.04em;
+  padding:9px 11px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tm-subhd .tm-car{font-size:10px;transition:transform .2s var(--ease)}
+.tm-sub.open .tm-subhd .tm-car{transform:rotate(90deg)}
+.tm-subn{margin-left:auto;color:var(--ink-30);font-weight:400}
+.tm-subbody{display:none;padding:8px 2px 2px}
+.tm-sub.open .tm-subbody{display:block}
 </style>
 </head>
 <body>
@@ -19611,6 +19670,804 @@ const DATA = {
       ]
     }
   ],
+  "menu_map": {
+    "schema_version": "1.0",
+    "description": "Curated in-use ingredient map from the live SF staff-portal menu. Decision schema: tracked/sourced/sub_recipe/pantry/untracked/prose. The price board reads this.",
+    "generated": "2026-06-22",
+    "source": {
+      "file": "Codename: Riker/staff-portal/data/menu.json",
+      "menuDate": "2026-06-18",
+      "captured": "2026-06-22"
+    },
+    "kinds": {
+      "tracked": "maps to a price-tracked ingredient; can fire a creep warning",
+      "sourced": "real cost via vendor/invoice (cheese, cured pork, nuts, truffle, Swan family); no seasonal warn",
+      "sub_recipe": "housemade prep; tracked sub-ingredients roll up",
+      "pantry": "excluded staple (oil/flour/salt/sugar/vinegar/butter/cream/pasta/polenta/bread/spice)",
+      "untracked": "real ingredient not price-tracked yet; add-to-tracking candidate",
+      "prose": "not an ingredient; dropped"
+    },
+    "rules_2026_06_21": {
+      "lemon": "generic 'lemon' -> untracked (regular, not Meyer Lemon)",
+      "tomato": "generic 'tomato' -> untracked (commodity, not a specialty SKU)",
+      "title_heroes": "include dish-title hero proteins/fish as tracked",
+      "untracked": "list as add-to-tracking candidates, never proxy-map"
+    },
+    "dishes": [
+      {
+        "name": "Sea Wolf Bakery Baguette",
+        "section": "Antipasti",
+        "desc": "les pres sales butter, sea salt",
+        "price": "8",
+        "hero": null,
+        "components": [
+          {
+            "raw": "les pres sales butter",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "sea salt",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Castelvetrano Olives",
+        "section": "Antipasti",
+        "desc": "fennel pollen, citrus, rosemary",
+        "price": "6",
+        "hero": null,
+        "components": [
+          {
+            "raw": "fennel pollen",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "citrus",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "rosemary",
+            "kind": "tracked",
+            "maps_to": "Rosemary",
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Marcona Almonds",
+        "section": "Antipasti",
+        "desc": "rosemary olive oil, fried rosemary, maldon sea salt",
+        "price": "6",
+        "hero": {
+          "kind": "sourced",
+          "maps_to": null,
+          "price_tracked": false
+        },
+        "components": [
+          {
+            "raw": "rosemary olive oil",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "fried rosemary",
+            "kind": "tracked",
+            "maps_to": "Rosemary",
+            "confidence": "exact"
+          },
+          {
+            "raw": "maldon sea salt",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Farinata",
+        "section": "Antipasti",
+        "desc": "chickpea flatbread, house cagliata, seasonal preserve, fresh thyme, sea salt",
+        "price": "13",
+        "hero": null,
+        "components": [
+          {
+            "raw": "chickpea flatbread",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "house cagliata",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "seasonal preserve",
+            "kind": "prose",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "fresh thyme",
+            "kind": "tracked",
+            "maps_to": "Thyme",
+            "confidence": "exact"
+          },
+          {
+            "raw": "sea salt",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "House Caesar",
+        "section": "Antipasti",
+        "desc": "anchovy, parmigiano reggiano, red wine croutons",
+        "price": "14",
+        "hero": null,
+        "components": [
+          {
+            "raw": "anchovy",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "parmigiano reggiano",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "red wine croutons",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Farm House Salad",
+        "section": "Antipasti",
+        "desc": "red onion, bread and butter pickled onion, charred apricot vinaigrette, nectarines, candied almonds",
+        "price": "18",
+        "hero": null,
+        "components": [
+          {
+            "raw": "red onion",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "bread and butter pickled onion",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "charred apricot vinaigrette",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "inferred"
+          },
+          {
+            "raw": "nectarines",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "candied almonds",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Burrata",
+        "section": "Antipasti",
+        "desc": "strawberries, chamomile gelee, strawberry buttermilk poppy seed vinaigrette, crostini",
+        "price": "18",
+        "hero": {
+          "kind": "sourced",
+          "maps_to": null,
+          "price_tracked": false
+        },
+        "components": [
+          {
+            "raw": "strawberries",
+            "kind": "tracked",
+            "maps_to": "Strawberries (Local)",
+            "confidence": "exact"
+          },
+          {
+            "raw": "chamomile gelee",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "inferred"
+          },
+          {
+            "raw": "strawberry buttermilk poppy seed vinaigrette",
+            "kind": "sub_recipe",
+            "maps_to": "Strawberries (Local)",
+            "confidence": "inferred"
+          },
+          {
+            "raw": "crostini",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Chilled Cherry Gazpacho",
+        "section": "Antipasti",
+        "desc": "bing cherry, tomato, cucumber, red onion, bell pepper, champagne vinegar, cr\u00e8me fraiche, sumac",
+        "price": "15",
+        "hero": null,
+        "components": [
+          {
+            "raw": "bing cherry",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "tomato",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "cucumber",
+            "kind": "tracked",
+            "maps_to": "Cucumber",
+            "confidence": "exact"
+          },
+          {
+            "raw": "red onion",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "bell pepper",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "champagne vinegar",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "cr\u00e8me fraiche",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "sumac",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Swan House Bolognese",
+        "section": "Primi & Secondi",
+        "desc": "saffron spaghetti, swan house beef & pork, tomato, fennel, rosemary, parmigiano reggiano",
+        "price": "32",
+        "hero": {
+          "kind": "sourced",
+          "maps_to": null,
+          "price_tracked": false
+        },
+        "components": [
+          {
+            "raw": "saffron spaghetti",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "swan house beef & pork",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "tomato",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "fennel",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "rosemary",
+            "kind": "tracked",
+            "maps_to": "Rosemary",
+            "confidence": "exact"
+          },
+          {
+            "raw": "parmigiano reggiano",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Paccheri",
+        "section": "Primi & Secondi",
+        "desc": "Italian pork sausage, morel mushroom, sea bean pesto, pistachio, lemon, parmigiano reggiano",
+        "price": "31",
+        "hero": null,
+        "components": [
+          {
+            "raw": "Italian pork sausage",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "morel mushroom",
+            "kind": "tracked",
+            "maps_to": "Morels (Wild)",
+            "confidence": "exact"
+          },
+          {
+            "raw": "sea bean pesto",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "inferred"
+          },
+          {
+            "raw": "pistachio",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "lemon",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "parmigiano reggiano",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Tartufo Nero",
+        "section": "Primi & Secondi",
+        "desc": "fresh egg tagliatelle, summer truffle, butter, parmigiano reggiano",
+        "price": "26",
+        "hero": null,
+        "components": [
+          {
+            "raw": "fresh egg tagliatelle",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "summer truffle",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "butter",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "parmigiano reggiano",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Mafaldine alla Carbonara",
+        "section": "Primi & Secondi",
+        "desc": "guanciale, black pepper, swan house farm egg yolk, pecorino romano",
+        "price": "28",
+        "hero": null,
+        "components": [
+          {
+            "raw": "guanciale",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "black pepper",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "swan house farm egg yolk",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "pecorino romano",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Risotto alle Zucchine",
+        "section": "Primi & Secondi",
+        "desc": "roasted zucchini, parmesan, lemon, basil",
+        "price": "28",
+        "hero": null,
+        "components": [
+          {
+            "raw": "roasted zucchini",
+            "kind": "tracked",
+            "maps_to": "Zucchini",
+            "confidence": "exact"
+          },
+          {
+            "raw": "parmesan",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "lemon",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          },
+          {
+            "raw": "basil",
+            "kind": "tracked",
+            "maps_to": "Basil",
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Pan Roasted Halibut",
+        "section": "Primi & Secondi",
+        "desc": "green pea hummus, grilled asparagus, sea bean, shallot, parsley, lemon",
+        "price": "38",
+        "hero": {
+          "kind": "tracked",
+          "maps_to": "Halibut (New Season)",
+          "price_tracked": true
+        },
+        "components": [
+          {
+            "raw": "green pea hummus",
+            "kind": "sub_recipe",
+            "maps_to": "English Peas",
+            "confidence": "inferred"
+          },
+          {
+            "raw": "grilled asparagus",
+            "kind": "tracked",
+            "maps_to": "Asparagus",
+            "confidence": "exact"
+          },
+          {
+            "raw": "sea bean",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "shallot",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "parsley",
+            "kind": "tracked",
+            "maps_to": "Parsley",
+            "confidence": "exact"
+          },
+          {
+            "raw": "lemon",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "needs_confirm"
+          }
+        ]
+      },
+      {
+        "name": "Pure Country Pork Chop",
+        "section": "Primi & Secondi",
+        "desc": "polenta, charred spring onion, apricot mostarda, demi glace",
+        "price": "42",
+        "hero": {
+          "kind": "tracked",
+          "maps_to": "Pure Country GL Pork Rack",
+          "price_tracked": true
+        },
+        "components": [
+          {
+            "raw": "polenta",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "charred spring onion",
+            "kind": "untracked",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "apricot mostarda",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "inferred"
+          },
+          {
+            "raw": "demi glace",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Earl Grey Tiramisu",
+        "section": "Dessert",
+        "desc": "mascarpone, ladyfingers, miro tea, planteray dark rum, bergamot agrumato",
+        "price": "15",
+        "hero": null,
+        "components": [
+          {
+            "raw": "mascarpone",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "ladyfingers",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "miro tea",
+            "kind": "pantry",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "planteray dark rum",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "bergamot agrumato",
+            "kind": "sourced",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Pavlova",
+        "section": "Dessert",
+        "desc": "rose meringue, vanilla pastry cream, macerated strawberries",
+        "price": "13",
+        "hero": null,
+        "components": [
+          {
+            "raw": "rose meringue",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "vanilla pastry cream",
+            "kind": "sub_recipe",
+            "maps_to": null,
+            "confidence": "exact"
+          },
+          {
+            "raw": "macerated strawberries",
+            "kind": "tracked",
+            "maps_to": "Strawberries (Local)",
+            "confidence": "exact"
+          }
+        ]
+      },
+      {
+        "name": "Seasonal Gelato",
+        "section": "Dessert",
+        "desc": "ask the kitchen for tonight's flavor",
+        "price": "8",
+        "hero": null,
+        "components": [
+          {
+            "raw": "ask the kitchen for tonight's flavor",
+            "kind": "prose",
+            "maps_to": null,
+            "confidence": "exact"
+          }
+        ]
+      }
+    ],
+    "candidates": [
+      "bell pepper",
+      "bing cherry",
+      "charred spring onion",
+      "citrus",
+      "fennel",
+      "lemon",
+      "nectarines",
+      "red onion",
+      "sea bean",
+      "shallot",
+      "tomato"
+    ]
+  },
+  "vendors": [
+    {
+      "key": "chefs_warehouse",
+      "display": "Chefs' Warehouse",
+      "tier": "",
+      "aliases": [
+        "chef's warehouse",
+        "chefs warehouse",
+        "chefs' warehouse",
+        "the chefs' warehouse"
+      ]
+    },
+    {
+      "key": "dim_pacific",
+      "display": "DIM Pacific Food Importers",
+      "tier": "",
+      "aliases": [
+        "dim pacific",
+        "dim pacific food importers"
+      ]
+    },
+    {
+      "key": "ec_wilson",
+      "display": "EC Wilson",
+      "tier": "",
+      "aliases": [
+        "ec wilson"
+      ]
+    },
+    {
+      "key": "farmstand_local_foods",
+      "display": "Farmstand Local Foods",
+      "tier": "",
+      "aliases": []
+    },
+    {
+      "key": "foraged_found",
+      "display": "Foraged & Found Edibles",
+      "tier": "",
+      "aliases": [
+        "foraged and found",
+        "foraged & found",
+        "foraged & found edibles",
+        "foraged_and_found",
+        "ff"
+      ]
+    },
+    {
+      "key": "franks",
+      "display": "Franks Quality Produce",
+      "tier": "",
+      "aliases": [
+        "franks produce",
+        "frank's quality produce",
+        "franks quality produce",
+        "franks_produce"
+      ]
+    },
+    {
+      "key": "key_city",
+      "display": "Key City Fish Co",
+      "tier": "",
+      "aliases": [
+        "key city fish",
+        "key city fish company",
+        "key city fish co",
+        "key_city_fish"
+      ]
+    },
+    {
+      "key": "local_roots_farm",
+      "display": "Local Roots Farm",
+      "tier": "",
+      "aliases": []
+    },
+    {
+      "key": "merlinos",
+      "display": "Merlino's",
+      "tier": "",
+      "aliases": [
+        "merlino",
+        "merlino's",
+        "merlino foods"
+      ]
+    },
+    {
+      "key": "pfi",
+      "display": "PFI",
+      "tier": "",
+      "aliases": [
+        "pacific food importers"
+      ]
+    },
+    {
+      "key": "preserve_meat",
+      "display": "Preserve Meat",
+      "tier": "",
+      "aliases": [
+        "preserve meat",
+        "preserve meat & provisions",
+        "preservation meat collective"
+      ]
+    },
+    {
+      "key": "sea_breeze_farm",
+      "display": "Sea Breeze Farm / Magic Meat Truck",
+      "tier": "",
+      "aliases": []
+    },
+    {
+      "key": "swan_house_farms",
+      "display": "Swan House Farms",
+      "tier": "family",
+      "aliases": [
+        "swan house farm",
+        "swan house farm, llc",
+        "swan house farms",
+        "swan house farms (our farm)"
+      ]
+    }
+  ],
   "component_links": {
     "beef tenderloin": {
       "kind": "canonical",
@@ -29913,20 +30770,249 @@ fbInit();
   };
   window.openPlanAhead=function(){clearScreens();renderPlanInline();setActive('plan');};
 
-  // ---- THE MENU (interim inline dish list; Firestore mapping tool = Pass B) ----
-  window.renderTheMenuInline=function(){
-    var h=host();if(!h)return;
-    var menu=DATA.menu||[];
-    var out='<div class="plan-h">The Menu</div><div class="vhint">Tap-to-map ingredient tool is coming next. For now, this is your live dish list.</div>';
-    if(!menu.length){out+='<div class="vempty">No menu loaded.</div>';h.innerHTML=out;return;}
-    menu.forEach(function(sec){
-      if(sec.section)out+='<div class="tr-sec-hd">'+esc(sec.section)+'</div>';
-      (sec.dishes||[]).forEach(function(d){
-        out+='<div class="vrow"><span class="vn">'+esc(d.name)+(d.description?('<div class="vhint" style="margin:2px 0 0">'+esc(d.description)+'</div>'):'')+'</span></div>';
-      });
+  // ---- THE MENU (Pass B) — chef-facing dish→ingredient→vendor→price mapping tool ----
+  // Landing = live dish list (DATA.menu_map). Tap a dish → expand its ingredient list,
+  // vendor-mapped items on top. Add/remove ingredients (search DATA.ingredients), map each
+  // to a vendor (search DATA.vendors registry) + a price (amount + unit). "Finalize" writes
+  // the dish doc to sf-staff-portal Firestore `menu-map` (doc per dish) so Remy digests it
+  // and the price board reads the chef-authored map.
+  var TM={state:{},loaded:false,ac:null,acCtx:null,_tracked:null};
+  var TM_UNITS=['lb','each','bunch','case','oz','pint','quart','dozen','flat','head'];
+
+  // sf-staff-portal is a SEPARATE Firebase project from this portal's default (remy-orders),
+  // so it gets its own named secondary compat app + anonymous sign-in (mirror of the
+  // staff-portal's remy-orders secondary app).
+  var TMFB={app:null,db:null,ready:false};
+  var SF_PORTAL_CONFIG={apiKey:"AIzaSyByAhPS7C86jXG-8y9EQGNbMwncmBPl9oc",authDomain:"sf-staff-portal.firebaseapp.com",projectId:"sf-staff-portal",storageBucket:"sf-staff-portal.firebasestorage.app",messagingSenderId:"395019590035",appId:"1:395019590035:web:d7fcccb093b09b9cb67066"};
+  function tmFbInit(cb){
+    if(TMFB.ready){cb&&cb();return;}
+    try{
+      if(!window.firebase){cb&&cb();return;}
+      TMFB.app=(firebase.apps||[]).find(function(a){return a.name==='sfportal';})||firebase.initializeApp(SF_PORTAL_CONFIG,'sfportal');
+      TMFB.db=TMFB.app.firestore();
+      TMFB.app.auth().signInAnonymously().then(function(){TMFB.ready=true;cb&&cb();}).catch(function(){TMFB.ready=false;cb&&cb();});
+    }catch(e){TMFB.ready=false;cb&&cb();}
+  }
+
+  function tmSlug(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80);}
+  function tmTracked(){if(TM._tracked)return TM._tracked;var s={};(DATA.price_trends||[]).forEach(function(t){if(t.ingredient)s[t.ingredient.toLowerCase()]=1;});TM._tracked=s;return s;}
+  function tmIsMapped(c){return !!((c.vendor&&String(c.vendor).trim())||(c.maps_to&&String(c.maps_to).trim()));}
+  function tmIsSub(c){return c.kind==='sub_recipe';}
+  function tmShowFields(c){return c.kind!=='prose'&&c.kind!=='pantry';}      // vendor/price fields (sub-recipes too)
+  function tmCountable(c){return c.kind==='tracked'||c.kind==='sourced'||c.kind==='untracked';} // mappable cost drivers (not sub/pantry/prose)
+
+  // --- lookups for auto-mapping ---
+  function tmTrendBy(){if(TM._trIdx)return TM._trIdx;var m={};(DATA.price_trends||[]).forEach(function(t){if(t.ingredient)m[t.ingredient.toLowerCase()]={amount:t.latest_price,unit:t.unit};});TM._trIdx=m;return m;}
+  function tmIngBy(){if(TM._ingIdx)return TM._ingIdx;var m={};(DATA.ingredients||[]).forEach(function(g){if(g.name)m[g.name.toLowerCase()]=g;});TM._ingIdx=m;return m;}
+  function tmVendorCanon(name){
+    if(!name)return '';var q=String(name).toLowerCase().trim(),V=DATA.vendors||[],i;
+    for(i=0;i<V.length;i++){if((V[i].display||'').toLowerCase()===q)return V[i].display;}
+    for(i=0;i<V.length;i++){if((V[i].aliases||[]).some(function(a){return a.toLowerCase()===q;}))return V[i].display;}
+    for(i=0;i<V.length;i++){var dn=(V[i].display||'').toLowerCase();if(dn&&(dn.indexOf(q)>=0||q.indexOf(dn)>=0))return V[i].display;}
+    return name;
+  }
+  function tmUnitNorm(u){u=(u||'').trim();return u==='#'?'lb':u;}
+  // sub-recipe = a composed/housemade prep. Catch the ones the curated map missed by name.
+  function tmLooksLikeSub(raw){
+    var s=(raw||'').toLowerCase();
+    if(/^house\s/.test(s))return true;
+    return /vinaigrette|pesto|hummus|gel[ée]+e|mostarda|gremolata|pur[ée]+e|coulis|aioli|dressing|marmalade|compote|conserva|marinara|pastry cream|meringue|demi[\s-]?glace|remoulade|tapenade|chimichurri|agrodolce|\bragu|\bjam\b|relish|caramelized onion|creamed |pickled /.test(s);
+  }
+  // On base/added comps (not chef-authored): catch missed sub-recipes, and push the tracked
+  // candidate's vendor + latest price into place so the chef starts from a real number.
+  function tmApplyAuto(c){
+    if(c.kind!=='sub_recipe'&&(c.kind==='pantry'||c.kind==='untracked'||c.kind==='sourced')&&tmLooksLikeSub(c.raw))c.kind='sub_recipe';
+    if(c.maps_to){
+      var key=String(c.maps_to).toLowerCase(),t=tmTrendBy()[key],g=tmIngBy()[key];
+      if(!c.vendor&&g&&g.vendor)c.vendor=tmVendorCanon(g.vendor);
+      if((c.price.amount===''||c.price.amount==null)&&t&&t.amount!=null){c.price.amount=t.amount;c.price.unit=tmUnitNorm(t.unit);}
+    }
+    return c;
+  }
+
+  function tmNormComp(c){
+    return {raw:c.raw,kind:c.kind||'untracked',maps_to:c.maps_to||null,vendor:c.vendor||'',
+      price:(c.price&&typeof c.price==='object')?{amount:(c.price.amount==null?'':c.price.amount),unit:c.price.unit||''}:{amount:'',unit:''},
+      confidence:c.confidence||''};
+  }
+  function tmInitState(){
+    var src=(DATA.menu_map&&DATA.menu_map.dishes)||[];
+    TM.state={};
+    src.forEach(function(d){
+      var key=tmSlug(d.name);
+      TM.state[key]={name:d.name,section:d.section||'',desc:d.desc||d.description||'',price:d.price||'',
+        hero:d.hero||null,components:(d.components||[]).map(function(c){return tmApplyAuto(tmNormComp(c));}),_open:false,_subopen:false};
     });
-    h.innerHTML=out;
+  }
+  // Overlay finalized Firestore docs onto base state (chef's authored map wins).
+  function tmLoadFromFirestore(done){
+    tmFbInit(function(){
+      if(!TMFB.ready||!TMFB.db){done&&done();return;}
+      TMFB.db.collection('menu-map').get().then(function(snap){
+        snap.forEach(function(doc){
+          var d=doc.data()||{},key=doc.id;
+          if(TM.state[key]){if(Array.isArray(d.components))TM.state[key].components=d.components.map(tmNormComp);}
+          else TM.state[key]={name:d.name||key,section:d.section||'',desc:d.desc||'',price:d.price||'',hero:d.hero||null,components:(d.components||[]).map(tmNormComp),_open:false,_subopen:false};
+        });
+        done&&done();
+      }).catch(function(){done&&done();});
+    });
+  }
+
+  window.renderTheMenuInline=function(){
+    var h=host();if(!h)return;tmBindOnce();
+    if(!TM.loaded){
+      tmInitState();
+      h.innerHTML='<div class="plan-h">The Menu</div><div class="vhint">Loading your menu…</div>';
+      tmLoadFromFirestore(function(){TM.loaded=true;tmRender();});
+      return;
+    }
+    tmRender();
   };
+  function tmRender(){
+    var h=host();if(!h)return;
+    var keys=Object.keys(TM.state);
+    var out='<div class="plan-h">The Menu</div><div class="vhint">Tap a dish, map each ingredient to a vendor and a price, then finalize. What you save becomes the price board’s source.</div>';
+    if(!keys.length){out+='<div class="vempty">No menu loaded.</div>';h.innerHTML=out;return;}
+    var order=[],bySec={};
+    keys.forEach(function(k){var s=TM.state[k].section||'Other';if(!bySec[s]){bySec[s]=[];order.push(s);}bySec[s].push(k);});
+    order.forEach(function(s){out+='<div class="tr-sec-hd">'+esc(s)+'</div>';bySec[s].forEach(function(k){out+=tmDishRow(k);});});
+    h.innerHTML=out;
+  }
+  function tmCount(d){var real=d.components.filter(tmCountable);return {mapped:real.filter(tmIsMapped).length,total:real.length};}
+  function tmDishRow(k){
+    var d=TM.state[k],c=tmCount(d),full=(c.total>0&&c.mapped>=c.total);
+    var h='<div class="tm-dish'+(d._open?' open':'')+'" data-k="'+esc(k)+'">';
+    h+='<button class="tm-dhd" data-act="toggle" data-k="'+esc(k)+'"><span class="tm-car">▶</span>';
+    h+='<span class="tm-dn">'+esc(d.name)+(d.desc?'<small>'+esc(d.desc)+'</small>':'')+'</span>';
+    h+='<span class="tm-cnt'+(full?' full':'')+'">'+c.mapped+'/'+c.total+' mapped</span></button>';
+    if(d._open)h+='<div class="tm-body">'+tmBody(k)+'</div>';
+    return h+'</div>';
+  }
+  function tmMainIdx(d){
+    var idx=[];d.components.forEach(function(c,i){if(!tmIsSub(c))idx.push(i);});
+    idx.sort(function(a,b){var ma=tmIsMapped(d.components[a])?0:1,mb=tmIsMapped(d.components[b])?0:1;return ma-mb||a-b;});
+    return idx;
+  }
+  function tmSubIdx(d){var idx=[];d.components.forEach(function(c,i){if(tmIsSub(c))idx.push(i);});return idx;}
+  function tmBody(k){
+    var d=TM.state[k],h='';
+    tmMainIdx(d).forEach(function(i){h+=tmIngRow(k,i);});
+    h+='<div class="tm-add"><button class="tm-addbtn" data-act="addopen" data-k="'+esc(k)+'">+ Add ingredient</button>'
+      +'<div class="tm-fld" data-addfld="'+esc(k)+'" style="display:none;margin-top:8px">'
+      +'<input class="tm-inp" data-act="addsearch" data-k="'+esc(k)+'" placeholder="Search ingredients… or type a new one" autocomplete="off"></div></div>';
+    var subs=tmSubIdx(d);
+    if(subs.length){
+      h+='<div class="tm-sub'+(d._subopen?' open':'')+'"><button class="tm-subhd" data-act="subtoggle" data-k="'+esc(k)+'">'
+        +'<span class="tm-car">▶</span>Sub-recipes<span class="tm-subn">'+subs.length+'</span></button>'
+        +'<div class="tm-subbody">';
+      subs.forEach(function(i){h+=tmIngRow(k,i);});
+      h+='</div></div>';
+    }
+    h+='<div class="tm-fin"><button class="tm-finbtn" data-act="finalize" data-k="'+esc(k)+'">Finalize ingredient list</button>'
+      +'<span class="tm-stamp" data-stamp="'+esc(k)+'"></span></div>';
+    return h;
+  }
+  function tmUnitOpts(sel){sel=sel||'';var o='<option value="">unit</option>',has=false;TM_UNITS.forEach(function(u){var s=(u===sel);if(s)has=true;o+='<option value="'+u+'"'+(s?' selected':'')+'>'+u+'</option>';});if(sel&&!has)o+='<option value="'+esc(sel)+'" selected>'+esc(sel)+'</option>';return o;}
+  function tmIngRow(k,i){
+    var d=TM.state[k],c=d.components[i],nm=c.maps_to||c.raw||'(unnamed)',mapped=tmIsMapped(c);
+    var h='<div class="tm-ing'+(mapped?' mapped':'')+'" data-k="'+esc(k)+'" data-i="'+i+'">';
+    h+='<div class="tm-iname">'+esc(nm)+'<span class="tm-kind '+esc(c.kind)+'">'+esc(c.kind)+'</span>'
+      +'<button class="tm-irm" data-act="rming" data-k="'+esc(k)+'" data-i="'+i+'" aria-label="Remove">×</button></div>';
+    if(tmShowFields(c)){
+      h+='<div class="tm-fld"><input class="tm-inp" data-act="vendor" data-k="'+esc(k)+'" data-i="'+i+'" value="'+esc(c.vendor)+'" placeholder="Vendor…" autocomplete="off"></div>';
+      h+='<div class="tm-fld price"><input class="tm-inp" type="number" min="0" step="0.01" inputmode="decimal" data-act="price" data-k="'+esc(k)+'" data-i="'+i+'" value="'+esc(c.price.amount)+'" placeholder="Price"></div>';
+      h+='<div class="tm-fld unit"><select class="tm-inp" data-act="unit" data-k="'+esc(k)+'" data-i="'+i+'">'+tmUnitOpts(c.price.unit)+'</select></div>';
+    }
+    return h+'</div>';
+  }
+  function tmRerenderDish(k){var el=document.querySelector('.tm-dish[data-k="'+k+'"]');if(!el){tmRender();return;}var w=document.createElement('div');w.innerHTML=tmDishRow(k);el.parentNode.replaceChild(w.firstChild,el);}
+
+  // ---- autocomplete ----
+  function tmCloseAC(){if(TM.ac&&TM.ac.parentNode)TM.ac.parentNode.removeChild(TM.ac);TM.ac=null;TM.acCtx=null;}
+  function tmShowAC(fld,items){
+    tmCloseAC();if(!items.length)return;
+    var ac=document.createElement('div');ac.className='tm-ac';
+    ac.innerHTML=items.map(function(it){
+      return '<div class="tm-aci" data-act="acpick" data-v="'+esc(it.value)+'">'+esc(it.label)
+        +(it.badge?'<span class="tm-amini">'+esc(it.badge)+'</span>':'')
+        +(it.isNew?'<span class="tm-anew">add new</span>':'')+'</div>';
+    }).join('');
+    fld.appendChild(ac);TM.ac=ac;
+  }
+  function tmVendorMatches(q){
+    q=(q||'').toLowerCase().trim();
+    return (DATA.vendors||[]).filter(function(v){
+      if(!q)return true;
+      if((v.display||'').toLowerCase().indexOf(q)>=0)return true;
+      return (v.aliases||[]).some(function(a){return a.toLowerCase().indexOf(q)>=0;});
+    }).slice(0,8).map(function(v){return {value:v.display,label:v.display,badge:v.tier==='family'?'family':''};});
+  }
+  function tmIngMatches(q){
+    q=(q||'').toLowerCase().trim();if(!q)return [];
+    var tr=tmTracked();
+    var out=(DATA.ingredients||[]).filter(function(g){return g.name&&g.name.toLowerCase().indexOf(q)>=0;})
+      .slice(0,8).map(function(g){return {value:g.name,label:g.name,badge:tr[g.name.toLowerCase()]?'tracked':''};});
+    var exact=(DATA.ingredients||[]).some(function(g){return g.name&&g.name.toLowerCase()===q;});
+    if(!exact)out.push({value:q,label:'“'+q+'”',isNew:true});
+    return out;
+  }
+  function tmPick(item){
+    var ctx=TM.acCtx;if(!ctx){tmCloseAC();return;}
+    var val=item.getAttribute('data-v');
+    if(ctx.type==='vendor'){TM.state[ctx.k].components[ctx.i].vendor=val;tmCloseAC();tmRerenderDish(ctx.k);}
+    else if(ctx.type==='add'){
+      var ing=(DATA.ingredients||[]).find(function(g){return g.name&&g.name.toLowerCase()===val.toLowerCase();});
+      var tr=tmTracked();
+      var comp=tmApplyAuto({raw:ing?ing.name:val,kind:ing?(tr[ing.name.toLowerCase()]?'tracked':'untracked'):'untracked',
+        maps_to:ing?ing.name:null,vendor:'',price:{amount:'',unit:''},confidence:'chef'});
+      TM.state[ctx.k].components.push(comp);tmCloseAC();tmRerenderDish(ctx.k);
+    }
+  }
+  function tmFinalize(k){
+    var d=TM.state[k],stamp=document.querySelector('[data-stamp="'+k+'"]');
+    function show(msg,err){if(!stamp)return;stamp.textContent=msg;stamp.className='tm-stamp show'+(err?' err':'');setTimeout(function(){stamp.className='tm-stamp';},2800);}
+    var doc={name:d.name,section:d.section,desc:d.desc,price:d.price,hero:d.hero||null,
+      components:d.components.map(function(c){return {raw:c.raw,kind:c.kind,maps_to:c.maps_to||null,vendor:c.vendor||'',
+        price:{amount:(c.price.amount===''||c.price.amount==null)?null:Number(c.price.amount),unit:c.price.unit||''},confidence:c.confidence||''};}),
+      updated_at:new Date().toISOString(),updated_by:'remy-portal'};
+    tmFbInit(function(){
+      if(!TMFB.ready||!TMFB.db){show('Saved locally (offline)');return;}
+      TMFB.db.collection('menu-map').doc(k).set(doc).then(function(){show('Finalized ✓');}).catch(function(){show('Save blocked — check rules',true);});
+    });
+  }
+
+  // ---- delegated events (host persists across re-renders; bind once) ----
+  function tmBindOnce(){
+    var h=host();if(!h||h._tmBound)return;h._tmBound=true;
+    h.addEventListener('click',function(e){
+      var t=e.target&&e.target.closest?e.target.closest('[data-act]'):null;
+      if(!t){tmCloseAC();return;}
+      var act=t.getAttribute('data-act'),k=t.getAttribute('data-k'),i=t.getAttribute('data-i');
+      if(act==='toggle'){TM.state[k]._open=!TM.state[k]._open;tmCloseAC();tmRerenderDish(k);}
+      else if(act==='subtoggle'){TM.state[k]._subopen=!TM.state[k]._subopen;tmCloseAC();tmRerenderDish(k);}
+      else if(act==='rming'){TM.state[k].components.splice(+i,1);tmRerenderDish(k);}
+      else if(act==='addopen'){var fld=document.querySelector('.tm-fld[data-addfld="'+k+'"]');if(fld){fld.style.display='block';var inp=fld.querySelector('input');if(inp)inp.focus();}t.style.display='none';}
+      else if(act==='acpick'){tmPick(t);}
+      else if(act==='finalize'){tmFinalize(k);}
+    });
+    h.addEventListener('input',function(e){
+      var t=e.target,act=t.getAttribute&&t.getAttribute('data-act');if(!act)return;
+      var k=t.getAttribute('data-k'),i=t.getAttribute('data-i');
+      if(act==='vendor'){TM.state[k].components[+i].vendor=t.value;var row=t.closest('.tm-ing');if(row)row.classList.toggle('mapped',tmIsMapped(TM.state[k].components[+i]));tmShowAC(t.parentNode,tmVendorMatches(t.value));TM.acCtx={type:'vendor',k:k,i:+i};}
+      else if(act==='price'){TM.state[k].components[+i].price.amount=t.value;}
+      else if(act==='addsearch'){tmShowAC(t.parentNode,tmIngMatches(t.value));TM.acCtx={type:'add',k:k};}
+    });
+    h.addEventListener('change',function(e){
+      var t=e.target;if(t.getAttribute&&t.getAttribute('data-act')==='unit'){TM.state[t.getAttribute('data-k')].components[+t.getAttribute('data-i')].price.unit=t.value;}
+    });
+    document.addEventListener('mousedown',function(e){
+      if(!TM.ac)return;
+      var inAc=e.target.closest&&e.target.closest('.tm-ac');
+      var inFld=e.target.getAttribute&&(e.target.getAttribute('data-act')==='vendor'||e.target.getAttribute('data-act')==='addsearch');
+      if(!inAc&&!inFld)tmCloseAC();
+    });
+  }
   window.openTheMenu=function(){clearScreens();renderTheMenuInline();setActive('menu');};
 })();
 </script>
