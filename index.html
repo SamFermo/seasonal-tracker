@@ -877,8 +877,15 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:8px}
 .pmhdr .pmcaret{color:var(--ink-30);font-size:11px}
 .pmhdr .pmn{margin-left:auto;color:var(--ink-30);font-weight:400;font-size:11px}
+.pmhdr .kc-ec{margin-left:8px;color:var(--olive);font-weight:600;font-size:11px;white-space:nowrap}
 .pmitems{padding:2px 6px 8px}
 .pmitems .vrow{padding:8px 4px}
+.kc-comp{background:rgba(123,155,209,0.08);border:1px dashed var(--ink-12);border-radius:7px;padding:4px 8px;margin:2px 0 6px}
+.kc-comp-h{font-family:var(--fb);font-size:9.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--navy);padding:4px 0 2px}
+.kc-ecrow{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--ink-6)}
+.kc-ecrow:last-child{border-bottom:none}
+.kc-ecrow .vn{flex:1;font-family:var(--fd);font-size:15px;color:var(--ink)}
+.kc-ecrow .vpr{font-family:var(--fb);font-size:12px;font-weight:500;color:var(--navy);white-space:nowrap}
 /* ── THE MENU (Pass B) — chef-facing dish→ingredient→vendor→price mapping ── */
 .tm-dish{border-bottom:1px solid var(--ink-6)}
 .tm-dhd{display:flex;align-items:center;gap:10px;padding:12px 2px;cursor:pointer;width:100%;background:none;border:none;text-align:left}
@@ -26597,6 +26604,378 @@ const DATA = {
     "sheet_date": "2026-06-22",
     "item_count": 118
   },
+  "ec_wilson_seafood": [
+    {
+      "location": "Alaska",
+      "name": "20-40lb Halibut",
+      "price_hg": {
+        "price": 15.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 26.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Halibut"
+    },
+    {
+      "location": "Alaska",
+      "name": "Sockeye",
+      "price_hg": {
+        "price": 11.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 17.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Salmon"
+    },
+    {
+      "location": "Washington",
+      "name": "Red Troll King",
+      "price_hg": {
+        "price": 15.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 25.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Salmon"
+    },
+    {
+      "location": "British Columbia, CA",
+      "name": "Organic Creative King Salmon",
+      "price_hg": {
+        "price": 13.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 19.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Salmon"
+    },
+    {
+      "location": "Washington",
+      "name": "Ling Cod Fillet",
+      "price_hg": {
+        "price": 6.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 11.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Ling Cod"
+    },
+    {
+      "location": "Washington",
+      "name": "Dover Sole Fillet",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 6.69,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Sole"
+    },
+    {
+      "location": "Washington",
+      "name": "Petrale Sole Fillet",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 10.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Sole"
+    },
+    {
+      "location": "Washington",
+      "name": "Rockfish PBI",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 6.69,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Rockfish"
+    },
+    {
+      "location": "Washington",
+      "name": "Black Cod 4-5lb",
+      "price_hg": {
+        "price": 8.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 14.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Black Cod"
+    },
+    {
+      "location": "Washington",
+      "name": "Black Cod 5-7lb",
+      "price_hg": {
+        "price": 12.45,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 17.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Black Cod"
+    },
+    {
+      "location": "USA",
+      "name": "Sturgeon",
+      "price_hg": {
+        "price": 12.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 16.65,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Sturgeon"
+    },
+    {
+      "location": "Domestic",
+      "name": "Dressed Trout",
+      "price_hg": {
+        "price": 7.65,
+        "unit": ""
+      },
+      "price_fillet": null,
+      "notes": "",
+      "species": "Trout"
+    },
+    {
+      "location": "Canada",
+      "name": "Atlantic Salmon",
+      "price_hg": {
+        "price": 6.69,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 10.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Salmon"
+    },
+    {
+      "location": "Japan",
+      "name": "Fresh U/10 Scallops",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 40.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Scallops"
+    },
+    {
+      "location": "USA",
+      "name": "Fresh U/14 Scallops",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 33.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Scallops"
+    },
+    {
+      "location": "Oregon",
+      "name": "Dungeness Crab Meat",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 49.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Crab"
+    },
+    {
+      "location": "Hawaii",
+      "name": "Yellowfin Ahi Tuna Loin #1",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 22.95,
+        "unit": ""
+      },
+      "notes": "Skin-Off Bloodline Out",
+      "species": "Tuna"
+    },
+    {
+      "location": "Fiji",
+      "name": "Albacore Tuna",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 13.95,
+        "unit": ""
+      },
+      "notes": "Skin-Off Bloodline Out",
+      "species": "Tuna"
+    },
+    {
+      "location": "Costa Rica",
+      "name": "Swordfish",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 18.95,
+        "unit": ""
+      },
+      "notes": "Skin-Off Bloodline Out",
+      "species": "Swordfish"
+    },
+    {
+      "location": "Costa Rica",
+      "name": "Mahi",
+      "price_hg": {
+        "price": 11.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 16.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Tuna"
+    },
+    {
+      "location": "New Zealand",
+      "name": "New Zealand King Salmon",
+      "price_hg": {
+        "price": 15.95,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 25.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Salmon"
+    },
+    {
+      "location": "New Zealand",
+      "name": "Sea Bream (Tai Snapper)",
+      "price_hg": {
+        "price": 12.95,
+        "unit": ""
+      },
+      "price_fillet": null,
+      "notes": "Gilled/Gutted/Scaled",
+      "species": "Snapper/Bream"
+    },
+    {
+      "location": "Turkey",
+      "name": "Branzini (Gilled/Gutted/Scaled)",
+      "price_hg": {
+        "price": 12.95,
+        "unit": ""
+      },
+      "price_fillet": null,
+      "notes": "",
+      "species": "Snapper/Bream"
+    },
+    {
+      "location": "Scotland",
+      "name": "Steelhead",
+      "price_hg": {
+        "price": 8.25,
+        "unit": ""
+      },
+      "price_fillet": {
+        "price": 12.95,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Salmon"
+    },
+    {
+      "location": "Penn Cove, WA",
+      "name": "Manila Clams",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 5.69,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Clams"
+    },
+    {
+      "location": "Chesapeake Bay",
+      "name": "Littleneck Clams",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 5.69,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Clams"
+    },
+    {
+      "location": "Penn Cove",
+      "name": "Mussels",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 5.09,
+        "unit": ""
+      },
+      "notes": "",
+      "species": "Mussels"
+    },
+    {
+      "location": "Samish Bay, WA",
+      "name": "Samish Pearl",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 10.95,
+        "unit": "dz"
+      },
+      "notes": "",
+      "species": "Oysters"
+    },
+    {
+      "location": "Baynes Sounds, BC",
+      "name": "Royal Miyagi Oysters",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 11.29,
+        "unit": "dz"
+      },
+      "notes": "",
+      "species": "Oysters"
+    },
+    {
+      "location": "Deep Bay, BC",
+      "name": "Kusshi",
+      "price_hg": null,
+      "price_fillet": {
+        "price": 16.95,
+        "unit": "dz"
+      },
+      "notes": "",
+      "species": "Oysters"
+    }
+  ],
+  "ec_wilson_seafood_meta": {
+    "sheet_date": "2026-06-23",
+    "item_count": 30
+  },
   "weather": {
     "vendor_alerts": {},
     "last_fetched": "2026-06-22T13:38:17.082317"
@@ -32727,6 +33106,24 @@ fbInit();
     s=s.replace(/\s{2,}/g,' ').replace(/[;,\-]\s*$/,'').trim();
     return s||String(n||'');
   }
+  // EC Wilson seafood (Jordan's emailed fresh sheet) — keyed by the same species as Key City
+  // so the two vendors comp side-by-side.
+  function ecwSeafood(){return DATA.ec_wilson_seafood||[];}
+  function ecwBySpecies(){if(window._ecwSp)return window._ecwSp;var m={};ecwSeafood().forEach(function(it){(m[it.species]=m[it.species]||[]).push(it);});window._ecwSp=m;return m;}
+  function ecwPrice(it){
+    var h=it.price_hg&&it.price_hg.price, f=it.price_fillet&&it.price_fillet.price;
+    var hu=(it.price_hg&&it.price_hg.unit)||'', fu=(it.price_fillet&&it.price_fillet.unit)||'';
+    if(h!=null&&f!=null)return '$'+h+' / $'+f;
+    if(h!=null)return '$'+h+(hu?('/'+esc(hu)):'');
+    if(f!=null)return '$'+f+(fu?('/'+esc(fu)):'');
+    return '';
+  }
+  function ecwMinHG(items){
+    var hs=items.map(function(i){return i.price_hg&&i.price_hg.price;}).filter(function(x){return x!=null;});
+    if(hs.length)return Math.min.apply(null,hs);
+    var fs=items.map(function(i){return i.price_fillet&&i.price_fillet.price;}).filter(function(x){return x!=null;});
+    return fs.length?Math.min.apply(null,fs):null;
+  }
   function keyCityView(vk){
     var vp=(DATA.vendor_prices||{})[vk]||[];
     if(!vp.length)return '<div class="vempty">No invoice pricing yet.</div>';
@@ -32741,29 +33138,53 @@ fbInit();
       seen[dk]=row; (groups[g]=groups[g]||[]).push(row);
     });
     var total=0;Object.keys(groups).forEach(function(g){total+=groups[g].length;});
+    var sp=ecwBySpecies();
     var body=order.filter(function(g){return groups[g];}).map(function(g,gi){
       var rows=groups[g].slice().sort(function(a,b){return a.name.localeCompare(b.name);}).map(function(r){
         return '<div class="vrow"><span class="vn">'+esc(r.name)+'</span><span class="vpr">$'+Number(r.price).toFixed(2)+(r.unit&&r.unit!=='each'&&r.unit!=='ea'?(' <span class="vu">/'+esc(r.unit)+'</span>'):'')+'</span>'+outreachIcon(r.name,'Key City Fish')+'</div>';
       }).join('');
+      // EC Wilson comp: same species from Jordan's seafood sheet
+      var ecw=sp[g]||[], ecBadge='', ecComp='';
+      if(ecw.length){
+        var mn=ecwMinHG(ecw); if(mn!=null)ecBadge=' <span class="kc-ec">EC $'+mn+'</span>';
+        var ecRows=ecw.map(function(it){return '<div class="kc-ecrow"><span class="vn">'+esc(it.name)+(it.location?(' <span class="vu">'+esc(it.location)+'</span>'):'')+'</span><span class="vpr">'+ecwPrice(it)+'</span></div>';}).join('');
+        ecComp='<div class="kc-comp"><div class="kc-comp-h">EC Wilson seafood sheet &middot; H&amp;G / fillet</div>'+ecRows+'</div>';
+      }
       var gid='kc-'+gi;
-      return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">&#9656;</span><span>'+esc(g)+'</span><span class="pmn">'+groups[g].length+'</span></button><div class="pmitems" id="'+gid+'" style="display:none">'+rows+'</div></div>';
+      return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">&#9656;</span><span>'+esc(g)+'</span><span class="pmn">'+groups[g].length+'</span>'+ecBadge+'</button><div class="pmitems" id="'+gid+'" style="display:none">'+ecComp+rows+'</div></div>';
     }).join('');
-    return '<div class="vhint">'+total+' items &middot; latest invoice price &middot; tap a group to expand</div>'+body;
+    var em=DATA.ec_wilson_seafood_meta||{};
+    return '<div class="vhint">'+total+' items &middot; latest invoice price &middot; tap a group to expand'+(ecwSeafood().length?(' &middot; <span class="kc-ec">EC $</span> = EC Wilson seafood comp ('+esc(em.sheet_date||'')+')'):'')+'</div>'+body;
   }
   function ecWilsonView(){
-    var vp=(DATA.vendor_prices||{})['EC Wilson']||[];
-    if(!vp.length)return '<div class="vhint">EC Wilson&rsquo;s invoice catalog needs OCR cleanup before it can show here &mdash; logged as a follow-on.</div>';
-    var groups={},order=[];
-    vp.forEach(function(p){var g=p.group||'Other';if(!groups[g]){groups[g]=[];order.push(g);}groups[g].push(p);});
-    order.sort(function(a,b){return a.localeCompare(b);});
-    var body=order.map(function(g,gi){
-      var rows=groups[g].slice().sort(function(a,b){return a.name.localeCompare(b.name);}).map(function(r){
-        return '<div class="vrow"><span class="vn">'+esc(r.name)+'</span><span class="vpr">$'+Number(r.price).toFixed(2)+(r.unit&&r.unit!=='each'?(' <span class="vu">/'+esc(r.unit)+'</span>'):'')+'</span>'+outreachIcon(r.name,'EC Wilson')+'</div>';
+    var out='';
+    // Seafood fresh sheet (Jordan, emailed) — grouped by species, prices H&G / fillet
+    var sea=ecwSeafood(), em=DATA.ec_wilson_seafood_meta||{};
+    if(sea.length){
+      var sp=ecwBySpecies(), sorder=Object.keys(sp).sort();
+      var sbody=sorder.map(function(g,gi){
+        var rows=sp[g].map(function(it){return '<div class="vrow"><span class="vn">'+esc(it.name)+(it.location||it.notes?('<div class="vhint" style="margin:2px 0 0">'+esc(it.location)+(it.notes?(' &middot; '+esc(it.notes)):'')+'</div>'):'')+'</span><span class="vpr">'+ecwPrice(it)+'</span></div>';}).join('');
+        var gid='ecws-'+gi;
+        return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">&#9656;</span><span>'+esc(g)+'</span><span class="pmn">'+sp[g].length+'</span></button><div class="pmitems" id="'+gid+'" style="display:none">'+rows+'</div></div>';
       }).join('');
-      var gid='ecw-'+gi;
-      return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">&#9656;</span><span>'+esc(g)+'</span><span class="pmn">'+groups[g].length+'</span></button><div class="pmitems" id="'+gid+'" style="display:none">'+rows+'</div></div>';
-    }).join('');
-    return '<div class="vhint">'+vp.length+' items &middot; latest invoice price &middot; OCR-canonicalized &middot; tap a group to expand</div>'+body;
+      out+='<div class="vhint"><b>Seafood fresh sheet</b> &middot; '+sea.length+' items'+(em.sheet_date?(' ('+esc(em.sheet_date)+')'):'')+' &middot; prices are H&amp;G / fillet</div>'+sbody;
+    }
+    // Meat catalog (invoice-canonicalized — EC Wilson has no vendor price list)
+    var vp=(DATA.vendor_prices||{})['EC Wilson']||[];
+    if(vp.length){
+      var groups={},order=[];
+      vp.forEach(function(p){var g=p.group||'Other';if(!groups[g]){groups[g]=[];order.push(g);}groups[g].push(p);});
+      order.sort(function(a,b){return a.localeCompare(b);});
+      var body=order.map(function(g,gi){
+        var rows=groups[g].slice().sort(function(a,b){return a.name.localeCompare(b.name);}).map(function(r){
+          return '<div class="vrow"><span class="vn">'+esc(r.name)+'</span><span class="vpr">$'+Number(r.price).toFixed(2)+(r.unit&&r.unit!=='each'?(' <span class="vu">/'+esc(r.unit)+'</span>'):'')+'</span>'+outreachIcon(r.name,'EC Wilson')+'</div>';
+        }).join('');
+        var gid='ecw-'+gi;
+        return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">&#9656;</span><span>'+esc(g)+'</span><span class="pmn">'+groups[g].length+'</span></button><div class="pmitems" id="'+gid+'" style="display:none">'+rows+'</div></div>';
+      }).join('');
+      out+='<div class="vhint" style="margin-top:14px"><b>Meat</b> &middot; '+vp.length+' items &middot; latest invoice price (no vendor price list) &middot; tap a group</div>'+body;
+    }
+    return out||'<div class="vhint">EC Wilson catalog not loaded yet.</div>';
   }
   // Merlino: Marci's biweekly order-history price sheet (commodity/pantry reference). Sorted
   // most-ordered first (10-week total) so the staples Sam actually buys float to the top.
