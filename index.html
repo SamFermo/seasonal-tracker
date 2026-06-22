@@ -964,40 +964,65 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   background:radial-gradient(ellipse at 50% 24%,#0c1535 0%,#050918 56%,#02040d 100%);
   transition:opacity .55s var(--ease)}
 #doors.gone,#farm.gone{opacity:0;pointer-events:none}
-.de-head{display:flex;align-items:baseline;gap:7px;padding:52px 20px 0;flex-shrink:0}
-.de-remy{font-family:var(--fd);font-size:16px;font-weight:500;letter-spacing:0.22em;color:var(--ink)}
+/* Entry header is now IDENTICAL to the portal header (.ph/.ph-remy) so the intro morph lands
+   once and never bumps when you enter a side. Moon colour + glow, center align, gap 10. */
+.de-head{display:flex;align-items:center;gap:10px;padding:52px 20px 0;flex-shrink:0}
+.de-remy{font-family:var(--fd);font-size:16px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--moon);text-shadow:0 0 8px rgba(245,232,200,0.42),0 0 16px rgba(245,232,200,0.22)}
 .de-brand{font-family:var(--fd);font-size:13px;font-style:italic;color:var(--ink-60)}
 .de-note{position:absolute;top:54px;right:20px;font-family:var(--fb);font-size:10px;letter-spacing:0.14em;
   text-transform:uppercase;color:var(--ink-30)}
-.doors-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 20px 26px;min-height:0}
-.door{position:relative;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:26px 26px 30px;border:1px solid var(--ink-12);border-radius:8px;cursor:pointer;
-  text-decoration:none;color:var(--ink);overflow:hidden;
-  transition:transform .4s var(--ease),box-shadow .5s var(--ease),border-color .4s var(--ease)}
-.door--kitchen{background:linear-gradient(180deg,#16122a 0%,#0a0a1f 100%)}
-.door--farm{background:linear-gradient(180deg,#101a26 0%,#0a1410 100%)}
-.door:hover,.door:focus-visible{transform:translateY(-3px);outline:none}
-.door--kitchen:hover,.door--kitchen:focus-visible{border-color:rgba(226,185,94,0.5);
-  box-shadow:0 16px 50px -20px rgba(224,135,99,0.5),0 0 60px -12px rgba(226,185,94,0.28)}
-.door--farm:hover,.door--farm:focus-visible{border-color:rgba(168,185,126,0.5);
-  box-shadow:0 16px 50px -20px rgba(168,185,126,0.42),0 0 60px -12px rgba(168,185,126,0.26)}
-.door-eyebrow{font-family:var(--fb);font-size:11px;font-weight:500;letter-spacing:0.20em;text-transform:uppercase}
-.door--kitchen .door-eyebrow{color:var(--terra)}
-.door--farm .door-eyebrow{color:var(--olive)}
-.door-title{font-family:var(--fd);font-size:42px;font-weight:500;line-height:1;margin-top:8px}
-.door-sub{font-family:var(--fd);font-style:italic;font-size:16px;color:var(--ink-60);margin-top:9px;max-width:22ch}
-.door-enter{margin-top:16px;font-family:var(--fb);font-size:11px;font-weight:500;letter-spacing:0.16em;
-  text-transform:uppercase;opacity:0;transform:translateX(-5px);
-  transition:opacity .4s var(--ease),transform .4s var(--ease)}
-.door:hover .door-enter,.door:focus-visible .door-enter{opacity:1;transform:translateX(0)}
+/* ── THE MOON ── one disc split into two halves; the side you hover glows and lifts. ── */
+.moon-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:14px 20px 30px;min-height:0}
+.moon-stage{position:relative;width:min(76vw,330px);height:min(76vw,330px);border-radius:50%;overflow:hidden;
+  background:radial-gradient(circle at 50% 40%,#1b2348 0%,#0b1024 58%,#070b1a 100%);
+  box-shadow:0 0 64px -16px rgba(245,232,200,0.24),inset 0 0 60px -22px rgba(245,232,200,0.18);
+  transition:box-shadow .55s var(--ease)}
+.moon-side{position:absolute;top:0;bottom:0;width:50%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;color:var(--moon);
+  text-align:center;padding:0 7%;-webkit-tap-highlight-color:transparent;
+  transition:filter .45s var(--ease),opacity .45s var(--ease)}
+.ms-kitchen{left:0;background:radial-gradient(circle at 72% 50%,rgba(226,185,94,0.32),rgba(224,135,99,0.10) 56%,transparent 82%)}
+.ms-farm{right:0;background:radial-gradient(circle at 28% 50%,rgba(168,185,126,0.32),rgba(120,150,110,0.10) 56%,transparent 82%)}
+.ms-eyebrow{font-family:var(--fb);font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,0.65)}
+.ms-kitchen .ms-eyebrow{color:var(--terra)}
+.ms-farm .ms-eyebrow{color:var(--olive)}
+.ms-title{font-family:var(--fd);font-size:25px;font-weight:500;line-height:1.05;text-shadow:0 1px 10px rgba(0,0,0,0.7)}
+.ms-enter{font-family:var(--fb);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-60);
+  opacity:0;transition:opacity .4s var(--ease)}
+/* glowing seam down the middle */
+.moon-stage::after{content:"";position:absolute;left:50%;top:9%;bottom:9%;width:1px;transform:translateX(-0.5px);
+  background:linear-gradient(180deg,transparent,rgba(245,232,200,0.55),transparent);
+  box-shadow:0 0 9px rgba(245,232,200,0.45);pointer-events:none}
+.moon-cap{font-family:var(--fd);font-style:italic;font-size:14px;color:var(--ink-60);text-align:center;max-width:30ch;line-height:1.4}
+/* DESKTOP (hover): hovered half flares in its colour, the moon's outer glow shifts to match,
+   the other half dims. */
+@media(hover:hover){
+  .moon-side{filter:brightness(0.82)}
+  .moon-side:hover{filter:brightness(1.55)}
+  .moon-side:hover .ms-enter{opacity:1}
+  .moon-stage:has(.ms-kitchen:hover){box-shadow:0 0 92px -6px rgba(226,185,94,0.55),inset 0 0 72px -16px rgba(226,185,94,0.34)}
+  .moon-stage:has(.ms-farm:hover){box-shadow:0 0 92px -6px rgba(168,185,126,0.5),inset 0 0 72px -16px rgba(168,185,126,0.32)}
+  .moon-stage:has(.ms-kitchen:hover) .ms-farm,.moon-stage:has(.ms-farm:hover) .ms-kitchen{filter:brightness(0.45);opacity:0.7}
+}
+/* TOUCH (no hover): can't preview, so both halves rest softly lit and the whole moon breathes
+   gently to read as "alive/tappable"; Enter cue stays visible; a tap flares the chosen side. */
+@media(hover:none){
+  .moon-stage{animation:moonBreath 6s ease-in-out infinite}
+  .ms-enter{opacity:0.85}
+  .moon-side:active{filter:brightness(1.6)}
+}
+@keyframes moonBreath{
+  0%,100%{box-shadow:0 0 58px -18px rgba(245,232,200,0.20),inset 0 0 54px -22px rgba(245,232,200,0.15)}
+  50%    {box-shadow:0 0 88px -12px rgba(245,232,200,0.34),inset 0 0 66px -18px rgba(245,232,200,0.24)}
+}
 /* farm shell: scrollable wrapper hosting the fresh-sheet .phone */
 .farm-shell{flex:1;display:flex;justify-content:center;align-items:flex-start;
   padding:22px 14px 40px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .farm-shell .phone{width:100%;max-width:430px;display:flex;flex-direction:column;position:relative;z-index:2}
-@media(max-width:720px){
-  .doors-grid{grid-template-columns:1fr;overflow-y:auto}
-  .door{min-height:200px}
-  .door-title{font-size:34px}
+@media(max-height:680px){
+  .moon-stage{width:min(58vh,300px);height:min(58vh,300px)}
+  .moon-wrap{gap:20px}
 }
 
 /* fresh-sheet component CSS (globals/:root stripped) */
@@ -1131,19 +1156,20 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 <div id="doors">
   <div class="de-head"><span class="de-remy">Remy</span><span class="de-brand">&middot; San Fermo</span></div>
   <div class="de-note">Choose your side</div>
-  <div class="doors-grid">
-    <a class="door door--kitchen" id="door-kitchen" href="#" role="button" tabindex="0">
-      <span class="door-eyebrow">For the restaurant</span>
-      <span class="door-title">The Kitchen</span>
-      <span class="door-sub">price trends, seasonal shifts, menu development</span>
-      <span class="door-enter">Enter &rarr;</span>
-    </a>
-    <a class="door door--farm" id="door-farm" href="#" role="button" tabindex="0">
-      <span class="door-eyebrow">For the grower</span>
-      <span class="door-title">The Farm</span>
-      <span class="door-sub">weather anomalies, what&rsquo;s peaking, surplus to move</span>
-      <span class="door-enter">Enter &rarr;</span>
-    </a>
+  <div class="moon-wrap">
+    <div class="moon-stage">
+      <a class="moon-side ms-kitchen" id="door-kitchen" href="#" role="button" tabindex="0" aria-label="The Kitchen — for the restaurant">
+        <span class="ms-eyebrow">For the restaurant</span>
+        <span class="ms-title">The Kitchen</span>
+        <span class="ms-enter">Enter &rarr;</span>
+      </a>
+      <a class="moon-side ms-farm" id="door-farm" href="#" role="button" tabindex="0" aria-label="The Farm — for the grower">
+        <span class="ms-eyebrow">For the grower</span>
+        <span class="ms-title">The Farm</span>
+        <span class="ms-enter">Enter &rarr;</span>
+      </a>
+    </div>
+    <div class="moon-cap">Kitchen: price trends, seasonal shifts &amp; menu. Farm: what&rsquo;s peaking &amp; surplus to move.</div>
   </div>
 </div>
 
