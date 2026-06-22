@@ -786,6 +786,65 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 .tr-push .pv{font-family:var(--fb);font-size:11px;color:var(--ink-30);white-space:nowrap}
 .tr-empty{font-family:var(--fd);font-style:italic;font-size:16px;color:var(--ink-30);padding:20px 0}
 </style>
+<style>
+/* ── KITCHEN Pass A: My Vendors + Plan dais + The Menu (2026-06-21) ── */
+.vp-bar{display:flex;gap:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 0 12px;scrollbar-width:none}
+.vp-bar::-webkit-scrollbar{display:none}
+.vpill{flex:0 0 auto;font-family:var(--fb);font-size:12px;font-weight:500;color:var(--ink-60);
+  background:var(--ink-6);border:1px solid var(--ink-12);border-radius:24px;padding:7px 13px;cursor:pointer;white-space:nowrap;transition:all .2s var(--ease)}
+.vpill:hover{color:var(--ink);border-color:var(--ink-30)}
+.vpill.active{color:#0a1028;background:var(--olive);border-color:var(--olive)}
+.vpill.sm{font-size:11px;padding:5px 11px}
+.vsort-bar{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 12px}
+.vlist{display:flex;flex-direction:column}
+.vrow{display:flex;align-items:center;gap:10px;padding:11px 2px;border-bottom:1px solid var(--ink-6)}
+.vrow .vn{font-family:var(--fd);font-size:18px;color:var(--ink);flex:1;line-height:1.1}
+.vrow .vtag{font-family:var(--fb);font-size:9.5px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;border-radius:12px;padding:3px 8px;white-space:nowrap}
+.vtag.peak{color:var(--terra);border:1px solid rgba(224,135,99,0.4)}
+.vtag.avail{color:var(--olive);border:1px solid rgba(168,185,126,0.4)}
+.vtag.off{color:var(--ink-30);border:1px solid var(--ink-12)}
+.vrow .vpr{font-family:var(--fb);font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;text-align:right}
+.vrow .vpr .vu{color:var(--ink-30);font-weight:400;font-size:10.5px}
+.vrow .vclimb{font-family:var(--fb);font-size:11px;font-weight:600;white-space:nowrap}
+.vclimb.up{color:var(--terra)}
+.vclimb.dn{color:var(--olive)}
+.vempty{font-family:var(--fd);font-style:italic;font-size:15px;color:var(--ink-30);padding:14px 0}
+.vhint{font-family:var(--fd);font-style:italic;font-size:12.5px;color:var(--ink-30);margin:-4px 0 12px}
+/* plan dais — more spacing, color glow (no movement) */
+.plan-dais{display:flex;justify-content:center;padding:18px 0 10px}
+.dais{position:relative;width:340px;height:340px}
+@media(max-width:380px){.dais{width:300px;height:300px}}
+.season-btn{position:absolute;width:98px;height:98px;border-radius:50%;border:1px solid var(--ink-12);
+  color:var(--ink);font-family:var(--fd);font-size:15px;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;transition:box-shadow .35s var(--ease),border-color .3s var(--ease);padding:0}
+.season-btn .sg{width:28px;height:28px;stroke:currentColor;stroke-width:1.5;fill:none;margin-bottom:3px}
+.season-btn.s-spring{background:linear-gradient(150deg,#1d3326,#0e1a14);color:#a8b97e}
+.season-btn.s-summer{background:linear-gradient(150deg,#3a2c12,#1d1407);color:#e2b95e}
+.season-btn.s-fall{background:linear-gradient(150deg,#3a1f12,#1d0f07);color:#e08763}
+.season-btn.s-winter{background:linear-gradient(150deg,#16243a,#0a121d);color:#7b9bd1}
+.season-btn.s-spring:hover,.season-btn.s-spring.sel{border-color:#a8b97e;box-shadow:0 0 28px -2px rgba(168,185,126,0.7)}
+.season-btn.s-summer:hover,.season-btn.s-summer.sel{border-color:#e2b95e;box-shadow:0 0 28px -2px rgba(226,185,94,0.7)}
+.season-btn.s-fall:hover,.season-btn.s-fall.sel{border-color:#e08763;box-shadow:0 0 28px -2px rgba(224,135,99,0.7)}
+.season-btn.s-winter:hover,.season-btn.s-winter.sel{border-color:#7b9bd1;box-shadow:0 0 28px -2px rgba(123,155,209,0.7)}
+.pos0{top:0;left:50%;transform:translateX(-50%)}
+.pos1{right:0;top:50%;transform:translateY(-50%)}
+.pos2{bottom:0;left:50%;transform:translateX(-50%)}
+.pos3{left:0;top:50%;transform:translateY(-50%)}
+.season-btn.center{top:50%;left:50%;transform:translate(-50%,-50%);width:112px;height:112px;
+  background:radial-gradient(circle at 50% 40%,#14224a,#070b18);color:var(--ink);border-color:var(--ink-30)}
+.season-btn.center:hover{border-color:var(--ink);box-shadow:0 0 28px -4px rgba(245,232,200,0.45)}
+.plan-h{font-family:var(--fd);font-size:26px;font-weight:500;color:var(--ink);margin:4px 0 2px}
+.plan-sub{font-family:var(--fd);font-style:italic;font-size:14px;color:var(--ink-60);margin-bottom:6px}
+/* preserve meat supplier groups */
+.pmgroup{margin-bottom:6px}
+.pmhdr{width:100%;text-align:left;background:var(--ink-6);border:1px solid var(--ink-12);border-radius:7px;
+  color:var(--ink);font-family:var(--fb);font-size:12.5px;font-weight:600;letter-spacing:0.02em;
+  padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.pmhdr .pmcaret{color:var(--ink-30);font-size:11px}
+.pmhdr .pmn{margin-left:auto;color:var(--ink-30);font-weight:400;font-size:11px}
+.pmitems{padding:2px 6px 8px}
+.pmitems .vrow{padding:8px 4px}
+</style>
 </head>
 <body>
 
@@ -16045,6 +16104,2164 @@ const DATA = {
       "tomato"
     ]
   },
+  "preserve_meat_catalog": {
+    "Beef": [
+      {
+        "name": "CNB - Brisket",
+        "price": "$7.99",
+        "unit": "Each",
+        "sku": "CNB00004",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CNB - Chuck Roll",
+        "price": "$9.99",
+        "unit": "Each",
+        "sku": "CNB00002",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CNB - Eye Round, Boneless",
+        "price": "$6.25",
+        "unit": "Each",
+        "sku": "CNB00018",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CNB - Oxtails, Cut and Trimmed",
+        "price": "$10.99",
+        "unit": "Each",
+        "sku": "CNB00016",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CNB - Prime Ribeye, Bone In",
+        "price": "$21.99",
+        "unit": "Each",
+        "sku": "CNB00010",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CNB - Ribeye Boneless, Choice",
+        "price": "$25.99",
+        "unit": "Each",
+        "sku": "CNB00017",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CNB - Sirloin Tip/Knuckle",
+        "price": "$6.99",
+        "unit": "Each",
+        "sku": "CNB00019",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CNB - Striploin",
+        "price": "$19.99",
+        "unit": "Each",
+        "sku": "CNB00003",
+        "supplier_meta": "Country Natural Beef, Oregon"
+      },
+      {
+        "name": "CRGF - Bavette (Sirloin Flap)",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7006",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Brisket Full",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7051",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Chuck Roll",
+        "price": "$9.99",
+        "unit": "Each",
+        "sku": "CRGF7075",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Chuck Under Blade",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7084",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Eye of Round",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7365",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF- Flat Iron, Peeled",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7108",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Outside Skirt",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7464",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF- Short Plate, Short Ribs Whole",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7973",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Short Ribs",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7310",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Striploins, Boneless",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7488",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "CRGF - Tri Tip",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "CRGF7549",
+        "supplier_meta": "Carman Rach 100% Grass Fed Beef - Wallowa, OR"
+      },
+      {
+        "name": "JMM - Beef Chuck Flap Steak, 6 oz",
+        "price": "$21.50",
+        "unit": "Each",
+        "sku": "JMM100124",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM - Boneless Chuck Short Ribs",
+        "price": "$17.99",
+        "unit": "Each",
+        "sku": "JMM11124",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM - Bones, Marrow, Canoe Cut",
+        "price": "$89.85 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "JMM09001",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - CNB Beef Cheeks",
+        "price": "$10.99",
+        "unit": "Each",
+        "sku": "JMM11401",
+        "supplier_meta": "Jack Mountain Meats. Burlington, WA"
+      },
+      {
+        "name": "JMM - CNB Beef Flanken Cut Short Ribs, COV.",
+        "price": "$15.99",
+        "unit": "Each",
+        "sku": "JMM11125",
+        "supplier_meta": "Jack Mountain Meats. Burlington, WA"
+      },
+      {
+        "name": "JMM - English Style Beef Short Rib",
+        "price": "$232.50 \u00a0 $15.50/pound",
+        "unit": "Each",
+        "sku": "JMM09002",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - Outside/Bottom Round, Sliced 2.1mm",
+        "price": "$10.99",
+        "unit": "Each",
+        "sku": "JMM17021",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM/PCB Bone In Ribeye Steak, 28oz.",
+        "price": "$27.55",
+        "unit": "Each",
+        "sku": "JMM53086",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM/PCB - Flat Iron Filets",
+        "price": "$269.85 \u00a0 $17.99/pound",
+        "unit": "Each",
+        "sku": "JMM00113",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM/PCB - New York Strip Steaks, 9/10oz",
+        "price": "$23.99",
+        "unit": "Each",
+        "sku": "JMM53083",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM/PCB NY Strip Steaks, 14oz.",
+        "price": "$25.55",
+        "unit": "Each",
+        "sku": "JMM53085",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM/PCB Tenderloin Filet, 6oz",
+        "price": "$28.99",
+        "unit": "Each",
+        "sku": "JMM53084",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM/PCB Trimmings Ground Beef Patties, 8oz.",
+        "price": "$10.00",
+        "unit": "Each",
+        "sku": "JMM53087",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM - Pepper Crusted Pastrami",
+        "price": "$16.80",
+        "unit": "Each",
+        "sku": "JMM50611",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM - Uncured Beef Hot Dogs (8-1, 15 lb case)",
+        "price": "$164.85",
+        "unit": "Case",
+        "sku": "JMM53080",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | | Sell Unit: Case"
+      },
+      {
+        "name": "KFW - Wagyu Skirt, Inside",
+        "price": "$31.98 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "KFW00019",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$45.98 \u00a0 $22.99/pound",
+        "unit": "Each",
+        "sku": "KFW00020",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Skirt, Outside | Pure Country Beef - Moses Lake, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "MRB00001",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | MRB - Beef Chuck Flap, Boneless | Mattawa Rach 100% Grass-Fed - Mattawa, WA"
+      },
+      {
+        "name": "OSC - Beef Bung Cap, 4.5-5",
+        "price": "$75.00",
+        "unit": "Case",
+        "sku": "OSC00001",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "OSC - Beef Bung Cap, 5+",
+        "price": "$80.00",
+        "unit": "Case",
+        "sku": "OSC00002",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "PCB - 13oz NY Strip Steaks",
+        "price": "$103.35 \u00a0 $7.95/pound",
+        "unit": "Each",
+        "sku": "PCB40013",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 13 oz | Lead Time: 7 days"
+      },
+      {
+        "name": "PCB - 3oz 30/70 Wagyu Patties",
+        "price": "$143.00 \u00a0 $7.15/pound",
+        "unit": "Each",
+        "sku": "PCB06011",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 20"
+      },
+      {
+        "name": "PCB - 3oz Burger Patties",
+        "price": "$71.00 \u00a0 $7.10/pound",
+        "unit": "Each",
+        "sku": "PCB40015",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA. | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - 4/1 Burger Patties, 10Lb Case",
+        "price": "$63.00 \u00a0 $6.30/pound",
+        "unit": "Each",
+        "sku": "PCB40021",
+        "supplier_meta": "21 day dry aged Pure Country Beef Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - 6oz Burger Patties",
+        "price": "$71.00 \u00a0 $7.10/pound",
+        "unit": "Each",
+        "sku": "PCB40016",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA. | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - 6oz. Chuck Flap Steaks",
+        "price": "$119.95 \u00a0 $23.99/pound",
+        "unit": "Each",
+        "sku": "PCB40012",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: .5"
+      },
+      {
+        "name": "PCB - Beef Carcass, Whole",
+        "price": "$0.00 \u00a0 $0.00/pound",
+        "unit": "Each",
+        "sku": "PCB03002",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 800"
+      },
+      {
+        "name": "PCB - Boneless Shank",
+        "price": "$0.00 \u00a0 $0.00/pound",
+        "unit": "Each",
+        "sku": "PCB40007",
+        "supplier_meta": "21 day dry aged Pure Country Beef Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - Boneless Short Rib, Not Denuded",
+        "price": "$21.99",
+        "unit": "Each",
+        "sku": "PCB20002",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA"
+      },
+      {
+        "name": "PCB - Bones, Knuckle",
+        "price": "$149.50 \u00a0 $2.99/pound",
+        "unit": "Each",
+        "sku": "PCB01000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 50"
+      },
+      {
+        "name": "PCB - Bones, Marrow, 2\" Cross Cut",
+        "price": "$103.00 \u00a0 $5.15/pound",
+        "unit": "Each",
+        "sku": "PCB01001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 20"
+      },
+      {
+        "name": "PCB - Bones, Marrow, Canoe Cut",
+        "price": "$59.90 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "PCB01002",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - Bones, Neck",
+        "price": "$85.50 \u00a0 $2.85/pound",
+        "unit": "Each",
+        "sku": "PCB01003",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 30"
+      },
+      {
+        "name": "PCB - Bottom Round",
+        "price": "$69.90 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "PCB00002",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - Brisket Whole",
+        "price": "$122.25 \u00a0 $8.15/pound",
+        "unit": "Each",
+        "sku": "PCB02000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 15"
+      },
+      {
+        "name": "PCB - Burger Patties, 3/1 Spec",
+        "price": "$97.50 \u00a0 $6.50/pound",
+        "unit": "Each",
+        "sku": "PCB06007",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 15"
+      },
+      {
+        "name": "PCB - Butt Tenderloin",
+        "price": "$64.97 \u00a0 $25.99/pound",
+        "unit": "Each",
+        "sku": "PCB40009",
+        "supplier_meta": "Pure Country Beef  - Moses Lake, WA | Avg Weight: 2.5"
+      },
+      {
+        "name": "PCB - Carcass, Half",
+        "price": "$2,240.00 \u00a0 $5.60/pound",
+        "unit": "Each",
+        "sku": "PCB03001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 400"
+      },
+      {
+        "name": "PCB - Cheeks",
+        "price": "$59.95 \u00a0 $11.99/pound",
+        "unit": "Each",
+        "sku": "PCB00003",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Chuck Roll",
+        "price": "$199.80 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "PCB04000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 20"
+      },
+      {
+        "name": "PCB - Chuck Short Ribs, Bone In",
+        "price": "$50.97 \u00a0 $16.99/pound",
+        "unit": "Each",
+        "sku": "PCB05000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCB - Clod Heart, Cap On",
+        "price": "$69.90 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "PCB06001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - Coulotte",
+        "price": "$56.97 \u00a0 $18.99/pound",
+        "unit": "Each",
+        "sku": "PCB07000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCB - Delmonico, Bone In",
+        "price": "$95.94 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "PCB40017",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 6"
+      },
+      {
+        "name": "PCB Dry Aged Bavette",
+        "price": "$75.96 \u00a0 $18.99/pound",
+        "unit": "Each",
+        "sku": "PCB00001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 4"
+      },
+      {
+        "name": "PCB Dry Aged Delmonico, Boneless",
+        "price": "$111.92 \u00a0 $13.99/pound",
+        "unit": "Each",
+        "sku": "PCB00004",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 8"
+      },
+      {
+        "name": "PCB Dry Aged Ground Beef, 10lbs",
+        "price": "$55.90 \u00a0 $5.59/pound",
+        "unit": "Each",
+        "sku": "PCB08000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB Dry Aged Hanging Tender",
+        "price": "$56.97 \u00a0 $18.99/pound",
+        "unit": "Each",
+        "sku": "PCB00010",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCB Dry Aged Sirloin Tip/Knuckle",
+        "price": "$87.89 \u00a0 $7.99/pound",
+        "unit": "Each",
+        "sku": "PCB00021",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 11"
+      },
+      {
+        "name": "PCB - English Cut Shortribs",
+        "price": "$15.50",
+        "unit": "Each",
+        "sku": "PCB40019",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA"
+      },
+      {
+        "name": "PCB - Exterior Fat",
+        "price": "$12.50 \u00a0 $2.50/pound",
+        "unit": "Each",
+        "sku": "PCB00006",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Eye of Round, Fat On",
+        "price": "$47.94 \u00a0 $7.99/pound",
+        "unit": "Each",
+        "sku": "PCB00105",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 6"
+      },
+      {
+        "name": "PCB - Flank",
+        "price": "$38.50 \u00a0 $19.25/pound",
+        "unit": "Each",
+        "sku": "PCB00008",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 2"
+      },
+      {
+        "name": "PCB - Flat Iron",
+        "price": "$79.95 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "PCB00009",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Grass Fed Beef Patties, 3.25 oz",
+        "price": "$71.00 \u00a0 $7.10/pound",
+        "unit": "Each",
+        "sku": "PCB06008",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - Grass Fed Ground Beef, 50lb",
+        "price": "$280.00 \u00a0 $5.60/pound",
+        "unit": "Each",
+        "sku": "PCB08002",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 50"
+      },
+      {
+        "name": "PCB - Ground Beef, 1 lb",
+        "price": "$7.50 \u00a0 $7.50/pound",
+        "unit": "Each",
+        "sku": "PCB08001",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "PCB - Ground Beef, 70/30 Spec",
+        "price": "$55.90 \u00a0 $5.59/pound",
+        "unit": "Each",
+        "sku": "PCB40011",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 10 | Lead Time: 7 days"
+      },
+      {
+        "name": "PCB - Heart",
+        "price": "$19.95 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCB00012",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Kidney",
+        "price": "$19.95 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCB00013",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Klingeman Wagyu Beef Slider Patties, 2 oz",
+        "price": "$82.50 \u00a0 $8.25/pound",
+        "unit": "Each",
+        "sku": "PCB06009",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCB - Lifter Caps",
+        "price": "$17.98 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "PCB40000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 2"
+      },
+      {
+        "name": "PCB - Liver",
+        "price": "$47.88 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCB00015",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 12"
+      },
+      {
+        "name": "PCB - Merlot",
+        "price": "$14.99 \u00a0 $14.99/pound",
+        "unit": "Each",
+        "sku": "PCB40014",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 1"
+      },
+      {
+        "name": "PCB - Mock Tender",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "PCB40006",
+        "supplier_meta": "21 day dry aged Pure Country Beef Moses Lake, WA | Special Order"
+      },
+      {
+        "name": "Please contact your Sales Representative directly to confirm availability and price.",
+        "price": "$83.86 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "PCB00016",
+        "supplier_meta": "PCB - Navel | 21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 14"
+      },
+      {
+        "name": "PCB - NY Strip Steak, 2\" Bone In",
+        "price": "$37.48 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "PCB40001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 1.5 | Lead Time: 7 days"
+      },
+      {
+        "name": "PCB - Osso Buco",
+        "price": "$27.50 \u00a0 $5.50/pound",
+        "unit": "Each",
+        "sku": "PCB00017",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Oxtail",
+        "price": "$32.97 \u00a0 $10.99/pound",
+        "unit": "Each",
+        "sku": "PCB00018",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCB - Ribeye, Bone In",
+        "price": "$428.22 \u00a0 $23.79/pound",
+        "unit": "Each",
+        "sku": "PCB09000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 18"
+      },
+      {
+        "name": "PCB - Skirt, Inside",
+        "price": "$29.98 \u00a0 $14.99/pound",
+        "unit": "Each",
+        "sku": "PCB20000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 2"
+      },
+      {
+        "name": "PCB - Skirt, Outside",
+        "price": "$40.50 \u00a0 $20.25/pound",
+        "unit": "Each",
+        "sku": "PCB20001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 2"
+      },
+      {
+        "name": "PCB - Striploin",
+        "price": "$265.86 \u00a0 $18.99/pound",
+        "unit": "Each",
+        "sku": "PCB13000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 14"
+      },
+      {
+        "name": "PCB - Suet/Kidney Fat",
+        "price": "$14.95 \u00a0 $2.99/pound",
+        "unit": "Each",
+        "sku": "PCB00022",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Tenderloin",
+        "price": "$155.94 \u00a0 $25.99/pound",
+        "unit": "Each",
+        "sku": "PCB00023",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 6"
+      },
+      {
+        "name": "PCB - Tendon",
+        "price": "$23.96 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "PCB00024",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 4"
+      },
+      {
+        "name": "PCB - Teres Major",
+        "price": "$17.50 \u00a0 $17.50/pound",
+        "unit": "Each",
+        "sku": "PCB00025",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 1"
+      },
+      {
+        "name": "PCB - Thor's Hammer",
+        "price": "$49.95 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "PCB40010",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 5 | Lead Time: 7 days"
+      },
+      {
+        "name": "PCB - Tongue",
+        "price": "$21.98 \u00a0 $10.99/pound",
+        "unit": "Each",
+        "sku": "PCB00026",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 2"
+      },
+      {
+        "name": "PCB - Top Round, Cap Off",
+        "price": "$68.00 \u00a0 $8.50/pound",
+        "unit": "Each",
+        "sku": "PCB15000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 8"
+      },
+      {
+        "name": "PCB - Top Round, Cap On",
+        "price": "$157.80 \u00a0 $7.89/pound",
+        "unit": "Each",
+        "sku": "PCB15001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 20"
+      },
+      {
+        "name": "PCB - Top Sirloin, Cap Off",
+        "price": "$103.92 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "PCB16000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 8"
+      },
+      {
+        "name": "PCB - Toro",
+        "price": "$28.48 \u00a0 $18.99/pound",
+        "unit": "Each",
+        "sku": "PCB40005",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 1.5"
+      },
+      {
+        "name": "PCB - Tri-Tip, Fat On",
+        "price": "$47.97 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "PCB00027",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCB - Zabuton",
+        "price": "$63.75 \u00a0 $21.25/pound",
+        "unit": "Each",
+        "sku": "PCB00029",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCP - Pork Spicy Breakfast Sausage, Bulk, 5 lb",
+        "price": "$24.95 \u00a0 $4.99/pound",
+        "unit": "Each",
+        "sku": "PCP00902",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Ribeye, Boneless",
+        "price": "$449.82 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "PCB40020",
+        "supplier_meta": "21 day dry aged Pure Country Beef Moses Lake, WA | Avg Weight: 18"
+      },
+      {
+        "name": "PCB - Shank, Whole",
+        "price": "$23.94 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCB00019",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 6"
+      },
+      {
+        "name": "PCB - Short Loin",
+        "price": "$593.78 \u00a0 $26.99/pound",
+        "unit": "Each",
+        "sku": "PCB05003",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 22"
+      },
+      {
+        "name": "PCB - Short Plate",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "PCB40018",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA"
+      },
+      {
+        "name": "PCB - Short Ribs 123A",
+        "price": "$93.95 \u00a0 $18.79/pound",
+        "unit": "Each",
+        "sku": "PCB10000",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCB - Short Ribs, Boneless 123D",
+        "price": "$21.99 \u00a0 $21.99/pound",
+        "unit": "Each",
+        "sku": "PCB10001",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 1"
+      },
+      {
+        "name": "PCB - Short Ribs, Flanken Cut",
+        "price": "$31.98 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "PCB10002",
+        "supplier_meta": "21 day dry aged Pure Country Beef | Moses Lake, WA | Avg Weight: 2"
+      }
+    ],
+    "Chicken": [
+      {
+        "name": "MOC - Airline Chicken Breasts - ABF",
+        "price": "$159.80 \u00a0 $7.99/pound",
+        "unit": "Each",
+        "sku": "MOC52134",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 20"
+      },
+      {
+        "name": "MOC - Boneless Skinless Chicken Dark Meat, 40Lb Case",
+        "price": "$3.99",
+        "unit": "Each",
+        "sku": "MOC52205",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight 40"
+      },
+      {
+        "name": "MOC - Chicken Back Bones - Non GMO",
+        "price": "$39.60 \u00a0 $0.99/pound",
+        "unit": "Each",
+        "sku": "MOC60017",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 40 lbs"
+      },
+      {
+        "name": "MOC - Chicken Breasts, Boneless, Skinless - ABF",
+        "price": "$216.00 \u00a0 $5.40/pound",
+        "unit": "Each",
+        "sku": "MOC52100",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 40"
+      },
+      {
+        "name": "MOC - Chicken Liver",
+        "price": "$3.99 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "MOC28408",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 1"
+      },
+      {
+        "name": "MOC - Chicken Party Wings - Non GMO",
+        "price": "$191.60 \u00a0 $4.79/pound",
+        "unit": "Each",
+        "sku": "MOC82307",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 40"
+      },
+      {
+        "name": "MOC - Chicken Thighs, Boneless, Skinless - Non GMO",
+        "price": "$290.00 \u00a0 $7.25/pound",
+        "unit": "Each",
+        "sku": "MOC82203",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 40"
+      },
+      {
+        "name": "MOC - Chicken Whole Leg - N/ Oyster Bone - Non GMO",
+        "price": "$170.00 \u00a0 $4.25/pound",
+        "unit": "Each",
+        "sku": "MOC82200",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 40"
+      },
+      {
+        "name": "MOC - Heirloom Whole Chicken - Non GMO",
+        "price": "$13.97 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "MOC87012",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 3.5"
+      },
+      {
+        "name": "MOC - Whole Chicken, 12 Head - Non GMO",
+        "price": "$144.00 \u00a0 $3.60/pound",
+        "unit": "Each",
+        "sku": "MOC82011",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 40"
+      },
+      {
+        "name": "MOC - Whole Chicken, 16 Head - Non GMO",
+        "price": "$159.60 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "MOC82017",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 40"
+      },
+      {
+        "name": "Palouse Poultry - Chicken Eggs (12 doz. per case)",
+        "price": "$99.99",
+        "unit": "Case",
+        "sku": "PPP00003",
+        "supplier_meta": "Palouse Pastured Poultry - Rosalia, WA | Sell Unit: Case"
+      },
+      {
+        "name": "Sky Valley Farm - Chicken Eggs (9 doz. per case)",
+        "price": "$74.99",
+        "unit": "Case",
+        "sku": "SVFF0016",
+        "supplier_meta": "Sky Valley Family Farm - Startup, WA | Sell Unit: Case"
+      }
+    ],
+    "Duck": [
+      {
+        "name": "LBG - Duck Fat, 7 Lb Tub",
+        "price": "$66.50 \u00a0 $9.50/pound",
+        "unit": "Each",
+        "sku": "LBG77778",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 7"
+      },
+      {
+        "name": "LBG - Duck Foie Gras, A Grade",
+        "price": "$87.48 \u00a0 $49.99/pound",
+        "unit": "Each",
+        "sku": "LBG10100",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1.75"
+      },
+      {
+        "name": "LBG - Duck Foie Gras, B Grade",
+        "price": "$78.73 \u00a0 $44.99/pound",
+        "unit": "Each",
+        "sku": "LBG10105",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1.75"
+      },
+      {
+        "name": "LBG - Duck Foie Gras Morsels/Nuggets",
+        "price": "$28.00 \u00a0 $28.00/pound",
+        "unit": "Each",
+        "sku": "LBG10330",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1"
+      },
+      {
+        "name": "LBG - Duck Fries",
+        "price": "$10.99 \u00a0 $10.99/pound",
+        "unit": "Each",
+        "sku": "LBG30001",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "LBG - Duck Gizzard",
+        "price": "$9.79 \u00a0 $9.79/pound",
+        "unit": "Each",
+        "sku": "LBG30002",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "LBG - Duck Heart",
+        "price": "$7.99 \u00a0 $7.99/pound",
+        "unit": "Each",
+        "sku": "LBG30003",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "LBG - Duck Leg Quarter",
+        "price": "$103.92 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "LBG20300",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 8"
+      },
+      {
+        "name": "LBG - Duck Tongues",
+        "price": "$21.50 \u00a0 $21.50/pound",
+        "unit": "Each",
+        "sku": "LBG30000",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "LBG - Moullard Double Duck Breasts",
+        "price": "$37.98 \u00a0 $18.99/pound",
+        "unit": "Each",
+        "sku": "LBG02000",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 2"
+      },
+      {
+        "name": "LBG - Orvia Duck Breasts",
+        "price": "$29.73 \u00a0 $16.99/pound",
+        "unit": "Each",
+        "sku": "LBG02003",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 1.75"
+      },
+      {
+        "name": "LBG - Whole MOULARD Duck",
+        "price": "$50.75 \u00a0 $7.25/pound",
+        "unit": "Each",
+        "sku": "LBG02001",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 7"
+      },
+      {
+        "name": "LBG- Whole ORVIA Ducks",
+        "price": "$29.95 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "LBG02002",
+        "supplier_meta": "La Bella Bella - West Haven, CT | Avg Weight: 5"
+      },
+      {
+        "name": "Maple Leaf - Duck Fat",
+        "price": "$8.99",
+        "unit": "Each",
+        "sku": "MDP00003",
+        "supplier_meta": "Maple Leaf Duck"
+      },
+      {
+        "name": "Maple Leaf - Duck Leg",
+        "price": "$10.99",
+        "unit": "Each",
+        "sku": "MDP00004",
+        "supplier_meta": "Maple Leaf"
+      },
+      {
+        "name": "MDP00006",
+        "price": "$3.89",
+        "unit": "Each",
+        "sku": "MAPLE - DUCK, WHOLE",
+        "supplier_meta": "Maple Leaf"
+      },
+      {
+        "name": "MOD - Duck Breast Skin On, 7-8oz. 20Lb Case",
+        "price": "$259.80 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "MOD75533",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 20"
+      },
+      {
+        "name": "MOD - Duck Carcasses/Frames. 30Lb Case.",
+        "price": "$65.70 \u00a0 $2.19/pound",
+        "unit": "Each",
+        "sku": "MOD77418",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 30"
+      },
+      {
+        "name": "MOD - Duck Leg Whole, Frozen. 20Lb Case",
+        "price": "$179.80 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "MOD77415",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 20"
+      },
+      {
+        "name": "MOD - Duck Wing 3 Joint",
+        "price": "$74.70 \u00a0 $2.49/pound",
+        "unit": "Each",
+        "sku": "MOD77404",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 30"
+      },
+      {
+        "name": "MOD - Whole Ducks, Large",
+        "price": "$19.95 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "MOD75450",
+        "supplier_meta": "Mary's Organic Chicken - Sanger, CA | Avg Weight: 5"
+      }
+    ],
+    "Goose": [
+      {
+        "name": "Wagyu",
+        "price": "$9.99",
+        "unit": "Each",
+        "sku": "SPOKANE HUTTERIAN GOOSE",
+        "supplier_meta": "Sort: Item name A-Z | SHG00001 | Spokane Hutterian Farm - Spokane, WA"
+      }
+    ],
+    "Lamb": [
+      {
+        "name": "OSC - 20/22 Sheep Flowline",
+        "price": "$339.99",
+        "unit": "Case",
+        "sku": "OSC00011",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "OSC - 20/22 Sheep Hank",
+        "price": "$37.99",
+        "unit": "Each",
+        "sku": "OSC00010",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Each"
+      },
+      {
+        "name": "OSC - 24/26 Sheep Flowline",
+        "price": "$339.99",
+        "unit": "Case",
+        "sku": "OSC00013",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "OSC - 24/26 Sheep Hank",
+        "price": "$38.99",
+        "unit": "Each",
+        "sku": "OSC00012",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Each"
+      },
+      {
+        "name": "OSC - 26/28 Sheep Flowline",
+        "price": "$359.99",
+        "unit": "Case",
+        "sku": "OSC00015",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "OSC - 26/28 Sheep Hank",
+        "price": "$38.99",
+        "unit": "Each",
+        "sku": "OSC00014",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Each"
+      },
+      {
+        "name": "OSC - 30+ Sheep Casing Flowline",
+        "price": "$549.00",
+        "unit": "Case",
+        "sku": "OSC00017",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "OSC - 30+ Sheep Hank",
+        "price": "$58.99",
+        "unit": "Each",
+        "sku": "OSC00016",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Each"
+      },
+      {
+        "name": "Wahl - Belly, boneless",
+        "price": "$48.93 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "UVL00051",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 7"
+      },
+      {
+        "name": "Wahl - Ground Lamb, 5 Lb",
+        "price": "$47.50 \u00a0 $9.50/pound",
+        "unit": "Each",
+        "sku": "UVL00010",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 5"
+      },
+      {
+        "name": "Wahl - Lamb Denver Ribs",
+        "price": "$26.97 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "UVL00012",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 3"
+      },
+      {
+        "name": "Wahl - Lamb Femur Bones, Cut",
+        "price": "$44.00 \u00a0 $2.20/pound",
+        "unit": "Each",
+        "sku": "UVL00026",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 20"
+      },
+      {
+        "name": "Wahl - Lamb Heart",
+        "price": "$5.99 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "UVL00022",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "Wahl - Lamb Hind Shanks",
+        "price": "$19.00 \u00a0 $9.50/pound",
+        "unit": "Each",
+        "sku": "UVL00003",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 2"
+      },
+      {
+        "name": "Wahl - Lamb Kidney",
+        "price": "$5.99 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "UVL00021",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "Wahl - Lamb Leg, Bone In",
+        "price": "$99.90 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "UVL00009",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 10"
+      },
+      {
+        "name": "Wahl - Lamb Leg, Boneless",
+        "price": "$59.95 \u00a0 $11.99/pound",
+        "unit": "Each",
+        "sku": "UVL00015",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 5"
+      },
+      {
+        "name": "Wahl - Lamb Liver",
+        "price": "$5.99 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "UVL00020",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "Wahl - Lamb Loin, Boneless",
+        "price": "$51.96 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "UVL00004",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 4"
+      },
+      {
+        "name": "Wahl - Lamb Loin Chops, Bone In",
+        "price": "$13.99 \u00a0 $13.99/pound",
+        "unit": "Each",
+        "sku": "UVL00008",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 1`"
+      },
+      {
+        "name": "Wahl - Lamb Neck, COV",
+        "price": "$13.00 \u00a0 $6.50/pound",
+        "unit": "Each",
+        "sku": "UVL00006",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 2"
+      },
+      {
+        "name": "Wahl - Lamb Racks",
+        "price": "$47.97 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "UVL00001",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 3"
+      },
+      {
+        "name": "Wahl - Lamb Saddle",
+        "price": "$64.95 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "UVL00019",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 5 | Lead Time: 10 days"
+      },
+      {
+        "name": "Wahl - Lamb Shoulder, Bone In Thick Slices",
+        "price": "$8.25",
+        "unit": "Each",
+        "sku": "UVL00027",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight:"
+      },
+      {
+        "name": "Wahl - Lamb Shoulder, Boneless",
+        "price": "$54.95 \u00a0 $10.99/pound",
+        "unit": "Each",
+        "sku": "UVL00005",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 5"
+      },
+      {
+        "name": "Wahl - Lamb Shoulder Osso Bucco",
+        "price": "$59.95 \u00a0 $11.99/pound",
+        "unit": "Each",
+        "sku": "UVL00023",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | avg Weight: 5"
+      },
+      {
+        "name": "Wahl - Lamb Tongue",
+        "price": "$12.99 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "UVL00014",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 1 | Lead Time: 10 days"
+      },
+      {
+        "name": "Wahl - Shoulder, Bone-in",
+        "price": "$50.75 \u00a0 $7.25/pound",
+        "unit": "Each",
+        "sku": "UVL00018",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 7 | Lead Time: 10 days"
+      },
+      {
+        "name": "Wahl - Whole Lamb Carcass",
+        "price": "$559.20 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "UVL00016",
+        "supplier_meta": "Wahl Grazing - Tangent, OR | Avg Weight: 80"
+      }
+    ],
+    "Pork": [
+      {
+        "name": "JCC - 30/32 Hog Flowline, 6 Hank",
+        "price": "$204.99",
+        "unit": "Each",
+        "sku": "JCC00001",
+        "supplier_meta": "Jordan Casing Co. - San Rafael, CA"
+      },
+      {
+        "name": "JMM - 10/12 Sunday Bacon, HRI",
+        "price": "$134.85 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "JMM00304",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - 10/12 Sunday Bacon, Retail",
+        "price": "$149.85 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "JMM00306",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - 14/16 Sunday Bacon, HRI",
+        "price": "$134.85 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "JMM00307",
+        "supplier_meta": "Jack Mountain Meats, Burlington WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - 20/22 Sunday Bacon, HRI",
+        "price": "$134.85 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "JMM00302",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight:15"
+      },
+      {
+        "name": "JMM - Andouille",
+        "price": "$9.99 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "JMM00100",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 1"
+      },
+      {
+        "name": "JMM - Bacon, Bits",
+        "price": "$89.85 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "JMM00300",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight:15"
+      },
+      {
+        "name": "JMM - Bacon, End to End",
+        "price": "$118.95 \u00a0 $7.93/pound",
+        "unit": "Each",
+        "sku": "JMM00301",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - Chorizo, Bulk",
+        "price": "$32.50 \u00a0 $6.50/pound",
+        "unit": "Each",
+        "sku": "JMM00101",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 5"
+      },
+      {
+        "name": "JMM - Classic Bratwurst, 1#",
+        "price": "$6.50 \u00a0 $6.50/pound",
+        "unit": "Each",
+        "sku": "JMM00102",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 1"
+      },
+      {
+        "name": "JMM - Country Morning Sausage",
+        "price": "$105.00 \u00a0 $7.00/pound",
+        "unit": "Each",
+        "sku": "JMM00103",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - Deli Ham",
+        "price": "$67.50 \u00a0 $7.50/pound",
+        "unit": "Each",
+        "sku": "JMM00402",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 9"
+      },
+      {
+        "name": "JMM - Hot Italian Sausage, Links",
+        "price": "$104.85 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "JMM00104",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15 | Lead Time: 7 days"
+      },
+      {
+        "name": "JMM  - Linguica Sausage",
+        "price": "$134.85 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "JMM00107",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight:15"
+      },
+      {
+        "name": "JMM - Polish Sausage, Links",
+        "price": "$149.85 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "JMM00108",
+        "supplier_meta": "Jack Mountain Meats, Burlington WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - Pork Butt, Sliced 6.4mm",
+        "price": "$5.99",
+        "unit": "Each",
+        "sku": "JMM00203",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA"
+      },
+      {
+        "name": "JMM - Rashers, HRI",
+        "price": "$134.85 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "JMM00305",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - Slab Bacon",
+        "price": "$35.96 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "JMM00308",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 4"
+      },
+      {
+        "name": "JMM -Smoked ham hocks",
+        "price": "$97.50 \u00a0 $6.50/pound",
+        "unit": "Each",
+        "sku": "JMM00309",
+        "supplier_meta": "Jack Mountain Meats, Burlington, WA | Avg Weight: 15"
+      },
+      {
+        "name": "JMM - Sweet Italian, Bulk",
+        "price": "$34.95 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "JMM00110",
+        "supplier_meta": "Jack Mountain Meats - Burlington, WA | Avg Weight: 5"
+      },
+      {
+        "name": "OSC - 29/32 Hog Flowline",
+        "price": "$309.00",
+        "unit": "Case",
+        "sku": "OSC00005",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "OSC - 29/32 Hog Hank",
+        "price": "$29.99",
+        "unit": "Each",
+        "sku": "OSC00004",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Each"
+      },
+      {
+        "name": "OSC - 30/32 Hog Flowline",
+        "price": "$339.00",
+        "unit": "Case",
+        "sku": "OSC00007",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Case"
+      },
+      {
+        "name": "OSC - 32/35 Hog Hank",
+        "price": "$36.00",
+        "unit": "Each",
+        "sku": "OSC00008",
+        "supplier_meta": "Oversea Casing Co. - Seattle, WA | Sell Unit: Each"
+      },
+      {
+        "name": "PCP00103",
+        "price": "$3.30",
+        "unit": "Each",
+        "sku": "PCP - BBQ HOG, 81-100LBS",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA"
+      },
+      {
+        "name": "PCP00106",
+        "price": "$2.80",
+        "unit": "Each",
+        "sku": "PCP - BBQ HOG, 141-160LBS",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA"
+      },
+      {
+        "name": "PCP - Ground Pork, Fine",
+        "price": "$42.50 \u00a0 $4.25/pound",
+        "unit": "Each",
+        "sku": "PCP00601",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCP - Porchetta",
+        "price": "$167.76 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "PCP04015",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 24 | Lead Time: 10 days"
+      },
+      {
+        "name": "PCP - Pork Baby Back Ribs",
+        "price": "$34.95 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "PCP00001",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Belly, Skinless",
+        "price": "$59.90 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "PCP00200",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCP - Pork Belly, Skin On",
+        "price": "$64.79 \u00a0 $5.89/pound",
+        "unit": "Each",
+        "sku": "PCP00201",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 11"
+      },
+      {
+        "name": "PCP - Pork Boneless Fat-On Leg",
+        "price": "$41.86 \u00a0 $2.99/pound",
+        "unit": "Each",
+        "sku": "PCP00300",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 14"
+      },
+      {
+        "name": "PCP - Pork Bones, Mixed",
+        "price": "$39.60 \u00a0 $0.99/pound",
+        "unit": "Each",
+        "sku": "PCP04006",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 40"
+      },
+      {
+        "name": "PCP - Pork Bones, Neck",
+        "price": "$42.25 \u00a0 $1.69/pound",
+        "unit": "Each",
+        "sku": "PCP04004",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 25"
+      },
+      {
+        "name": "PCP - Pork Breakfast Sausage Patties, 3 oz",
+        "price": "$52.50 \u00a0 $5.25/pound",
+        "unit": "Each",
+        "sku": "PCP00603",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCP - Pork Breakfast Sausage PUCKS",
+        "price": "$126.00 \u00a0 $6.30/pound",
+        "unit": "Each",
+        "sku": "PCP00604",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 20"
+      },
+      {
+        "name": "PCP - Pork Butt, .25\" Sliced",
+        "price": "$103.80 \u00a0 $5.19/pound",
+        "unit": "Each",
+        "sku": "PCP00503",
+        "supplier_meta": "Pure Country Pork, Moses Lake WA | Avg Weight: 20"
+      },
+      {
+        "name": "PCP - Pork Butt, Bone-in",
+        "price": "$73.95 \u00a0 $4.35/pound",
+        "unit": "Each",
+        "sku": "PCP00017",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 17"
+      },
+      {
+        "name": "PCP - Pork Butt, Boneless",
+        "price": "$70.35 \u00a0 $4.69/pound",
+        "unit": "Each",
+        "sku": "PCP00501",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 15"
+      },
+      {
+        "name": "PCP - Pork Capicola (Pork Butt, Close Trim)",
+        "price": "$39.95 \u00a0 $7.99/pound",
+        "unit": "Each",
+        "sku": "PCP04011",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Cheeks",
+        "price": "$11.98 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "PCP00002",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 2"
+      },
+      {
+        "name": "PCP - Pork Coppa Ribs",
+        "price": "$49.90 \u00a0 $4.99/pound",
+        "unit": "Each",
+        "sku": "PCP04002",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCP - Pork Danish leg, bone-in ham",
+        "price": "$71.76 \u00a0 $2.99/pound",
+        "unit": "Each",
+        "sku": "PCP04017",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 24"
+      },
+      {
+        "name": "PCP - Pork Danish, shoulder",
+        "price": "$103.74 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCP04018",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 26"
+      },
+      {
+        "name": "PCP - Pork Dry Aged GL Rack",
+        "price": "$99.90 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "PCP04009",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCP - Pork Dry Aged  NY End Loin, Skin On, Boneless",
+        "price": "$27.00 \u00a0 $4.50/pound",
+        "unit": "Each",
+        "sku": "PCP00502",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 6"
+      },
+      {
+        "name": "PCP - Pork Ears",
+        "price": "$19.95 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCP00003",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Fat, Bulk",
+        "price": "$12.50 \u00a0 $2.50/pound",
+        "unit": "Each",
+        "sku": "PCP00014",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Feet, Short Spec",
+        "price": "$7.96 \u00a0 $1.99/pound",
+        "unit": "Each",
+        "sku": "PCP00023",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 4"
+      },
+      {
+        "name": "PCP - Pork GL Rack, Half Rib",
+        "price": "$67.90 \u00a0 $6.79/pound",
+        "unit": "Each",
+        "sku": "PCP00700",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "PCP - Pork Head",
+        "price": "$27.86 \u00a0 $1.99/pound",
+        "unit": "Each",
+        "sku": "PCP00004",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 14"
+      },
+      {
+        "name": "PCP - Pork Heart",
+        "price": "$14.95 \u00a0 $2.99/pound",
+        "unit": "Each",
+        "sku": "PCP00005",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Jowl, Skin ON",
+        "price": "$11.97 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCP00006",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCP - Pork Kidney",
+        "price": "$9.95 \u00a0 $1.99/pound",
+        "unit": "Each",
+        "sku": "PCP00007",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Leaf Lard",
+        "price": "$14.95 \u00a0 $2.99/pound",
+        "unit": "Each",
+        "sku": "PCP04010",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Leg, Bone In, Skin Off",
+        "price": "$113.75 \u00a0 $3.25/pound",
+        "unit": "Each",
+        "sku": "PCP04012",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 35 | lead time: 10 days"
+      },
+      {
+        "name": "PCP - Pork Liver",
+        "price": "$23.88 \u00a0 $1.99/pound",
+        "unit": "Each",
+        "sku": "PCP00008",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 12"
+      },
+      {
+        "name": "PCP - Pork Loin Boneless, Strap On",
+        "price": "$90.87 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "PCP04003",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 13"
+      },
+      {
+        "name": "PCP - Pork Nut Hog",
+        "price": "$770.00 \u00a0 $3.50/pound",
+        "unit": "Each",
+        "sku": "PCP04016",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 220 | Lead Time: 10 days"
+      },
+      {
+        "name": "PCP - Pork NY End Loin, Boneless",
+        "price": "$18.00 \u00a0 $4.50/pound",
+        "unit": "Each",
+        "sku": "PCP00009",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 4"
+      },
+      {
+        "name": "PCP - Pork Picnic, Boneless",
+        "price": "$23.94 \u00a0 $3.99/pound",
+        "unit": "Each",
+        "sku": "PCP00010",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 6"
+      },
+      {
+        "name": "PCP - Pork Rack, Long Bone",
+        "price": "$81.48 \u00a0 $6.79/pound",
+        "unit": "Each",
+        "sku": "PCP00800",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 12"
+      },
+      {
+        "name": "PCP - Pork Saddle",
+        "price": "$247.05 \u00a0 $5.49/pound",
+        "unit": "Each",
+        "sku": "PCP00016",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 45 | lead time: 7 days"
+      },
+      {
+        "name": "PCP - Pork Shanks, Skinless",
+        "price": "$2.89",
+        "unit": "Each",
+        "sku": "PCP01100",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA"
+      },
+      {
+        "name": "PCP - Pork Skin",
+        "price": "$12.45 \u00a0 $2.49/pound",
+        "unit": "Each",
+        "sku": "PCP00018",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Snouts",
+        "price": "$29.95 \u00a0 $5.99/pound",
+        "unit": "Each",
+        "sku": "PCP04013",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 5"
+      },
+      {
+        "name": "PCP - Pork Spare Ribs",
+        "price": "$22.26 \u00a0 $3.18/pound",
+        "unit": "Each",
+        "sku": "PCP02000",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 7"
+      },
+      {
+        "name": "PCP - Pork St. Louis Ribs",
+        "price": "$9.87 \u00a0 $3.29/pound",
+        "unit": "Each",
+        "sku": "PCP00506",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCP - Pork Tenderloin, Whole",
+        "price": "$9.99 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "PCP04001",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 1"
+      },
+      {
+        "name": "PCP - Pork Tongue",
+        "price": "$3.99",
+        "unit": "Each",
+        "sku": "PCP00021",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA"
+      },
+      {
+        "name": "PCP - Pork Trotters (Feet w/ Shank Attached)",
+        "price": "$5.97 \u00a0 $1.99/pound",
+        "unit": "Each",
+        "sku": "PCP00022",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 3"
+      },
+      {
+        "name": "PCP - Prosciutto, bone-in, skin-on",
+        "price": "$48.75 \u00a0 $3.25/pound",
+        "unit": "Each",
+        "sku": "PCP04014",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 15 | Lead Time: 10 days"
+      },
+      {
+        "name": "PCP - Split Hog Carcass",
+        "price": "$646.80 \u00a0 $2.94/pound",
+        "unit": "Each",
+        "sku": "PCP03000",
+        "supplier_meta": "Pure Country Pork - Moses Lake, WA | Avg Weight: 220"
+      },
+      {
+        "name": "SCF - Butt, pork boneless",
+        "price": "$4.25",
+        "unit": "Each",
+        "sku": "SCF00106",
+        "supplier_meta": "Salmon Creek Farms - Twin Falls, ID"
+      },
+      {
+        "name": "SCF - Pork Femur Bones",
+        "price": "$0.99",
+        "unit": "Each",
+        "sku": "SCF00110",
+        "supplier_meta": "Salmon Creek Farms - Twin Falls, ID"
+      }
+    ],
+    "Wagyu": [
+      {
+        "name": "Authentic Wagyu - Bavette",
+        "price": "$99.96 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0002",
+        "supplier_meta": "Authentic Wagyu Full Blood - Enumclaw, WA | Avg Weight: 4 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.90 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0024",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Bottom round | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 10 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$134.85 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0003",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Brisket | Authentic Wagyu Full Blood - Enumclaw, WA | Avg Weight: 15 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.90 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0004",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Clod heart | Authentic Wagyu Full Blood - Enumclaw, WA | Avg Weight: 10 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$74.97 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0005",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Coulotte | Authentic Wagyu Full Blood - Enumclaw, WA | Avg Weight: 3 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$119.92 \u00a0 $14.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0006",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Delmonico | Authentic Wagyu Full Blood - Enumclaw, WA | Avg Weight: 8 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$44.95 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0007",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Eye of round | Authentic Wagyu Full Blood - Enumclaw, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$49.98 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0009",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Flank | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$47.98 \u00a0 $23.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0010",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Flanken ribs | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.95 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0011",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Flat iron | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$69.90 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0012",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Ground beef | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 10"
+      },
+      {
+        "name": "Authentic Wagyu - Hanging tender",
+        "price": "$19.99 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0008",
+        "supplier_meta": "Authentic Wagyu Full Blood - Enumclaw, WA | Avg Weight: 1 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$24.00 \u00a0 $12.00/pound",
+        "unit": "Each",
+        "sku": "AWFB0013",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Lifter cap | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$14.99 \u00a0 $14.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0014",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Merlot | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 1 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$900.00 \u00a0 $45.00/pound",
+        "unit": "Each",
+        "sku": "AWFB0015",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Ribeye | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 20 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.95 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0001",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Short Rib, 123A// | Authentic Wagyu Full Blood  - Enumclaw, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$33.98 \u00a0 $16.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0016",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Skirt, inside | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$47.98 \u00a0 $23.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0017",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Skirt, outside | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$419.86 \u00a0 $29.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0018",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Striploin | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 14 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$199.95 \u00a0 $39.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0019",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Tenderloin | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$118.93 \u00a0 $16.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0020",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Top sirloin | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 7 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$37.48 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0022",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Toro | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 1.5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$57.47 \u00a0 $22.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0021",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Tri-tip | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 2.5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$77.97 \u00a0 $25.99/pound",
+        "unit": "Each",
+        "sku": "AWFB0023",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | Authentic Wagyu - Zabuton | Authentic Full Blood Wagyu - Enumclaw, WA | Avg Weight: 3 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.96 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "KFW00001",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Bavette | Pure Country Beef - Moses Lake, WA | Avg Weight: 4 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.90 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "KFW00002",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Bottom Round | Pure Country Beef - Moses Lake, WA | Avg Weight: 10 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$134.85 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "KFW00003",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Brisket, Whole | Pure Country Beef - Moses Lake, WA | Avg Weight: 15 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$199.80 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "KFW00004",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Chuck Roll | Pure Country Beef - Moses Lake, WA | Avg Weight: 20 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$24.99 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "KFW00005",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Chuck Serratus | Pure Country Beef - Moses Lake, WA | Avg Weight: 1 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$129.90 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "KFW00006",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Clod Heart, Cap On | Pure Country Beef - Moses Lake, WA | Avg Weight: 10 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$74.97 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "KFW00007",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Coulotte | Pure Country Beef - Moses Lake, WA | Avg Weight: 3 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$119.92 \u00a0 $14.99/pound",
+        "unit": "Each",
+        "sku": "KFW00008",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Delmonico (Chuck Eye Loin) | Pure Country Beef - Moses Lake, WA | Avg Weight: 8 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$45.98 \u00a0 $22.99/pound",
+        "unit": "Each",
+        "sku": "KFW00032",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu English Shortrib | Pure Country Beef - Moses Lake, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$14.95 \u00a0 $2.99/pound",
+        "unit": "Each",
+        "sku": "KFW00010",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Ext. Fat | Pure Country Beef - Moses Lake, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$44.95 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "KFW00009",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Eye Round | Pure Country Beef - Moses Lake, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$45.98 \u00a0 $22.99/pound",
+        "unit": "Each",
+        "sku": "KFW00012",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Flanken Cut Short Ribs | Pure Country Beef - Moses Lake, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$45.98 \u00a0 $22.99/pound",
+        "unit": "Each",
+        "sku": "KFW00011",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Flank Steak | Pure Country Beef - Moses Lake, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.95 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "KFW00013",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Flat Iron, Top Blade | Pure Country Beef - Moses Lake, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$69.90 \u00a0 $6.99/pound",
+        "unit": "Each",
+        "sku": "KFW00014",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Ground Beef, 10Lb Bulk | Pure Country Beef - Moses Lake, WA | Avg Weight: 10"
+      },
+      {
+        "name": "KFW - Wagyu Hanging Tenders",
+        "price": "$19.99 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "KFW00015",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 1 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$37.50 \u00a0 $1.25/pound",
+        "unit": "Each",
+        "sku": "KFW00031",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Kidney Fat (Suet) | Pure Country Beef - Moses Lake, WA | Avg Weight: 30 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$25.98 \u00a0 $12.99/pound",
+        "unit": "Each",
+        "sku": "KFW00018",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Lifter Cap | Pure Country Beef - Moses Lake, WA | Avg Weight: 2 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$15.99 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "KFW00016",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Merlot Steaks | Pure Country Beef - Moses Lake, WA | Avg Weight: 1 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$599.80 \u00a0 $29.99/pound",
+        "unit": "Each",
+        "sku": "KFW00017",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Ribeye, Bone In | Pure Country Beef - Moses Lake, WA | Avg Weight: 20 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$99.95 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "KFW00021",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Short Rib, 123A | Pure Country Beef - Moses Lake, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$89.90 \u00a0 $8.99/pound",
+        "unit": "Each",
+        "sku": "KFW00023",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Sirloin Tip/Knuckle | Pure Country Beef - Moses Lake, WA | Avg Weight: 10 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$490.00 \u00a0 $35.00/pound",
+        "unit": "Each",
+        "sku": "KFW00022",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Striploin | Pure Country Beef - Moses Lake, WA | Avg Weight: 14 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$149.95 \u00a0 $29.99/pound",
+        "unit": "Each",
+        "sku": "KFW00024",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Tenderloin | Pure Country Beef - Moses Lake, WA | Avg Weight: 5 | Special Order"
+      },
+      {
+        "name": "KFW - Wagyu Teres Major",
+        "price": "$19.99 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "KFW00025",
+        "supplier_meta": "Pure Country Beef - Moses Lake, WA | Avg Weight: 1 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$79.92 \u00a0 $9.99/pound",
+        "unit": "Each",
+        "sku": "KFW00026",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Top Round, Cap On | Pure Country Beef - Moses Lake, WA | Avg Weight: 8 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$111.93 \u00a0 $15.99/pound",
+        "unit": "Each",
+        "sku": "KFW00027",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Top Sirloin | Pure Country Beef - Moses Lake, WA | Avg Weight: 7 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$37.48 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "KFW00028",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Toro | Pure Country Beef - Moses Lake, WA | Avg Weight: 1.5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$49.97 \u00a0 $19.99/pound",
+        "unit": "Each",
+        "sku": "KFW00029",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Tri Tip, Fat On | Pure Country Beef - Moses Lake, WA | Avg Weight: 2.5 | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$0.00",
+        "unit": "Each",
+        "sku": "KFW00033",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Whole Carcass | Pure Country Beef - Moses Lake, WA | Special Order"
+      },
+      {
+        "name": "Low stock",
+        "price": "$74.97 \u00a0 $24.99/pound",
+        "unit": "Each",
+        "sku": "KFW00030",
+        "supplier_meta": "Please contact your Sales Representative directly to confirm availability and price. | KFW - Wagyu Zabuton/Denver | Pure Country Beef - Moses Lake, WA | Avg Weight: 3 | Special Order"
+      }
+    ]
+  },
   "weather": {
     "vendor_alerts": {},
     "last_fetched": "2026-06-19T16:23:00.437717"
@@ -21971,6 +24188,7 @@ fbInit();
     }else{h+='<div class="tr-none">Nothing creeping past '+(b.threshold_pct||10)+'% this week.</div>';}
     h+='<div class="tr-sec-hd">Vendors are pushing</div>'+pushingList();
     var rest=(b.in_use||[]).filter(function(r){return !warned[r.ingredient];});
+    rest.sort(function(a,b2){var pa=(a.pct_30d==null)?-1e9:a.pct_30d,pb=(b2.pct_30d==null)?-1e9:b2.pct_30d;return (pb!==pa)?(pb-pa):((a.ingredient||'').localeCompare(b2.ingredient||''));});
     if(rest.length){
       h+='<div class="tr-sec-hd">On your menu</div>';
       rest.forEach(function(r,i){h+=card(r,'mv'+i,false);});
@@ -21986,16 +24204,180 @@ fbInit();
   };
   function buildKitchenPills(){
     var bar=document.getElementById('kitchen-pills');if(!bar)return;
-    var h='<button class="kpill active" data-k="trending" onclick="showTrending()">Trending Prices</button>';
-    (window.MODE_DEFS||[]).forEach(function(def,i){
-      h+='<button class="kpill" data-k="'+def.id+'" onclick="handleMode('+i+')">'+esc(def.label)+'</button>';
-    });
-    bar.innerHTML=h;
+    var P=[['trending','Trending Prices','showTrending'],['vendors','My Vendors','showVendors'],
+           ['menu','The Menu','openTheMenu'],['plan','Plan Ahead','openPlanAhead']];
+    bar.innerHTML=P.map(function(p,i){
+      return '<button class="kpill'+(i===0?' active':'')+'" data-k="'+p[0]+'" onclick="'+p[2]+'()">'+p[1]+'</button>';
+    }).join('');
   }
 
   function start(){ buildKitchenPills(); renderTrending(); }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);
   else start();
+})();
+</script>
+<script>
+/* ── KITCHEN Pass A inline views (2026-06-21) ── */
+(function(){
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function host(){return document.getElementById('trending-home');}
+  function setActive(k){var b=document.getElementById('kitchen-pills');if(b)b.querySelectorAll('.kpill').forEach(function(p){p.classList.toggle('active',p.dataset.k===k);});}
+  function clearScreens(){document.querySelectorAll('.ss').forEach(function(s){s.classList.remove('active');});if(typeof screenHistory!=='undefined')screenHistory.length=0;}
+
+  // Trending (re-renders into host; overrides the earlier showTrending)
+  window.showTrending=function(){clearScreens();if(window.renderTrending)renderTrending();setActive('trending');};
+
+  // ---- price-trend lookup ----
+  function trMap(){if(!window._kTr){_kTr={};(DATA.price_trends||[]).forEach(function(t){_kTr[t.ingredient]=t;});}return _kTr;}
+  function curMonth(){return (typeof curM!=='undefined')?curM:(new Date()).getMonth();}
+  function statusOf(it){
+    if(typeof isPeak==='function'&&isPeak(it))return 'peak';
+    var inS=false;
+    if(typeof sc==='function'){try{inS=sc(it,curMonth())>0;}catch(e){}}
+    else{var m=it.months||[];inS=(m[curMonth()]||0)>0;}
+    return inS?'avail':'off';
+  }
+
+  // ---- MY VENDORS ----
+  var VENDORS=[['Swan House Farms','Swan House'],['Franks Quality Produce','Franks'],
+    ['Foraged & Found Edibles','Foraged & Found'],['Local Roots Farm','Local Roots'],
+    ['Farmstand Local Foods','Farmstand'],['EC Wilson','EC Wilson'],['Key City Fish','Key City'],
+    ['Preserve Meat','Preserve Meat'],['Puget Sound Food Hub','PSFH'],['Sea Breeze Farm','Sea Breeze']];
+  var _vSel=0,_vSort='peaking',_pmCat=null;
+  function vIngs(vk){return (DATA.ingredients||[]).filter(function(it){var v=it.vendor||'';return v===vk||v.indexOf(vk)===0;});}
+  window.selVendor=function(i){_vSel=i;_pmCat=null;_vSort='peaking';renderVendors();};
+  window.setVSort=function(s){_vSort=s;renderVendors();};
+  window.setPmCat=function(c){_pmCat=c;renderVendors();};
+  function isComing(it){return (typeof isArriving==='function')&&isArriving(it);}
+
+  function climbHtml(name){var t=trMap()[name];if(!t||t.trend_30d_pct==null)return '';var p=t.trend_30d_pct;var cls=p>=10?'up':(p<=-10?'dn':'');var ar=p>0?'▲':(p<0?'▼':'');return cls?('<span class="vclimb '+cls+'">'+ar+' '+(p>0?'+':'')+p+'%</span>'):'';}
+  function priceHtml(it){var t=trMap()[it.name];if(t&&t.latest_price!=null)return '<span class="vpr">$'+Number(t.latest_price).toFixed(2)+(t.unit?(' <span class="vu">/'+esc(t.unit)+'</span>'):'')+'</span>';if(it.price_range)return '<span class="vpr" style="font-weight:400;color:var(--ink-60);font-size:11.5px">'+esc(it.price_range)+'</span>';return '';}
+  function tagHtml(it){var st=isComing(it)?'coming':statusOf(it);var m={peak:['peak','Peak'],avail:['avail','Available'],coming:['avail','Coming Soon'],off:['off','Off']};var x=m[st]||m.off;return '<span class="vtag '+x[0]+'">'+x[1]+'</span>';}
+
+  function vendorList(vk){
+    var ings=vIngs(vk);
+    if(_vSort==='peaking')ings=ings.filter(function(i){return statusOf(i)==='peak';});
+    else if(_vSort==='available')ings=ings.filter(function(i){var s=statusOf(i);return s==='peak'||s==='avail';});
+    else if(_vSort==='coming')ings=ings.filter(isComing);
+    if(_vSort==='costly'){ings.sort(function(a,b){var ta=trMap()[a.name],tb=trMap()[b.name];var pa=(ta&&ta.trend_30d_pct!=null)?ta.trend_30d_pct:-999;var pb=(tb&&tb.trend_30d_pct!=null)?tb.trend_30d_pct:-999;return pb-pa;});}
+    else ings.sort(function(a,b){return (a.name||'').localeCompare(b.name||'');});
+    if(!ings.length)return '<div class="vempty">Nothing in this view right now.</div>';
+    return ings.map(function(it){return '<div class="vrow"><span class="vn">'+esc(it.name)+'</span>'+tagHtml(it)+climbHtml(it.name)+priceHtml(it)+'</div>';}).join('');
+  }
+
+  // Preserve Meat: group by supplier, strip code prefix + low-stock suffix, badge low stock, guard Goose
+  // curated code -> supplier (from catalog + design-rationale program entries)
+  var PM_NAMES={CNB:'Country Natural Beef',CRGF:'Carman Ranch Grass-Fed',JMM:'Jack Mountain Meats',
+    PCP:'Pure Country Pork',PCB:'PCB Dry-Aged Beef',LBG:'La Bella Bella',MOC:"Mary's Organic Chicken",
+    MOD:"Mary's Organic Duck",WAHL:'Wahl Ranch',SCF:'Salmon Creek Farms',JCC:'Jordan Casing Co.',
+    KFW:'KFW',OSC:'OSC'};
+  function pmJunk(p){var n=(p.name||'').trim();if(!n)return true;if(/^low stock$/i.test(n))return true;
+    if(/please contact/i.test(n))return true;if(/^[A-Z]{2,5}\d{3,}$/.test(n))return true;return false;}
+  function pmGroup(p){
+    var n=(p.name||'').trim();
+    var first=(n.split(/[\s\-\/]+/)[0]||'').toUpperCase();
+    if(PM_NAMES[first])return PM_NAMES[first];
+    var m=n.match(/^([A-Za-z]{2,6})\s*-\s*/);
+    if(m){var c=m[1].toUpperCase();return PM_NAMES[c]||c;}
+    if(n.indexOf(' - ')>=0)return n.split(' - ')[0].trim();
+    if((p.sku||'').toLowerCase().indexOf('goose')>=0)return 'Spokane Hutterian Farm';
+    return 'Other';
+  }
+  var PM_CODES={CNB:1,CRGF:1,JMM:1,PCP:1,PCB:1,LBG:1,MOC:1,MOD:1,WAHL:1,SCF:1,JCC:1,KFW:1,OSC:1};
+  function cleanPMName(p){
+    var n=(p.name||'').replace(/\s*low stock\s*/ig,' ').trim();
+    n=n.replace(/^[A-Za-z]{2,6}(\/[A-Za-z]{2,6})?\s*-\s*/,'').trim();
+    var first=(n.split(/\s+/)[0]||'').toUpperCase();
+    if(PM_CODES[first])n=n.split(/\s+/).slice(1).join(' ');
+    if(!n||n.toLowerCase()==='wagyu'){if((p.sku||'').toLowerCase().indexOf('goose')>=0)n='Goose';}
+    return n||(p.name||'');
+  }
+  function pmLow(p){return /low stock/i.test(p.name||'');}
+  window.pmTog=function(id,btn){var el=document.getElementById(id);if(!el)return;var open=el.style.display!=='none';el.style.display=open?'none':'';var c=btn&&btn.querySelector('.pmcaret');if(c)c.textContent=open?'▸':'▾';};
+  function pmView(){
+    var cat=DATA.preserve_meat_catalog||{};var cats=Object.keys(cat);
+    if(!cats.length)return '<div class="vempty">Catalog not loaded.</div>';
+    if(!_pmCat||cats.indexOf(_pmCat)<0)_pmCat=cats[0];
+    var sub=cats.map(function(c){return '<button class="vpill sm'+(c===_pmCat?' active':'')+'" onclick="setPmCat(\''+c+'\')">'+esc(c)+'</button>';}).join('');
+    var all=cat[_pmCat]||[];
+    var prods=all.filter(function(p){return !pmJunk(p);});
+    var hidden=all.length-prods.length;
+    var groups={},order=[];
+    prods.forEach(function(p){var k=pmGroup(p);if(!groups[k]){groups[k]=[];order.push(k);}groups[k].push(p);});
+    order.sort(function(a,b){return groups[b].length-groups[a].length;});
+    var body=order.map(function(k,gi){
+      var items=groups[k].map(function(p){return '<div class="vrow"><span class="vn">'+esc(cleanPMName(p))+(pmLow(p)?' <span class="vtag off">low</span>':'')+'</span>'+(p.price?('<span class="vpr">'+esc(p.price)+(p.unit&&p.unit!=='Each'?(' <span class="vu">/'+esc(p.unit)+'</span>'):'')+'</span>'):'')+'</div>';}).join('');
+      var gid='pmg-'+gi;
+      return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">▾</span><span>'+esc(k)+'</span><span class="pmn">'+groups[k].length+'</span></button><div class="pmitems" id="'+gid+'">'+items+'</div></div>';
+    }).join('');
+    var note=hidden>0?('<div class="vhint" style="margin-top:8px">+'+hidden+' low-stock item'+(hidden===1?'':'s')+' hidden — product names not captured by the catalog scrape yet.</div>'):'';
+    return '<div class="vsort-bar">'+sub+'</div>'+body+note;
+  }
+  window.renderVendors=function(){
+    var h=host();if(!h)return;
+    var vp=VENDORS.map(function(v,i){return '<button class="vpill'+(i===_vSel?' active':'')+'" onclick="selVendor('+i+')">'+esc(v[1])+'</button>';}).join('');
+    var v=VENDORS[_vSel];
+    var out='<div class="vp-bar">'+vp+'</div>';
+    if(v[0]==='Preserve Meat'){out+=pmView();}
+    else{
+      var sorts=(v[0]==='Swan House Farms')
+        ?[['peaking','Peak'],['available','Available'],['coming','Coming Soon']]
+        :[['peaking','Peaking'],['available','Available'],['costly','Costly'],['alpha','A–Z']];
+      if(['peaking','available','costly','coming','alpha'].indexOf(_vSort)<0)_vSort='peaking';
+      out+='<div class="vsort-bar">'+sorts.map(function(s){return '<button class="vpill sm'+(_vSort===s[0]?' active':'')+'" onclick="setVSort(\''+s[0]+'\')">'+s[1]+'</button>';}).join('')+'</div>';
+      out+='<div class="vlist">'+vendorList(v[0])+'</div>';
+    }
+    h.innerHTML=out;
+  };
+  window.showVendors=function(){clearScreens();renderVendors();setActive('vendors');};
+
+  // ---- PLAN AHEAD (inline dais; avoids the screen-plan showPicker bug) ----
+  var SG={
+    spring:'<svg class="sg" viewBox="0 0 24 24"><path d="M12 21V11M12 11c0-3 2-5 5-5 0 3-2 5-5 5zM12 13c0-3-2-5-5-5 0 3 2 5 5 5z"/></svg>',
+    summer:'<svg class="sg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>',
+    fall:'<svg class="sg" viewBox="0 0 24 24"><path d="M5 19c7 1 14-6 14-14-8 0-15 7-14 14zM5 19l7-7"/></svg>',
+    winter:'<svg class="sg" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>',
+    cal:'<svg class="sg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>'
+  };
+  var DAIS=[['spring','Spring',0],['summer','Summer',1],['fall','Fall',2],['winter','Winter',3]];
+  window.renderPlanInline=function(){
+    var h=host();if(!h)return;
+    var btns=DAIS.map(function(s){return '<button class="season-btn s-'+s[0]+' pos'+s[2]+'" onclick="planSeason(\''+s[0]+'\',this)">'+SG[s[0]]+'<span>'+s[1]+'</span></button>';}).join('');
+    h.innerHTML='<div class="plan-h">Plan Ahead</div><div class="plan-sub">Pick a season, or a specific date.</div>'+
+      '<div class="plan-dais"><div class="dais">'+btns+
+      '<button class="season-btn center" onclick="planDate()">'+SG.cal+'<span>Pick a date</span></button>'+
+      '<input type="date" id="plan-inline-date" style="position:absolute;left:50%;top:50%;width:1px;height:1px;opacity:0;border:0;padding:0" '+
+      'onchange="if(window.selectDate)selectDate(\'plan-inline\',\'event\',this.value)"></div></div>'+
+      '<div class="flow-wrap"><div class="flow-results" id="plan-inline-results"></div></div>';
+  };
+  window.planSeason=function(id,btn){
+    document.querySelectorAll('#trending-home .season-btn').forEach(function(b){b.classList.remove('sel');});
+    if(btn)btn.classList.add('sel');
+    var s=(window.SEASONS||[]).find(function(x){return x.id===id;});
+    if(s&&window.renderFlowResults)renderFlowResults('plan-inline','planning',s.months,s.label);
+  };
+  window.planDate=function(){
+    var inp=document.getElementById('plan-inline-date');if(!inp)return;
+    if(typeof inp.showPicker==='function'){try{inp.showPicker();return;}catch(e){}}
+    try{inp.focus();inp.click();}catch(e){}
+  };
+  window.openPlanAhead=function(){clearScreens();renderPlanInline();setActive('plan');};
+
+  // ---- THE MENU (interim inline dish list; Firestore mapping tool = Pass B) ----
+  window.renderTheMenuInline=function(){
+    var h=host();if(!h)return;
+    var menu=DATA.menu||[];
+    var out='<div class="plan-h">The Menu</div><div class="vhint">Tap-to-map ingredient tool is coming next. For now, this is your live dish list.</div>';
+    if(!menu.length){out+='<div class="vempty">No menu loaded.</div>';h.innerHTML=out;return;}
+    menu.forEach(function(sec){
+      if(sec.section)out+='<div class="tr-sec-hd">'+esc(sec.section)+'</div>';
+      (sec.dishes||[]).forEach(function(d){
+        out+='<div class="vrow"><span class="vn">'+esc(d.name)+(d.description?('<div class="vhint" style="margin:2px 0 0">'+esc(d.description)+'</div>'):'')+'</span></div>';
+      });
+    });
+    h.innerHTML=out;
+  };
+  window.openTheMenu=function(){clearScreens();renderTheMenuInline();setActive('menu');};
 })();
 </script>
 </body>
