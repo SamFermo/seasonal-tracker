@@ -1210,6 +1210,25 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .pc-photo{display:block;width:100%;max-height:170px;object-fit:cover;border-radius:8px;border:1px solid var(--ink-12)}
 .pc-photo-up{position:absolute;top:8px;left:8px;background:rgba(2,4,13,0.72);color:var(--ink);font-family:var(--fb);font-size:11px;letter-spacing:0.04em;padding:4px 9px;border-radius:14px}
 .pc-photo-err{margin-top:8px;font-family:var(--fb);font-size:11px;color:var(--terra);letter-spacing:0.02em}
+.pc-photo{cursor:pointer}
+.list-head{display:flex;align-items:flex-start;gap:10px;margin:16px 0 12px}
+.list-head .list-intro{margin:0;flex:1}
+.list-intro b{font-style:normal;color:var(--olive);font-weight:600}
+.pmode-toggle{flex-shrink:0;font-family:var(--fb);font-size:11px;font-weight:500;letter-spacing:0.04em;color:var(--ink-60);background:var(--ink-6);border:1px solid var(--ink-12);border-radius:20px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+.pmode-toggle.on{color:#0a1028;background:var(--gold);border-color:var(--gold)}
+#photoView{position:fixed;inset:0;z-index:210;display:none;align-items:center;justify-content:center;background:rgba(2,4,13,0.86);padding:20px}
+#photoView.open{display:flex}
+.pv-card{width:100%;max-width:460px;display:flex;flex-direction:column;gap:12px}
+.pv-head{display:flex;align-items:center}
+.pv-title{flex:1;font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink)}
+.pv-x{background:none;border:none;color:var(--ink-60);font-size:26px;cursor:pointer;line-height:1}
+.pv-x:hover{color:var(--ink)}
+.pv-img{width:100%;max-height:70vh;object-fit:contain;border-radius:10px;background:#0d1535}
+.pv-actions{display:flex;gap:10px}
+.pv-btn{flex:1;font-family:var(--fb);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink);background:var(--ink-6);border:1px solid var(--ink-12);border-radius:8px;padding:12px;cursor:pointer}
+.pv-btn:hover{border-color:var(--ink-30)}
+.pv-btn.danger{color:var(--terra);border-color:rgba(224,135,99,0.4)}
+.pv-btn.danger:hover{background:rgba(224,135,99,0.1)}
 
 </style>
 
@@ -1262,7 +1281,10 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   </div>
 
   <div class="view" id="view-list">
-    <div class="list-intro">Everything you&rsquo;re growing. Tap a status to change it, star what to push.</div>
+    <div class="list-head">
+      <div class="list-intro" id="list-intro">Everything you&rsquo;re growing. Tap a status to change it, <b>$</b> to price, <b>&#9733;</b> to push.</div>
+      <button class="pmode-toggle" id="photo-mode-toggle" aria-pressed="false">Photo mode</button>
+    </div>
     <div id="list-rows"></div>
   </div>
 
@@ -1273,6 +1295,16 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 
   <div class="meta" id="meta"></div>
   <div id="saved" style="position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:rgba(168,185,126,0.16);border:1px solid rgba(168,185,126,0.5);color:#a8b97e;font-family:var(--fb);font-size:11px;letter-spacing:0.08em;padding:7px 15px;border-radius:20px;opacity:0;transition:opacity .3s ease;pointer-events:none">Saved</div>
+  <div id="photoView">
+    <div class="pv-card">
+      <div class="pv-head"><span class="pv-title" id="pv-title">Photo</span><button class="pv-x" id="pv-close" aria-label="Close">&times;</button></div>
+      <img class="pv-img" id="pv-img" src="" alt="">
+      <div class="pv-actions">
+        <button class="pv-btn" id="pv-replace">Replace</button>
+        <button class="pv-btn danger" id="pv-remove">Remove</button>
+      </div>
+    </div>
+  </div>
   <div id="priceTool">
   <div class="pt-card">
     <div class="pt-head"><span class="pt-title" id="pt-title">Price this</span><button class="pt-x" id="pt-close" aria-label="Close">&times;</button></div>
@@ -32833,28 +32865,70 @@ function resizeImage(file,maxDim,quality,cb){
     img.src=url;
   }catch(e){cb(null,null);}
 }
+function reRender(){try{renderPush();renderList();}catch(e){}}
+function clearUploading(g){if(g&&g._photoUp){g._photoUp=false;reRender();}}
 function handlePhoto(name,file){
   var g=byName[name];if(!g)return;
   resizeImage(file,1024,0.7,function(blob,dataUrl){
-    if(!dataUrl){g._photoErr='Could not read that image';renderPush();renderList();return;}
-    g.photo=dataUrl;g._photoErr='';g._photoUp=true;   // optimistic local preview
+    if(!dataUrl){g._photoErr='Could not read that image';reRender();return;}
+    g.photo=dataUrl;g._photoErr='';g._photoUp=true;   // optimistic local preview (dataUrl)
     pushed.add(name);renderPush();renderPick();renderList();
-    uploadMedia('photo',name,blob||file,'image/jpeg','.jpg',function(url,err){
-      g._photoUp=false;
-      if(url){g.photo=url;persist();}
-      else{g._photoErr=(err==='offline'?'Saved on this device — will sync when online':'Upload failed — tap to retry');lsSave();}
-      renderPush();renderList();
-    });
+    var done=false;
+    function finish(url,err){
+      if(done)return;done=true;g._photoUp=false;
+      if(url){g.photo=url;persist();}                 // real Storage URL → Firestore
+      else if(err&&err!=='offline'){g._photoErr='Upload failed — tap the photo to retry';lsSave();}
+      else{lsSave();}                                  // offline: keep local preview, no error noise
+      reRender();
+    }
+    // clear the "Uploading…" badge the moment the bytes land — don't block on getDownloadURL
+    uploadMedia('photo',name,blob||file,'image/jpeg','.jpg',finish,function(){clearUploading(g);});
+    // safety net: never let the badge stick if the network stalls
+    setTimeout(function(){clearUploading(g);},20000);
   });
 }
-function uploadMedia(kind,name,blob,contentType,ext,cb){
+function uploadMedia(kind,name,blob,contentType,ext,cb,onPut){
   if(!(FB.ready&&FB.storage)){cb(null,'offline');return;}
   try{
     var ref=FB.storage.ref('farmMedia/'+BUYER+'/'+kind+'/'+slugName(name)+ext);
-    ref.put(blob,{contentType:contentType}).then(function(){return ref.getDownloadURL();})
+    var task=ref.put(blob,{contentType:contentType});
+    task.then(function(){try{if(onPut)onPut();}catch(e){}return ref.getDownloadURL();})
       .then(function(url){cb(url);}).catch(function(e){cb(null,(e&&e.code)||'err');});
   }catch(e){cb(null,'err');}
 }
+
+/* photo-mode toggle on the full list (keeps the catalog clean by default) */
+var photoMode=false;
+function setPhotoMode(on){
+  photoMode=on;
+  var b=document.getElementById('photo-mode-toggle');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');}
+  var i=document.getElementById('list-intro');
+  if(i)i.innerHTML=on?'Photo mode on &mdash; tap a row&rsquo;s &#9711; to add, or &#9728; to view/replace a photo.'
+                     :'Everything you&rsquo;re growing. Tap a status to change it, <b>$</b> to price, <b>&#9733;</b> to push.';
+  renderList();
+}
+/* full-size photo viewer + remove */
+var _pvName=null;
+function openPhotoView(name){
+  var g=byName[name];if(!g||!g.photo)return;
+  _pvName=name;
+  document.getElementById('pv-title').textContent=g.name;
+  document.getElementById('pv-img').src=g.photo;
+  document.getElementById('photoView').classList.add('open');
+}
+function closePhotoView(){document.getElementById('photoView').classList.remove('open');}
+function removePhoto(name){
+  var g=byName[name];if(!g)return;
+  g.photo='';g._photoErr='';g._photoUp=false;
+  persist();closePhotoView();renderPush();renderList();
+}
+(function pvBind(){
+  var x=document.getElementById('pv-close');if(x)x.onclick=closePhotoView;
+  var pv=document.getElementById('photoView');if(pv)pv.addEventListener('click',function(e){if(e.target.id==='photoView')closePhotoView();});
+  var rp=document.getElementById('pv-replace');if(rp)rp.onclick=function(){var n=_pvName;closePhotoView();if(n)pickPhoto(n);};
+  var rm=document.getElementById('pv-remove');if(rm)rm.onclick=function(){if(_pvName)removePhoto(_pvName);};
+  var t=document.getElementById('photo-mode-toggle');if(t)t.onclick=function(){setPhotoMode(!photoMode);};
+})();
 
 var PRICEIC='<svg class="ic" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>';
 var PT={item:null,inputs:[],mult:2.5,_ask:0,_unit:'unit'};
@@ -33086,20 +33160,21 @@ function renderPush(){
       '<div class="pc-top"><span class="pc-name">'+g.name+'</span>'+(g.qty?'<span class="pc-qty">'+g.qty+'</span>':'')+'</div>'+
       '<div class="pc-market">'+mkt(g)+'</div>'+
       '<div class="md-tag">&#9662; Marked down to move</div>'+
-      (g.photo?('<div class="pc-photo-wrap"><img class="pc-photo" src="'+g.photo+'" alt="'+g.name+'">'+(g._photoUp?'<span class="pc-photo-up">Uploading&hellip;</span>':'')+'</div>'):'')+
+      (g.photo?('<div class="pc-photo-wrap"><img class="pc-photo" data-n="'+n+'" src="'+g.photo+'" alt="'+g.name+'">'+(g._photoUp?'<span class="pc-photo-up">Uploading&hellip;</span>':'')+'</div>'):'')+
       (g._photoErr?('<div class="pc-photo-err">'+g._photoErr+'</div>'):'')+
       '<div class="pc-actions">'+
         (g.prepped?('<button class="chip-btn price-btn" data-n="'+n+'">'+PRICEIC+'Price this</button>')
                   :('<button class="chip-btn ask-btn" data-n="'+n+'">'+TAG+(g.ask?'Edit price':'Set price')+'</button>'))+
         '<button class="chip-btn">'+MIC+'Voice note</button>'+
-        '<button class="chip-btn photo-btn'+(g.photo?' on':'')+'" data-n="'+n+'">'+CAM+(g._photoUp?'Uploading&hellip;':(g.photo?'Replace':'Photo'))+'</button>'+
+        '<button class="chip-btn photo-btn'+(g.photo?' on':'')+'" data-n="'+n+'">'+CAM+(g._photoUp?'Uploading&hellip;':(g.photo?'Edit photo':'Photo'))+'</button>'+
       '</div>';
     el.appendChild(c);
   });
   el.querySelectorAll('.pc-x').forEach(function(b){b.onclick=function(){pushed.delete(b.dataset.n);markdown.delete(b.dataset.n);renderPush();renderPick();renderList();};});
   el.querySelectorAll('.ask-btn').forEach(function(b){b.onclick=function(){atOpen(b.dataset.n);};});
   el.querySelectorAll('.price-btn').forEach(function(b){b.onclick=function(){ptOpen(b.dataset.n);};});
-  el.querySelectorAll('.photo-btn').forEach(function(b){b.onclick=function(){pickPhoto(b.dataset.n);};});
+  el.querySelectorAll('.photo-btn').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.photo)openPhotoView(b.dataset.n);else pickPhoto(b.dataset.n);};});
+  el.querySelectorAll('.pc-photo').forEach(function(b){b.onclick=function(){openPhotoView(b.dataset.n);};});
   persist();
 }
 function renderPick(){
@@ -33122,14 +33197,14 @@ function renderList(){
     r.innerHTML=
       '<div class="lr-main"><div class="lr-name">'+g.name+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
       '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
-      (g.prepped?'':'<button class="lr-photo'+(g.photo?' set':'')+'" data-n="'+g.name+'" aria-label="Photo">'+(g.photo?'&#9728;':'&#9711;')+'</button>')+
+      ((photoMode&&!g.prepped)?'<button class="lr-photo'+(g.photo?' set':'')+'" data-n="'+g.name+'" aria-label="Photo">'+(g.photo?'&#9728;':'&#9711;')+'</button>':'')+
       '<button class="lr-price'+(g.ask?' set':'')+'" data-n="'+g.name+'" aria-label="Price">'+(g.ask?('$'+Number(g.ask).toFixed(2)):'$')+'</button>'+
       '<button class="star'+(pushed.has(g.name)?' on':'')+'" data-n="'+g.name+'" aria-label="Push">&#9733;</button>';
     el.appendChild(r);
   });
   el.querySelectorAll('.status').forEach(function(c){c.onclick=function(){var g=byName[c.dataset.n];var i=STATUS_ORDER.indexOf(g.status);g.status=STATUS_ORDER[(i+1)%STATUS_ORDER.length];statusEdits[g.name]=g.status;renderList();renderPick();};});
   el.querySelectorAll('.lr-price').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.prepped)ptOpen(b.dataset.n);else atOpen(b.dataset.n);};});
-  el.querySelectorAll('.lr-photo').forEach(function(b){b.onclick=function(){pickPhoto(b.dataset.n);};});
+  el.querySelectorAll('.lr-photo').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.photo)openPhotoView(b.dataset.n);else pickPhoto(b.dataset.n);};});
   el.querySelectorAll('.star').forEach(function(b){b.onclick=function(){var n=b.dataset.n;pushed.has(n)?pushed.delete(n):pushed.add(n);renderList();renderPush();renderPick();};});
   persist();
 }
