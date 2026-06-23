@@ -28,7 +28,13 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   background:radial-gradient(ellipse at 50% 28%, #0c1535 0%, #050918 55%, #02040d 100%)}
 /* starfield sits behind everything — subtle, almost ambient */
 #stars{position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%;
-  opacity:0.5}
+  opacity:0.55}
+/* per-view starfield (behind the moon on the doors view) — opaque bg layers cover the
+   global #stars, so each entry world gets its own twinkling sky painted behind its content */
+.sky{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+/* randomly-generated stars twinkle on their own per-star duration/delay (set inline by JS) */
+@keyframes twinkle{0%,100%{opacity:var(--o0,0.2)}50%{opacity:var(--o1,0.7)}}
+.sky circle.tw,#stars circle.tw{animation:twinkle var(--dur,3.4s) ease-in-out var(--del,0s) infinite;will-change:opacity}
 
 /* ── INTRO ── moonlit big REMY morphs into header position */
 #intro{position:fixed;inset:0;display:flex;align-items:center;
@@ -61,6 +67,12 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
 #portal{position:absolute;inset:0;display:flex;flex-direction:column;
   overflow:hidden;background:transparent}
 .ph{display:flex;align-items:center;padding:52px 20px 0;flex-shrink:0;gap:10px}
+/* kitchen "Doors" back button — mirrors the farm's .fh-back so both worlds exit the same way.
+   Sized via the shared .doorback metric; the doors header carries a matching ghost so Remy
+   stays x-aligned and the intro morph still lands once. */
+.ph-back{color:var(--ink-60);cursor:pointer;opacity:0;transition:opacity .3s var(--ease)}
+.ph-back.in{opacity:1}
+.ph-back:hover{color:var(--ink)}
 .ph-wordmark{display:flex;align-items:baseline;gap:7px;flex:1}
 .ph-remy{font-family:var(--fd);font-size:16px;font-weight:500;letter-spacing:0.22em;
   text-transform:uppercase;color:var(--moon);
@@ -965,18 +977,33 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 #doors.gone,#farm.gone{opacity:0;pointer-events:none}
 /* Entry header is now IDENTICAL to the portal header (.ph/.ph-remy) so the intro morph lands
    once and never bumps when you enter a side. Moon colour + glow, center align, gap 10. */
-.de-head{display:flex;align-items:center;gap:10px;padding:52px 20px 0;flex-shrink:0}
+/* min-height matches the portal header's icon-driven height (52 pad-top + 38 icon row) so
+   the de-remy and ph-remy sit at the SAME y — the intro morph lands once, no vertical bump. */
+.de-head{display:flex;align-items:center;gap:10px;padding:52px 20px 0;flex-shrink:0;min-height:90px;position:relative;z-index:1}
 .de-remy{font-family:var(--fd);font-size:16px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;
   color:var(--moon);text-shadow:0 0 8px rgba(245,232,200,0.42),0 0 16px rgba(245,232,200,0.22)}
 .de-brand{font-family:var(--fd);font-size:13px;font-style:italic;color:var(--ink-60)}
+/* shared sizing for the "Doors" back affordance — the kitchen has a real button, the doors
+   header carries an invisible ghost of identical width so de-remy & ph-remy stay x-aligned. */
+.doorback{font-family:var(--fb);font-size:11px;letter-spacing:0.06em;padding:0;border:none;background:none;white-space:nowrap}
+.de-back-ghost{visibility:hidden}
 .de-note{position:absolute;top:54px;right:20px;font-family:var(--fb);font-size:10px;letter-spacing:0.14em;
-  text-transform:uppercase;color:var(--ink-30)}
+  text-transform:uppercase;color:var(--ink-30);z-index:1}
 /* ── THE MOON ── one disc split into two halves; the side you hover glows and lifts. ── */
-.moon-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:14px 20px 30px;min-height:0}
+.moon-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:14px 20px 30px;min-height:0;position:relative;z-index:1}
+/* more moon-like: faint craters in the surface (the translucent colour halves tint over them)
+   + soft limb shading reads the disc as a lit sphere. The breath now lives on the base rule
+   (desktop + touch) and is more pronounced — bigger glow swing + a gentle scale. */
 .moon-stage{position:relative;width:min(76vw,330px);height:min(76vw,330px);border-radius:50%;overflow:hidden;
-  background:radial-gradient(circle at 50% 40%,#1b2348 0%,#0b1024 58%,#070b1a 100%);
-  box-shadow:0 0 64px -16px rgba(245,232,200,0.24),inset 0 0 60px -22px rgba(245,232,200,0.18);
-  transition:box-shadow .55s var(--ease)}
+  background:
+    radial-gradient(circle at 30% 27%, rgba(0,0,0,0.24) 0 2.6%, transparent 3.5%),
+    radial-gradient(circle at 63% 60%, rgba(0,0,0,0.18) 0 3.4%, transparent 4.6%),
+    radial-gradient(circle at 45% 75%, rgba(0,0,0,0.15) 0 2%, transparent 3%),
+    radial-gradient(circle at 72% 34%, rgba(0,0,0,0.13) 0 1.8%, transparent 2.8%),
+    radial-gradient(circle at 22% 56%, rgba(0,0,0,0.11) 0 1.5%, transparent 2.4%),
+    radial-gradient(circle at 56% 18%, rgba(0,0,0,0.10) 0 1.4%, transparent 2.2%),
+    radial-gradient(circle at 50% 40%,#1b2348 0%,#0b1024 58%,#070b1a 100%);
+  animation:moonBreath 5.5s ease-in-out infinite}
 .moon-side{position:absolute;top:0;bottom:0;width:50%;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;color:var(--moon);
   text-align:center;padding:0 7%;-webkit-tap-highlight-color:transparent;
@@ -1007,13 +1034,22 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 /* TOUCH (no hover): can't preview, so both halves rest softly lit and the whole moon breathes
    gently to read as "alive/tappable"; Enter cue stays visible; a tap flares the chosen side. */
 @media(hover:none){
-  .moon-stage{animation:moonBreath 6s ease-in-out infinite}
   .ms-enter{opacity:0.85}
   .moon-side:active{filter:brightness(1.6)}
 }
+/* breathing — more exaggerated: glow swells further and the disc gently scales; the inset
+   limb-shadow (sphere read) is carried through both keys so it never flickers off. */
 @keyframes moonBreath{
-  0%,100%{box-shadow:0 0 58px -18px rgba(245,232,200,0.20),inset 0 0 54px -22px rgba(245,232,200,0.15)}
-  50%    {box-shadow:0 0 88px -12px rgba(245,232,200,0.34),inset 0 0 66px -18px rgba(245,232,200,0.24)}
+  0%,100%{transform:scale(1);
+    box-shadow:0 0 50px -18px rgba(245,232,200,0.18),
+               inset 0 0 54px -22px rgba(245,232,200,0.14),
+               inset -10px -13px 48px -14px rgba(0,0,0,0.55),
+               inset 9px 9px 34px -16px rgba(245,232,200,0.14)}
+  50%    {transform:scale(1.025);
+    box-shadow:0 0 108px -6px rgba(245,232,200,0.42),
+               inset 0 0 78px -12px rgba(245,232,200,0.30),
+               inset -10px -13px 48px -14px rgba(0,0,0,0.55),
+               inset 9px 9px 34px -16px rgba(245,232,200,0.18)}
 }
 /* SELECT flourish — chosen half flares, the other dims, the moon blooms its colour + scale-pulses */
 .moon-stage.picking{animation:moonPick .42s var(--ease) forwards}
@@ -1309,7 +1345,8 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 
 <!-- DOORS (split-worlds entry) -->
 <div id="doors">
-  <div class="de-head"><span class="de-remy">Remy</span><span class="de-brand">&middot; San Fermo</span></div>
+  <svg class="sky" id="door-sky" viewBox="0 0 1000 1800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <div class="de-head"><span class="de-back-ghost doorback" aria-hidden="true">&#8592; Doors</span><span class="de-remy">Remy</span><span class="de-brand">&middot; San Fermo</span></div>
   <div class="de-note">Choose your side</div>
   <div class="moon-wrap">
     <div class="moon-stage">
@@ -1434,6 +1471,7 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 <!-- PORTAL -->
 <div id="portal">
   <div class="ph">
+    <button class="ph-back doorback" id="ph-back">&#8592; Doors</button>
     <div class="ph-wordmark">
       <span class="ph-remy">Remy</span>
       <span class="ph-brand">&middot; San Fermo</span>
@@ -32776,13 +32814,20 @@ function runIntroMorph(){
   var word = document.querySelector('.intro-word');
   var headerRemy = document.querySelector('.ph-remy');
   var headerBrand = document.querySelector('.ph-brand');
+  var headerBack = document.getElementById('ph-back');
   var intro = document.getElementById('intro');
   if(!word || !headerRemy || !intro){
     // Safety: if anything is missing, just hide the overlay so the app is usable
     if(intro) intro.classList.add('gone');
     return;
   }
-  // Wait for header to be laid out so getBoundingClientRect is correct
+  // Wait for the display font to load AND the header to be laid out before measuring.
+  // Measuring while Cormorant Garamond is still swapping gives fallback-serif metrics, so the
+  // morph lands at the wrong size/spot and the title visibly resizes when the doors' de-remy
+  // (real font) takes over. fonts.ready removes that drift; de-remy is metric-matched in CSS.
+  var _ran = false;
+  var _go = function(){
+  if(_ran) return; _ran = true;
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       var hr = headerRemy.getBoundingClientRect();
@@ -32812,6 +32857,7 @@ function runIntroMorph(){
       setTimeout(function(){
         // Reveal the real header REMY at the exact spot the morph lands
         headerRemy.classList.add('in');
+        if(headerBack) headerBack.classList.add('in');
       }, 2030);
 
       setTimeout(function(){
@@ -32823,6 +32869,9 @@ function runIntroMorph(){
       }, 2120);
     });
   });
+  };
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(_go); setTimeout(_go, 1200); }
+  else { _go(); }
 }
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -32859,6 +32908,36 @@ function runIntroMorph(){
     pw.style.cursor='pointer';pw.title='Back to doors';
     pw.addEventListener('click',function(){show(doors);clearPick();});
   });
+  var pb=document.getElementById('ph-back');
+  if(pb)pb.addEventListener('click',function(){show(doors);clearPick();window.scrollTo(0,0);});
+
+  // ── starfield: randomly generated, gently twinkling stars (global #stars for the portal,
+  //    plus a per-view sky behind the moon since #doors' bg covers the global layer) ──
+  function seedStars(svg,n){
+    if(!svg)return;
+    var ns='http://www.w3.org/2000/svg',frag=document.createDocumentFragment();
+    for(var i=0;i<n;i++){
+      var c=document.createElementNS(ns,'circle');
+      var base=0.16+Math.random()*0.55;
+      c.setAttribute('cx',(Math.random()*1000).toFixed(0));
+      c.setAttribute('cy',(Math.random()*1800).toFixed(0));
+      c.setAttribute('r',(0.4+Math.random()*1.5).toFixed(2));
+      c.setAttribute('fill','#f5e8c8');
+      c.setAttribute('opacity',base.toFixed(2));
+      if(Math.random()<0.6){                       // ~60% twinkle, the rest steady
+        c.setAttribute('class','tw');
+        c.style.setProperty('--o0',(base*0.32).toFixed(2));
+        c.style.setProperty('--o1',Math.min(0.95,base+0.28).toFixed(2));
+        c.style.setProperty('--dur',(2.6+Math.random()*3.8).toFixed(2)+'s');
+        c.style.setProperty('--del',(-Math.random()*5).toFixed(2)+'s');
+      }
+      frag.appendChild(c);
+    }
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    svg.appendChild(frag);
+  }
+  seedStars(document.getElementById('stars'),96);
+  seedStars(document.getElementById('door-sky'),76);
 })();
 </script>
 <script>
