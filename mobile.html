@@ -1157,6 +1157,53 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .pt-use{width:100%;margin-top:18px;font-family:var(--fb);font-size:14px;font-weight:500;letter-spacing:0.04em;color:#0a1028;background:var(--olive);border:none;border-radius:8px;padding:13px;cursor:pointer}
 .pt-use:hover{background:#b6c690}
 
+/* farmer pricing calculator (match / premium / markdown / manual + unit conversion) */
+#askTool{position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;justify-content:center;background:rgba(2,4,13,0.74);padding:26px 14px;overflow-y:auto}
+#askTool.open{display:flex}
+.at-card{width:100%;max-width:420px;background:#0d1535;border:1px solid rgba(245,232,200,0.13);border-radius:12px;padding:20px 18px 18px;margin:auto}
+.at-head{display:flex;align-items:center;margin-bottom:14px}
+.at-title{flex:1;font-family:var(--fd);font-size:23px;font-weight:500;color:var(--ink)}
+.at-x{background:none;border:none;color:var(--ink-30);font-size:22px;cursor:pointer;line-height:1}
+.at-x:hover{color:var(--ink)}
+.at-ref{background:var(--ink-6);border-radius:8px;padding:12px 14px;font-family:var(--fb);font-size:13px;color:var(--ink-60);margin-bottom:12px}
+.at-ref b{color:var(--ink);font-weight:500}
+.at-ref i{font-style:italic;color:var(--ink-30);font-family:var(--fd);font-size:14px}
+.at-reflabel{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-30);display:block;margin-bottom:5px}
+.at-conv{display:block;margin-top:6px;font-size:14px;color:var(--ink)}
+.at-conv b{font-weight:500}
+.at-flag{display:inline-block;margin-top:6px;font-size:11px;color:var(--gold);letter-spacing:0.02em}
+.at-flag:before{content:"\26A0  "}
+.at-units{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;align-items:center}
+.at-units .at-ulabel{font-family:var(--fb);font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-30);margin-right:2px}
+.at-uchip{font-family:var(--fb);font-size:12px;color:var(--ink-60);background:var(--ink-6);border:1px solid var(--ink-12);border-radius:16px;padding:5px 10px;cursor:pointer}
+.at-uchip.on{color:#0a1028;background:var(--olive);border-color:var(--olive)}
+.at-uchip.est{border-style:dashed}
+.at-modes{display:flex;gap:5px;background:var(--ink-6);border:1px solid var(--ink-12);border-radius:30px;padding:4px;margin-bottom:14px;flex-wrap:wrap}
+.at-mode{flex:1;min-width:72px;font-family:var(--fb);font-size:11.5px;font-weight:500;letter-spacing:0.02em;color:var(--ink-60);background:none;border:none;border-radius:24px;padding:9px 4px;cursor:pointer;transition:all .2s var(--ease)}
+.at-mode.on{color:#0a1028;background:var(--ink)}
+.at-mode:disabled{opacity:0.3;cursor:default}
+.at-body{min-height:54px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.at-step{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+.at-stepbtn{font-family:var(--fb);font-size:20px;font-weight:500;color:var(--ink);background:var(--ink-6);border:1px solid var(--ink-12);border-radius:50%;width:40px;height:40px;cursor:pointer;line-height:1}
+.at-stepbtn:hover{border-color:var(--olive);color:var(--olive)}
+.at-pct{font-family:var(--fd);font-size:30px;font-weight:500;color:var(--ink);min-width:74px;text-align:center}
+.at-pctcustom{font-family:var(--fb);font-size:12px;color:var(--ink-30)}
+.at-pctcustom input{width:50px;background:var(--ink-6);border:1px solid var(--ink-12);border-radius:6px;color:var(--ink);font-family:var(--fb);font-size:13px;padding:6px 7px;text-align:right}
+.at-manual{display:flex;align-items:center;gap:8px;font-family:var(--fb);font-size:15px;color:var(--ink-60)}
+.at-manual input{width:96px;background:var(--ink-6);border:1px solid var(--ink-12);border-radius:6px;color:var(--ink);font-family:var(--fb);font-size:16px;padding:9px 10px;text-align:right}
+.at-manual input:focus,.at-pctcustom input:focus{outline:none;border-color:var(--olive)}
+.at-matchtxt{font-family:var(--fd);font-style:italic;font-size:15px;color:var(--ink-60);text-align:center}
+.at-result{margin-top:8px;text-align:center}
+.at-ask{font-family:var(--fd);font-size:34px;font-weight:500;color:var(--ink);line-height:1}
+.at-ask span{font-family:var(--fb);font-size:13px;color:var(--ink-60)}
+.at-note{font-family:var(--fb);font-size:12px;margin-top:5px;letter-spacing:0.02em;color:var(--olive);min-height:15px}
+.at-note.move{color:var(--gold)}
+.at-use{width:100%;margin-top:18px;font-family:var(--fb);font-size:14px;font-weight:500;letter-spacing:0.04em;color:#0a1028;background:var(--olive);border:none;border-radius:8px;padding:13px;cursor:pointer}
+.at-use:hover{background:#b6c690}
+.lr-price{background:none;border:none;color:var(--ink-30);cursor:pointer;padding:3px 6px;font-family:var(--fb);font-size:14px;line-height:1}
+.lr-price:hover{color:var(--olive)}
+.lr-price.set{color:var(--olive)}
+
 </style>
 
 <!-- DOORS (split-worlds entry) -->
@@ -1245,6 +1292,17 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
     </div>
     <div class="pt-price"><div class="pt-ask" id="pt-ask">$0 <span id="pt-askunit"></span></div><div class="pt-margin" id="pt-margin"></div></div>
     <button class="pt-use" id="pt-use">Use this price</button>
+  </div>
+</div>
+  <div id="askTool">
+  <div class="at-card">
+    <div class="at-head"><span class="at-title" id="at-title">Price this</span><button class="at-x" id="at-close" aria-label="Close">&times;</button></div>
+    <div class="at-ref" id="at-ref"></div>
+    <div class="at-units" id="at-units"></div>
+    <div class="at-modes" id="at-modes"></div>
+    <div class="at-body" id="at-body"></div>
+    <div class="at-result"><div class="at-ask" id="at-ask">$0 <span id="at-askunit"></span></div><div class="at-note" id="at-note"></div></div>
+    <button class="at-use" id="at-use">Use this ask</button>
   </div>
 </div>
 </div>
@@ -32684,7 +32742,7 @@ function runIntroMorph(){
 (function(){
 var ROOT=document.getElementById('farm');
 
-var DATA = /*__DATA__*/ {"week": "week of June 22", "kelly_last_touch": "6/10", "market_count": 39, "growList": [{"name": "Chive Blossoms", "category": "flower", "status": "Peak", "qty": "", "push": false, "market": {"price": 20, "unit": "bunch", "freshness": "FARM-SET"}}, {"name": "Kale (Farm)", "category": "green", "status": "Peak", "qty": "20+#", "push": false, "market": {"price": 48.0, "unit": "CS", "freshness": "FRESH"}}, {"name": "Lettuce (Farm)", "category": "green", "status": "Peak", "qty": "30-40#", "push": false, "market": {"price": 24.0, "unit": "CS", "freshness": "FRESH"}}, {"name": "Lovage", "category": "green", "status": "Peak", "qty": "30+#", "push": false, "market": {"price": 24.5, "unit": "#", "freshness": "FRESH"}}, {"name": "Mint", "category": "green", "status": "Peak", "qty": "", "push": false, "market": {"price": 3.75, "unit": "1/4#", "freshness": "FRESH"}}, {"name": "Parsley (Farm)", "category": "green", "status": "Peak", "qty": "", "push": false, "market": {"price": 0.99, "unit": "bn", "freshness": "FRESH"}}, {"name": "Tomato Leaf", "category": "green", "status": "Peak", "qty": "10#", "push": false, "market": null}, {"name": "Beef Shanks", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 15.0, "unit": "lb", "freshness": "AGING"}}, {"name": "Beef Tenderloin", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 33.0, "unit": "lb", "freshness": "PRIOR-YEAR"}}, {"name": "Bronze Fennel", "category": "green", "status": "Available", "qty": "3 gallon bags", "push": false, "market": {"price": 45.0, "unit": "24CT CS", "freshness": "AGING"}}, {"name": "Cabbage (Farm)", "category": "produce", "status": "Available", "qty": "40+ # presto", "push": false, "market": {"price": 1.5, "unit": "lb", "freshness": "STALE"}}, {"name": "Chicken Eggs", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 8.5, "unit": "dozen", "freshness": "AGING"}}, {"name": "Chives", "category": "green", "status": "Available", "qty": "10#", "push": false, "market": {"price": 6.0, "unit": "1/4#", "freshness": "AGING"}}, {"name": "Dill (Farm)", "category": "green", "status": "Available", "qty": "", "push": false, "market": {"price": 1.25, "unit": "bn", "freshness": "FRESH"}}, {"name": "Duck Eggs", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 1.0, "unit": "each", "freshness": "AGING"}}, {"name": "Edible Flowers", "category": "flower", "status": "Available", "qty": "", "push": false, "market": {"price": 15, "unit": "bunch", "freshness": "FARM-SET"}}, {"name": "Fennel Fronds", "category": "green", "status": "Available", "qty": "2-3 gallon bags", "push": false, "market": {"price": 2.85, "unit": "each", "freshness": "FRESH"}}, {"name": "Grape Leaves", "category": "green", "status": "Available", "qty": "5#", "push": false, "market": null}, {"name": "Ground Beef / Bolo Meat", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 13.2, "unit": "lb", "freshness": "FRESH"}}, {"name": "Honeysuckle", "category": "flower", "status": "Available", "qty": "1 gallon bag", "push": false, "market": {"price": 12, "unit": "bunch", "freshness": "FARM-SET"}}, {"name": "Lamb Loin Chops", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 21.95, "unit": "lb", "freshness": "FRESH"}}, {"name": "Lavender", "category": "flower", "status": "Available", "qty": "", "push": false, "market": null}, {"name": "Lemon Balm (Farm)", "category": "green", "status": "Available", "qty": "10#", "push": false, "market": null}, {"name": "Nasturtium", "category": "flower", "status": "Available", "qty": "", "push": false, "market": null}, {"name": "Oregano", "category": "green", "status": "Available", "qty": "10#", "push": false, "market": {"price": 3.99, "unit": "1/4#", "freshness": "FRESH"}}, {"name": "Rose Petals", "category": "flower", "status": "Available", "qty": "", "push": false, "market": null}, {"name": "Rosemary", "category": "green", "status": "Available", "qty": "5#", "push": false, "market": {"price": 12.5, "unit": "#", "freshness": "FRESH"}}, {"name": "Snap Peas", "category": "produce", "status": "Available", "qty": "", "push": false, "market": {"price": 5.78, "unit": "cs", "freshness": "AGING"}}, {"name": "Snow Peas", "category": "produce", "status": "Available", "qty": "", "push": false, "market": {"price": 4.55, "unit": "cs", "freshness": "FRESH"}}, {"name": "Sorrel (French)", "category": "green", "status": "Available", "qty": "5#", "push": false, "market": {"price": 8.0, "unit": "lb", "freshness": "RESEARCH"}}, {"name": "Thyme", "category": "green", "status": "Available", "qty": "", "push": false, "market": {"price": 9.75, "unit": "1/2#", "freshness": "FRESH"}}, {"name": "Garlic Scapes", "category": "produce", "status": "Trickling", "qty": "", "push": false, "market": {"price": 6.0, "unit": "lb", "freshness": "RESEARCH"}}, {"name": "Turnips", "category": "produce", "status": "Trickling", "qty": "", "push": false, "market": {"price": 2.75, "unit": "bn", "freshness": "PRIOR-YEAR"}}, {"name": "Borage", "category": "green", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Loganberries", "category": "berry", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Mixed Berries (Farm)", "category": "berry", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Raspberries", "category": "berry", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Angelica", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Apples (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 2.25, "unit": "lb", "freshness": "STALE"}}, {"name": "Basil (Farm)", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 5.5, "unit": "1/2#", "freshness": "FRESH"}}, {"name": "Calendula", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Candy Roaster Squash", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Cherry Tomatoes (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 32.25, "unit": "CS", "freshness": "STALE"}}, {"name": "Cilantro (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 0.99, "unit": "bn", "freshness": "FRESH"}}, {"name": "Cucumber (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Heirloom Tomatoes (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 52.0, "unit": "CS", "freshness": "STALE"}}, {"name": "Lemon Verbena", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Onions", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Peppers (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 2.5, "unit": "lb", "freshness": "FRESH"}}, {"name": "Savory", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Squash (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 1.5, "unit": "lb", "freshness": "STALE"}}, {"name": "Tarragon (Farm)", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 8.5, "unit": "1/4#", "freshness": "AGING"}}, {"name": "Tomatoes (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 32.25, "unit": "CS", "freshness": "STALE"}}, {"name": "Zucchini (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 36.5, "unit": "CS", "freshness": "STALE"}}, {"name": "Flowering Branches", "category": "Edible Flower", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Green Garlic", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Lilacs", "category": "Edible Flower", "status": "Done", "qty": "", "push": false, "market": {"price": 20, "unit": "bunch", "freshness": "FARM-SET"}}, {"name": "Nettle", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Radish", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Rhubarb (Farm)", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": {"price": 3.99, "unit": "lb", "freshness": "FRESH"}}]} /*__END__*/;
+var DATA = /*__DATA__*/ {"week": "week of June 22", "kelly_last_touch": "6/10", "market_count": 39, "growList": [{"name": "Chive Blossoms", "category": "flower", "status": "Peak", "qty": "", "push": false, "market": {"price": 20, "unit": "bunch", "freshness": "FARM-SET", "ref_measurable": true, "sell_units": [{"unit": "bunch", "per": 1.0, "basis": "exact", "native": true}]}}, {"name": "Kale (Farm)", "category": "green", "status": "Peak", "qty": "20+#", "push": false, "market": {"price": 48.0, "unit": "CS", "freshness": "FRESH", "vendor": "Franks", "swan_price": 57.6, "ref_measurable": true, "per_lb": 3.33, "per_lb_basis": "estimate", "per_lb_note": "24 bunch/CS x ~0.6 lb/bunch", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}, {"unit": "bunch", "per": 1.0, "basis": "estimate", "note": "greens bunch 0.75-1.5#, midpoint (UGA/UK ext.)"}]}}, {"name": "Lettuce (Farm)", "category": "green", "status": "Peak", "qty": "30-40#", "push": false, "market": {"price": 24.0, "unit": "CS", "freshness": "FRESH", "vendor": "Franks", "swan_price": 28.8, "ref_measurable": true, "per_lb": 12.0, "per_lb_basis": "exact", "per_lb_note": "2#/CS baby head mix", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Lovage", "category": "green", "status": "Peak", "qty": "30+#", "push": false, "market": {"price": 24.5, "unit": "#", "freshness": "FRESH", "vendor": "Franks", "swan_price": 29.4, "ref_measurable": true, "per_lb": 24.5, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Mint", "category": "green", "status": "Peak", "qty": "", "push": false, "market": {"price": 3.75, "unit": "1/4#", "freshness": "FRESH", "vendor": "Franks", "swan_price": 4.5, "ref_measurable": true, "per_lb": 15.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Parsley (Farm)", "category": "green", "status": "Peak", "qty": "", "push": false, "market": {"price": 0.99, "unit": "bn", "freshness": "FRESH", "vendor": "Franks", "swan_price": 1.19, "ref_measurable": true, "per_lb": 10.53, "per_lb_basis": "estimate", "per_lb_note": "1-2 oz herb bunch, ~1.5oz", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}, {"unit": "bunch", "per": 0.094, "basis": "estimate", "note": "1-2 oz herb bunch, ~1.5oz"}]}}, {"name": "Tomato Leaf", "category": "green", "status": "Peak", "qty": "10#", "push": false, "market": null}, {"name": "Beef Shanks", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 15.0, "unit": "lb", "freshness": "AGING", "ref_measurable": true, "per_lb": 15.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Beef Tenderloin", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 33.0, "unit": "lb", "freshness": "PRIOR-YEAR", "ref_measurable": true, "per_lb": 33.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Bronze Fennel", "category": "green", "status": "Available", "qty": "3 gallon bags", "push": false, "market": {"price": 45.0, "unit": "24CT CS", "freshness": "AGING", "ref_measurable": false}}, {"name": "Cabbage (Farm)", "category": "produce", "status": "Available", "qty": "40+ # presto", "push": false, "market": {"price": 1.5, "unit": "lb", "freshness": "STALE", "vendor": "Franks", "swan_price": 1.8, "ref_measurable": true, "per_lb": 1.5, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Chicken Eggs", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 8.5, "unit": "dozen", "freshness": "AGING", "ref_measurable": true, "sell_units": [{"unit": "dozen", "per": 1.0, "basis": "exact", "native": true}]}}, {"name": "Chives", "category": "green", "status": "Available", "qty": "10#", "push": false, "market": {"price": 6.0, "unit": "1/4#", "freshness": "AGING", "vendor": "Franks", "swan_price": 7.2, "ref_measurable": true, "per_lb": 24.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Dill (Farm)", "category": "green", "status": "Available", "qty": "", "push": false, "market": {"price": 1.25, "unit": "bn", "freshness": "FRESH", "vendor": "Franks", "swan_price": 1.5, "ref_measurable": true, "per_lb": 13.3, "per_lb_basis": "estimate", "per_lb_note": "1-2 oz herb bunch, ~1.5oz", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}, {"unit": "bunch", "per": 0.094, "basis": "estimate", "note": "1-2 oz herb bunch, ~1.5oz"}]}}, {"name": "Duck Eggs", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 1.0, "unit": "each", "freshness": "AGING", "ref_measurable": true, "sell_units": [{"unit": "each", "per": 1.0, "basis": "exact", "native": true}]}}, {"name": "Edible Flowers", "category": "flower", "status": "Available", "qty": "", "push": false, "market": {"price": 15, "unit": "bunch", "freshness": "FARM-SET", "ref_measurable": true, "sell_units": [{"unit": "bunch", "per": 1.0, "basis": "exact", "native": true}]}}, {"name": "Fennel Fronds", "category": "green", "status": "Available", "qty": "2-3 gallon bags", "push": false, "market": {"price": 2.85, "unit": "each", "freshness": "FRESH", "vendor": "Franks", "swan_price": 3.9, "ref_measurable": true, "per_lb": 4.07, "per_lb_basis": "estimate", "per_lb_note": "per fennel bulb", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Grape Leaves", "category": "green", "status": "Available", "qty": "5#", "push": false, "market": null}, {"name": "Ground Beef / Bolo Meat", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 13.2, "unit": "lb", "freshness": "FRESH", "ref_measurable": true, "per_lb": 13.2, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Honeysuckle", "category": "flower", "status": "Available", "qty": "1 gallon bag", "push": false, "market": {"price": 12, "unit": "bunch", "freshness": "FARM-SET", "ref_measurable": true, "sell_units": [{"unit": "bunch", "per": 1.0, "basis": "exact", "native": true}]}}, {"name": "Lamb Loin Chops", "category": "protein", "status": "Available", "qty": "", "push": false, "market": {"price": 21.95, "unit": "lb", "freshness": "FRESH", "vendor": "Key City", "swan_price": 26.34, "ref_measurable": true, "per_lb": 21.95, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Lavender", "category": "flower", "status": "Available", "qty": "", "push": false, "market": null}, {"name": "Lemon Balm (Farm)", "category": "green", "status": "Available", "qty": "10#", "push": false, "market": null}, {"name": "Nasturtium", "category": "flower", "status": "Available", "qty": "", "push": false, "market": null}, {"name": "Oregano", "category": "green", "status": "Available", "qty": "10#", "push": false, "market": {"price": 3.99, "unit": "1/4#", "freshness": "FRESH", "vendor": "Franks", "swan_price": 9.0, "ref_measurable": true, "per_lb": 15.96, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Rose Petals", "category": "flower", "status": "Available", "qty": "", "push": false, "market": null}, {"name": "Rosemary", "category": "green", "status": "Available", "qty": "5#", "push": false, "market": {"price": 12.5, "unit": "#", "freshness": "FRESH", "vendor": "Franks", "swan_price": 15.0, "ref_measurable": true, "per_lb": 12.5, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Snap Peas", "category": "produce", "status": "Available", "qty": "", "push": false, "market": {"price": 5.78, "unit": "lb", "freshness": "AGING", "vendor": "Franks", "swan_price": 6.94, "ref_measurable": true, "per_lb": 5.78, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Snow Peas", "category": "produce", "status": "Available", "qty": "", "push": false, "market": {"price": 4.55, "unit": "lb", "freshness": "FRESH", "vendor": "Franks", "swan_price": 5.04, "ref_measurable": true, "per_lb": 4.55, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Sorrel (French)", "category": "green", "status": "Available", "qty": "5#", "push": false, "market": {"price": 8.0, "unit": "lb", "freshness": "RESEARCH", "vendor": "Franks", "swan_price": 9.6, "ref_measurable": true, "per_lb": 8.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Thyme", "category": "green", "status": "Available", "qty": "", "push": false, "market": {"price": 9.75, "unit": "1/2#", "freshness": "FRESH", "vendor": "Franks", "swan_price": 11.7, "ref_measurable": true, "per_lb": 19.5, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Garlic Scapes", "category": "produce", "status": "Trickling", "qty": "", "push": false, "market": {"price": 6.0, "unit": "lb", "freshness": "RESEARCH", "vendor": "Franks", "swan_price": 7.2, "ref_measurable": true, "per_lb": 6.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Turnips", "category": "produce", "status": "Trickling", "qty": "", "push": false, "market": {"price": 2.75, "unit": "bn", "freshness": "PRIOR-YEAR", "vendor": "Franks", "swan_price": 3.3, "ref_measurable": true, "per_lb": 2.75, "per_lb_basis": "estimate", "per_lb_note": "root veg, tops-on, ~1#", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}, {"unit": "bunch", "per": 1.0, "basis": "estimate", "note": "root veg, tops-on, ~1#"}]}}, {"name": "Borage", "category": "green", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Loganberries", "category": "berry", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Mixed Berries (Farm)", "category": "berry", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Raspberries", "category": "berry", "status": "Coming Soon", "qty": "", "push": false, "market": null}, {"name": "Angelica", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Apples (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 2.25, "unit": "lb", "freshness": "STALE", "vendor": "Franks", "swan_price": 2.7, "ref_measurable": true, "per_lb": 2.25, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Basil (Farm)", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 5.5, "unit": "1/2#", "freshness": "FRESH", "vendor": "Franks", "swan_price": 11.1, "ref_measurable": true, "per_lb": 11.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Calendula", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Candy Roaster Squash", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Cherry Tomatoes (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 32.25, "unit": "CS", "freshness": "STALE", "vendor": "Franks", "swan_price": 38.7, "ref_measurable": true, "per_lb": 3.58, "per_lb_basis": "estimate", "per_lb_note": "12 pint/CS x ~0.75 lb/pint", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Cilantro (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 0.99, "unit": "bn", "freshness": "FRESH", "vendor": "Franks", "swan_price": 1.19, "ref_measurable": true, "per_lb": 10.53, "per_lb_basis": "estimate", "per_lb_note": "1-2 oz herb bunch, ~1.5oz", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}, {"unit": "bunch", "per": 0.094, "basis": "estimate", "note": "1-2 oz herb bunch, ~1.5oz"}]}}, {"name": "Cucumber (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Heirloom Tomatoes (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 52.0, "unit": "CS", "freshness": "STALE", "vendor": "Franks", "swan_price": 62.4, "ref_measurable": true, "per_lb": 5.2, "per_lb_basis": "exact", "per_lb_note": "10#/CS", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Lemon Verbena", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Onions", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Peppers (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 2.5, "unit": "lb", "freshness": "FRESH", "vendor": "Franks", "swan_price": 16.79, "ref_measurable": true, "per_lb": 2.5, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Savory", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": null}, {"name": "Squash (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 1.5, "unit": "lb", "freshness": "STALE", "vendor": "Franks", "swan_price": 1.8, "ref_measurable": true, "per_lb": 1.5, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Tarragon (Farm)", "category": "Herb / Green", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 8.5, "unit": "1/4#", "freshness": "AGING", "ref_measurable": true, "per_lb": 34.0, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Tomatoes (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 32.25, "unit": "CS", "freshness": "STALE", "vendor": "Franks", "swan_price": 38.7, "ref_measurable": false}}, {"name": "Zucchini (Farm)", "category": "Produce", "status": "Not Yet", "qty": "", "push": false, "market": {"price": 36.5, "unit": "CS", "freshness": "STALE", "vendor": "Franks", "swan_price": 31.5, "ref_measurable": true, "per_lb": 1.82, "per_lb_basis": "exact", "per_lb_note": "20#/CS", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}, {"name": "Flowering Branches", "category": "Edible Flower", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Green Garlic", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Lilacs", "category": "Edible Flower", "status": "Done", "qty": "", "push": false, "market": {"price": 20, "unit": "bunch", "freshness": "FARM-SET", "ref_measurable": true, "sell_units": [{"unit": "bunch", "per": 1.0, "basis": "exact", "native": true}]}}, {"name": "Nettle", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Radish", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": null}, {"name": "Rhubarb (Farm)", "category": "Produce", "status": "Done", "qty": "", "push": false, "market": {"price": 3.99, "unit": "lb", "freshness": "FRESH", "vendor": "Franks", "swan_price": 4.79, "ref_measurable": true, "per_lb": 3.99, "per_lb_basis": "exact", "sell_units": [{"unit": "lb", "per": 1.0, "basis": "exact"}, {"unit": "1/4 lb", "per": 0.25, "basis": "exact"}, {"unit": "1/2 lb", "per": 0.5, "basis": "exact"}]}}]} /*__END__*/;
 
 var MIC='<svg class="ic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
 var CAM='<svg class="ic" viewBox="0 0 24 24"><path d="M3 8h4l2-2h6l2 2h4v12H3z"/><circle cx="12" cy="13" r="3.2"/></svg>';
@@ -32781,13 +32839,150 @@ function ptUse(){var g=byName[PT.item];if(g){g.ask=PT._ask;g.askUnit=PT._unit;}p
   document.getElementById('pt-use').onclick=ptUse;
 })();
 
+/* ── farmer pricing calculator: match / premium / mark down / manual, with unit conversion ──
+   The market comp is always expressed in a unit the farmer can measure: $/lb when weight-derivable
+   (with an exact/estimate trust flag), the native unit when already measurable (dozen, bunch for
+   flowers), or manual entry when a vendor pack can't be converted. */
+var AT_DEF_UNITS=[{unit:'lb',per:1,basis:'exact'},{unit:'1/4 lb',per:0.25,basis:'exact'},
+  {unit:'1/2 lb',per:0.5,basis:'exact'},{unit:'bunch',per:1,basis:'estimate'},
+  {unit:'each',per:1,basis:'exact'},{unit:'pint',per:1,basis:'exact'},{unit:'quart',per:1,basis:'exact'}];
+var AT={item:null,market:null,offers:[],ri:0,ref:null,units:[],ui:0,mode:'match',pct:10,manual:0,result:0};
+function atUnit(){return AT.units[AT.ui]||{unit:'unit',per:1,basis:'exact'};}
+function atAnchor(){ // the market reference price expressed in the selected unit (null if none)
+  if(!AT.ref)return null;
+  var u=atUnit();
+  if(AT.ref.per_lb!=null)return AT.ref.per_lb*u.per;
+  if(u.native)return Number(AT.ref.price);
+  return null;
+}
+function atUsable(){return atAnchor()!=null;}
+function atEstimate(){ // is the current reference/unit a flagged estimate?
+  if(AT.ref&&AT.ref.per_lb!=null)return (AT.ref.per_lb_basis==='estimate')||(atUnit().basis==='estimate');
+  return atUnit().basis==='estimate';
+}
+function atOpen(name){
+  var g=byName[name]||{name:name};
+  AT.item=name;AT.market=g.market||null;var mk=AT.market;
+  if(mk){
+    AT.offers=(mk.offers&&mk.offers.length)?mk.offers.slice()
+      :[{vendor:mk.vendor||'',price:mk.price,unit:mk.unit,per_lb:mk.per_lb,per_lb_basis:mk.per_lb_basis}];
+  }else AT.offers=[];
+  AT.ri=0;AT.ref=AT.offers.length?AT.offers[0]:null;
+  AT.units=(mk&&mk.sell_units&&mk.sell_units.length)?mk.sell_units.slice():AT_DEF_UNITS.slice();
+  AT.ui=0;
+  if(g.ask){
+    AT.mode=g.askMode||'manual';AT.pct=g.askPct||10;
+    for(var i=0;i<AT.units.length;i++){if(AT.units[i].unit===g.askUnit){AT.ui=i;break;}}
+    AT.manual=(g.askMode==='manual')?Number(g.ask):0;
+  }else{AT.mode=atUsable()?'match':'manual';AT.pct=10;AT.manual=0;}
+  if(AT.mode!=='manual'&&!atUsable())AT.mode='manual';
+  document.getElementById('at-title').textContent='Price '+g.name;
+  atRender();
+  document.getElementById('askTool').classList.add('open');
+}
+function atClose(){document.getElementById('askTool').classList.remove('open');}
+function atSelRef(i){AT.ri=i;AT.ref=AT.offers[i];atRecalc();atRender();}
+function atSelUnit(i){AT.ui=i;atRecalc();atRender();}
+function atSetMode(m){if(m!=='manual'&&!atUsable())return;if((m==='premium'||m==='markdown')&&AT.mode!==m)AT.pct=10;AT.mode=m;atRender();}
+function atStep(d){AT.pct=Math.max(0,AT.pct+d*5);atRecalc();atRenderBody();atRenderResult();}
+function atRecalc(){
+  var a=atAnchor();
+  if(AT.mode==='match')AT.result=a||0;
+  else if(AT.mode==='premium')AT.result=(a||0)*(1+AT.pct/100);
+  else if(AT.mode==='markdown')AT.result=(a||0)*(1-AT.pct/100);
+  else AT.result=Number(AT.manual)||0;
+}
+function atRender(){atRenderRef();atRenderUnits();atRenderModes();atRenderBody();atRecalc();atRenderResult();}
+function atRenderRef(){
+  var el=document.getElementById('at-ref');
+  if(!AT.market){el.innerHTML='<span class="at-reflabel">No market comp</span><i>Set your own price below.</i>';return;}
+  var h='<span class="at-reflabel">Market reference</span>';
+  if(AT.offers.length>1){
+    h+='Matching <b>'+(AT.ref.vendor||'top')+'</b> &middot; <b>$'+Number(AT.ref.price).toFixed(2)+'/'+AT.ref.unit+'</b>';
+    h+='<div class="at-vrow" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">'+AT.offers.map(function(o,i){
+      return '<button class="at-uchip'+(i===AT.ri?' on':'')+'" data-vi="'+i+'">'+(o.vendor||'?')+' $'+Number(o.price).toFixed(2)+'</button>';}).join('')+'</div>';
+  }else{
+    h+='<b>$'+Number(AT.ref.price).toFixed(2)+'/'+AT.ref.unit+'</b>'+(AT.ref.vendor?(' &middot; '+AT.ref.vendor):' &middot; your farm price');
+  }
+  if(AT.ref.per_lb!=null){
+    h+='<span class="at-conv">&asymp; <b>$'+Number(AT.ref.per_lb).toFixed(2)+'/lb</b> in your units</span>';
+    if(AT.ref.per_lb_basis==='estimate'){var nt=AT.market.per_lb_note?(' &mdash; '+AT.market.per_lb_note):'';h+='<span class="at-flag">rough estimate'+nt+', double-check</span>';}
+  }else if(!atUsable()){
+    h+='<span class="at-conv" style="color:var(--ink-60)">Couldn&rsquo;t convert this pack to a unit you measure &mdash; set your price below.</span>';
+  }
+  el.innerHTML=h;
+  el.querySelectorAll('.at-uchip[data-vi]').forEach(function(b){b.onclick=function(){atSelRef(+b.dataset.vi);};});
+}
+function atRenderUnits(){
+  var el=document.getElementById('at-units');
+  if(AT.units.length<=1){el.innerHTML='';el.style.display='none';return;}
+  el.style.display='flex';
+  el.innerHTML='<span class="at-ulabel">Sell by</span>'+AT.units.map(function(u,i){
+    return '<button class="at-uchip'+(i===AT.ui?' on':'')+(u.basis==='estimate'?' est':'')+'" data-ui="'+i+'">'+u.unit+'</button>';}).join('');
+  el.querySelectorAll('.at-uchip[data-ui]').forEach(function(b){b.onclick=function(){atSelUnit(+b.dataset.ui);};});
+}
+function atRenderModes(){
+  var el=document.getElementById('at-modes');var usable=atUsable();
+  var modes=[['match','Match market'],['premium','Premium'],['markdown','Mark down'],['manual','Set manually']];
+  el.innerHTML=modes.map(function(m){var dis=(m[0]!=='manual'&&!usable)?' disabled':'';return '<button class="at-mode'+(AT.mode===m[0]?' on':'')+'" data-mode="'+m[0]+'"'+dis+'>'+m[1]+'</button>';}).join('');
+  el.querySelectorAll('.at-mode').forEach(function(b){b.onclick=function(){if(!b.disabled)atSetMode(b.dataset.mode);};});
+}
+function atRenderBody(){
+  var el=document.getElementById('at-body');var un=atUnit().unit;
+  if(AT.mode==='match'){
+    el.innerHTML='<div class="at-matchtxt">Selling at the market price'+(AT.ref&&AT.ref.vendor?(' &mdash; '+AT.ref.vendor):'')+'.</div>';
+  }else if(AT.mode==='premium'||AT.mode==='markdown'){
+    var sign=AT.mode==='premium'?'+':'−';
+    el.innerHTML='<div class="at-step"><button class="at-stepbtn" data-d="-1">&minus;</button><span class="at-pct">'+sign+AT.pct+'%</span><button class="at-stepbtn" data-d="1">+</button>'+
+      '<span class="at-pctcustom">or <input id="at-pctin" type="number" min="0" step="1" value="'+AT.pct+'">%</span></div>';
+    el.querySelector('[data-d="-1"]').onclick=function(){atStep(-1);};
+    el.querySelector('[data-d="1"]').onclick=function(){atStep(1);};
+    el.querySelector('#at-pctin').oninput=function(){AT.pct=Math.max(0,Number(this.value)||0);atRecalc();atRenderResult();var p=el.querySelector('.at-pct');if(p)p.textContent=sign+AT.pct+'%';};
+  }else{
+    el.innerHTML='<div class="at-manual">$ <input id="at-manin" type="number" min="0" step="0.01" value="'+(AT.manual||'')+'" placeholder="0.00"> per '+un+'</div>';
+    el.querySelector('#at-manin').oninput=function(){AT.manual=Number(this.value)||0;atRecalc();atRenderResult();};
+  }
+}
+function atRenderResult(){
+  document.getElementById('at-ask').firstChild.textContent='$'+(AT.result||0).toFixed(2)+' ';
+  document.getElementById('at-askunit').textContent='per '+atUnit().unit;
+  var note=document.getElementById('at-note');
+  if(AT.mode==='markdown'){note.className='at-note move';note.innerHTML='&#9662; Flagged to the kitchen as surplus to move';}
+  else if(AT.mode==='premium'){note.className='at-note';note.textContent='+'+AT.pct+'% over market'+(atEstimate()?' · est. conversion':'');}
+  else if(AT.mode==='match'){note.className='at-note';note.textContent='Matching the market'+(atEstimate()?' · est. conversion':'');}
+  else{note.className='at-note';note.textContent='Your set price';}
+}
+function atUse(){
+  var g=byName[AT.item];if(!g)return;
+  g.ask=Number(AT.result)||0;g.askUnit=atUnit().unit;g.askMode=AT.mode;g.askPct=AT.pct;
+  g.askVendor=(AT.mode==='match'&&AT.ref)?(AT.ref.vendor||''):'';
+  if(AT.mode==='markdown')markdown.add(AT.item);else markdown.delete(AT.item);
+  pushed.add(AT.item);
+  atClose();renderPush();renderPick();renderList();
+}
+(function atBind(){
+  document.getElementById('at-close').onclick=atClose;
+  document.getElementById('askTool').addEventListener('click',function(e){if(e.target.id==='askTool')atClose();});
+  document.getElementById('at-use').onclick=atUse;
+})();
+
+function askModeLabel(g){
+  switch(g.askMode){
+    case 'match': return 'matching'+(g.askVendor?(' '+g.askVendor):' market');
+    case 'premium': return '+'+(g.askPct||0)+'% over market';
+    case 'markdown': return '−'+(g.askPct||0)+'% to move';
+    case 'manual': return 'set by you';
+    default: return 'priced from cost';
+  }
+}
 function mkt(g){
   if(g.ask){
-    return 'your ask <b>$'+Number(g.ask).toFixed(2)+(g.askUnit?(' per '+g.askUnit):'')+'</b> &middot; priced from cost';
+    return 'your ask <b>$'+Number(g.ask).toFixed(2)+(g.askUnit?(' per '+g.askUnit):'')+'</b> &middot; '+askModeLabel(g);
   }
   if(g.market){
     var f=g.market.freshness?(' · '+g.market.freshness.toLowerCase()):'';
-    return 'market <b>$'+Number(g.market.price).toFixed(2)+'/'+g.market.unit+'</b>'+f+' &middot; your ask is yours to set';
+    var ven=g.market.vendor?(' &middot; '+g.market.vendor):'';
+    return 'market <b>$'+Number(g.market.price).toFixed(2)+'/'+g.market.unit+'</b>'+ven+f;
   }
   return '<span class="pc-nocomp">no market comp yet &middot; set your own price</span>';
 }
@@ -32806,15 +33001,15 @@ function renderPush(){
       '<div class="pc-market">'+mkt(g)+'</div>'+
       '<div class="md-tag">&#9662; Marked down to move</div>'+
       '<div class="pc-actions">'+
-        (!g.market?'<button class="chip-btn price-btn" data-n="'+n+'">'+PRICEIC+'Price this</button>':'')+
-        '<button class="chip-btn md-btn'+(md?' on':'')+'" data-n="'+n+'">'+TAG+'Mark down</button>'+
+        (g.prepped?('<button class="chip-btn price-btn" data-n="'+n+'">'+PRICEIC+'Price this</button>')
+                  :('<button class="chip-btn ask-btn" data-n="'+n+'">'+TAG+(g.ask?'Edit price':'Set price')+'</button>'))+
         '<button class="chip-btn">'+MIC+'Voice note</button>'+
         '<button class="chip-btn">'+CAM+'Photo</button>'+
       '</div>';
     el.appendChild(c);
   });
   el.querySelectorAll('.pc-x').forEach(function(b){b.onclick=function(){pushed.delete(b.dataset.n);markdown.delete(b.dataset.n);renderPush();renderPick();renderList();};});
-  el.querySelectorAll('.md-btn').forEach(function(b){b.onclick=function(){var n=b.dataset.n;markdown.has(n)?markdown.delete(n):markdown.add(n);renderPush();};});
+  el.querySelectorAll('.ask-btn').forEach(function(b){b.onclick=function(){atOpen(b.dataset.n);};});
   el.querySelectorAll('.price-btn').forEach(function(b){b.onclick=function(){ptOpen(b.dataset.n);};});
   persist();
 }
@@ -32838,10 +33033,12 @@ function renderList(){
     r.innerHTML=
       '<div class="lr-main"><div class="lr-name">'+g.name+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
       '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
+      '<button class="lr-price'+(g.ask?' set':'')+'" data-n="'+g.name+'" aria-label="Price">'+(g.ask?('$'+Number(g.ask).toFixed(2)):'$')+'</button>'+
       '<button class="star'+(pushed.has(g.name)?' on':'')+'" data-n="'+g.name+'" aria-label="Push">&#9733;</button>';
     el.appendChild(r);
   });
   el.querySelectorAll('.status').forEach(function(c){c.onclick=function(){var g=byName[c.dataset.n];var i=STATUS_ORDER.indexOf(g.status);g.status=STATUS_ORDER[(i+1)%STATUS_ORDER.length];statusEdits[g.name]=g.status;renderList();renderPick();};});
+  el.querySelectorAll('.lr-price').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.prepped)ptOpen(b.dataset.n);else atOpen(b.dataset.n);};});
   el.querySelectorAll('.star').forEach(function(b){b.onclick=function(){var n=b.dataset.n;pushed.has(n)?pushed.delete(n):pushed.add(n);renderList();renderPush();renderPick();};});
   persist();
 }
