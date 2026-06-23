@@ -33699,6 +33699,9 @@ window.RemyFarm={
   function setActive(k){var b=document.getElementById('kitchen-pills');if(b)b.querySelectorAll('.kpill').forEach(function(p){p.classList.toggle('active',p.dataset.k===k);});}
   var ST={view:'pushing',sort:'smart',q:''};
   var STATUS_RANK={'Peak':0,'Available':1,'Trickling':2,'Coming Soon':3,'Not Yet':4,'Done':5};
+  // Peak's rank is 0, which is falsy — `STATUS_RANK[s]||9` wrongly sent Peak to the bottom.
+  // Use an explicit null check so rank 0 (Peak) sorts first.
+  function srank(s){var r=STATUS_RANK[s];return (r==null)?9:r;}
   function farmList(){return (window.RemyFarm&&window.RemyFarm.list)?window.RemyFarm.list():[];}
   function priceStr(g){
     if(g.ask!=null)return '$'+Number(g.ask).toFixed(2)+(g.askUnit?('/'+g.askUnit):'');
@@ -33729,7 +33732,7 @@ window.RemyFarm={
   function pushingHtml(){
     var items=farmList().filter(function(g){return g.pushed;});
     if(!items.length)return '<div class="cf-empty">Swan House hasn&rsquo;t flagged anything to push yet.</div>';
-    items.sort(function(a,b){return (b.markdown-a.markdown)||((STATUS_RANK[a.status]||9)-(STATUS_RANK[b.status]||9))||a.name.localeCompare(b.name);});
+    items.sort(function(a,b){return (b.markdown-a.markdown)||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
     return items.map(function(g){
       var photo=g.photo?('<img class="cf-photo" data-photo="'+esc(g.photo)+'" src="'+esc(g.photo)+'" alt="'+esc(g.name)+'">'):'';
       var voice=g.voiceText?('<div class="cf-voice">&ldquo;'+esc(g.voiceText)+'&rdquo;'+((g.voice&&/^https?:/.test(g.voice))?('<audio controls src="'+esc(g.voice)+'"></audio>'):'')+'</div>'):'';
@@ -33744,7 +33747,7 @@ window.RemyFarm={
     var items=farmList();var q=ST.q.trim().toLowerCase();
     if(q)items=items.filter(function(g){return g.name.toLowerCase().indexOf(q)>=0;});
     if(ST.sort==='az')items.sort(function(a,b){return a.name.localeCompare(b.name);});
-    else items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||((STATUS_RANK[a.status]||9)-(STATUS_RANK[b.status]||9))||a.name.localeCompare(b.name);});
+    else items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
     var bar='<div class="cf-bar"><input class="cf-search" id="cf-search" type="text" placeholder="Search crops" value="'+esc(ST.q)+'">'+
       '<div class="cf-sort"><button class="cf-sortb'+(ST.sort==='smart'?' on':'')+'" onclick="_cfSetSort(\'smart\')">Pushing first</button>'+
       '<button class="cf-sortb'+(ST.sort==='az'?' on':'')+'" onclick="_cfSetSort(\'az\')">A&ndash;Z</button></div></div>';
