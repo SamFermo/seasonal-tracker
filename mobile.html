@@ -33219,7 +33219,7 @@ function ptRecalc(){
   document.getElementById('pt-margin').textContent=margin+'% margin · '+PT.mult+'× cost';
   PT._ask=ask;PT._unit=unit;
 }
-function ptUse(){var g=byName[PT.item];if(g){g.ask=PT._ask;g.askUnit=PT._unit;}pushed.add(PT.item);ptClose();renderPush();renderPick();renderList();}
+function ptUse(){var g=byName[PT.item];if(g){g.ask=PT._ask;g.askUnit=PT._unit;}pushed.add(PT.item);persist();ptClose();renderPush();renderPick();renderList();}
 (function ptBind(){
   document.getElementById('pt-close').onclick=ptClose;
   document.getElementById('priceTool').addEventListener('click',function(e){if(e.target.id==='priceTool')ptClose();});
@@ -33353,6 +33353,7 @@ function atUse(){
   g.askVendor=(AT.mode==='match'&&AT.ref)?(AT.ref.vendor||''):'';
   if(AT.mode==='markdown')markdown.add(AT.item);else markdown.delete(AT.item);
   pushed.add(AT.item);
+  persist();   // FIX 2026-06-23: was missing — set price never reached localStorage/Firestore, silently breaking the price-back loop
   atClose();renderPush();renderPick();renderList();
 }
 (function atBind(){
