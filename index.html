@@ -1352,6 +1352,36 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .io-btn-deliv{background:var(--gold-bg);color:var(--gold);border-color:rgba(226,185,94,0.5)}
 .seg button.has-new{position:relative}
 .seg button.has-new::after{content:'';position:absolute;top:6px;right:10px;width:6px;height:6px;border-radius:50%;background:var(--terra)}
+.io-btn-inv{width:100%;margin-top:8px;background:transparent;color:var(--ink);border:1px dashed var(--ink-30);padding:11px;border-radius:10px;font-family:var(--fb);font-size:13.5px;font-weight:500;cursor:pointer}
+.io-btn-inv:active{background:var(--ink-6)}
+/* invoice / finalize modal */
+#invTool{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;justify-content:center;background:rgba(2,4,13,0.72)}
+#invTool.open{display:flex}
+#invTool .inv-card{width:100%;max-width:480px;max-height:92vh;overflow:auto;background:var(--bg-card);border:1px solid var(--ink-12);border-radius:16px 16px 0 0;padding:18px 16px 26px}
+@media(min-width:768px){#invTool{align-items:center}#invTool .inv-card{border-radius:16px}}
+.inv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.inv-title{font-family:var(--fd);font-size:24px;font-weight:500}
+.inv-x{background:none;border:none;color:var(--ink-60);font-size:26px;line-height:1;cursor:pointer}
+.inv-meta{font-family:var(--fb);font-size:12px;color:var(--ink-60);line-height:1.5;margin-bottom:12px}
+.inv-row{border:1px solid var(--ink-12);border-radius:10px;padding:10px 12px;margin-bottom:9px;background:var(--bg-card-h)}
+.inv-row.off{opacity:.5}
+.inv-row.flagged{border-color:rgba(224,135,99,0.55)}
+.inv-r-top label{font-family:var(--fb);font-size:14.5px;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:7px}
+.inv-r-note{font-family:var(--fd);font-style:italic;font-size:12.5px;color:var(--ink-60);margin:3px 0 0 22px}
+.inv-defnote{display:block;font-family:var(--fb);font-size:11px;color:var(--olive);margin:4px 0 0 22px}
+.inv-flagnote{display:block;font-family:var(--fb);font-size:11px;font-weight:500;color:var(--terra);margin:4px 0 0 22px}
+.inv-r-grid{display:grid;grid-template-columns:auto 64px auto 1fr 70px;align-items:center;gap:6px;margin:8px 0 0 22px}
+.inv-lbl{font-family:var(--fb);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-30)}
+.inv-qty,.inv-price{font-family:var(--fb);font-size:14px;padding:5px 7px;border:1px solid var(--ink-12);border-radius:6px;background:var(--bg-card);color:var(--ink);text-align:right;width:100%}
+.inv-unit{font-family:var(--fb);font-size:12px;color:var(--ink-60)}
+.inv-amt{font-family:var(--fb);font-size:14px;font-weight:500;color:var(--ink);text-align:right}
+.inv-ref{font-family:var(--fb);font-size:11px;color:var(--ink-30);margin:6px 0 0 22px}
+.inv-total{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--fb);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-60);border-top:1px solid var(--ink-12);margin-top:8px;padding-top:12px}
+.inv-total b{font-family:var(--fd);font-size:26px;letter-spacing:0;text-transform:none;color:var(--ink)}
+.inv-foot{font-family:var(--fb);font-size:11.5px;color:var(--ink-60);line-height:1.45;margin:10px 0 14px}
+.inv-warn{color:var(--terra);font-weight:500}
+.inv-finalize{width:100%;padding:14px;border-radius:12px;border:none;background:var(--olive);color:#0a1028;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer}
+.inv-finalize:disabled{background:var(--ink-12);color:var(--ink-30);cursor:default}
 .cf-c-top{display:flex;align-items:baseline;gap:8px}
 .cf-c-name{font-family:var(--fd);font-size:20px;font-weight:500}
 .cf-c-qty{font-family:var(--fb);font-size:11px;color:var(--olive);border:1px solid rgba(168,185,126,0.3);border-radius:20px;padding:2px 9px}
@@ -33712,6 +33742,7 @@ function orderCard(o){
         (st==='placed'?('<button class="io-btn io-btn-ack" data-ack="'+oesc(o.order_id)+'">Got it 👍</button>'):'')+
         (st!=='delivered'&&st!=='cancelled'?('<button class="io-btn io-btn-deliv" data-deliv="'+oesc(o.order_id)+'">Mark delivered</button>'):'')+
       '</div>'+
+      (st!=='cancelled'?('<button class="io-btn io-btn-inv" data-inv="'+oesc(o.order_id)+'">'+((o.invoice&&o.invoice.drafted)?('Invoice $'+(o.invoice.total!=null?Number(o.invoice.total).toFixed(2):'?')+' · re-finalize'):'Build invoice')+'</button>'):'')+
     '</div>'):'')+
   '</div>';
 }
@@ -33722,6 +33753,150 @@ function wireOrders(c){
   c.querySelectorAll('.io-cf-date').forEach(function(el){el.addEventListener('change',function(){ordersUpdate(el.getAttribute('data-ord'),{confirmed_date:el.value||null});});});
   c.querySelectorAll('[data-ack]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();ordersUpdate(el.getAttribute('data-ack'),{status:'acked',farm_ack:{by:'farm',at:new Date().toISOString()}});});});
   c.querySelectorAll('[data-deliv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-deliv');var o=ordersData.find(function(x){return x.order_id===id;});ordersUpdate(id,{status:'delivered',delivered:{at:new Date().toISOString()},confirmed_date:(o&&o.confirmed_date)||new Date().toISOString().slice(0,10)});});});
+  c.querySelectorAll('[data-inv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();invOpen(el.getAttribute('data-inv'));});});
+}
+
+/* ── INVOICE / FINALIZE (farm side, in Remy) — ports the check-in invoice flow + adds the
+   short/sub quantity-default (Sam, 2026-06-24). Reads the price feed for a prefill comp;
+   a flagged-short line DEFAULTS the billed qty to the shorted amount (Tim opts out), so the
+   loop can't silently bill the full order the way the check-in finalize did. Writes
+   order.invoice in the exact shape ingest_finalized_orders.py consumes. ── */
+var INV={order:null, feed:null, feedTried:false, rows:[]};
+function invFetchFeed(cb){
+  if(INV.feedTried){cb(INV.feed);return;}
+  INV.feedTried=true;
+  try{
+    fetch('price-reference.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+      .then(function(j){INV.feed=j;cb(j);}).catch(function(){cb(null);});
+  }catch(e){cb(null);}
+}
+function invNormUnit(u){u=(u==null?'':u).toString().trim().toLowerCase();
+  if(u==='#'||u==='lb'||u==='lbs'||u==='pound'||u==='pounds')return 'lb';
+  if(u==='bn'||u==='bunch'||u==='bunches')return 'bunch';
+  if(u==='ea'||u==='each')return 'each';
+  if(u==='cs'||u==='case'||u==='cases')return 'case';
+  if(u==='doz'||u==='dz'||u==='dozen')return 'dozen';
+  if(u==='qt'||u==='quart'||u==='quarts')return 'quart';
+  if(u==='pt'||u==='pint'||u==='pints')return 'pint';
+  if(u==='gal'||u==='gallon'||u==='gallon bag'||u==='gal bag')return 'gallon';
+  return u;
+}
+// short/sub: default the billed qty to the number Kelly wrote in the note; if none parses,
+// keep the ordered qty but FLAG the line so Tim sets it (never silently bill the full order).
+function invQtyDefault(line, existingInvLine){
+  var fs=line.farm_status;
+  if(fs!=='short'&&fs!=='sub'){return {qty:line.qty, flagged:false, defaulted:false};}
+  var m=(line.farm_note||'').match(/(\d+(?:\.\d+)?)/);
+  if(m){return {qty:parseFloat(m[1]), flagged:false, defaulted:true};}
+  return {qty:line.qty, flagged:true, defaulted:false};
+}
+function invPrefillPrice(line, existingInvLine){
+  // re-finalize: prefer the price already on the filed invoice (what Tim charged before)
+  if(existingInvLine&&existingInvLine.price!=null)return {price:existingInvLine.price, ref:invRefStr(line)};
+  var fe=invFeedItem(line.item);
+  // prefill ONLY on an exact unit match (no risky auto-conversion); else blank + show the comp
+  if(fe&&fe.swan_price!=null&&invNormUnit(fe.unit)===invNormUnit(line.unit))return {price:fe.swan_price, ref:invRefStr(line)};
+  return {price:null, ref:invRefStr(line)};
+}
+function invFeedItem(item){var it=(INV.feed&&INV.feed.items)||{};return it[item]||null;}
+function invRefStr(line){
+  var fe=invFeedItem(line.item);if(!fe)return 'no comp on file';
+  var parts=[];
+  if(fe.swan_price!=null)parts.push('Swan $'+Number(fe.swan_price).toFixed(2)+'/'+oesc(fe.unit||'?'));
+  if(fe.swan_per_lb!=null)parts.push('$'+Number(fe.swan_per_lb).toFixed(2)+'/lb');
+  var mr=fe.market_ref;if(mr&&mr.price!=null)parts.push('mkt $'+Number(mr.price).toFixed(2)+'/'+oesc(mr.unit||'?')+(mr.vendor?(' '+oesc(mr.vendor)):''));
+  else if(fe.market!=null&&fe.vendor)parts.push(oesc(fe.vendor));
+  return parts.join(' · ')||'on file';
+}
+function invModal(){
+  var m=document.getElementById('invTool');
+  if(!m){m=document.createElement('div');m.id='invTool';
+    m.innerHTML='<div class="inv-card"><div class="inv-head"><span class="inv-title" id="inv-title">Invoice</span><button class="inv-x" id="inv-close" aria-label="Close">&times;</button></div><div class="inv-meta" id="inv-meta"></div><div class="inv-rows" id="inv-rows"></div><div class="inv-total" id="inv-total"></div><div class="inv-foot" id="inv-foot"></div><button class="inv-finalize" id="inv-finalize">Finalize invoice</button></div>';
+    document.body.appendChild(m);
+    m.addEventListener('click',function(e){if(e.target.id==='invTool'||e.target.id==='inv-close')m.classList.remove('open');});
+    m.querySelector('#inv-finalize').addEventListener('click',invFinalize);
+  }
+  return m;
+}
+function invOpen(id){
+  var o=ordersData.find(function(x){return x.order_id===id;});if(!o)return;
+  invFetchFeed(function(){
+    INV.order=o;
+    var existing=(o.invoice&&o.invoice.lines)||[];
+    var exByItem={};existing.forEach(function(x){exByItem[x.item]=x;});
+    INV.rows=(o.lines||[]).map(function(l){
+      var ex=exByItem[l.item];
+      var qd=invQtyDefault(l,ex);
+      var pf=invPrefillPrice(l,ex);
+      return {item:l.item, unit:l.unit, ordered:l.qty, qty:qd.qty, flagged:qd.flagged, defaulted:qd.defaulted,
+              farm_status:l.farm_status||null, farm_note:l.farm_note||'',
+              price:(pf.price==null?'':String(pf.price)), ref:pf.ref, incl:true};
+    });
+    invRender();
+    invModal().classList.add('open');
+  });
+}
+function invRender(){
+  var m=invModal();var o=INV.order;if(!o)return;
+  document.getElementById('inv-title').textContent=(o.invoice&&o.invoice.drafted)?'Re-finalize invoice':'Build invoice';
+  document.getElementById('inv-meta').innerHTML='<b>Swan House Farm</b> &rarr; San Fermo &middot; '+oesc(o.placed_by||'')+'<br>order '+oesc(o.order_id)+(o.requested_date?(' &middot; needed '+ofmtDate(o.requested_date)):'');
+  var rows=INV.rows.map(function(r,i){
+    var flag=(r.farm_status||'').toUpperCase();
+    var flagHtml=flag?(' <span class="io-l-flag f-'+r.farm_status+'">'+flag+'</span>'):'';
+    var shortInfo=r.defaulted?('<span class="inv-defnote">qty set to the '+flag.toLowerCase()+' ('+oesc(String(r.ordered))+'&rarr;'+oesc(String(r.qty))+')</span>')
+                 :(r.flagged?('<span class="inv-flagnote">'+flag+" — couldn't read a qty, confirm it</span>"):'');
+    return '<div class="inv-row'+(r.incl?'':' off')+(r.flagged?' flagged':'')+'">'+
+      '<div class="inv-r-top"><label class="inv-incl"><input type="checkbox" data-inci="'+i+'"'+(r.incl?' checked':'')+'> <b>'+oesc(r.item)+'</b>'+flagHtml+'</label></div>'+
+      (r.farm_note?('<div class="inv-r-note">&ldquo;'+oesc(r.farm_note)+'&rdquo;</div>'):'')+
+      shortInfo+
+      '<div class="inv-r-grid">'+
+        '<span class="inv-lbl">Qty</span><input class="inv-qty" data-qi="'+i+'" inputmode="decimal" value="'+oesc(String(r.qty))+'"><span class="inv-unit">'+oesc(r.unit||'')+'</span>'+
+        '<span class="inv-lbl">$/unit</span><input class="inv-price" data-pi="'+i+'" inputmode="decimal" value="'+oesc(r.price)+'" placeholder="set">'+
+        '<span class="inv-amt" id="inv-amt-'+i+'"></span>'+
+      '</div>'+
+      '<div class="inv-ref">'+r.ref+'</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('inv-rows').innerHTML=rows;
+  m.querySelectorAll('.inv-qty').forEach(function(el){el.addEventListener('input',function(){INV.rows[+el.getAttribute('data-qi')].qty=el.value;invRecalc();});});
+  m.querySelectorAll('.inv-price').forEach(function(el){el.addEventListener('input',function(){INV.rows[+el.getAttribute('data-pi')].price=el.value;invRecalc();});});
+  m.querySelectorAll('[data-inci]').forEach(function(el){el.addEventListener('change',function(){var r=INV.rows[+el.getAttribute('data-inci')];r.incl=el.checked;el.closest('.inv-row').classList.toggle('off',!r.incl);invRecalc();});});
+  invRecalc();
+}
+function invLineAmt(r){var q=parseFloat(r.qty),p=parseFloat(r.price);if(isNaN(q)||isNaN(p))return null;return +(q*p).toFixed(2);}
+function invRecalc(){
+  var tot=0,any=false,flagged=false;
+  INV.rows.forEach(function(r,i){
+    var amt=r.incl?invLineAmt(r):null;
+    var cell=document.getElementById('inv-amt-'+i);if(cell)cell.textContent=(amt!=null)?('$'+amt.toFixed(2)):(r.incl?'—':'off');
+    if(r.incl&&amt!=null){tot+=amt;any=true;}
+    if(r.incl&&r.flagged)flagged=true;
+  });
+  document.getElementById('inv-total').innerHTML='TOTAL <b>'+(any?('$'+tot.toFixed(2)):'—')+'</b>';
+  var foot=document.getElementById('inv-foot');
+  foot.innerHTML=flagged?'<span class="inv-warn">Confirm the flagged quantities before finalizing.</span>'
+    :'Shorted lines default to the packed amount. Edit any qty/price, then finalize. Re-finalizing overwrites the filed invoice.';
+  var btn=document.getElementById('inv-finalize');if(btn)btn.disabled=!any;
+}
+function invFinalize(){
+  var o=INV.order;if(!o)return;
+  var fitems=(INV.feed&&INV.feed.items)||{};
+  var lines=INV.rows.filter(function(r){return r.incl;}).map(function(r){
+    var q=parseFloat(r.qty),p=parseFloat(r.price);
+    var has=!isNaN(p),amt=(!isNaN(q)&&has)?+(q*p).toFixed(2):null;
+    var fe=fitems[r.item];
+    return {item:r.item, unit:r.unit, qty:(isNaN(q)?r.qty:q), price:has?+p.toFixed(2):null, amount:amt,
+            farm_status:r.farm_status||null, farm_note:r.farm_note||'',
+            source:(fe&&fe.source)||'manual', farm_set:!!(fe&&fe.farm_set)||!fe};
+  });
+  var tot=lines.reduce(function(s,x){return s+(x.amount||0);},0);
+  var inv={drafted:true, finalized_at:new Date().toISOString(),
+           premium_pct:(INV.feed&&INV.feed.premium_pct!=null)?INV.feed.premium_pct:((o.invoice&&o.invoice.premium_pct)||20),
+           total:+tot.toFixed(2), lines:lines};
+  o.invoice=inv;                          // optimistic local update so the card label refreshes
+  invModal().classList.remove('open');
+  renderOrders();
+  ordersUpdate(o.order_id,{invoice:inv});
 }
 
 /* expose the live farmer state for the restaurant-side Connected Farms mirror (read-only) */
