@@ -1312,6 +1312,46 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .cf-empty{font-family:var(--fd);font-style:italic;font-size:15px;color:var(--ink-30);text-align:center;padding:18px 0}
 .cf-card{background:var(--bg-card);border:1px solid var(--ink-12);border-radius:8px;padding:13px 14px;margin-bottom:10px}
 .cf-card.md{border-color:rgba(226,185,94,0.45)}
+/* ── Incoming Orders (farm side of the order loop) — Moonstruck-themed port of the farm-checkin Farm Orders view ── */
+.io-empty{font-family:var(--fd);font-style:italic;font-size:15px;color:var(--ink-30);text-align:center;padding:18px 0}
+.io-card{background:var(--bg-card);border:1px solid var(--ink-12);border-radius:8px;margin:10px 0;overflow:hidden}
+.io-card.st-placed{border-left:3px solid var(--terra)}
+.io-card.st-acked{border-left:3px solid var(--gold)}
+.io-card.st-delivered{border-left:3px solid var(--olive);opacity:.85}
+.io-card.st-cancelled{opacity:.55}
+.io-card-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;gap:10px}
+.io-card-when{font-family:var(--fd);font-weight:500;font-size:18px;color:var(--ink);line-height:1.1}
+.io-card-sub{font-family:var(--fb);font-size:12px;color:var(--ink-60);margin-top:2px}
+.io-badge{font-family:var(--fb);font-size:10.5px;font-weight:500;letter-spacing:0.04em;padding:4px 10px;border-radius:999px;white-space:nowrap;border:1px solid}
+.io-badge.b-placed{background:var(--terra-bg);color:var(--terra);border-color:rgba(224,135,99,0.45)}
+.io-badge.b-acked{background:var(--gold-bg);color:var(--gold);border-color:rgba(226,185,94,0.45)}
+.io-badge.b-delivered{background:var(--olive-bg);color:var(--olive);border-color:rgba(168,185,126,0.45)}
+.io-badge.b-cancelled{background:var(--ink-6);color:var(--ink-30);border-color:var(--ink-12)}
+.io-card-body{padding:4px 14px 14px;border-top:1px solid var(--ink-12)}
+.io-card-note{font-family:var(--fd);font-style:italic;color:var(--ink-60);font-size:14px;margin:10px 0}
+.io-pickhead{font-family:var(--fb);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-30);font-weight:500;margin:10px 0 6px}
+.io-l{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--ink-6)}
+.io-l.packed .io-l-name{text-decoration:line-through;color:var(--ink-30)}
+.io-l-check{flex:0 0 26px;width:26px;height:26px;border:2px solid var(--olive);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--olive);font-weight:800;cursor:pointer;background:transparent}
+.io-l.packed .io-l-check{background:var(--olive-bg)}
+.io-l-body{flex:1}
+.io-l-name{font-family:var(--fb);font-size:14.5px;color:var(--ink);font-weight:500}
+.io-l-flag{font-size:9.5px;font-weight:800;letter-spacing:0.04em;padding:1px 6px;border-radius:5px;vertical-align:middle}
+.io-l-flag.f-short{background:var(--terra-bg);color:var(--terra)}
+.io-l-flag.f-sub{background:var(--gold-bg);color:var(--gold)}
+.io-l-note{display:block;font-family:var(--fd);font-style:italic;font-size:13px;color:var(--terra);margin-top:2px}
+.io-l-actions{display:flex;gap:6px;margin-top:6px}
+.io-mini{font-family:var(--fb);font-size:11px;font-weight:500;padding:4px 11px;border-radius:999px;border:1px solid var(--ink-12);background:transparent;color:var(--ink-60);cursor:pointer}
+.io-mini-clear{border-color:rgba(168,185,126,0.45);color:var(--olive)}
+.io-confirm-row{margin:12px 0 4px}
+.io-cf-label{font-family:var(--fb);font-size:12px;color:var(--ink-60);font-weight:500;display:flex;flex-direction:column;gap:4px}
+.io-cf-date{font-family:var(--fb);font-size:14px;padding:8px 10px;border:1px solid var(--ink-12);border-radius:8px;background:var(--bg-card-h);color:var(--ink)}
+.io-actions{display:flex;gap:8px;margin-top:12px}
+.io-btn{flex:1;padding:11px;border-radius:10px;border:1px solid;font-family:var(--fb);font-size:13.5px;font-weight:500;cursor:pointer}
+.io-btn-ack{background:var(--olive-bg);color:var(--olive);border-color:rgba(168,185,126,0.5)}
+.io-btn-deliv{background:var(--gold-bg);color:var(--gold);border-color:rgba(226,185,94,0.5)}
+.seg button.has-new{position:relative}
+.seg button.has-new::after{content:'';position:absolute;top:6px;right:10px;width:6px;height:6px;border-radius:50%;background:var(--terra)}
 .cf-c-top{display:flex;align-items:baseline;gap:8px}
 .cf-c-name{font-family:var(--fd);font-size:20px;font-weight:500}
 .cf-c-qty{font-family:var(--fb);font-size:11px;color:var(--olive);border:1px solid rgba(168,185,126,0.3);border-radius:20px;padding:2px 9px}
@@ -1377,6 +1417,7 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   <div class="seg">
     <button class="on" data-view="push">Pushing</button>
     <button data-view="list">Full list</button>
+    <button data-view="orders" id="seg-orders">Orders</button>
   </div>
   <button class="guided-link" data-view="guided">New farm? Let Remy walk you through it &rarr;</button>
 
@@ -1403,6 +1444,12 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   <div class="view" id="view-guided">
     <div class="gcard" id="gcard"></div>
     <button class="g-back" id="g-back">&larr; Back to the board</button>
+  </div>
+
+  <div class="view" id="view-orders">
+    <div class="vh">Incoming orders</div>
+    <div class="vh-sub">What San Fermo needs from you. Pack it, flag a short or sub, set the delivery date.</div>
+    <div id="orders-rows"><div class="io-empty">Connecting to the order feed&hellip;</div></div>
   </div>
 
   <div class="meta" id="meta"></div>
@@ -32919,6 +32966,22 @@ function runIntroMorph(){
   var pb=document.getElementById('ph-back');
   if(pb)pb.addEventListener('click',function(){show(doors);clearPick();window.scrollTo(0,0);});
 
+  /* deep-link: ?view=orders (or #orders) lands straight on the farm side's Incoming Orders tab.
+     The Chakotay farm-checkin app links here after ceding its in-app order review (2026-06-24).
+     Deferred to DOMContentLoaded so the farm IIFE has wired the seg buttons + setView first. */
+  function _deepLinkOrders(){
+    try{
+      var q=(location.search||'')+' '+(location.hash||'');
+      if(/(?:[?&]view=orders\b)|(?:#orders\b)/.test(q)){
+        hide(doors);show(farm);
+        var b=document.getElementById('seg-orders');if(b)b.click();
+        window.scrollTo(0,0);
+      }
+    }catch(e){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_deepLinkOrders);
+  else _deepLinkOrders();
+
   // ── starfield: randomly generated, gently twinkling stars (global #stars for the portal,
   //    plus a per-view sky behind the moon since #doors' bg covers the global layer) ──
   function seedStars(svg,n){
@@ -33011,7 +33074,7 @@ function fbInit(){try{if(!window.firebase)return;firebase.initializeApp({apiKey:
   // offline persistence: prices/status/markdown/transcripts queue locally + auto-sync on reconnect
   try{FB.db.enablePersistence({synchronizeTabs:true}).catch(function(){});}catch(e){}
   try{FB.storage=firebase.storage();}catch(e){}
-  firebase.auth().signInAnonymously().then(function(){FB.ready=true;fbLoad();flushQueue();}).catch(function(){});}catch(e){}}
+  firebase.auth().signInAnonymously().then(function(){FB.ready=true;fbLoad();flushQueue();startOrdersSync();}).catch(function(){});}catch(e){}}
 function flagSaved(){var m=document.getElementById('saved');if(!m)return;m.style.opacity='1';clearTimeout(window._svt);window._svt=setTimeout(function(){m.style.opacity='0';},1100);}
 
 /* ── PHOTO per listing: one tap → camera → resize → Storage → URL on the listing ── */
@@ -33560,6 +33623,7 @@ function setView(v){
   document.getElementById('view-'+v).classList.add('live');
   ROOT.querySelectorAll('.seg button').forEach(function(b){b.classList.toggle('on',b.dataset.view===v);});
   if(v==='guided'){gi=0;renderGuided();}
+  if(v==='orders'){startOrdersSync();renderOrders();}
 }
 ROOT.querySelectorAll('.seg button').forEach(function(b){b.onclick=function(){setView(b.dataset.view);};});
 ROOT.querySelector('.guided-link').onclick=function(){setView('guided');};
@@ -33574,6 +33638,91 @@ renderPush();renderPick();renderList();
 updateOfflineBanner();
 fbInit();
 flushQueue();
+
+/* ── INCOMING ORDERS — farm side of the chef↔farm order loop (remy-orders `orders`) ──
+   Ported 2026-06-24 from the Chakotay farm-checkin Farm Orders view. Order review only:
+   list → pack → short/sub → ack → delivered → confirmed-date. Invoice/finalize lives in the
+   Harvest List tab behind the auth gate (not here). Reads the same remy-orders Firestore the
+   farm side already uses (FB.db, compat SDK — matches the staff-portal writer). */
+var ordersData=[], ordersUnsub=null, ordersExpanded={};
+function oesc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function ofmtDate(iso){try{return new Date(iso).toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'});}catch(e){return iso||'';}}
+/* multi-farm seam: order docs carry no seller/farm_id yet (single san_fermo↔Swan pair today).
+   When they do, filter to this farm here — never hardcode the farm name. */
+function orderForThisFarm(o){return true;}
+function ordStatusLabel(o){var s=o.status||'placed';return s==='acked'?'Got it':s==='delivered'?'Delivered':s==='cancelled'?'Cancelled':'New';}
+function ordOpenCount(){return ordersData.filter(function(o){return (o.status||'placed')==='placed';}).length;}
+function updateOrdersSeg(){var b=document.getElementById('seg-orders');if(!b)return;var n=ordOpenCount();b.textContent=n?('Orders ('+n+')'):'Orders';b.classList.toggle('has-new',!!n);}
+function startOrdersSync(){
+  if(!(FB&&FB.ready&&FB.db))return;
+  if(ordersUnsub)return;
+  try{
+    ordersUnsub=FB.db.collection('orders').orderBy('placed_at','desc').limit(40).onSnapshot(function(snap){
+      ordersData=snap.docs.map(function(d){return d.data();}).filter(orderForThisFarm);
+      updateOrdersSeg();
+      var v=document.getElementById('view-orders');
+      if(v&&v.classList.contains('live'))renderOrders();
+    },function(e){});
+  }catch(e){}
+}
+function ordersUpdate(id,patch){
+  if(!(FB&&FB.ready&&FB.db))return Promise.resolve();
+  return FB.db.collection('orders').doc(id).update(patch).catch(function(){alert('Could not save — check your connection.');});
+}
+function renderOrders(){
+  var c=document.getElementById('orders-rows');if(!c)return;
+  if(!(FB&&FB.ready&&FB.db)){c.innerHTML='<div class="io-empty">Connecting to the order feed&hellip;</div>';return;}
+  if(!ordersData.length){c.innerHTML='<div class="io-empty">No orders yet. When San Fermo sends one, it lands here.</div>';return;}
+  c.innerHTML=ordersData.map(orderCard).join('');
+  wireOrders(c);
+}
+function orderCard(o){
+  var open=!!ordersExpanded[o.order_id];
+  var st=o.status||'placed';
+  var lines=o.lines||[];
+  var packed=lines.filter(function(l){return l.packed;}).length;
+  var reqd=o.requested_date?('needed '+ofmtDate(o.requested_date)):'no date set';
+  var lineRows=lines.map(function(l,i){
+    var flag=l.farm_status==='short'?'short':l.farm_status==='sub'?'sub':'';
+    return '<div class="io-l'+(l.packed?' packed':'')+'">'+
+      '<span class="io-l-check" data-ord="'+oesc(o.order_id)+'" data-li="'+i+'" role="checkbox" aria-checked="'+(l.packed?'true':'false')+'">'+(l.packed?'✓':'')+'</span>'+
+      '<span class="io-l-body">'+
+        '<span class="io-l-name">'+oesc(l.qty)+' '+oesc(l.unit)+' '+oesc(l.item)+(flag?(' <span class="io-l-flag f-'+flag+'">'+flag.toUpperCase()+'</span>'):'')+'</span>'+
+        (l.farm_note?('<span class="io-l-note">'+oesc(l.farm_note)+'</span>'):'')+
+        '<span class="io-l-actions">'+
+          '<button class="io-mini" data-flag="short" data-ord="'+oesc(o.order_id)+'" data-li="'+i+'">Short</button>'+
+          '<button class="io-mini" data-flag="sub" data-ord="'+oesc(o.order_id)+'" data-li="'+i+'">Sub</button>'+
+          (flag?('<button class="io-mini io-mini-clear" data-flag="clear" data-ord="'+oesc(o.order_id)+'" data-li="'+i+'">Clear</button>'):'')+
+        '</span>'+
+      '</span>'+
+    '</div>';
+  }).join('');
+  return '<div class="io-card st-'+st+'">'+
+    '<div class="io-card-head" data-toggle="'+oesc(o.order_id)+'">'+
+      '<div><div class="io-card-when">'+ofmtDate(o.placed_at)+' · '+oesc(o.placed_by||'')+'</div>'+
+      '<div class="io-card-sub">'+lines.length+' item'+(lines.length!==1?'s':'')+' · '+oesc(reqd)+'</div></div>'+
+      '<span class="io-badge b-'+st+'">'+oesc(ordStatusLabel(o))+'</span>'+
+    '</div>'+
+    (open?('<div class="io-card-body">'+
+      (o.order_note?('<div class="io-card-note">“'+oesc(o.order_note)+'”</div>'):'')+
+      '<div class="io-pickhead">'+packed+' of '+lines.length+' packed</div>'+
+      lineRows+
+      '<div class="io-confirm-row"><label class="io-cf-label">Delivery date<input type="date" class="io-cf-date" data-ord="'+oesc(o.order_id)+'" value="'+oesc(o.confirmed_date||o.requested_date||'')+'"></label></div>'+
+      '<div class="io-actions">'+
+        (st==='placed'?('<button class="io-btn io-btn-ack" data-ack="'+oesc(o.order_id)+'">Got it 👍</button>'):'')+
+        (st!=='delivered'&&st!=='cancelled'?('<button class="io-btn io-btn-deliv" data-deliv="'+oesc(o.order_id)+'">Mark delivered</button>'):'')+
+      '</div>'+
+    '</div>'):'')+
+  '</div>';
+}
+function wireOrders(c){
+  c.querySelectorAll('[data-toggle]').forEach(function(el){el.addEventListener('click',function(){var id=el.getAttribute('data-toggle');ordersExpanded[id]=!ordersExpanded[id];renderOrders();});});
+  c.querySelectorAll('.io-l-check').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-ord'),i=+el.getAttribute('data-li');var o=ordersData.find(function(x){return x.order_id===id;});if(!o)return;var lines=(o.lines||[]).map(function(l,ix){return ix===i?Object.assign({},l,{packed:!l.packed}):l;});o.lines=lines;renderOrders();ordersUpdate(id,{lines:lines});});});
+  c.querySelectorAll('.io-mini').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-ord'),i=+el.getAttribute('data-li'),flag=el.getAttribute('data-flag');var o=ordersData.find(function(x){return x.order_id===id;});if(!o)return;var note='';if(flag==='short'||flag==='sub'){note=prompt(flag==='short'?'How much can you send / what changed?':'Substitute with what?','')||'';}var lines=(o.lines||[]).map(function(l,ix){return ix===i?Object.assign({},l,{farm_status:flag==='clear'?null:flag,farm_note:flag==='clear'?'':note}):l;});o.lines=lines;renderOrders();ordersUpdate(id,{lines:lines});});});
+  c.querySelectorAll('.io-cf-date').forEach(function(el){el.addEventListener('change',function(){ordersUpdate(el.getAttribute('data-ord'),{confirmed_date:el.value||null});});});
+  c.querySelectorAll('[data-ack]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();ordersUpdate(el.getAttribute('data-ack'),{status:'acked',farm_ack:{by:'farm',at:new Date().toISOString()}});});});
+  c.querySelectorAll('[data-deliv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-deliv');var o=ordersData.find(function(x){return x.order_id===id;});ordersUpdate(id,{status:'delivered',delivered:{at:new Date().toISOString()},confirmed_date:(o&&o.confirmed_date)||new Date().toISOString().slice(0,10)});});});
+}
 
 /* expose the live farmer state for the restaurant-side Connected Farms mirror (read-only) */
 window.RemyFarm={
