@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#050918">
 <title>Remy &middot; San Fermo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +26,11 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;color:var(--ink);
   font-family:var(--fb);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
-  background:radial-gradient(ellipse at 50% 28%, #0c1535 0%, #050918 55%, #02040d 100%)}
+  /* solid dark base UNDER the gradient image: without it the page background-color is
+     transparent→white, which iOS paints behind the status bar / on repaint after a fixed
+     overlay closes (the "white bar"). */
+  background-color:#02040d;
+  background:#02040d radial-gradient(ellipse at 50% 28%, #0c1535 0%, #050918 55%, #02040d 100%)}
 /* starfield sits behind everything — subtle, almost ambient */
 #stars{position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%;
   opacity:0.55}
@@ -1384,6 +1389,8 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .inv-total b{font-family:var(--fd);font-size:26px;letter-spacing:0;text-transform:none;color:var(--ink)}
 .inv-foot{font-family:var(--fb);font-size:11.5px;color:var(--ink-60);line-height:1.45;margin:10px 0 14px}
 .inv-warn{color:var(--terra);font-weight:500}
+.inv-savetoggle{display:flex;align-items:center;gap:9px;font-family:var(--fb);font-size:13px;color:var(--ink-60);margin:0 0 12px;cursor:pointer}
+.inv-savetoggle input{width:17px;height:17px;accent-color:var(--olive);flex:0 0 auto}
 .inv-finalize{width:100%;padding:14px;border-radius:12px;border:none;background:var(--olive);color:#0a1028;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer}
 .inv-finalize:disabled{background:var(--ink-12);color:var(--ink-30);cursor:default}
 .cf-c-top{display:flex;align-items:baseline;gap:8px}
@@ -33076,7 +33083,7 @@ var BUYER='san_fermo', SKEY='remy.farm.'+BUYER+'.v1', statusEdits={};
 function snapshot(){
   var items={};
   grow.forEach(function(g){
-    if(g.ask!=null||g.photo||g.voice||g.voiceText){
+    if(g.ask!=null||g.askUnit||g.photo||g.voice||g.voiceText){
       items[g.name]={ask:(g.ask==null?null:g.ask),askUnit:g.askUnit||'',askMode:g.askMode||'',askPct:(g.askPct==null?null:g.askPct),askVendor:g.askVendor||'',photo:g.photo||'',voice:g.voice||'',voiceText:g.voiceText||''};
     }
   });
@@ -33089,6 +33096,7 @@ function applyState(x){
   if(x.status){statusEdits=x.status;grow.forEach(function(g){if(statusEdits[g.name])g.status=statusEdits[g.name];});}
   if(x.items){Object.keys(x.items).forEach(function(n){var g=byName[n];if(!g)return;var it=x.items[n];
     if(it.ask!=null){g.ask=it.ask;g.askUnit=it.askUnit;g.askMode=it.askMode;g.askPct=it.askPct;g.askVendor=it.askVendor;}
+    if(it.askUnit)g.askUnit=it.askUnit;   // a saved sell-unit persists even if she hasn't priced the crop
     if(it.photo)g.photo=it.photo;if(it.voice)g.voice=it.voice;if(it.voiceText)g.voiceText=it.voiceText;});}
 }
 function lsSave(){try{localStorage.setItem(SKEY,JSON.stringify(snapshot()));}catch(e){}}
@@ -33765,7 +33773,7 @@ function wireOrders(c){
    a flagged-short line DEFAULTS the billed qty to the shorted amount (Tim opts out), so the
    loop can't silently bill the full order the way the check-in finalize did. Writes
    order.invoice in the exact shape ingest_finalized_orders.py consumes. ── */
-var INV={order:null, feed:null, feedTried:false, rows:[]};
+var INV={order:null, feed:null, feedTried:false, rows:[], savePrices:false};
 function invFetchFeed(cb){
   if(INV.feedTried){cb(INV.feed);return;}
   INV.feedTried=true;
@@ -33812,12 +33820,16 @@ function invFeedItem(item){var it=(INV.feed&&INV.feed.items)||{};return it[item]
 // unit); else the prior filed line (re-finalize); else the market spine on an exact unit match;
 // else blank. The unit is a LABEL Kelly controls — changing it never converts qty or price.
 function invLineDefaults(line, ex){
-  var k=invKellyAsk(line);
-  if(k)return {unit:(k.unit||line.unit||''), price:k.price, saved:true};
-  if(ex&&ex.price!=null)return {unit:(ex.unit||line.unit||''), price:ex.price, saved:false};
-  var fe=invFeedItem(line.item);
-  if(fe&&fe.swan_price!=null&&invNormUnit(fe.unit)===invNormUnit(line.unit))return {unit:line.unit||'', price:fe.swan_price, saved:false};
-  return {unit:line.unit||'', price:null, saved:false};
+  var g=invCrop(line.item);
+  var savedUnit=(g&&g.askUnit)?g.askUnit:'';          // her saved sell-unit (persists even if unpriced)
+  var savedAsk=(g&&g.ask!=null)?g.ask:null;
+  // UNIT: Kelly's saved sell-unit wins, else the prior filed unit, else the order unit.
+  var unit=savedUnit||(ex&&ex.unit)||line.unit||'';
+  // PRICE: her saved ask, else the prior filed price, else the spine on an exact unit match, else blank.
+  var price=savedAsk;
+  if(price==null&&ex&&ex.price!=null)price=ex.price;
+  if(price==null){var fe=invFeedItem(line.item);if(fe&&fe.swan_price!=null&&invNormUnit(fe.unit)===invNormUnit(line.unit))price=fe.swan_price;}
+  return {unit:unit, price:price, saved:(savedAsk!=null)};
 }
 var INV_UNITS=['lb','1/4 lb','1/2 lb','oz','each','dozen','bunch','pint','quart','gallon','gallon bag','case','flat','bag'];
 function invUnitOptions(cur){
@@ -33827,10 +33839,11 @@ function invUnitOptions(cur){
 function invModal(){
   var m=document.getElementById('invTool');
   if(!m){m=document.createElement('div');m.id='invTool';
-    m.innerHTML='<div class="inv-card"><div class="inv-head"><span class="inv-title" id="inv-title">Invoice</span><button class="inv-x" id="inv-close" aria-label="Close">&times;</button></div><div class="inv-meta" id="inv-meta"></div><div class="inv-rows" id="inv-rows"></div><div class="inv-total" id="inv-total"></div><div class="inv-foot" id="inv-foot"></div><button class="inv-finalize" id="inv-finalize">Finalize invoice</button></div>';
+    m.innerHTML='<div class="inv-card"><div class="inv-head"><span class="inv-title" id="inv-title">Invoice</span><button class="inv-x" id="inv-close" aria-label="Close">&times;</button></div><div class="inv-meta" id="inv-meta"></div><div class="inv-rows" id="inv-rows"></div><div class="inv-total" id="inv-total"></div><div class="inv-foot" id="inv-foot"></div><label class="inv-savetoggle"><input type="checkbox" id="inv-saveprices"><span>Save these prices to my Remy prices</span></label><button class="inv-finalize" id="inv-finalize">Finalize invoice</button></div>';
     document.body.appendChild(m);
     m.addEventListener('click',function(e){if(e.target.id==='invTool'||e.target.id==='inv-close')m.classList.remove('open');});
     m.querySelector('#inv-finalize').addEventListener('click',invFinalize);
+    m.querySelector('#inv-saveprices').addEventListener('change',function(){INV.savePrices=this.checked;});
   }
   return m;
 }
@@ -33838,6 +33851,7 @@ function invOpen(id){
   var o=ordersData.find(function(x){return x.order_id===id;});if(!o)return;
   invFetchFeed(function(){
     INV.order=o;
+    INV.savePrices=false;   // price write-back is opt-in per finalize; unit type always feeds back
     var existing=(o.invoice&&o.invoice.lines)||[];
     var exByItem={};existing.forEach(function(x){exByItem[x.item]=x;});
     INV.rows=(o.lines||[]).map(function(l){
@@ -33883,6 +33897,7 @@ function invRender(){
   // unit is a label Kelly controls — change it freely; qty and price never recompute (no conversion)
   m.querySelectorAll('.inv-unit-sel').forEach(function(el){el.addEventListener('change',function(){INV.rows[+el.getAttribute('data-ui')].unit=el.value;invRecalc();});});
   m.querySelectorAll('[data-inci]').forEach(function(el){el.addEventListener('change',function(){var r=INV.rows[+el.getAttribute('data-inci')];r.incl=el.checked;el.closest('.inv-row').classList.toggle('off',!r.incl);invRecalc();});});
+  var sp=document.getElementById('inv-saveprices');if(sp)sp.checked=INV.savePrices;
   invRecalc();
 }
 function invLineAmt(r){var q=parseFloat(r.qty),p=parseFloat(r.price);if(isNaN(q)||isNaN(p))return null;return +(q*p).toFixed(2);}
@@ -33910,8 +33925,13 @@ function invFinalize(){
     var q=parseFloat(r.qty),p=parseFloat(r.price);
     var has=!isNaN(p),amt=(!isNaN(q)&&has)?+(q*p).toFixed(2):null;
     var fe=fitems[r.item];
-    // save the price + unit back to Kelly's crop so it applies to how she prices throughout Remy
-    if(has){var g=invCrop(r.item);if(g){g.ask=+p.toFixed(2);g.askUnit=r.unit||g.askUnit||'';if(!g.askMode)g.askMode='manual';wroteBack=true;}}
+    // UNIT type always feeds back to Kelly's crop (applies throughout Remy). PRICE only when she
+    // ticks "Save these prices to my Remy prices" — otherwise a one-off invoice price stays here.
+    var g=invCrop(r.item);
+    if(g){
+      if(r.unit&&g.askUnit!==r.unit){g.askUnit=r.unit;wroteBack=true;}
+      if(has&&INV.savePrices){g.ask=+p.toFixed(2);if(!g.askMode)g.askMode='manual';wroteBack=true;}
+    }
     return {item:r.item, unit:r.unit, qty:(isNaN(q)?r.qty:q), price:has?+p.toFixed(2):null, amount:amt,
             farm_status:r.farm_status||null, farm_note:r.farm_note||'',
             source:(fe&&fe.source)||'manual', farm_set:!!(fe&&fe.farm_set)||!fe};
