@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-23",
+ "generated": "2026-06-24",
  "premium_pct": 20,
  "items": {
   "Apples": {
@@ -184,9 +184,9 @@
    "date": "2026-06-12",
    "freshness": "FRESH",
    "source": "invoice",
-   "needs_check": false,
-   "swan_per_lb": 4.76,
-   "per_lb_basis": "exact"
+   "needs_check": true,
+   "swan_per_lb": 12.6596,
+   "per_lb_basis": "estimate"
   },
   "Cucumbers": {
    "swan_price": 2.1,
@@ -209,10 +209,10 @@
    "date": "2026-06-12",
    "freshness": "FRESH",
    "source": "invoice",
-   "needs_check": false,
+   "needs_check": true,
    "climb": 0.0,
-   "swan_per_lb": 6.0,
-   "per_lb_basis": "exact"
+   "swan_per_lb": 15.9574,
+   "per_lb_basis": "estimate"
   },
   "Duck Eggs": {
    "swan_price": 1.0,
@@ -419,10 +419,10 @@
    "date": "2026-06-15",
    "freshness": "FRESH",
    "source": "invoice",
-   "needs_check": false,
+   "needs_check": true,
    "climb": 0.0,
-   "swan_per_lb": 4.76,
-   "per_lb_basis": "exact"
+   "swan_per_lb": 12.6596,
+   "per_lb_basis": "estimate"
   },
   "Peppers": {
    "swan_price": 16.79,
@@ -613,8 +613,8 @@
    "freshness": "PRIOR-YEAR",
    "source": "invoice",
    "needs_check": true,
-   "swan_per_lb": 13.2,
-   "per_lb_basis": "exact"
+   "swan_per_lb": 3.3,
+   "per_lb_basis": "estimate"
   },
   "Zucchini": {
    "swan_price": 31.5,
