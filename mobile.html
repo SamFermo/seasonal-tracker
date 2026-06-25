@@ -33004,6 +33004,7 @@ function runIntroMorph(){
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
 <script>
 /* ── DUAL-DOOR wiring ── */
 (function(){
@@ -33142,7 +33143,12 @@ function fbSave(){try{var x=snapshot();
   x.buyer_id=BUYER;x.name='__sheet__';x.status='live';FB.db.collection('farmAvailability').doc(BUYER).set(x).catch(function(){});}catch(e){}}
 function fbLoad(){try{FB.db.collection('farmAvailability').doc(BUYER).get().then(function(d){if(d&&d.exists){applyState(d.data());renderPush();renderPick();renderList();_cfNotify();}}).catch(function(){});}catch(e){}}
 var _cfListeners=[];function _cfNotify(){try{(_cfListeners||[]).forEach(function(f){try{f();}catch(e){}});}catch(e){}}
-function fbInit(){try{if(!window.firebase)return;firebase.initializeApp({apiKey:"AIzaSyCYx8NdTrmmH73J8DYsd94LvXKyOOiFyeU",authDomain:"remy-orders.firebaseapp.com",projectId:"remy-orders",storageBucket:"remy-orders.firebasestorage.app",messagingSenderId:"8525936717",appId:"1:8525936717:web:99fa76a1171b6f53cb4404"});FB.db=firebase.firestore();
+function fbInit(){try{if(!window.firebase)return;firebase.initializeApp({apiKey:"AIzaSyCYx8NdTrmmH73J8DYsd94LvXKyOOiFyeU",authDomain:"remy-orders.firebaseapp.com",projectId:"remy-orders",storageBucket:"remy-orders.firebasestorage.app",messagingSenderId:"8525936717",appId:"1:8525936717:web:99fa76a1171b6f53cb4404"});
+  // App Check (reCAPTCHA Enterprise) — attests requests come from the genuine app. Registered
+  // on remy-orders 2026-06-24; MONITOR mode (not enforced) until the server scripts migrate off
+  // anon REST. Wrapped so an attestation/SDK failure can never break Firestore init.
+  try{if(firebase.appCheck&&firebase.appCheck.ReCaptchaEnterpriseProvider){firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider('6LcpDDMtAAAAANRyfWfGCd6uPgDsMlIsbFRBiozb'),true);}}catch(e){}
+  FB.db=firebase.firestore();
   // offline persistence: prices/status/markdown/transcripts queue locally + auto-sync on reconnect
   try{FB.db.enablePersistence({synchronizeTabs:true}).catch(function(){});}catch(e){}
   try{FB.storage=firebase.storage();}catch(e){}
