@@ -1399,6 +1399,7 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .io-invrow{display:flex;gap:8px;margin-top:8px}
 .io-invrow .io-btn-inv{flex:1;margin-top:0}
 .io-btn-pdf{flex:0 0 auto;margin-top:0;background:var(--olive-bg);color:var(--olive);border:1px solid rgba(168,185,126,0.5)}
+.io-btn-harv{flex:0 0 auto;margin-top:0;background:transparent;color:var(--ink);border:1px solid var(--ink-12)}
 .inv-done{text-align:center;padding:18px 0 22px}
 .inv-done-amt{font-family:var(--fd);font-size:42px;font-weight:500;color:var(--ink);line-height:1}
 .inv-done-sub{font-family:var(--fb);font-size:12px;color:var(--olive);margin-top:8px;letter-spacing:0.04em}
@@ -33783,7 +33784,7 @@ function orderCard(o){
         (st==='placed'?('<button class="io-btn io-btn-ack" data-ack="'+oesc(o.order_id)+'">Got it 👍</button>'):'')+
         (st!=='delivered'&&st!=='cancelled'?('<button class="io-btn io-btn-deliv" data-deliv="'+oesc(o.order_id)+'">Mark delivered</button>'):'')+
       '</div>'+
-      (st!=='cancelled'?('<button class="io-btn io-btn-inv" data-inv="'+oesc(o.order_id)+'">Finalize invoice</button>'):'')+
+      (st!=='cancelled'?('<div class="io-invrow"><button class="io-btn io-btn-inv" data-inv="'+oesc(o.order_id)+'">Finalize invoice</button><button class="io-btn io-btn-harv" data-harv="'+oesc(o.order_id)+'">Harvest list</button></div>'):'')+
     '</div>'):'')+
   '</div>';
 }
@@ -33796,6 +33797,7 @@ function wireOrders(c){
   c.querySelectorAll('[data-deliv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-deliv');var o=ordersData.find(function(x){return x.order_id===id;});ordersUpdate(id,{status:'delivered',delivered:{at:new Date().toISOString()},confirmed_date:(o&&o.confirmed_date)||new Date().toISOString().slice(0,10)});});});
   c.querySelectorAll('[data-inv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();invOpen(el.getAttribute('data-inv'));});});
   c.querySelectorAll('[data-pdf]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var o=ordersData.find(function(x){return x.order_id===el.getAttribute('data-pdf');});if(o)invPdf(o);});});
+  c.querySelectorAll('[data-harv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var o=ordersData.find(function(x){return x.order_id===el.getAttribute('data-harv');});if(o)invHarvest(o);});});
 }
 
 /* ── INVOICE / FINALIZE (farm side, in Remy) — ports the check-in invoice flow + adds the
@@ -34019,7 +34021,8 @@ function invPdf(o){ if(o&&o.invoice)invPrintDoc(invPrintHtml(o)); }
 // quantities) when open, else the order lines. Blank "Packed" column to tick while packing.
 function invHarvestRows(o){
   if(INV.order===o&&INV.rows&&INV.rows.length)return INV.rows.map(function(r){return {item:r.item,qty:r.qty,unit:r.unit,farm_status:r.farm_status,farm_note:r.farm_note};});
-  return (o.lines||[]).map(function(l){return {item:l.item,qty:l.qty,unit:l.unit,farm_status:l.farm_status,farm_note:l.farm_note};});
+  // from the card (editor not open): short-correct the qty so the packing list shows what to pack
+  return (o.lines||[]).map(function(l){var qd=invQtyDefault(l);return {item:l.item,qty:qd.qty,unit:l.unit,farm_status:l.farm_status,farm_note:l.farm_note};});
 }
 function invHarvestHtml(o){
   var rows=invHarvestRows(o).map(function(r){
