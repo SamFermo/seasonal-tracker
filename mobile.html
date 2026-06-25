@@ -34218,7 +34218,7 @@ window.RemyFarm={
       var price=priceStr(g);
       return '<div class="cf-card'+(g.markdown?' md':'')+'">'+
         '<div class="cf-c-top"><span class="cf-c-name">'+esc(g.name)+'</span>'+(g.qty?'<span class="cf-c-qty">'+esc(g.qty)+'</span>':'')+'</div>'+
-        (price?('<div class="cf-c-price">'+esc(price)+'<span class="cf-c-meta">'+esc(askMeta(g))+'</span></div>'):'<div class="cf-c-price cf-noprice">price not set</div>')+
+        (price?('<div class="cf-c-price">'+esc(price)+'</div>'):'<div class="cf-c-price cf-noprice">price not set</div>')+
         (g.markdown?'<div class="cf-md-tag">&#9662; Marked down to move</div>':'')+photo+voice+'</div>';
     }).join('');
   }
@@ -34287,7 +34287,7 @@ window.RemyFarm={
   }
 
   // ---- MY VENDORS ----
-  var VENDORS=[['Swan House Farms','Swan House'],['Franks Quality Produce','Franks'],
+  var VENDORS=[['Franks Quality Produce','Franks'],
     ['Foraged & Found Edibles','Foraged & Found'],['Local Roots Farm','Local Roots'],
     ['Farmstand Local Foods','Farmstand'],['EC Wilson','EC Wilson'],['Key City Fish','Key City'],
     ['Preserve Meat','Preserve Meat'],['Merlino Foods','Merlino'],['Puget Sound Food Hub','Puget Sound Food Hub']];
