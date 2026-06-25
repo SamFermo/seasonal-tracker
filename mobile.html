@@ -1258,6 +1258,26 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 .list-intro b{font-style:normal;color:var(--olive);font-weight:600}
 .pmode-toggle{flex-shrink:0;font-family:var(--fb);font-size:11px;font-weight:500;letter-spacing:0.04em;color:var(--ink-60);background:var(--ink-6);border:1px solid var(--ink-12);border-radius:20px;padding:7px 12px;cursor:pointer;white-space:nowrap}
 .pmode-toggle.on{color:#0a1028;background:var(--gold);border-color:var(--gold)}
+/* New Growth (add) + remove controls */
+.ng-add-btn{width:100%;font-family:var(--fb);font-size:13px;font-weight:600;letter-spacing:0.04em;color:#0a1028;background:var(--olive);border:none;border-radius:8px;padding:13px;cursor:pointer;margin:0 0 12px;transition:background .2s var(--ease)}
+.ng-add-btn:hover{background:#b6c690}
+.lr-mine{font-family:var(--fb);font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--olive);border:1px solid rgba(168,185,126,0.3);border-radius:10px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.lr-rm{background:none;border:1px solid var(--ink-12);color:var(--ink-30);cursor:pointer;padding:6px 11px;border-radius:16px;font-family:var(--fb);font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0}
+.lr-rm:hover{color:#e8a0a0;border-color:rgba(232,160,160,0.45)}
+.lr-rm.del:hover{color:#e8a0a0;border-color:rgba(232,160,160,0.55);background:rgba(232,160,160,0.08)}
+#ngTool{position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;justify-content:center;background:rgba(2,4,13,0.74);padding:26px 14px;overflow-y:auto}
+#ngTool.open{display:flex}
+.ng-card{width:100%;max-width:420px;background:#0d1535;border:1px solid rgba(245,232,200,0.13);border-radius:12px;padding:20px 18px 18px;margin:auto}
+.ng-head{display:flex;align-items:center;margin-bottom:16px}
+.ng-title{flex:1;font-family:var(--fd);font-size:23px;font-weight:500;color:var(--ink)}
+.ng-x{background:none;border:none;color:var(--ink-30);font-size:22px;cursor:pointer;line-height:1}
+.ng-x:hover{color:var(--ink)}
+.ng-label{display:block;font-family:var(--fb);font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-60);margin-bottom:13px}
+.ng-label input,.ng-label select{display:block;width:100%;margin-top:5px;background:var(--ink-6);border:1px solid var(--ink-12);border-radius:8px;color:var(--ink);font-family:var(--fb);font-size:15px;font-weight:400;letter-spacing:normal;text-transform:none;padding:11px;box-sizing:border-box}
+.ng-label input:focus,.ng-label select:focus{outline:none;border-color:var(--olive)}
+.ng-err{font-family:var(--fb);font-size:12px;color:#e8a0a0;min-height:15px;margin:-4px 0 8px}
+.ng-use{width:100%;margin-top:6px;font-family:var(--fb);font-size:14px;font-weight:500;letter-spacing:0.04em;color:#0a1028;background:var(--olive);border:none;border-radius:8px;padding:13px;cursor:pointer}
+.ng-use:hover{background:#b6c690}
 #photoView{position:fixed;inset:0;z-index:210;display:none;align-items:center;justify-content:center;background:rgba(2,4,13,0.86);padding:20px}
 #photoView.open{display:flex}
 .pv-card{width:100%;max-width:460px;display:flex;flex-direction:column;gap:12px}
@@ -1507,8 +1527,10 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
   <div class="view" id="view-list">
     <div class="list-head">
       <div class="list-intro" id="list-intro">Everything you&rsquo;re growing. Tap a status to change it, <b>$</b> to price, <b>&#9733;</b> to push.</div>
+      <button class="pmode-toggle" id="edit-mode-toggle" aria-pressed="false">Edit</button>
       <button class="pmode-toggle" id="photo-mode-toggle" aria-pressed="false">Photo mode</button>
     </div>
+    <button class="ng-add-btn" id="ng-toggle">+ New Growth</button>
     <div id="list-rows"></div>
   </div>
 
@@ -1540,6 +1562,21 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       <div class="vt-head"><span class="vt-title" id="vt-title">Voice note</span><button class="vt-x" id="vt-close" aria-label="Close">&times;</button></div>
       <div class="vt-stage" id="vt-stage"></div>
       <div class="vt-actions" id="vt-actions"></div>
+    </div>
+  </div>
+  <div id="ngTool">
+    <div class="ng-card">
+      <div class="ng-head"><span class="ng-title">New growth</span><button class="ng-x" id="ng-close" aria-label="Close">&times;</button></div>
+      <label class="ng-label">Name<input id="ng-name" type="text" placeholder="e.g. Romanesco" autocomplete="off"></label>
+      <label class="ng-label">Category
+        <select id="ng-cat"><option>Green</option><option>Produce</option><option>Herb</option><option>Flower</option><option>Berry</option><option>Protein</option><option>Prepped</option></select>
+      </label>
+      <label class="ng-label">Status
+        <select id="ng-status"><option>Peak</option><option selected>Available</option><option>Trickling</option><option>Coming Soon</option><option>Not Yet</option></select>
+      </label>
+      <label class="ng-label">How much (optional)<input id="ng-qty" type="text" placeholder="e.g. 20#, 3 flats" autocomplete="off"></label>
+      <div class="ng-err" id="ng-err"></div>
+      <button class="ng-use" id="ng-save">Add to my list</button>
     </div>
   </div>
   <div id="priceTool">
@@ -33269,13 +33306,24 @@ function snapshot(){
       items[g.name]={ask:(g.ask==null?null:g.ask),askUnit:g.askUnit||'',askMode:g.askMode||'',askPct:(g.askPct==null?null:g.askPct),askVendor:g.askVendor||'',photo:g.photo||'',voice:g.voice||'',voiceText:g.voiceText||''};
     }
   });
-  return {pushed:Array.from(pushed),markdown:Array.from(markdown),status:statusEdits,items:items,updated_at:Date.now()};
+  // farmer-added crops: persist their membership + defining fields so they survive reload and
+  // reach the kitchen (Connected Farms) cross-device. This array is also the canonical-promotion queue.
+  var added=grow.filter(function(g){return g._added;}).map(function(g){return {name:g.name,category:g.category||'',status:g.status||'Available',qty:g.qty||''};});
+  // status_edits is a non-colliding mirror of statusEdits: fbSave overwrites the doc's `status`
+  // field with the 'live' doc-type marker, which would otherwise drop status changes on the
+  // Firestore round-trip. status_edits rides alongside so won't-have / status edits sync too.
+  return {pushed:Array.from(pushed),markdown:Array.from(markdown),status:statusEdits,status_edits:statusEdits,added:added,items:items,updated_at:Date.now()};
 }
 function applyState(x){
   if(!x)return;
+  // recreate farmer-added crops FIRST so the status/items passes below can find them in byName
+  if(x.added&&x.added.length){x.added.forEach(function(a){if(!a||!a.name)return;
+    if(!byName[a.name]){var g={name:a.name,category:a.category||'',status:a.status||'Available',qty:a.qty||'',push:false,market:null,_added:true};grow.push(g);byName[a.name]=g;}
+    else{byName[a.name]._added=true;if(a.qty)byName[a.name].qty=a.qty;if(a.status)byName[a.name].status=a.status;}});}
   if(x.pushed)pushed=new Set(x.pushed);
   if(x.markdown)markdown=new Set(x.markdown);
-  if(x.status){statusEdits=x.status;grow.forEach(function(g){if(statusEdits[g.name])g.status=statusEdits[g.name];});}
+  var se=x.status_edits||((x.status&&typeof x.status==='object')?x.status:null);
+  if(se){statusEdits=se;grow.forEach(function(g){if(statusEdits[g.name])g.status=statusEdits[g.name];});}
   if(x.items){Object.keys(x.items).forEach(function(n){var g=byName[n];if(!g)return;var it=x.items[n];
     if(it.ask!=null){g.ask=it.ask;g.askUnit=it.askUnit;g.askMode=it.askMode;g.askPct=it.askPct;g.askVendor=it.askVendor;}
     if(it.askUnit)g.askUnit=it.askUnit;   // a saved sell-unit persists even if she hasn't priced the crop
@@ -33405,6 +33453,7 @@ function uploadMedia(kind,name,blob,contentType,ext,cb,onPut){
 var photoMode=false;
 function setPhotoMode(on){
   photoMode=on;
+  if(on&&typeof setEditMode==='function')setEditMode(false);
   var b=document.getElementById('photo-mode-toggle');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');}
   var i=document.getElementById('list-intro');
   if(i)i.innerHTML=on?'Photo mode on &mdash; tap a row&rsquo;s &#9711; to add, or &#9728; to view/replace a photo.'
@@ -33432,6 +33481,55 @@ function removePhoto(name){
   var rp=document.getElementById('pv-replace');if(rp)rp.onclick=function(){var n=_pvName;closePhotoView();if(n)pickPhoto(n);};
   var rm=document.getElementById('pv-remove');if(rm)rm.onclick=function(){if(_pvName)removePhoto(_pvName);};
   var t=document.getElementById('photo-mode-toggle');if(t)t.onclick=function(){setPhotoMode(!photoMode);};
+})();
+
+/* ── edit mode (remove controls) + New Growth (add a crop) ── */
+var editMode=false;
+function setEditMode(on){
+  editMode=on;if(on)setPhotoMode(false);
+  var b=document.getElementById('edit-mode-toggle');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');}
+  var i=document.getElementById('list-intro');
+  if(i)i.innerHTML=on?'Edit mode &mdash; &ldquo;Won&rsquo;t have it&rdquo; hides a crop for now (tap its status to bring it back). Crops you added show <b>Delete</b>.'
+                     :'Everything you&rsquo;re growing. Tap a status to change it, <b>$</b> to price, <b>&#9733;</b> to push.';
+  renderList();
+}
+function removeAddedCrop(name){
+  var idx=-1;for(var i=0;i<grow.length;i++){if(grow[i].name===name){idx=i;break;}}
+  if(idx>=0)grow.splice(idx,1);
+  delete byName[name];pushed.delete(name);markdown.delete(name);delete statusEdits[name];
+  persist();renderList();renderPick();renderPush();_cfNotify();
+}
+function ngOpen(){
+  var e=document.getElementById('ng-err');if(e)e.textContent='';
+  var n=document.getElementById('ng-name');if(n)n.value='';
+  var q=document.getElementById('ng-qty');if(q)q.value='';
+  var s=document.getElementById('ng-status');if(s)s.value='Available';
+  var c=document.getElementById('ng-cat');if(c)c.selectedIndex=0;
+  document.getElementById('ngTool').classList.add('open');
+  if(n)setTimeout(function(){try{n.focus();}catch(e){}},60);
+}
+function ngClose(){document.getElementById('ngTool').classList.remove('open');}
+function ngSave(){
+  var err=document.getElementById('ng-err');
+  var name=(document.getElementById('ng-name').value||'').trim();
+  if(!name){if(err)err.textContent='Give it a name.';return;}
+  var base=name.replace(/\s*\(farm\)\s*$/i,'').toLowerCase();
+  var dup=Object.keys(byName).some(function(k){return k.replace(/\s*\(farm\)\s*$/i,'').toLowerCase()===base;});
+  if(dup){if(err)err.textContent='You already have that one on your list.';return;}
+  var cat=(document.getElementById('ng-cat').value||'').toLowerCase();
+  var status=document.getElementById('ng-status').value||'Available';
+  var qty=(document.getElementById('ng-qty').value||'').trim();
+  var g={name:name,category:cat,status:status,qty:qty,push:false,market:null,_added:true};
+  grow.push(g);byName[name]=g;statusEdits[name]=status;
+  persist();ngClose();renderList();renderPick();_cfNotify();
+}
+(function ngBind(){
+  var b=document.getElementById('ng-toggle');if(b)b.onclick=ngOpen;
+  var x=document.getElementById('ng-close');if(x)x.onclick=ngClose;
+  var s=document.getElementById('ng-save');if(s)s.onclick=ngSave;
+  var o=document.getElementById('ngTool');if(o)o.addEventListener('click',function(e){if(e.target.id==='ngTool')ngClose();});
+  var nm=document.getElementById('ng-name');if(nm)nm.addEventListener('keydown',function(e){if(e.key==='Enter')ngSave();});
+  var e=document.getElementById('edit-mode-toggle');if(e)e.onclick=function(){setEditMode(!editMode);};
 })();
 
 /* ── VOICE NOTE: record audio (every device) + live transcription where supported,
@@ -33815,18 +33913,29 @@ function renderList(){
   grow.forEach(function(g){
     var cls=STATUS_CLASS[g.status]||'st-done';
     var r=document.createElement('div');r.className='lrow';
-    r.innerHTML=
-      '<div class="lr-main"><div class="lr-name">'+g.name+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
-      '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
-      (photoMode?'<button class="lr-photo'+(g.photo?' set':'')+'" data-n="'+g.name+'" aria-label="Photo">'+(g.photo?'&#9728;':'&#9711;')+'</button>':'')+
-      '<button class="lr-price'+(g.ask?' set':'')+'" data-n="'+g.name+'" aria-label="Price">'+(g.ask?('$'+Number(g.ask).toFixed(2)):'$')+'</button>'+
-      '<button class="star'+(pushed.has(g.name)?' on':'')+'" data-n="'+g.name+'" aria-label="Push">&#9733;</button>';
+    if(editMode){
+      r.innerHTML=
+        '<div class="lr-main"><div class="lr-name">'+g.name+(g._added?' <span class="lr-mine">added</span>':'')+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
+        '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
+        '<button class="lr-rm'+(g._added?' del':'')+'" data-n="'+g.name+'">'+(g._added?'Delete':'Won&rsquo;t have it')+'</button>';
+    } else {
+      r.innerHTML=
+        '<div class="lr-main"><div class="lr-name">'+g.name+(g._added?' <span class="lr-mine">added</span>':'')+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
+        '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
+        (photoMode?'<button class="lr-photo'+(g.photo?' set':'')+'" data-n="'+g.name+'" aria-label="Photo">'+(g.photo?'&#9728;':'&#9711;')+'</button>':'')+
+        '<button class="lr-price'+(g.ask?' set':'')+'" data-n="'+g.name+'" aria-label="Price">'+(g.ask?('$'+Number(g.ask).toFixed(2)):'$')+'</button>'+
+        '<button class="star'+(pushed.has(g.name)?' on':'')+'" data-n="'+g.name+'" aria-label="Push">&#9733;</button>';
+    }
     el.appendChild(r);
   });
   el.querySelectorAll('.status').forEach(function(c){c.onclick=function(){var g=byName[c.dataset.n];var i=STATUS_ORDER.indexOf(g.status);g.status=STATUS_ORDER[(i+1)%STATUS_ORDER.length];statusEdits[g.name]=g.status;renderList();renderPick();};});
   el.querySelectorAll('.lr-price').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.prepped)ptOpen(b.dataset.n);else atOpen(b.dataset.n);};});
   el.querySelectorAll('.lr-photo').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.photo)openPhotoView(b.dataset.n);else pickPhoto(b.dataset.n);};});
   el.querySelectorAll('.star').forEach(function(b){b.onclick=function(){var n=b.dataset.n;pushed.has(n)?pushed.delete(n):pushed.add(n);renderList();renderPush();renderPick();};});
+  el.querySelectorAll('.lr-rm').forEach(function(b){b.onclick=function(){var n=b.dataset.n;var g=byName[n];if(!g)return;
+    if(g._added){if(confirm('Delete “'+n+'” from your list? This removes it everywhere.'))removeAddedCrop(n);}
+    else{g.status='Done';statusEdits[n]='Done';persist();renderList();renderPick();renderPush();_cfNotify();}
+  };});
   persist();
 }
 
