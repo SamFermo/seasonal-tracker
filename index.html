@@ -34094,12 +34094,24 @@ function ordersUpdate(id,patch){
   if(!(FB&&FB.ready&&FB.db))return Promise.resolve();
   return FB.db.collection('orders').doc(id).update(patch).catch(function(){alert('Could not save — check your connection.');});
 }
+var ordersSrc='restaurant';
+/* Farm-dinner harvests (pushed from the dinner app, source:'farm_dinner') share the orders feed +
+   finalize machinery but get their own segment so they don't muddy the restaurant-order read. */
+function ordIsFarmDinner(o){return (o.source==='farm_dinner')||(o.placed_by==='swan_house');}
 function renderOrders(){
   var c=document.getElementById('orders-rows');if(!c)return;
   if(!(FB&&FB.ready&&FB.db)){c.innerHTML='<div class="io-empty">Connecting to the order feed&hellip;</div>';return;}
-  if(!ordersData.length){c.innerHTML='<div class="io-empty">No orders yet. When San Fermo sends one, it lands here.</div>';return;}
-  c.innerHTML=ordersData.map(orderCard).join('');
+  var farm=ordersData.filter(ordIsFarmDinner), rest=ordersData.filter(function(o){return !ordIsFarmDinner(o);});
+  if(ordersSrc==='farm_dinner'&&!farm.length)ordersSrc='restaurant';
+  var seg=farm.length?('<div style="display:flex;gap:8px;margin-bottom:12px">'+
+    '<button class="io-srcb" data-src="restaurant" style="flex:1;padding:9px;border-radius:10px;cursor:pointer;font-family:var(--fb,sans-serif);font-size:13px;border:1px solid '+(ordersSrc==='restaurant'?'rgba(255,255,255,.5)':'rgba(255,255,255,.15)')+';background:'+(ordersSrc==='restaurant'?'rgba(255,255,255,.1)':'transparent')+';color:var(--ink,#eaf0ff)">Restaurant ('+rest.length+')</button>'+
+    '<button class="io-srcb" data-src="farm_dinner" style="flex:1;padding:9px;border-radius:10px;cursor:pointer;font-family:var(--fb,sans-serif);font-size:13px;border:1px solid '+(ordersSrc==='farm_dinner'?'rgba(155,176,106,.7)':'rgba(255,255,255,.15)')+';background:'+(ordersSrc==='farm_dinner'?'rgba(155,176,106,.16)':'transparent')+';color:var(--ink,#eaf0ff)">Farm dinners ('+farm.length+')</button>'+
+    '</div>'):'';
+  var show=ordersSrc==='farm_dinner'?farm:rest;
+  var body=show.length?show.map(orderCard).join(''):('<div class="io-empty">'+(ordersSrc==='farm_dinner'?'No farm-dinner harvests yet. When Kelly packs one and sends it, it lands here.':'No restaurant orders yet. When San Fermo sends one, it lands here.')+'</div>');
+  c.innerHTML=seg+body;
   wireOrders(c);
+  c.querySelectorAll('.io-srcb').forEach(function(b){b.addEventListener('click',function(){ordersSrc=b.getAttribute('data-src');renderOrders();});});
 }
 function orderCard(o){
   var open=!!ordersExpanded[o.order_id];
@@ -34124,7 +34136,7 @@ function orderCard(o){
   }).join('');
   return '<div class="io-card st-'+st+'">'+
     '<div class="io-card-head" data-toggle="'+oesc(o.order_id)+'">'+
-      '<div><div class="io-card-when">'+ofmtDate(o.placed_at)+' · '+oesc(o.placed_by||'')+'</div>'+
+      '<div><div class="io-card-when">'+ofmtDate(o.placed_at)+' · '+oesc(o.source==='farm_dinner'?('Swan House'+(o.series_label?(' · '+o.series_label):'')):(o.placed_by||''))+'</div>'+
       '<div class="io-card-sub">'+lines.length+' item'+(lines.length!==1?'s':'')+' · '+oesc(reqd)+'</div></div>'+
       '<span class="io-badge b-'+st+'">'+oesc(ordStatusLabel(o))+'</span>'+
     '</div>'+
