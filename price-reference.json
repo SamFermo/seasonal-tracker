@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-26",
+ "generated": "2026-06-27",
  "premium_pct": 20,
  "items": {
   "Apples": {
@@ -20,11 +20,11 @@
    "market": 9.25,
    "unit": "1/2#",
    "vendor": "Franks",
-   "date": "2026-06-18",
+   "date": "2026-06-25",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": false,
-   "climb": 17.8,
+   "climb": 28.3,
    "swan_per_lb": 22.2,
    "per_lb_basis": "exact"
   },
@@ -189,16 +189,16 @@
    "per_lb_basis": "estimate"
   },
   "Cucumbers": {
-   "swan_price": 2.1,
-   "market": 1.75,
+   "swan_price": 1.8,
+   "market": 1.5,
    "unit": "each",
    "vendor": "Franks",
-   "date": "2026-06-17",
+   "date": "2026-06-25",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": true,
-   "climb": -30.0,
-   "swan_per_lb": 4.2,
+   "climb": -40.0,
+   "swan_per_lb": 3.6,
    "per_lb_basis": "estimate"
   },
   "Dill": {
@@ -220,7 +220,7 @@
    "unit": "each",
    "vendor": "Swan House (avg of 4)",
    "date": "2026-03-28",
-   "freshness": "AGING",
+   "freshness": "STALE",
    "source": "swan-baseline (avg of 4, 2024–2026)",
    "needs_check": true,
    "baseline": true,
@@ -241,16 +241,16 @@
    "farm_set": true
   },
   "Fennel Fronds": {
-   "swan_price": 3.9,
-   "market": 3.25,
+   "swan_price": 3.59,
+   "market": 2.99,
    "unit": "each",
    "vendor": "Franks",
-   "date": "2026-06-15",
+   "date": "2026-06-22",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": true,
-   "climb": 8.7,
-   "swan_per_lb": 5.5714,
+   "climb": 0.0,
+   "swan_per_lb": 5.1286,
    "per_lb_basis": "estimate"
   },
   "Garlic Scapes": {
@@ -314,15 +314,15 @@
    "farm_set": true
   },
   "Kale": {
-   "swan_price": 57.6,
-   "market": 48.0,
+   "swan_price": 43.8,
+   "market": 36.5,
    "unit": "CS",
    "vendor": "Franks",
-   "date": "2026-06-06",
+   "date": "2026-06-23",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": true,
-   "swan_per_lb": 4.0,
+   "swan_per_lb": 3.0417,
    "per_lb_basis": "estimate"
   },
   "Lamb Loin Chops": {
@@ -331,22 +331,23 @@
    "unit": "lb",
    "vendor": "Key City",
    "date": "2026-05-27",
-   "freshness": "FRESH",
+   "freshness": "AGING",
    "source": "catalogue",
    "needs_check": false,
    "swan_per_lb": 26.34,
    "per_lb_basis": "exact"
   },
   "Lettuce": {
-   "swan_price": 28.8,
-   "market": 24.0,
+   "swan_price": 29.1,
+   "market": 24.25,
    "unit": "CS",
    "vendor": "Franks",
-   "date": "2026-06-18",
+   "date": "2026-06-25",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": false,
-   "swan_per_lb": 14.4,
+   "climb": 1.0,
+   "swan_per_lb": 14.55,
    "per_lb_basis": "exact"
   },
   "Lilacs": {
@@ -489,7 +490,7 @@
    "market": 3.99,
    "unit": "lb",
    "vendor": "Franks",
-   "date": "2026-06-15",
+   "date": "2026-06-22",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": false,
@@ -523,7 +524,7 @@
    "market": 12.5,
    "unit": "#",
    "vendor": "Franks",
-   "date": "2026-06-16",
+   "date": "2026-06-23",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": false,
@@ -639,15 +640,15 @@
    "per_lb_basis": "estimate"
   },
   "Zucchini": {
-   "swan_price": 31.5,
-   "market": 26.25,
+   "swan_price": 37.5,
+   "market": 31.25,
    "unit": "CS",
    "vendor": "Franks",
-   "date": "2026-06-18",
+   "date": "2026-06-23",
    "freshness": "FRESH",
    "source": "invoice",
    "needs_check": false,
-   "swan_per_lb": 1.575,
+   "swan_per_lb": 1.875,
    "per_lb_basis": "exact"
   }
  }
