@@ -34245,7 +34245,6 @@ function orderCard(o){
       '<div class="io-confirm-row"><label class="io-cf-label">Delivery date<input type="date" class="io-cf-date" data-ord="'+oesc(o.order_id)+'" value="'+oesc(o.confirmed_date||o.requested_date||'')+'"></label></div>'+
       '<div class="io-actions">'+
         (st==='placed'?('<button class="io-btn io-btn-ack" data-ack="'+oesc(o.order_id)+'">Got it 👍</button>'):'')+
-        (st!=='delivered'&&st!=='cancelled'?('<button class="io-btn io-btn-deliv" data-deliv="'+oesc(o.order_id)+'">Mark delivered</button>'):'')+
         (ordIsFarmDinner(o)&&st!=='cancelled'?('<button class="io-btn io-btn-cancel" data-cancel="'+oesc(o.order_id)+'" style="border-color:rgba(200,90,90,.45);color:#e2a0a0">Cancel</button>'):'')+
       '</div>'+
       (st!=='cancelled'?('<div class="io-invrow"><button class="io-btn io-btn-inv" data-inv="'+oesc(o.order_id)+'">Finalize invoice</button><button class="io-btn io-btn-harv" data-harv="'+oesc(o.order_id)+'">Harvest list</button></div>'):'')+
@@ -34258,7 +34257,6 @@ function wireOrders(c){
   c.querySelectorAll('.io-mini').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-ord'),i=+el.getAttribute('data-li'),flag=el.getAttribute('data-flag');var o=ordersData.find(function(x){return x.order_id===id;});if(!o)return;var note='';if(flag==='short'||flag==='sub'){note=prompt(flag==='short'?'How much can you send / what changed?':'Substitute with what?','')||'';}var lines=(o.lines||[]).map(function(l,ix){return ix===i?Object.assign({},l,{farm_status:flag==='clear'?null:flag,farm_note:flag==='clear'?'':note}):l;});o.lines=lines;renderOrders();ordersUpdate(id,{lines:lines});});});
   c.querySelectorAll('.io-cf-date').forEach(function(el){el.addEventListener('change',function(){ordersUpdate(el.getAttribute('data-ord'),{confirmed_date:el.value||null});});});
   c.querySelectorAll('[data-ack]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();ordersUpdate(el.getAttribute('data-ack'),{status:'acked',farm_ack:{by:'farm',at:new Date().toISOString()}});});});
-  c.querySelectorAll('[data-deliv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-deliv');var o=ordersData.find(function(x){return x.order_id===id;});ordersUpdate(id,{status:'delivered',delivered:{at:new Date().toISOString()},confirmed_date:(o&&o.confirmed_date)||new Date().toISOString().slice(0,10)});});});
   c.querySelectorAll('[data-cancel]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var id=el.getAttribute('data-cancel');if(!confirm('Cancel this harvest send? It drops out of the finalize flow. You can re-send it from the dinner app to bring it back.'))return;var o=ordersData.find(function(x){return x.order_id===id;});if(o)o.status='cancelled';renderOrders();ordersUpdate(id,{status:'cancelled'});});});
   c.querySelectorAll('[data-inv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();invOpen(el.getAttribute('data-inv'));});});
   c.querySelectorAll('[data-pdf]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var o=ordersData.find(function(x){return x.order_id===el.getAttribute('data-pdf');});if(o)invPdf(o);});});
@@ -34448,8 +34446,10 @@ function invFinalize(){
            premium_pct:(INV.feed&&INV.feed.premium_pct!=null)?INV.feed.premium_pct:((o.invoice&&o.invoice.premium_pct)||20),
            total:+tot.toFixed(2), lines:lines};
   o.invoice=inv;                          // optimistic local update so the card refreshes
+  o.status='delivered';                   // finalizing IS the completion: ack -> pack/shorts-subs -> finalize=done
+  if(!o.delivered)o.delivered={at:new Date().toISOString()};
   renderOrders();
-  ordersUpdate(o.order_id,{invoice:inv});
+  ordersUpdate(o.order_id,{invoice:inv, status:'delivered', delivered:o.delivered});
   invModal().classList.remove('open');
   invPdf(o);                               // finalize goes straight to the invoice PDF
 }
