@@ -34199,7 +34199,8 @@ function ordIsFarmDinner(o){return (o.source==='farm_dinner')||(o.placed_by==='s
 function renderOrders(){
   var c=document.getElementById('orders-rows');if(!c)return;
   if(!(FB&&FB.ready&&FB.db)){c.innerHTML='<div class="io-empty">Connecting to the order feed&hellip;</div>';return;}
-  var farm=ordersData.filter(ordIsFarmDinner), rest=ordersData.filter(function(o){return !ordIsFarmDinner(o);});
+  var visible=ordersData.filter(function(o){return (o.status||'placed')!=='cancelled';});   // cancelled orders hidden from view (clutter)
+  var farm=visible.filter(ordIsFarmDinner), rest=visible.filter(function(o){return !ordIsFarmDinner(o);});
   if(ordersSrc==='farm_dinner'&&!farm.length)ordersSrc='restaurant';
   var seg=farm.length?('<div style="display:flex;gap:8px;margin-bottom:12px">'+
     '<button class="io-srcb" data-src="restaurant" style="flex:1;padding:9px;border-radius:10px;cursor:pointer;font-family:var(--fb,sans-serif);font-size:13px;border:1px solid '+(ordersSrc==='restaurant'?'rgba(255,255,255,.5)':'rgba(255,255,255,.15)')+';background:'+(ordersSrc==='restaurant'?'rgba(255,255,255,.1)':'transparent')+';color:var(--ink,#eaf0ff)">Restaurant ('+rest.length+')</button>'+
