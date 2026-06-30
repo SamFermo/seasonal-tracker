@@ -1529,6 +1529,7 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
       <div class="list-intro" id="list-intro">Everything you&rsquo;re growing. Tap a status to change it, <b>$</b> to price, <b>&#9733;</b> to push.</div>
       <button class="pmode-toggle" id="edit-mode-toggle" aria-pressed="false">Edit</button>
       <button class="pmode-toggle" id="photo-mode-toggle" aria-pressed="false">Photo mode</button>
+      <button class="pmode-toggle" id="bytype-toggle" aria-pressed="false">By type</button>
     </div>
     <button class="ng-add-btn" id="ng-toggle">+ New Growth</button>
     <div id="list-rows"></div>
@@ -27105,11 +27106,79 @@ const DATA = {
         "tw": 3,
         "broken": true
       }
+    ],
+    "Alluvial Farms": [
+      {
+        "name": "Shoulder steak",
+        "price": 10.0,
+        "unit": "lb",
+        "group": "Shoulder"
+      },
+      {
+        "name": "Country Style Ribs",
+        "price": 10.0,
+        "unit": "lb",
+        "group": "Shoulder"
+      },
+      {
+        "name": "Butt/Picnic roast",
+        "price": 10.0,
+        "unit": "lb",
+        "group": "Shoulder"
+      },
+      {
+        "name": "Chops (bone in, two per pack)",
+        "price": 12.0,
+        "unit": "lb",
+        "group": "Loin"
+      },
+      {
+        "name": "Fresh belly, sliced",
+        "price": 12.0,
+        "unit": "lb",
+        "group": "Side"
+      },
+      {
+        "name": "Ground pork (1lb packages)",
+        "price": 9.0,
+        "unit": "lb",
+        "group": "Leg or Ground"
+      },
+      {
+        "name": "Italian Links or Bulk (Sweet or Hot)",
+        "price": 11.0,
+        "unit": "lb",
+        "group": "Leg or Ground"
+      },
+      {
+        "name": "Breakfast Links or Bulk",
+        "price": 11.0,
+        "unit": "lb",
+        "group": "Leg or Ground"
+      },
+      {
+        "name": "Bratwurst Links or Bulk",
+        "price": 11.0,
+        "unit": "lb",
+        "group": "Leg or Ground"
+      },
+      {
+        "name": "Soup Bones",
+        "price": 5.0,
+        "unit": "lb",
+        "group": "Odds and Snout"
+      }
     ]
   },
   "merlino_meta": {
     "sheet_date": "2026-06-22",
     "item_count": 118
+  },
+  "alluvial_meta": {
+    "sheet_date": "2026-04-20",
+    "item_count": 10,
+    "case_note": "Wholesale pork cuts are in 30lb cases.",
+    "open_ask": "NOT on this sheet. Live ask for the guanciale program \u2014 price/lb + reliable annual quantity pending from Matt (Sam's 6/16 email)."
   },
   "ec_wilson_seafood": [
     {
@@ -33436,6 +33505,11 @@ function setEditMode(on){
                      :'Everything you&rsquo;re growing. Tap a status to change it, <b>$</b> to price, <b>&#9733;</b> to push.';
   renderList();
 }
+/* Farm-side "By type" view — group the full crop list into collapsible category sections (Sam, 2026-06-27). */
+var listByType=false, listTypeOpen={};
+var LCAT={sea:'Seafood',green:'Greens',produce:'Produce',berry:'Berries',mushroom:'Mushrooms',flower:'Flowers',herb:'Herbs',fruit:'Fruit',prepped:'Prepared',protein:'Proteins',meat:'Meat',egg:'Eggs',root:'Roots',allium:'Alliums',pepper:'Peppers',squash:'Squash',bean:'Beans',other:'Other'};
+function lcatLabel(c){return LCAT[c]||(c?(c.charAt(0).toUpperCase()+c.slice(1)):'Other');}
+function setListByType(on){listByType=on;var b=document.getElementById('bytype-toggle');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');}renderList();}
 function removeAddedCrop(name){
   var idx=-1;for(var i=0;i<grow.length;i++){if(grow[i].name===name){idx=i;break;}}
   if(idx>=0)grow.splice(idx,1);
@@ -33473,6 +33547,7 @@ function ngSave(){
   var o=document.getElementById('ngTool');if(o)o.addEventListener('click',function(e){if(e.target.id==='ngTool')ngClose();});
   var nm=document.getElementById('ng-name');if(nm)nm.addEventListener('keydown',function(e){if(e.key==='Enter')ngSave();});
   var e=document.getElementById('edit-mode-toggle');if(e)e.onclick=function(){setEditMode(!editMode);};
+  var bt=document.getElementById('bytype-toggle');if(bt)bt.onclick=function(){setListByType(!listByType);};
 })();
 
 /* ── VOICE NOTE: record audio (every device) + live transcription where supported,
@@ -33938,26 +34013,42 @@ function renderPick(){
 }
 document.getElementById('add-toggle').onclick=function(){document.getElementById('picker').classList.toggle('open');};
 
+function lrowNode(g){
+  var cls=STATUS_CLASS[g.status]||'st-done';
+  var r=document.createElement('div');r.className='lrow';
+  if(editMode){
+    r.innerHTML=
+      '<div class="lr-main"><div class="lr-name">'+g.name+(g._added?' <span class="lr-mine">added</span>':'')+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
+      '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
+      '<button class="lr-rm'+(g._added?' del':'')+'" data-n="'+g.name+'">'+(g._added?'Delete':'Won&rsquo;t have it')+'</button>';
+  } else {
+    r.innerHTML=
+      '<div class="lr-main"><div class="lr-name">'+g.name+(g._added?' <span class="lr-mine">added</span>':'')+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
+      '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
+      (photoMode?'<button class="lr-photo'+(g.photo?' set':'')+'" data-n="'+g.name+'" aria-label="Photo">'+(g.photo?'&#9728;':'&#9711;')+'</button>':'')+
+      '<button class="lr-price'+(g.ask?' set':'')+'" data-n="'+g.name+'" aria-label="Price">'+(g.ask?('$'+Number(g.ask).toFixed(2)):'$')+'</button>'+
+      '<button class="star'+(pushed.has(g.name)?' on':'')+'" data-n="'+g.name+'" aria-label="Push">&#9733;</button>';
+  }
+  return r;
+}
 function renderList(){
   var el=document.getElementById('list-rows');el.innerHTML='';
-  grow.forEach(function(g){
-    var cls=STATUS_CLASS[g.status]||'st-done';
-    var r=document.createElement('div');r.className='lrow';
-    if(editMode){
-      r.innerHTML=
-        '<div class="lr-main"><div class="lr-name">'+g.name+(g._added?' <span class="lr-mine">added</span>':'')+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
-        '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
-        '<button class="lr-rm'+(g._added?' del':'')+'" data-n="'+g.name+'">'+(g._added?'Delete':'Won&rsquo;t have it')+'</button>';
-    } else {
-      r.innerHTML=
-        '<div class="lr-main"><div class="lr-name">'+g.name+(g._added?' <span class="lr-mine">added</span>':'')+'</div>'+(g.qty?'<div class="lr-qty">'+g.qty+'</div>':'')+'</div>'+
-        '<span class="status '+cls+'" data-n="'+g.name+'">'+g.status+'</span>'+
-        (photoMode?'<button class="lr-photo'+(g.photo?' set':'')+'" data-n="'+g.name+'" aria-label="Photo">'+(g.photo?'&#9728;':'&#9711;')+'</button>':'')+
-        '<button class="lr-price'+(g.ask?' set':'')+'" data-n="'+g.name+'" aria-label="Price">'+(g.ask?('$'+Number(g.ask).toFixed(2)):'$')+'</button>'+
-        '<button class="star'+(pushed.has(g.name)?' on':'')+'" data-n="'+g.name+'" aria-label="Push">&#9733;</button>';
-    }
-    el.appendChild(r);
-  });
+  if(listByType){
+    var groups={};grow.forEach(function(g){var c=g.category||'other';(groups[c]=groups[c]||[]).push(g);});
+    var cats=Object.keys(groups).sort(function(a,b){return lcatLabel(a).localeCompare(lcatLabel(b));});
+    cats.forEach(function(c){
+      var arr=groups[c].sort(function(a,b){return a.name.localeCompare(b.name);});
+      var open=!!listTypeOpen[c];
+      var h=document.createElement('button');h.className='lr-typehdr';h.setAttribute('data-cat',c);
+      h.style.cssText='width:100%;display:flex;align-items:center;gap:8px;background:var(--ink-6,rgba(255,255,255,.05));border:1px solid var(--ink-12,rgba(255,255,255,.1));border-radius:10px;padding:11px 13px;margin:8px 0 4px;cursor:pointer;color:var(--ink,#eaf0ff);font-family:inherit;font-size:14px;text-align:left';
+      h.innerHTML='<span style="width:14px;color:var(--ink-60,#9aa6c0)">'+(open?'▾':'▸')+'</span><span style="flex:1;font-weight:600">'+lcatLabel(c)+'</span><span style="color:var(--ink-50,#8893ad);font-size:12px">'+arr.length+'</span>';
+      el.appendChild(h);
+      if(open)arr.forEach(function(g){el.appendChild(lrowNode(g));});
+    });
+  } else {
+    grow.forEach(function(g){el.appendChild(lrowNode(g));});
+  }
+  el.querySelectorAll('.lr-typehdr').forEach(function(h){h.onclick=function(){var c=h.getAttribute('data-cat');listTypeOpen[c]=!listTypeOpen[c];renderList();};});
   el.querySelectorAll('.status').forEach(function(c){c.onclick=function(){var g=byName[c.dataset.n];var i=STATUS_ORDER.indexOf(g.status);g.status=STATUS_ORDER[(i+1)%STATUS_ORDER.length];statusEdits[g.name]=g.status;renderList();renderPick();};});
   el.querySelectorAll('.lr-price').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.prepped)ptOpen(b.dataset.n);else atOpen(b.dataset.n);};});
   el.querySelectorAll('.lr-photo').forEach(function(b){b.onclick=function(){var g=byName[b.dataset.n];if(g&&g.photo)openPhotoView(b.dataset.n);else pickPhoto(b.dataset.n);};});
@@ -34733,7 +34824,7 @@ window.RemyFarm={
   var VENDORS=[['Franks Quality Produce','Franks'],
     ['Foraged & Found Edibles','Foraged & Found'],['Local Roots Farm','Local Roots'],
     ['Farmstand Local Foods','Farmstand'],['EC Wilson','EC Wilson'],['Key City Fish','Key City'],
-    ['Preserve Meat','Preserve Meat'],['Merlino Foods','Merlino'],['Puget Sound Food Hub','Puget Sound Food Hub']];
+    ['Preserve Meat','Preserve Meat'],['Alluvial Farms','Alluvial'],['Merlino Foods','Merlino'],['Puget Sound Food Hub','Puget Sound Food Hub']];
   var _vSel=0,_vSort='peaking',_pmCat=null;
   function vIngs(vk){return (DATA.ingredients||[]).filter(function(it){var v=it.vendor||'';return v===vk||v.indexOf(vk)===0;});}
   window.selVendor=function(i){_vSel=i;_pmCat=null;_vSort='peaking';renderVendors();};
@@ -34957,6 +35048,24 @@ window.RemyFarm={
     }).join('');
     return '<div class="vhint">'+vp.length+' items &middot; Marci’s order-history sheet'+(meta.sheet_date?(' ('+esc(meta.sheet_date)+')'):'')+' &middot; most-ordered first</div><div class="vlist">'+rows+'</div>';
   }
+  // Alluvial Farms: Matt's 2026 wholesale pork sheet (relationship pork vendor, pastured).
+  // Prices are wholesale $/lb, 30lb cases. Grouped by sheet section, collapsible like EC Wilson.
+  function alluvialView(){
+    var vp=(DATA.vendor_prices||{})['Alluvial Farms']||[];
+    if(!vp.length)return '<div class="vhint">No Alluvial price sheet loaded yet.</div>';
+    var meta=DATA.alluvial_meta||{};
+    var groups={},order=[];
+    vp.forEach(function(p){var g=p.group||'Other';if(!groups[g]){groups[g]=[];order.push(g);}groups[g].push(p);});
+    var body=order.map(function(g,gi){
+      var rows=groups[g].map(function(p){
+        return '<div class="vrow"><span class="vn">'+esc(p.name)+'</span><span class="vpr">$'+Number(p.price).toFixed(2)+(p.unit?(' <span class="vu">/'+esc(p.unit)+'</span>'):'')+'</span>'+outreachIcon(p.name,'Alluvial Farms')+'</div>';
+      }).join('');
+      var gid='alv-'+gi;
+      return '<div class="pmgroup"><button class="pmhdr" onclick="pmTog(\''+gid+'\',this)"><span class="pmcaret">&#9656;</span><span>'+esc(g)+'</span><span class="pmn">'+groups[g].length+'</span></button><div class="pmitems" id="'+gid+'" style="display:none">'+rows+'</div></div>';
+    }).join('');
+    var ask=meta.open_ask?('<div class="vhint" style="margin-top:8px">Jowls (guanciale ask): '+esc(meta.open_ask)+'</div>'):'';
+    return '<div class="vhint">'+vp.length+' cuts &middot; wholesale $/lb'+(meta.case_note?(' &middot; '+esc(meta.case_note)):'')+(meta.sheet_date?(' ('+esc(meta.sheet_date)+')'):'')+' &middot; tap a group</div>'+body+ask;
+  }
   window.renderVendors=function(){
     var h=host();if(!h)return;
     // preserve horizontal scroll of the filter rows so selecting a pill doesn't jump back to the left
@@ -34973,6 +35082,7 @@ window.RemyFarm={
     else if(v[0]==='Key City Fish'){out+=keyCityView(v[0]);}
     else if(v[0]==='EC Wilson'){out+=ecWilsonView();}
     else if(v[0]==='Merlino Foods'){out+=merlinoView();}
+    else if(v[0]==='Alluvial Farms'){out+=alluvialView();}
     else if(v[0]==='Puget Sound Food Hub'){out+=psfhView();}
     else{
       // sort pills computed per vendor: Costly and Coming Soon only appear when the vendor
