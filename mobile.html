@@ -35360,16 +35360,27 @@ window.RemyFarm={
       var pr=tmCatPrice(p.price);
       out.push({value:nm,label:nm,cat:{vendor:'Preserve Meat',price:pr.price,unit:pr.unit||tmUnitNorm(p.unit)}});
     });});
-    (((DATA.vendor_prices||{})['Key City Fish'])||[]).forEach(function(p){
-      var nm=String(p.name||'').replace(/^Fresh\s+/i,'').trim();if(!nm||nm.toLowerCase().indexOf(q)<0)return;
-      out.push({value:nm,label:nm,cat:{vendor:'Key City Fish',price:p.price,unit:tmUnitNorm(p.unit)}});
-    });
+    // EVERY vendor price sheet — Merlino, Key City, and any future vendor (PFI, etc.) ingested into
+    // vendor_prices. This is what makes commodity/pantry items (e.g. Merlino boquerones) mappable.
+    var vp=DATA.vendor_prices||{};
+    Object.keys(vp).forEach(function(vn){(vp[vn]||[]).forEach(function(p){
+      var nm=tmCatClean(String(p.name||'').replace(/^Fresh\s+/i,''));
+      if(!nm||nm.toLowerCase().indexOf(q)<0)return;
+      var price=(p.price!=null&&p.price!==''&&!isNaN(parseFloat(p.price)))?parseFloat(p.price):tmCatPrice(p.price).price;
+      out.push({value:nm,label:nm,cat:{vendor:vn,price:price,unit:tmUnitNorm(p.unit||'')}});
+    });});
     (DATA.psfh_catalog||[]).forEach(function(p){
       if(!p.name||p.name.toLowerCase().indexOf(q)<0)return;
       var pr=tmCatPrice(p.price);
       out.push({value:p.name,label:p.name,cat:{vendor:p.producer?(p.producer+' via PSFH'):'Puget Sound Food Hub',price:pr.price,unit:pr.unit||tmUnitNorm(p.unit)}});
     });
-    return out.slice(0,8);
+    (DATA.ec_wilson_seafood||[]).forEach(function(p){
+      if(!p.name||p.name.toLowerCase().indexOf(q)<0)return;
+      out.push({value:p.name,label:p.name,cat:{vendor:'EC Wilson',price:(p.price==null?'':p.price),unit:tmUnitNorm(p.unit||'')}});
+    });
+    var seen={},ded=[];
+    out.forEach(function(o){var k=(o.value+'|'+((o.cat&&o.cat.vendor)||'')).toLowerCase();if(seen[k])return;seen[k]=1;ded.push(o);});
+    return ded.slice(0,12);
   }
   function tmIngMatches(q){
     q=(q||'').toLowerCase().trim();if(!q)return [];
