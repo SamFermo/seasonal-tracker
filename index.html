@@ -33227,15 +33227,21 @@ function runIntroMorph(){
     var s=stage();if(s)s.classList.remove('picking','pick-kitchen','pick-farm');
     [k,f].forEach(function(el){if(el)el.classList.remove('picking');});
   }
+  // Embed mode (?embed=…): the sf-portal frames Remy's RESTAURANT side. Skip the moon entry, land
+  // on the kitchen, and make the farm side unreachable — so no order-to-Kelly path exists here.
+  // window._REMY_EMBED is the global guard any future order-send checks (hard stop while prototyping).
+  var _embed=/[?&]embed=/.test(location.search||'');
+  if(_embed){try{window._REMY_EMBED=true;document.body.classList.add('remy-embed');}catch(e){}}
   if(k)k.addEventListener('click',function(e){e.preventDefault();pick(k,'kitchen',function(){hide(doors);});});
-  if(f)f.addEventListener('click',function(e){e.preventDefault();pick(f,'farm',function(){hide(doors);show(farm);});});
+  if(f)f.addEventListener('click',function(e){e.preventDefault();if(_embed)return;pick(f,'farm',function(){hide(doors);show(farm);});});
   if(fb)fb.addEventListener('click',function(){hide(farm);show(doors);clearPick();});
   document.querySelectorAll('#portal .ph-wordmark').forEach(function(pw){
     pw.style.cursor='pointer';pw.title='Back to doors';
-    pw.addEventListener('click',function(){show(doors);clearPick();});
+    pw.addEventListener('click',function(){if(_embed)return;show(doors);clearPick();});
   });
   var pb=document.getElementById('ph-back');
-  if(pb)pb.addEventListener('click',function(){show(doors);clearPick();window.scrollTo(0,0);});
+  if(pb)pb.addEventListener('click',function(){if(_embed)return;show(doors);clearPick();window.scrollTo(0,0);});
+  if(_embed){ hide(doors); window.scrollTo(0,0); }   // land straight on the kitchen side
 
   /* deep-link: ?view=orders (or #orders) lands straight on the farm side's Incoming Orders tab.
      The Chakotay farm-checkin app links here after ceding its in-app order review (2026-06-24).
