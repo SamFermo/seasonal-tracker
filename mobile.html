@@ -34131,7 +34131,8 @@ function wireOrders(c){
 // farm_added; a price entered here prefills the finalize via invLineDefaults (line.price wins).
 function ordAddOpen(orderId){
   var o=ordersData.find(function(x){return x.order_id===orderId;});if(!o)return;
-  var cropNames=(typeof grow!=='undefined'?grow:[]).map(function(g){return g.name;});
+  var _STR={'Peak':0,'Available':1,'Trickling':2,'Coming Soon':3,'Coming soon':3,'Not Yet':4,'Done':5};
+  var cropOpts=(typeof grow!=='undefined'?grow.slice():[]).sort(function(a,b){var ra=(_STR[a.status]==null?9:_STR[a.status]),rb=(_STR[b.status]==null?9:_STR[b.status]);return ra-rb||String(a.name).localeCompare(String(b.name));}).map(function(g){var lbl=g.name+(g.ask!=null?(' · $'+Number(g.ask).toFixed(2)+(g.askUnit?('/'+g.askUnit):'')):'');return '<option value="'+oesc(g.name)+'">'+oesc(lbl)+'</option>';}).join('');
   var s=document.getElementById('ordAddSheet');
   if(!s){s=document.createElement('div');s.id='ordAddSheet';
     s.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:95;background:#0b1020;border-top:1px solid rgba(255,255,255,.12);border-radius:18px 18px 0 0;padding:18px 18px 26px;max-height:86vh;overflow:auto;transform:translateY(110%);transition:transform .25s ease;box-shadow:0 -12px 44px rgba(0,0,0,.55)';
@@ -34140,7 +34141,7 @@ function ordAddOpen(orderId){
   var ist='width:100%;box-sizing:border-box;font-family:var(--fb,sans-serif);font-size:16px;padding:12px 13px;border-radius:11px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:var(--ink,#eaf0ff)';
   s.innerHTML='<div style="font-family:var(--fd,serif);font-size:21px;color:var(--ink,#eaf0ff)">Add an item</div>'+
     '<div style="font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60,#9aa6c0);margin:3px 0 15px">Something agreed on after the order. Pick a crop or type your own.</div>'+
-    fld('Item','<input id="oa-item" list="oa-crops" placeholder="e.g. Rhubarb" style="'+ist+'"><datalist id="oa-crops">'+cropNames.map(function(n){return '<option value="'+oesc(n)+'">';}).join('')+'</datalist>')+
+    fld('Item','<select id="oa-pick" style="'+ist+'"><option value="">— Pick from your list —</option>'+cropOpts+'<option value="__new__">+ Type a new item…</option></select><input id="oa-item" placeholder="New item name" style="'+ist+';display:none;margin-top:8px">')+
     '<div style="display:flex;gap:10px"><div style="flex:1">'+fld('Qty','<input id="oa-qty" inputmode="decimal" value="1" style="'+ist+'">')+'</div>'+
       '<div style="flex:1.3">'+fld('Unit','<select id="oa-unit" style="'+ist+'">'+invUnitOptions('lb')+'</select>')+'</div></div>'+
     fld('Price <span style="text-transform:none;color:var(--ink-50,#8893ad)">(optional &mdash; leave blank to fill at the invoice)</span>','<input id="oa-price" inputmode="decimal" placeholder="$ per unit" style="'+ist+'">')+
@@ -34148,22 +34149,17 @@ function ordAddOpen(orderId){
     '<div style="display:flex;gap:10px;margin-top:6px"><button id="oa-cancel" style="flex:0 0 auto;font-family:var(--fb,sans-serif);font-size:15px;padding:13px 18px;border-radius:12px;cursor:pointer;border:1px solid rgba(255,255,255,.2);background:transparent;color:var(--ink-80,#c4cde2)">Cancel</button>'+
     '<button id="oa-add" style="flex:1 1 auto;font-family:var(--fb,sans-serif);font-size:16px;padding:13px;border-radius:12px;cursor:pointer;border:none;background:var(--ink,#eaf0ff);color:#06101f;font-weight:600">Add to order</button></div>';
   function close(){s.style.transform='translateY(110%)';}
-  function oaSync(){
-    var val=(s.querySelector('#oa-item').value||'').trim();
-    var g=(val&&typeof invCrop==='function')?invCrop(val):null;
-    if(g){var pe=s.querySelector('#oa-price');if(g.ask!=null&&!pe.value)pe.value=g.ask;
-      if(g.askUnit){var us=s.querySelector('#oa-unit');for(var i=0;i<us.options.length;i++){if(us.options[i].value===g.askUnit){us.selectedIndex=i;break;}}}}
-    var row=s.querySelector('#oa-saverow'), nm=s.querySelector('#oa-savename'), cb=s.querySelector('#oa-save');
-    if(val&&!g){row.style.display='flex';nm.textContent='“'+val+'”';if(!row.dataset.touched)cb.checked=true;}
-    else{row.style.display='none';}
-  }
-  s.querySelector('#oa-item').addEventListener('input',oaSync);
-  s.querySelector('#oa-item').addEventListener('change',oaSync);
+  function oaCurrentItem(){var pick=s.querySelector('#oa-pick').value;if(pick==='__new__')return (s.querySelector('#oa-item').value||'').trim();return (pick&&pick!=='')?pick:'';}
+  function oaApplyCrop(g){var pe=s.querySelector('#oa-price');pe.value=(g&&g.ask!=null)?g.ask:'';if(g&&g.askUnit){var us=s.querySelector('#oa-unit');for(var i=0;i<us.options.length;i++){if(us.options[i].value===g.askUnit){us.selectedIndex=i;break;}}}}
+  function oaSyncSave(){var val=oaCurrentItem();var isNew=!!val&&!(typeof invCrop==='function'&&invCrop(val));var row=s.querySelector('#oa-saverow'),nm=s.querySelector('#oa-savename'),cb=s.querySelector('#oa-save');if(isNew){row.style.display='flex';nm.textContent='“'+val+'”';if(!row.dataset.touched)cb.checked=true;}else{row.style.display='none';}}
+  function oaPickChange(){var pick=s.querySelector('#oa-pick').value,itemInput=s.querySelector('#oa-item');if(pick==='__new__'){itemInput.style.display='block';itemInput.value='';setTimeout(function(){try{itemInput.focus();}catch(e){}},50);}else{itemInput.style.display='none';itemInput.value='';if(pick)oaApplyCrop(invCrop(pick));}oaSyncSave();}
+  s.querySelector('#oa-pick').addEventListener('change',oaPickChange);
+  s.querySelector('#oa-item').addEventListener('input',oaSyncSave);
   s.querySelector('#oa-save').addEventListener('change',function(){s.querySelector('#oa-saverow').dataset.touched='1';});
   s.querySelector('#oa-cancel').onclick=close;
   s.querySelector('#oa-add').onclick=function(){
-    var item=(s.querySelector('#oa-item').value||'').trim();
-    if(!item){s.querySelector('#oa-item').focus();return;}
+    var item=oaCurrentItem();
+    if(!item){var pk=s.querySelector('#oa-pick');if(pk.value==='__new__')s.querySelector('#oa-item').focus();else pk.focus();return;}
     var qraw=s.querySelector('#oa-qty').value, qv=parseFloat(qraw), qty=isNaN(qv)?(qraw||1):qv;
     var unit=s.querySelector('#oa-unit').value;
     var pv=s.querySelector('#oa-price').value, price=(pv!==''&&!isNaN(parseFloat(pv)))?parseFloat(pv):null;
