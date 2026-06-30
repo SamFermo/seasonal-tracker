@@ -34067,7 +34067,7 @@ function orderCard(o){
     return '<div class="io-l'+(l.packed?' packed':'')+'">'+
       '<span class="io-l-check" data-ord="'+oesc(o.order_id)+'" data-li="'+i+'" role="checkbox" aria-checked="'+(l.packed?'true':'false')+'">'+(l.packed?'✓':'')+'</span>'+
       '<span class="io-l-body">'+
-        '<span class="io-l-name">'+oesc(l.qty)+' '+oesc(l.unit)+' '+oesc(l.item)+(flag?(' <span class="io-l-flag f-'+flag+'">'+flag.toUpperCase()+'</span>'):'')+'</span>'+
+        '<span class="io-l-name">'+oesc(l.qty)+' '+oesc(l.unit)+' '+oesc(l.item)+(flag?(' <span class="io-l-flag f-'+flag+'">'+flag.toUpperCase()+'</span>'):'')+(l.ordered_by?(' <span class="io-l-who" style="color:var(--ink-50,#8893ad);font-size:11px">· '+oesc(l.ordered_by)+'</span>'):'')+(l.farm_added?(' <span class="io-l-flag" style="background:rgba(155,176,106,.22);color:#cfe0a8">added</span>'):'')+'</span>'+
         (l.farm_note?('<span class="io-l-note">'+oesc(l.farm_note)+'</span>'):'')+
         '<span class="io-l-actions">'+
           '<button class="io-mini" data-flag="short" data-ord="'+oesc(o.order_id)+'" data-li="'+i+'">Short</button>'+
@@ -34081,12 +34081,13 @@ function orderCard(o){
     '<div class="io-card-head" data-toggle="'+oesc(o.order_id)+'">'+
       '<div><div class="io-card-when">'+ofmtDate(o.placed_at)+' · '+oesc(o.source==='farm_dinner'?('Swan House'+(o.series_label?(' · '+o.series_label):'')):(o.placed_by||''))+'</div>'+
       '<div class="io-card-sub">'+lines.length+' item'+(lines.length!==1?'s':'')+' · '+oesc(reqd)+'</div></div>'+
-      (o.test?'<span class="io-badge" style="background:#7a5a1e;color:#fff;margin-right:5px">TEST</span>':'')+'<span class="io-badge b-'+st+'">'+oesc(ordStatusLabel(o))+'</span>'+
+      (o.test?'<span class="io-badge" style="background:#7a5a1e;color:#fff;margin-right:5px">TEST</span>':'')+(o.combined?'<span class="io-badge" style="background:#3a5a7a;color:#fff;margin-right:5px">COMBINED</span>':'')+'<span class="io-badge b-'+st+'">'+oesc(ordStatusLabel(o))+'</span>'+
     '</div>'+
     (open?('<div class="io-card-body">'+
       (o.order_note?('<div class="io-card-note">“'+oesc(o.order_note)+'”</div>'):'')+
       '<div class="io-pickhead">'+packed+' of '+lines.length+' packed</div>'+
       lineRows+
+      '<button class="io-additem" data-additem="'+oesc(o.order_id)+'" style="margin:6px 0 2px;background:none;border:1px dashed rgba(255,255,255,.25);color:var(--ink-70,#aab4cc);border-radius:9px;padding:8px;width:100%;cursor:pointer;font-family:var(--fb,sans-serif);font-size:13px">+ Add an item</button>'+
       '<div class="io-confirm-row"><label class="io-cf-label">Delivery date<input type="date" class="io-cf-date" data-ord="'+oesc(o.order_id)+'" value="'+oesc(o.confirmed_date||o.requested_date||'')+'"></label></div>'+
       '<div class="io-actions">'+
         (st==='placed'?('<button class="io-btn io-btn-ack" data-ack="'+oesc(o.order_id)+'">Got it 👍</button>'):'')+
@@ -34106,6 +34107,50 @@ function wireOrders(c){
   c.querySelectorAll('[data-inv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();invOpen(el.getAttribute('data-inv'));});});
   c.querySelectorAll('[data-pdf]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var o=ordersData.find(function(x){return x.order_id===el.getAttribute('data-pdf');});if(o)invPdf(o);});});
   c.querySelectorAll('[data-harv]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();var o=ordersData.find(function(x){return x.order_id===el.getAttribute('data-harv');});if(o)invHarvest(o);});});
+  c.querySelectorAll('[data-additem]').forEach(function(el){el.addEventListener('click',function(ev){ev.stopPropagation();ordAddOpen(el.getAttribute('data-additem'));});});
+}
+// Add an item to an existing order (Remy farm side, 2026-06-27) — pick from Kelly's crops or
+// free-type; price optional (blank = a blank line she/Tim fills at the invoice). Line is tagged
+// farm_added; a price entered here prefills the finalize via invLineDefaults (line.price wins).
+function ordAddOpen(orderId){
+  var o=ordersData.find(function(x){return x.order_id===orderId;});if(!o)return;
+  var cropNames=(typeof grow!=='undefined'?grow:[]).map(function(g){return g.name;});
+  var s=document.getElementById('ordAddSheet');
+  if(!s){s=document.createElement('div');s.id='ordAddSheet';
+    s.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:95;background:#0b1020;border-top:1px solid rgba(255,255,255,.12);border-radius:18px 18px 0 0;padding:18px 18px 26px;max-height:86vh;overflow:auto;transform:translateY(110%);transition:transform .25s ease;box-shadow:0 -12px 44px rgba(0,0,0,.55)';
+    document.body.appendChild(s);}
+  function fld(label,inner){return '<div style="margin-bottom:12px"><div style="font-family:var(--fb,sans-serif);font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-60,#9aa6c0);margin-bottom:6px">'+label+'</div>'+inner+'</div>';}
+  var ist='width:100%;box-sizing:border-box;font-family:var(--fb,sans-serif);font-size:16px;padding:12px 13px;border-radius:11px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:var(--ink,#eaf0ff)';
+  s.innerHTML='<div style="font-family:var(--fd,serif);font-size:21px;color:var(--ink,#eaf0ff)">Add an item</div>'+
+    '<div style="font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60,#9aa6c0);margin:3px 0 15px">Something agreed on after the order. Pick a crop or type your own.</div>'+
+    fld('Item','<input id="oa-item" list="oa-crops" placeholder="e.g. Rhubarb" style="'+ist+'"><datalist id="oa-crops">'+cropNames.map(function(n){return '<option value="'+oesc(n)+'">';}).join('')+'</datalist>')+
+    '<div style="display:flex;gap:10px"><div style="flex:1">'+fld('Qty','<input id="oa-qty" inputmode="decimal" value="1" style="'+ist+'">')+'</div>'+
+      '<div style="flex:1.3">'+fld('Unit','<select id="oa-unit" style="'+ist+'">'+invUnitOptions('lb')+'</select>')+'</div></div>'+
+    fld('Price <span style="text-transform:none;color:var(--ink-50,#8893ad)">(optional &mdash; leave blank to fill at the invoice)</span>','<input id="oa-price" inputmode="decimal" placeholder="$ per unit" style="'+ist+'">')+
+    '<div style="display:flex;gap:10px;margin-top:6px"><button id="oa-cancel" style="flex:0 0 auto;font-family:var(--fb,sans-serif);font-size:15px;padding:13px 18px;border-radius:12px;cursor:pointer;border:1px solid rgba(255,255,255,.2);background:transparent;color:var(--ink-80,#c4cde2)">Cancel</button>'+
+    '<button id="oa-add" style="flex:1 1 auto;font-family:var(--fb,sans-serif);font-size:16px;padding:13px;border-radius:12px;cursor:pointer;border:none;background:var(--ink,#eaf0ff);color:#06101f;font-weight:600">Add to order</button></div>';
+  function close(){s.style.transform='translateY(110%)';}
+  s.querySelector('#oa-item').addEventListener('change',function(){
+    var g=(typeof invCrop==='function')?invCrop(this.value):null;
+    if(g){var pe=s.querySelector('#oa-price');if(g.ask!=null&&!pe.value)pe.value=g.ask;
+      if(g.askUnit){var us=s.querySelector('#oa-unit');for(var i=0;i<us.options.length;i++){if(us.options[i].value===g.askUnit){us.selectedIndex=i;break;}}}}
+  });
+  s.querySelector('#oa-cancel').onclick=close;
+  s.querySelector('#oa-add').onclick=function(){
+    var item=(s.querySelector('#oa-item').value||'').trim();
+    if(!item){s.querySelector('#oa-item').focus();return;}
+    var qraw=s.querySelector('#oa-qty').value, qv=parseFloat(qraw), qty=isNaN(qv)?(qraw||1):qv;
+    var unit=s.querySelector('#oa-unit').value;
+    var pv=s.querySelector('#oa-price').value, price=(pv!==''&&!isNaN(parseFloat(pv)))?parseFloat(pv):null;
+    var line={item:item, qty:qty, unit:unit, packed:false, farm_added:true};
+    if(price!=null)line.price=price;
+    o.lines=(o.lines||[]).concat([line]);
+    ordersExpanded[o.order_id]=true;
+    renderOrders();
+    ordersUpdate(o.order_id,{lines:o.lines});
+    close();
+  };
+  s.style.transform='translateY(0)';
 }
 
 /* ── INVOICE / FINALIZE (farm side, in Remy) — ports the check-in invoice flow + adds the
@@ -34166,7 +34211,7 @@ function invLineDefaults(line, ex){
   // UNIT: Kelly's saved sell-unit wins, else the prior filed unit, else the order unit.
   var unit=savedUnit||(ex&&ex.unit)||line.unit||'';
   // PRICE: her saved ask, else the prior filed price, else the spine on an exact unit match, else blank.
-  var price=savedAsk;
+  var price=(line.price!=null&&line.price!=='')?Number(line.price):savedAsk;   // a line's own price (farm-added item) wins
   if(price==null&&ex&&ex.price!=null)price=ex.price;
   if(price==null){var fe=invFeedItem(line.item);if(fe&&fe.swan_price!=null&&invNormUnit(fe.unit)===invNormUnit(line.unit))price=fe.swan_price;}
   return {unit:unit, price:price, saved:(savedAsk!=null)};
