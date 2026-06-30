@@ -33241,7 +33241,10 @@ function runIntroMorph(){
   });
   var pb=document.getElementById('ph-back');
   if(pb)pb.addEventListener('click',function(){if(_embed)return;show(doors);clearPick();window.scrollTo(0,0);});
-  if(_embed){ hide(doors); window.scrollTo(0,0); }   // land straight on the kitchen side
+  if(_embed){ hide(doors); window.scrollTo(0,0);
+    var _pb=document.getElementById('ph-back'); if(_pb)_pb.style.display='none';   // no "Doors" back in embed (farm is unreachable)
+    document.querySelectorAll('#portal .ph-wordmark').forEach(function(pw){pw.style.cursor='default';pw.title='';});
+  }
 
   /* deep-link: ?view=orders (or #orders) lands straight on the farm side's Incoming Orders tab.
      The Chakotay farm-checkin app links here after ceding its in-app order review (2026-06-24).
