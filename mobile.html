@@ -33906,7 +33906,7 @@ function fpSetupOpen(){
     else if(STEPS[step]==='certs'){title='Any certifications?';sub='Optional. Separate with commas.';body=txt('fp-certs',draft.certifications,'e.g. Certified Organic, Salmon-Safe');}
     else if(STEPS[step]==='season'){title='Your season & region';sub='A rough line is fine — Remy tracks each crop’s timing on its own.';body=txt('fp-season',draft.region_season,'e.g. Skagit Valley · May–October');}
     else {title='You’re all set';sub='Remy shows this across every crop. Fine-tune any single crop with its Details button.';}
-    o.innerHTML='<div style="flex:0 0 auto;padding:26px 22px 4px;text-align:center"><div style="font-family:var(--fb,sans-serif);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-30,#6b7591)">Set up your farm</div></div>'+
+    o.innerHTML='<div style="flex:0 0 auto;position:relative;padding:26px 22px 4px;text-align:center"><div style="font-family:var(--fb,sans-serif);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-30,#6b7591)">Set up your farm</div><button id="fp-close" aria-label="Close" style="position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:var(--ink-70,#aab4cc);font-size:20px;line-height:1;cursor:pointer">×</button></div>'+
       '<div style="flex:1 1 auto;overflow:auto;padding:18px 22px;display:flex;flex-direction:column;justify-content:center;max-width:520px;margin:0 auto;width:100%;box-sizing:border-box">'+
       '<div style="font-family:var(--fd,serif);font-size:27px;color:var(--ink,#eaf0ff);margin-bottom:6px;text-align:center">'+title+'</div>'+
       '<div style="font-family:var(--fb,sans-serif);font-size:14px;color:var(--ink-60,#9aa6c0);margin-bottom:22px;text-align:center;line-height:1.4">'+sub+'</div>'+
@@ -33922,6 +33922,7 @@ function fpSetupOpen(){
     var nx=o.querySelector('#fp-next');if(nx)nx.onclick=function(){grab();if(isDone){save();close();}else{step++;draw();}};
     var bk=o.querySelector('#fp-back');if(bk)bk.onclick=function(){grab();step--;draw();};
     var sk=o.querySelector('#fp-skip');if(sk)sk.onclick=function(){grab();step++;draw();};
+    var cl=o.querySelector('#fp-close');if(cl)cl.onclick=function(){close();};   // exit without saving (draft only commits on Done)
   }
   o.style.display='flex';draw();
 }
