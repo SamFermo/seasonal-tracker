@@ -34608,6 +34608,10 @@ window.RemyFarm={
   };
   window._cfSetView=function(v){ST.view=v;render();};
   window._cfSetSort=function(s){ST.sort=s;render();};
+  var cfTypeOpen={};   // collapsed category sections in the "By type" view (default all collapsed)
+  var CAT_LABEL={sea:'Seafood',green:'Greens',produce:'Produce',berry:'Berries',mushroom:'Mushrooms',flower:'Flowers',herb:'Herbs',fruit:'Fruit',prepped:'Prepared',protein:'Proteins',meat:'Meat',egg:'Eggs',root:'Roots',allium:'Alliums',pepper:'Peppers',squash:'Squash',bean:'Beans',other:'Other'};
+  function cfCatLabel(c){return CAT_LABEL[c]||(c?(c.charAt(0).toUpperCase()+c.slice(1)):'Other');}
+  window._cfToggleType=function(c){cfTypeOpen[c]=!cfTypeOpen[c];render();};
 
   function render(){
     var h=host();if(!h)return;var rf=window.RemyFarm;
@@ -34649,24 +34653,36 @@ window.RemyFarm={
         photo+voice+'</div>';
     }).join('');
   }
+  function cfRowHtml(g){
+    var cls=({'Peak':'st-peak','Available':'st-avail','Trickling':'st-avail','Coming Soon':'st-coming'})[g.status]||'st-done';
+    return '<div class="cf-row">'+
+      '<button class="cf-star'+(g.pushed?' on':'')+'" disabled>&#9733;</button>'+
+      '<div class="cf-r-main"><div class="cf-r-name">'+esc(g.name)+(g.photo?' <span class="cf-r-cam">&#9673;</span>':'')+(g.voiceText?' <span class="cf-r-cam">&#9834;</span>':'')+((g.grow_method&&g.grow_method.length)?' <span class="cf-r-cam" title="'+esc(g.grow_method.join(', '))+'">&#127793;</span>':'')+(g.teaser?' <span class="cf-r-cam" title="'+esc(g.teaser)+'">&#9201;</span>':'')+'</div>'+(g.variety?'<div class="cf-r-qty" style="opacity:.85">'+esc(g.variety)+'</div>':'')+(g.qty?'<div class="cf-r-qty">'+esc(g.qty)+'</div>':'')+'</div>'+
+      '<span class="cf-r-price">'+esc(priceStr(g))+'</span>'+
+      '<span class="status '+cls+'">'+esc(g.status)+'</span>'+'</div>';
+  }
   function listHtml(){
     var items=farmList();var q=ST.q.trim().toLowerCase();
     if(q)items=items.filter(function(g){return g.name.toLowerCase().indexOf(q)>=0;});
-    if(ST.sort==='az')items.sort(function(a,b){return a.name.localeCompare(b.name);});
-    else items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
     var bar='<div class="cf-bar"><input class="cf-search" id="cf-search" type="text" placeholder="Search crops" value="'+esc(ST.q)+'">'+
       '<div class="cf-sort"><button class="cf-sortb'+(ST.sort==='smart'?' on':'')+'" onclick="_cfSetSort(\'smart\')">Pushing first</button>'+
-      '<button class="cf-sortb'+(ST.sort==='az'?' on':'')+'" onclick="_cfSetSort(\'az\')">A&ndash;Z</button></div></div>';
+      '<button class="cf-sortb'+(ST.sort==='az'?' on':'')+'" onclick="_cfSetSort(\'az\')">A&ndash;Z</button>'+
+      '<button class="cf-sortb'+(ST.sort==='type'?' on':'')+'" onclick="_cfSetSort(\'type\')">By type</button></div></div>';
     if(!items.length)return bar+'<div class="cf-empty">No crops match.</div>';
-    var rows=items.map(function(g){
-      var cls=({'Peak':'st-peak','Available':'st-avail','Trickling':'st-avail','Coming Soon':'st-coming'})[g.status]||'st-done';
-      return '<div class="cf-row">'+
-        '<button class="cf-star'+(g.pushed?' on':'')+'" disabled>&#9733;</button>'+
-        '<div class="cf-r-main"><div class="cf-r-name">'+esc(g.name)+(g.photo?' <span class="cf-r-cam">&#9673;</span>':'')+(g.voiceText?' <span class="cf-r-cam">&#9834;</span>':'')+((g.grow_method&&g.grow_method.length)?' <span class="cf-r-cam" title="'+esc(g.grow_method.join(', '))+'">&#127793;</span>':'')+(g.teaser?' <span class="cf-r-cam" title="'+esc(g.teaser)+'">&#9201;</span>':'')+'</div>'+(g.variety?'<div class="cf-r-qty" style="opacity:.85">'+esc(g.variety)+'</div>':'')+(g.qty?'<div class="cf-r-qty">'+esc(g.qty)+'</div>':'')+'</div>'+
-        '<span class="cf-r-price">'+esc(priceStr(g))+'</span>'+
-        '<span class="status '+cls+'">'+esc(g.status)+'</span>'+'</div>';
-    }).join('');
-    return bar+'<div class="cf-rows">'+rows+'</div>';
+    if(ST.sort==='type'){
+      var groups={};items.forEach(function(g){var c=g.category||'other';(groups[c]=groups[c]||[]).push(g);});
+      var cats=Object.keys(groups).sort(function(a,b){return cfCatLabel(a).localeCompare(cfCatLabel(b));});
+      var secs=cats.map(function(c){
+        var arr=groups[c].sort(function(a,b){return a.name.localeCompare(b.name);});
+        var open=q?true:!!cfTypeOpen[c];   // a search auto-expands matching groups
+        var hdr='<button class="cf-typehdr" onclick="_cfToggleType(\''+esc(c)+'\')" style="width:100%;display:flex;align-items:center;gap:8px;background:var(--ink-6,rgba(255,255,255,.05));border:1px solid var(--ink-12,rgba(255,255,255,.1));border-radius:10px;padding:11px 13px;margin:8px 0 4px;cursor:pointer;color:var(--ink,#eaf0ff);font-family:var(--fb,sans-serif);font-size:14px"><span style="width:14px;color:var(--ink-60,#9aa6c0)">'+(open?'▾':'▸')+'</span><span style="flex:1;text-align:left;font-weight:600">'+esc(cfCatLabel(c))+'</span><span style="color:var(--ink-50,#8893ad);font-size:12px">'+arr.length+'</span></button>';
+        return '<div class="cf-typegroup">'+hdr+(open?('<div class="cf-rows">'+arr.map(cfRowHtml).join('')+'</div>'):'')+'</div>';
+      }).join('');
+      return bar+secs;
+    }
+    if(ST.sort==='az')items.sort(function(a,b){return a.name.localeCompare(b.name);});
+    else items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
+    return bar+'<div class="cf-rows">'+items.map(cfRowHtml).join('')+'</div>';
   }
   function bind(){
     var h=host();if(!h)return;
