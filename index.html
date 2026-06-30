@@ -34036,14 +34036,14 @@ function ordersUpdate(id,patch){
   if(!(FB&&FB.ready&&FB.db))return Promise.resolve();
   return FB.db.collection('orders').doc(id).update(patch).catch(function(){alert('Could not save — check your connection.');});
 }
-var ordersSrc='restaurant';
+var ordersSrc='restaurant', ordersSelMode=false, ordersSel={};
 /* Farm-dinner harvests (pushed from the dinner app, source:'farm_dinner') share the orders feed +
    finalize machinery but get their own segment so they don't muddy the restaurant-order read. */
 function ordIsFarmDinner(o){return (o.source==='farm_dinner')||(o.placed_by==='swan_house');}
 function renderOrders(){
   var c=document.getElementById('orders-rows');if(!c)return;
   if(!(FB&&FB.ready&&FB.db)){c.innerHTML='<div class="io-empty">Connecting to the order feed&hellip;</div>';return;}
-  var visible=ordersData.filter(function(o){return (o.status||'placed')!=='cancelled';});   // cancelled orders hidden from view (clutter)
+  var visible=ordersData.filter(function(o){var s=o.status||'placed';return s!=='cancelled'&&s!=='merged';});   // cancelled + merged hidden (clutter)
   var farm=visible.filter(ordIsFarmDinner), rest=visible.filter(function(o){return !ordIsFarmDinner(o);});
   if(ordersSrc==='farm_dinner'&&!farm.length)ordersSrc='restaurant';
   var seg=farm.length?('<div style="display:flex;gap:8px;margin-bottom:12px">'+
@@ -34051,10 +34051,18 @@ function renderOrders(){
     '<button class="io-srcb" data-src="farm_dinner" style="flex:1;padding:9px;border-radius:10px;cursor:pointer;font-family:var(--fb,sans-serif);font-size:13px;border:1px solid '+(ordersSrc==='farm_dinner'?'rgba(155,176,106,.7)':'rgba(255,255,255,.15)')+';background:'+(ordersSrc==='farm_dinner'?'rgba(155,176,106,.16)':'transparent')+';color:var(--ink,#eaf0ff)">Farm dinners ('+farm.length+')</button>'+
     '</div>'):'';
   var show=ordersSrc==='farm_dinner'?farm:rest;
+  // keep selections valid: only ids still visible in the current segment
+  Object.keys(ordersSel).forEach(function(id){if(!show.some(function(o){return o.order_id===id;}))delete ordersSel[id];});
+  var selCount=Object.keys(ordersSel).length;
+  var selToggle=(show.length>=2)?('<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button class="io-selbtn" style="background:none;border:1px solid rgba(255,255,255,.2);color:var(--ink-70,#aab4cc);border-radius:9px;padding:7px 12px;cursor:pointer;font-family:var(--fb,sans-serif);font-size:12px">'+(ordersSelMode?'Done':'Select to combine')+'</button></div>'):'';
+  var combineBar=ordersSelMode?('<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;padding:10px 12px;border-radius:11px;background:rgba(58,90,122,.18);border:1px solid rgba(58,90,122,.5)"><span style="flex:1;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-80,#c4cde2)">'+(selCount?(selCount+' selected'):'Tap orders to combine')+'</span><button class="io-combine" '+(selCount<2?'disabled':'')+' style="font-family:var(--fb,sans-serif);font-size:14px;padding:9px 16px;border-radius:10px;cursor:'+(selCount<2?'default':'pointer')+';border:none;background:'+(selCount<2?'rgba(255,255,255,.12)':'var(--ink,#eaf0ff)')+';color:'+(selCount<2?'var(--ink-50,#8893ad)':'#06101f')+';font-weight:600">Combine'+(selCount>=2?(' ('+selCount+')'):'')+'</button></div>'):'';
   var body=show.length?show.map(orderCard).join(''):('<div class="io-empty">'+(ordersSrc==='farm_dinner'?'No farm-dinner harvests yet. When Kelly packs one and sends it, it lands here.':'No restaurant orders yet. When San Fermo sends one, it lands here.')+'</div>');
-  c.innerHTML=seg+body;
+  c.innerHTML=seg+selToggle+combineBar+body;
   wireOrders(c);
   c.querySelectorAll('.io-srcb').forEach(function(b){b.addEventListener('click',function(){ordersSrc=b.getAttribute('data-src');renderOrders();});});
+  c.querySelectorAll('.io-selbtn').forEach(function(b){b.addEventListener('click',function(){ordersSelMode=!ordersSelMode;ordersSel={};renderOrders();});});
+  c.querySelectorAll('.io-combine').forEach(function(b){b.addEventListener('click',function(){ordCombine(Object.keys(ordersSel));});});
+  c.querySelectorAll('[data-sel]').forEach(function(el){el.addEventListener('click',function(){var id=el.getAttribute('data-sel');if(ordersSel[id])delete ordersSel[id];else ordersSel[id]=true;renderOrders();});});
 }
 function orderCard(o){
   var open=!!ordersExpanded[o.order_id];
@@ -34062,6 +34070,15 @@ function orderCard(o){
   var lines=o.lines||[];
   var packed=lines.filter(function(l){return l.packed;}).length;
   var reqd=o.requested_date?('needed '+ofmtDate(o.requested_date)):'no date set';
+  if(ordersSelMode){
+    var sel=!!ordersSel[o.order_id];
+    var who=o.source==='farm_dinner'?('Swan House'+(o.series_label?(' · '+o.series_label):'')):(o.placed_by||'');
+    return '<div class="io-card st-'+st+'" data-sel="'+oesc(o.order_id)+'" style="cursor:pointer;display:flex;align-items:center;gap:12px'+(sel?';border-color:rgba(120,180,230,.7);background:rgba(58,90,122,.12)':'')+'">'+
+      '<span style="flex:0 0 auto;width:22px;height:22px;border-radius:6px;border:1px solid '+(sel?'rgba(120,180,230,.9)':'rgba(255,255,255,.3)')+';background:'+(sel?'rgba(120,180,230,.3)':'transparent')+';display:flex;align-items:center;justify-content:center;color:#cfe0ff;font-size:14px">'+(sel?'✓':'')+'</span>'+
+      '<div style="flex:1"><div class="io-card-when">'+ofmtDate(o.placed_at)+' · '+oesc(who)+(o.combined?' <span class="io-badge" style="background:#3a5a7a;color:#fff">COMBINED</span>':'')+'</div>'+
+      '<div class="io-card-sub">'+lines.length+' item'+(lines.length!==1?'s':'')+' · '+oesc(reqd)+'</div></div>'+
+    '</div>';
+  }
   var lineRows=lines.map(function(l,i){
     var flag=l.farm_status==='short'?'short':l.farm_status==='sub'?'sub':'';
     return '<div class="io-l'+(l.packed?' packed':'')+'">'+
@@ -34151,6 +34168,35 @@ function ordAddOpen(orderId){
     close();
   };
   s.style.transform='translateY(0)';
+}
+// Combine selected orders into one (Remy farm side, 2026-06-27). Merges all lines into a new
+// combined order, each line tagged with who ordered it; originals are marked 'merged' (hidden).
+// Same item from two people stays as separate tagged lines. The combined order rides the normal
+// finalize, so it produces ONE invoice / packing list.
+function ordCombine(ids){
+  if(!ids||ids.length<2)return;
+  var orders=ids.map(function(id){return ordersData.find(function(x){return x.order_id===id;});}).filter(Boolean);
+  if(orders.length<2)return;
+  if(!(FB&&FB.ready&&FB.db)){alert('Can’t reach the order server right now — try again when back online.');return;}
+  if(!confirm('Combine '+orders.length+' orders into one? Each line stays tagged with who ordered it, and the originals move out of the way.'))return;
+  function whoOf(o){return o.source==='farm_dinner'?'Swan House':(o.placed_by||'San Fermo');}
+  var lines=[], contributors=[];
+  orders.forEach(function(o){
+    var w=whoOf(o); if(contributors.indexOf(w)<0)contributors.push(w);
+    (o.lines||[]).forEach(function(l){var nl=Object.assign({},l); nl.ordered_by=l.ordered_by||w; lines.push(nl);});
+  });
+  var dates=orders.map(function(o){return o.requested_date;}).filter(Boolean).sort();
+  var isFarm=orders.every(ordIsFarmDinner);
+  var newId='combined-'+Date.now();
+  var combined={order_id:newId, combined:true, combined_from:ids,
+    source:isFarm?'farm_dinner':'combined', placed_by:contributors.join(' + '),
+    placed_at:new Date().toISOString(), requested_date:dates[0]||'', status:'placed',
+    order_note:'Combined from '+orders.length+' orders ('+contributors.join(', ')+')', lines:lines};
+  FB.db.collection('orders').doc(newId).set(combined).catch(function(){alert('Combine didn’t save — try again.');});
+  ids.forEach(function(id){var oo=ordersData.find(function(x){return x.order_id===id;});if(oo)oo.status='merged';ordersUpdate(id,{status:'merged',merged_into:newId});});
+  ordersData.push(combined);
+  ordersSelMode=false; ordersSel={}; ordersExpanded[newId]=true;
+  renderOrders();
 }
 
 /* ── INVOICE / FINALIZE (farm side, in Remy) — ports the check-in invoice flow + adds the
