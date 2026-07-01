@@ -34713,6 +34713,7 @@ window.RemyFarm={
   function host(){return document.getElementById('trending-home');}
   function setActive(k){var b=document.getElementById('kitchen-pills');if(b)b.querySelectorAll('.kpill').forEach(function(p){p.classList.toggle('active',p.dataset.k===k);});}
   var ST={view:'pushing',sort:'smart',q:''};
+  var cfOrder={items:{},date:''};   // in-progress order to Swan House (compose-only; send is hard-stopped for now)
   var STATUS_RANK={'Peak':0,'Available':1,'Trickling':2,'Coming Soon':3,'Not Yet':4,'Done':5};
   // Peak's rank is 0, which is falsy — `STATUS_RANK[s]||9` wrongly sent Peak to the bottom.
   // Use an explicit null check so rank 0 (Peak) sorts first.
@@ -34753,8 +34754,9 @@ window.RemyFarm={
       '<div class="cf-farm"><span class="cf-dot"></span>Swan House Farm</div>'+
       '<div class="cf-sub">'+(rf&&rf.week?esc(rf.week):'this week')+(rf&&rf.lastTouch?(' &middot; updated '+esc(rf.lastTouch)):'')+'</div>'+profHtml+'</div>';
     var seg='<div class="cf-seg"><button class="cf-segb'+(ST.view==='pushing'?' on':'')+'" onclick="_cfSetView(\'pushing\')">Pushing</button>'+
+      '<button class="cf-segb'+(ST.view==='order'?' on':'')+'" onclick="_cfSetView(\'order\')">Order</button>'+
       '<button class="cf-segb'+(ST.view==='list'?' on':'')+'" onclick="_cfSetView(\'list\')">Full list</button></div>';
-    h.innerHTML=head+seg+(ST.view==='pushing'?pushingHtml():listHtml());
+    h.innerHTML=head+seg+(ST.view==='pushing'?pushingHtml():(ST.view==='order'?orderHtml():listHtml()));
     bind();
   }
   function pushingHtml(){
@@ -34809,11 +34811,50 @@ window.RemyFarm={
     else items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
     return bar+'<div class="cf-rows">'+items.map(cfRowHtml).join('')+'</div>';
   }
+  // Order composer (2026-06-27): the chef builds an order to Swan House from the availability list.
+  // COMPOSE ONLY — the Place button is hard-stopped (no remy-orders write) until Sam wires it.
+  function orderHtml(){
+    var items=farmList().filter(function(g){return g.status!=='Done'&&g.status!=='Not Yet';});
+    items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
+    if(!items.length)return '<div class="cf-empty">Nothing available from Swan House to order right now.</div>';
+    var count=Object.keys(cfOrder.items).length;
+    var head='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:11px 13px;border:1px solid var(--ink-12);border-radius:12px">'+
+      '<span style="font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)">Needed by</span>'+
+      '<input type="date" id="cf-ord-date" value="'+esc(cfOrder.date||'')+'" style="flex:1;font-family:var(--fb,sans-serif);font-size:15px;padding:8px 10px;border-radius:9px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)"></div>'+
+      '<div style="font-family:var(--fb,sans-serif);font-size:11px;color:var(--ink-30);margin:0 2px 10px">Tap a quantity for anything you want from Swan House.</div>';
+    var rows=items.map(function(g){
+      var cur=cfOrder.items[g.name];var qv=(cur&&cur.qty!=null)?cur.qty:'';
+      var unit=(cur&&cur.unit)||g.askUnit||'lb';
+      return '<div class="cf-row" style="align-items:center">'+
+        '<div class="cf-r-main"><div class="cf-r-name">'+esc(g.name)+'</div><div class="cf-r-qty" style="opacity:.85">'+esc(priceStr(g)||'')+'</div></div>'+
+        '<input class="cf-ord-qty" data-crop="'+esc(g.name)+'" data-unit="'+esc(unit)+'" data-price="'+(g.ask==null?'':g.ask)+'" inputmode="decimal" placeholder="0" value="'+esc(String(qv))+'" style="width:60px;text-align:center;font-family:var(--fb,sans-serif);font-size:15px;padding:7px 6px;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)">'+
+        '<span class="cf-r-price" style="min-width:46px;text-align:left;color:var(--ink-60)">'+esc(unit)+'</span>'+
+      '</div>';
+    }).join('');
+    var place='<div id="cf-ord-bar" style="position:sticky;bottom:0;display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px;border-radius:12px;background:var(--bg-card);border:1px solid var(--ink-12);box-shadow:0 -6px 18px rgba(0,0,0,.14)">'+
+      '<span id="cf-ord-count" style="flex:1;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)">'+(count?(count+' item'+(count>1?'s':'')):'Add quantities to build an order')+'</span>'+
+      '<button id="cf-ord-send" '+(count?'':'disabled')+' style="font-family:var(--fb,sans-serif);font-size:15px;padding:11px 18px;border-radius:11px;cursor:'+(count?'pointer':'default')+';border:none;background:'+(count?'var(--ink)':'var(--ink-12)')+';color:'+(count?'var(--bg)':'var(--ink-30)')+';font-weight:600">Place order</button></div>';
+    return head+'<div class="cf-rows">'+rows+'</div>'+place;
+  }
   function bind(){
     var h=host();if(!h)return;
     var s=document.getElementById('cf-search');
     if(s)s.oninput=function(){var pos=s.selectionStart;ST.q=s.value;render();var s2=document.getElementById('cf-search');if(s2){s2.focus();try{s2.setSelectionRange(pos,pos);}catch(e){}}};
     h.querySelectorAll('[data-photo]').forEach(function(im){im.onclick=function(){openCfPhoto(im.getAttribute('data-photo'));};});
+    h.querySelectorAll('.cf-ord-qty').forEach(function(inp){inp.addEventListener('input',function(){
+      var crop=inp.getAttribute('data-crop'),v=inp.value.trim(),n;
+      if(v===''||isNaN(parseFloat(v))||parseFloat(v)===0){delete cfOrder.items[crop];}
+      else{cfOrder.items[crop]={qty:parseFloat(v),unit:inp.getAttribute('data-unit'),price:(inp.getAttribute('data-price')===''?null:parseFloat(inp.getAttribute('data-price')))};}
+      n=Object.keys(cfOrder.items).length;
+      var cnt=document.getElementById('cf-ord-count');if(cnt)cnt.textContent=n?(n+' item'+(n>1?'s':'')):'Add quantities to build an order';
+      var sb=document.getElementById('cf-ord-send');if(sb){sb.disabled=!n;sb.style.background=n?'var(--ink)':'var(--ink-12)';sb.style.color=n?'var(--bg)':'var(--ink-30)';sb.style.cursor=n?'pointer':'default';}
+    });});
+    var _od=document.getElementById('cf-ord-date');if(_od)_od.addEventListener('change',function(){cfOrder.date=_od.value;});
+    var _os=document.getElementById('cf-ord-send');if(_os)_os.addEventListener('click',function(){
+      var n=Object.keys(cfOrder.items).length;if(!n)return;
+      /* HARD STOP (prototype): compose only — do NOT write to remy-orders / send to Kelly yet. */
+      alert('Order composed: '+n+' item'+(n>1?'s':'')+(cfOrder.date?', needed '+cfOrder.date:'')+'.\n\nSending is turned OFF for now — we will wire this to Kelly next.');
+    });
   }
   function openCfPhoto(url){
     var o=document.getElementById('cfPhoto');
