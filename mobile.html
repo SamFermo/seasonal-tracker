@@ -34783,14 +34783,18 @@ window.RemyFarm={
     if(!(window.RemyOrders&&window.RemyOrders.ready&&window.RemyOrders.ready())){
       alert('Can’t reach the order server right now — try again when you’re back online.');return;}
     var all=farmList();
+    // When embedded in the sf-portal, the parent hands us the logged-in user so Kelly's feed shows
+    // who ordered (matches the old Farm Order button). Standalone Remy falls back to "San Fermo".
+    var who='San Fermo';
+    try{ if(window.parent&&window.parent!==window&&window.parent.__remyPortalUser){ who=String(window.parent.__remyPortalUser)||who; } }catch(e){}
     var lines=names.map(function(nm){
       var it=cfOrder.items[nm];var g=all.filter(function(x){return x.name===nm;})[0]||{};
       return {item:nm, seasonal_ref:{name:nm,vendor:'Swan House Farms'}, qty:it.qty, unit:it.unit,
-        free_text:false, farm_status:null, farm_note:'', packed:false, ordered_by:'San Fermo',
+        free_text:false, farm_status:null, farm_note:'', packed:false, ordered_by:who,
         ask:(it.price==null?(g.ask==null?null:g.ask):it.price)};
     });
     var id='remyord-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
-    var order={order_id:id, placed_by:'San Fermo', placed_at:new Date().toISOString(),
+    var order={order_id:id, placed_by:who, placed_at:new Date().toISOString(),
       requested_date:cfOrder.date||'', confirmed_date:null, status:'placed',
       order_note:'', channel:'remy-order-v1', synced:false, lines:lines};
     cfOrder._sending=true;
