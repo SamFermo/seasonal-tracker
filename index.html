@@ -45,7 +45,10 @@ body.remy-embed{
   --terra:#e08763;--terra-bg:rgba(224,135,99,.14);
   --olive:#a8b97e;--olive-bg:rgba(168,185,126,.14);
   --gold:#e6c878;--gold-bg:rgba(230,200,120,.16);
-  background:#0a1430!important}
+  /* 2026-07-01: transparent instead of a flat navy fill, so the sf-portal's own textured
+     background (already dark-scrimmed by the portal's own gradient) shows through the iframe —
+     Sam wants Farm Order to read as continuous with the portal, not a flat-colored insert. */
+  background:transparent!important}
 /* cards become cream "moons"; scope a dark ink onto each cream-surfaced container so its
    var(--ink) descendants inherit the portal --card-ink (#241f15) automatically. The list is
    every selector/inline class that paints itself with var(--bg-card) (the cream). */
@@ -33276,7 +33279,12 @@ function runIntroMorph(){
   // on the kitchen, and make the farm side unreachable — so no order-to-Kelly path exists here.
   // window._REMY_EMBED is the global guard any future order-send checks (hard stop while prototyping).
   var _embed=/[?&]embed=/.test(location.search||'');
-  if(_embed){try{window._REMY_EMBED=true;document.body.classList.add('remy-embed');}catch(e){}}
+  if(_embed){try{window._REMY_EMBED=true;document.body.classList.add('remy-embed');
+    // <html>'s own background would otherwise show through the now-transparent <body> in embed
+    // mode (background paints html under body); force it transparent too so the parent portal's
+    // background image is what actually shows, not a flat navy layer.
+    document.documentElement.style.background='transparent';
+  }catch(e){}}
   if(k)k.addEventListener('click',function(e){e.preventDefault();pick(k,'kitchen',function(){hide(doors);});});
   if(f)f.addEventListener('click',function(e){e.preventDefault();if(_embed)return;pick(f,'farm',function(){hide(doors);show(farm);});});
   if(fb)fb.addEventListener('click',function(){hide(farm);show(doors);clearPick();});
