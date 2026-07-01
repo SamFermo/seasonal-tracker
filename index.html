@@ -45,10 +45,27 @@ body.remy-embed{
   --terra:#e08763;--terra-bg:rgba(224,135,99,.14);
   --olive:#a8b97e;--olive-bg:rgba(168,185,126,.14);
   --gold:#e6c878;--gold-bg:rgba(230,200,120,.16);
-  /* 2026-07-01: transparent instead of a flat navy fill, so the sf-portal's own textured
-     background (already dark-scrimmed by the portal's own gradient) shows through the iframe —
-     Sam wants Farm Order to read as continuous with the portal, not a flat-colored insert. */
-  background:transparent!important}
+  /* 2026-07-01: tried transparent (let the sf-portal's own bg.jpg show through the iframe) —
+     reverted. On Sam's iPhone this rendered as a flat white gap instead of the portal's photo:
+     the portal's background lives on a position:fixed body::before layer, and fixed-position
+     content behind an iframe is a known iOS Safari compositing weak spot (confirmed: worked fine
+     in a desktop Chrome mock-up, failed live on iPhone). Baking the SAME image directly into
+     Remy's own background is not cross-document, so it can't hit that bug — same visual result,
+     no dependency on iframe transparency compositing. */
+  background:linear-gradient(rgba(9,15,34,.80),rgba(6,10,24,.88)),
+    url('https://samfermo.github.io/sf-portal/data/bg.jpg')!important;
+  background-size:cover!important;background-position:center!important;
+  background-repeat:no-repeat!important}
+/* 2026-07-01: kills the intro-morph flash in embed mode. runIntroMorph() already skips the morph
+   for ?embed=, but it's called from a script near the END of this (huge) file, so on a real
+   device #intro's opaque box can stay visible for a noticeable beat while the rest of the page
+   downloads/parses — Sam flagged this as "a brief loading screen." Fix: a tiny script right after
+   #intro's own markup (see below) sets this class on <html> the instant the parser reaches it,
+   long before the rest of the page loads. CSS applies to elements as they're parsed, so #intro
+   hides immediately and .ph-remy/.ph-brand (default opacity:0, normally revealed by the same late
+   script) show up the moment they exist — no waiting on the big script at all. */
+html.remy-embed-early #intro{display:none!important}
+html.remy-embed-early .ph-remy,html.remy-embed-early .ph-brand{opacity:1!important}
 /* cards become cream "moons"; scope a dark ink onto each cream-surfaced container so its
    var(--ink) descendants inherit the portal --card-ink (#241f15) automatically. The list is
    every selector/inline class that paints itself with var(--bg-card) (the cream). */
@@ -1010,6 +1027,16 @@ select.tm-inp{cursor:pointer;-webkit-appearance:none;appearance:none}
 
 <!-- INTRO -->
 <div id="intro"><div class="intro-word">Remy</div></div>
+<script>
+// Fires the instant the parser reaches this point — before the rest of this large file is even
+// downloaded — so embed mode's "no intro" state (see html.remy-embed-early CSS above) takes effect
+// immediately instead of waiting for runIntroMorph() near the bottom of the page. Body already
+// exists (we're past <body>), so the theme class can go on early too.
+if(/[?&]embed=/.test(location.search||'')){
+  document.documentElement.classList.add('remy-embed-early');
+  try{document.body.classList.add('remy-embed');}catch(e){}
+}
+</script>
 
 <!-- APP -->
 <div id="app">
@@ -33279,12 +33306,7 @@ function runIntroMorph(){
   // on the kitchen, and make the farm side unreachable — so no order-to-Kelly path exists here.
   // window._REMY_EMBED is the global guard any future order-send checks (hard stop while prototyping).
   var _embed=/[?&]embed=/.test(location.search||'');
-  if(_embed){try{window._REMY_EMBED=true;document.body.classList.add('remy-embed');
-    // <html>'s own background would otherwise show through the now-transparent <body> in embed
-    // mode (background paints html under body); force it transparent too so the parent portal's
-    // background image is what actually shows, not a flat navy layer.
-    document.documentElement.style.background='transparent';
-  }catch(e){}}
+  if(_embed){try{window._REMY_EMBED=true;document.body.classList.add('remy-embed');}catch(e){}}
   if(k)k.addEventListener('click',function(e){e.preventDefault();pick(k,'kitchen',function(){hide(doors);});});
   if(f)f.addEventListener('click',function(e){e.preventDefault();if(_embed)return;pick(f,'farm',function(){hide(doors);show(farm);});});
   if(fb)fb.addEventListener('click',function(){hide(farm);show(doors);clearPick();});
