@@ -33414,6 +33414,10 @@ function fbInit(){try{if(!window.firebase)return;firebase.initializeApp({apiKey:
   // anon REST. Wrapped so an attestation/SDK failure can never break Firestore init.
   try{if(firebase.appCheck&&firebase.appCheck.ReCaptchaEnterpriseProvider){firebase.appCheck().activate(new firebase.appCheck.ReCaptchaEnterpriseProvider('6LcpDDMtAAAAANRyfWfGCd6uPgDsMlIsbFRBiozb'),true);}}catch(e){}
   FB.db=firebase.firestore();
+  // Expose a tiny order-write helper so the kitchen-side Order composer (a separate IIFE) can place
+  // a real order into remy-orders without reaching into FB directly. Attested via the same App Check.
+  try{window.RemyOrders={ready:function(){return !!(FB.ready&&FB.db);},
+    place:function(order){return FB.db.collection('orders').doc(order.order_id).set(order);}};}catch(e){}
   // offline persistence: prices/status/markdown/transcripts queue locally + auto-sync on reconnect
   try{FB.db.enablePersistence({synchronizeTabs:true}).catch(function(){});}catch(e){}
   try{FB.storage=firebase.storage();}catch(e){}
@@ -34773,9 +34777,30 @@ window.RemyFarm={
   window._cfOrdQtyInput=function(name,v){var it=cfOrder.items[name];if(!it)return;it.qty=Math.max(0.5,parseFloat(v)||1);render();};
   window._cfOrdUnit=function(name,u){var it=cfOrder.items[name];if(it)it.unit=u;};
   window._cfOrdDate=function(v){cfOrder.date=v;};
-  window._cfOrdSend=function(){var n=Object.keys(cfOrder.items).length;if(!n)return;
-    /* HARD STOP (prototype): compose only — no remy-orders write / nothing to Kelly yet. */
-    alert('Order composed: '+n+' item'+(n>1?'s':'')+(cfOrder.date?', needed '+cfOrder.date:'')+'.\n\nSending is turned OFF for now — we will wire this to Kelly next.');
+  window._cfOrdSend=function(){
+    var names=Object.keys(cfOrder.items);if(!names.length)return;
+    if(cfOrder._sending)return;   // guard against a double-tap sending twice
+    if(!(window.RemyOrders&&window.RemyOrders.ready&&window.RemyOrders.ready())){
+      alert('Can’t reach the order server right now — try again when you’re back online.');return;}
+    var all=farmList();
+    var lines=names.map(function(nm){
+      var it=cfOrder.items[nm];var g=all.filter(function(x){return x.name===nm;})[0]||{};
+      return {item:nm, seasonal_ref:{name:nm,vendor:'Swan House Farms'}, qty:it.qty, unit:it.unit,
+        free_text:false, farm_status:null, farm_note:'', packed:false, ordered_by:'San Fermo',
+        ask:(it.price==null?(g.ask==null?null:g.ask):it.price)};
+    });
+    var id='remyord-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
+    var order={order_id:id, placed_by:'San Fermo', placed_at:new Date().toISOString(),
+      requested_date:cfOrder.date||'', confirmed_date:null, status:'placed',
+      order_note:'', channel:'remy-order-v1', synced:false, lines:lines};
+    cfOrder._sending=true;
+    window.RemyOrders.place(order).then(function(){
+      cfOrder.items={};cfOrder.date='';cfOrder._sending=false;render();
+      alert('Order sent to Swan House ✓  ('+lines.length+' item'+(lines.length>1?'s':'')+')\nKelly & Tim check Sunday–Tuesday mornings.');
+    }).catch(function(e){
+      cfOrder._sending=false;
+      alert('Order didn’t send — check your connection and try again.');
+    });
   };
 
   function render(){
