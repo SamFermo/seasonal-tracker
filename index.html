@@ -34167,6 +34167,11 @@ var ordersData=[], ordersUnsub=null, ordersExpanded={};
 var _ordListeners=[];function _ordNotify(){for(var i=0;i<_ordListeners.length;i++){try{_ordListeners[i](ordersData);}catch(e){}}}
 function oesc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function ofmtDate(iso){try{return new Date(iso).toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'});}catch(e){return iso||'';}}
+/* requested_date is a date-only YYYY-MM-DD string (no time/zone). new Date(iso) parses that as
+   UTC midnight, so toLocaleDateString in a behind-UTC zone (e.g. Pacific) rendered it a day early.
+   Parse the y/m/d parts as a LOCAL date instead — same fix pattern as cfFmtDate below. */
+function ofmtDateOnly(iso){if(!iso)return '';var p=String(iso).split('-');if(p.length!==3)return ofmtDate(iso);
+  try{return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'});}catch(e){return iso;}}
 /* multi-farm seam: order docs carry no seller/farm_id yet (single san_fermo↔Swan pair today).
    When they do, filter to this farm here — never hardcode the farm name. */
 function orderForThisFarm(o){return true;}
@@ -34223,7 +34228,7 @@ function orderCard(o){
   var st=o.status||'placed';
   var lines=o.lines||[];
   var packed=lines.filter(function(l){return l.packed;}).length;
-  var reqd=o.requested_date?('needed '+ofmtDate(o.requested_date)):'no date set';
+  var reqd=o.requested_date?('needed '+ofmtDateOnly(o.requested_date)):'no date set';
   if(ordersSelMode){
     var sel=!!ordersSel[o.order_id];
     var who=o.source==='farm_dinner'?('Swan House'+(o.series_label?(' · '+o.series_label):'')):(o.placed_by||'');
@@ -34477,7 +34482,7 @@ function invOpen(id){
 function invRender(){
   var m=invModal();var o=INV.order;if(!o)return;
   document.getElementById('inv-title').textContent=(o.invoice&&o.invoice.drafted)?'Re-finalize invoice':'Build invoice';
-  document.getElementById('inv-meta').innerHTML='<b>Swan House Farm</b> &rarr; San Fermo &middot; '+oesc(o.placed_by||'')+'<br>order '+oesc(o.order_id)+(o.requested_date?(' &middot; needed '+ofmtDate(o.requested_date)):'');
+  document.getElementById('inv-meta').innerHTML='<b>Swan House Farm</b> &rarr; San Fermo &middot; '+oesc(o.placed_by||'')+'<br>order '+oesc(o.order_id)+(o.requested_date?(' &middot; needed '+ofmtDateOnly(o.requested_date)):'');
   var rows=INV.rows.map(function(r,i){
     var flag=(r.farm_status||'').toUpperCase();
     var flagHtml=flag?(' <span class="io-l-flag f-'+r.farm_status+'">'+flag+'</span>'):'';
