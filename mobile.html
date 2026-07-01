@@ -45,6 +45,9 @@ body.remy-embed #portal,body.remy-embed #trending-home{background:#f5f2ec}
 body.remy-embed #stars,body.remy-embed .sky{display:none!important}
 body.remy-embed .ph-remy{color:var(--ink)!important;text-shadow:none!important}   /* dark wordmark on light */
 body.remy-embed .ph-icon{stroke:var(--ink-60)}
+/* active pills/segments hardcode dark text on a var(--ink) bg (light in standalone Remy, DARK here) —
+   flip their text to light so the active state is readable on the dark pill */
+body.remy-embed .kpill.active,body.remy-embed .seg button.on,body.remy-embed .cf-segb.on,body.remy-embed .cf-sortb.on,body.remy-embed .at-use,body.remy-embed .pill.active,body.remy-embed .bucket-btn.sel,body.remy-embed .bucket-btn:active{color:#f5f2ec!important}
 /* starfield sits behind everything — subtle, almost ambient */
 #stars{position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%;
   opacity:0.55}
@@ -33155,6 +33158,14 @@ function runIntroMorph(){
   var headerBrand = document.querySelector('.ph-brand');
   var headerBack = document.getElementById('ph-back');
   var intro = document.getElementById('intro');
+  if(/[?&]embed=/.test(location.search||'')){
+    // Embed (framed by the sf-portal): the portal moon IS the transition — skip Remy's intro
+    // morph entirely and reveal the header + kitchen immediately.
+    if(intro) intro.classList.add('gone');
+    if(headerRemy) headerRemy.classList.add('in');
+    if(headerBrand) headerBrand.classList.add('in');
+    return;
+  }
   if(!word || !headerRemy || !intro){
     // Safety: if anything is missing, just hide the overlay so the app is usable
     if(intro) intro.classList.add('gone');
