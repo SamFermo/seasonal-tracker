@@ -1,5 +1,5 @@
 {
- "generated": "2026-07-01T10:39:28-07:00",
+ "generated": "2026-07-01T11:12:51-07:00",
  "month": "July",
  "source": "Swan_House_2026_Weekly_Availability (live sheet, current-year tabs only; Archive excluded)",
  "sheet_modified": "2026-06-12T18:01:25.449Z",
@@ -762,5 +762,5 @@
    ]
   }
  ],
- "stale_warning": "WARN: weekly sheet last modified 2026-06-12T18:01:25.449Z (18d ago) — picker may be stale."
+ "stale_warning": "WARN: weekly sheet last modified 2026-06-12T18:01:25.449Z (19d ago) — picker may be stale."
 }
