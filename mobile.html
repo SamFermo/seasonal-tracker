@@ -34732,7 +34732,9 @@ window.RemyFarm={
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function host(){return document.getElementById('trending-home');}
   function setActive(k){var b=document.getElementById('kitchen-pills');if(b)b.querySelectorAll('.kpill').forEach(function(p){p.classList.toggle('active',p.dataset.k===k);});}
-  var ST={view:'pushing',sort:'smart',q:''};
+  // Prototype (embed): land on Order, not Pushing (Pushing is redundant — peak sorts to the top of
+  // Order — and a clean landing means nothing looks off on open). Standalone Remy keeps Pushing.
+  var ST={view:(window._REMY_EMBED?'order':'pushing'),sort:'smart',q:''};
   var cfOrder={items:{},date:'',filter:'all'};   // in-progress order to Swan House (compose-only; send is hard-stopped for now)
   var CF_UNITS=['lb','1/2 lb','oz','each','dozen','bunch','pint','quart','case','flat','bag'];
   function cfJss(s){return String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -34790,10 +34792,12 @@ window.RemyFarm={
     var head='<div class="cf-head"><div class="cf-eyebrow">Connected Farms</div>'+
       '<div class="cf-farm"><span class="cf-dot"></span>Swan House Farm</div>'+
       '<div class="cf-sub">'+(rf&&rf.week?esc(rf.week):'this week')+(rf&&rf.lastTouch?(' &middot; updated '+esc(rf.lastTouch)):'')+'</div>'+profHtml+'</div>';
-    var seg='<div class="cf-seg"><button class="cf-segb'+(ST.view==='pushing'?' on':'')+'" onclick="_cfSetView(\'pushing\')">Pushing</button>'+
+    var pushBtn=window._REMY_EMBED?'':'<button class="cf-segb'+(ST.view==='pushing'?' on':'')+'" onclick="_cfSetView(\'pushing\')">Pushing</button>';
+    var seg='<div class="cf-seg">'+pushBtn+
       '<button class="cf-segb'+(ST.view==='order'?' on':'')+'" onclick="_cfSetView(\'order\')">Order</button>'+
       '<button class="cf-segb'+(ST.view==='list'?' on':'')+'" onclick="_cfSetView(\'list\')">Full list</button></div>';
-    h.innerHTML=head+seg+(ST.view==='pushing'?pushingHtml():(ST.view==='order'?orderHtml():listHtml()));
+    var _v=(window._REMY_EMBED&&ST.view==='pushing')?'order':ST.view;   // never land on Pushing in embed
+    h.innerHTML=head+seg+(_v==='pushing'?pushingHtml():(_v==='order'?orderHtml():listHtml()));
     bind();
   }
   function pushingHtml(){
