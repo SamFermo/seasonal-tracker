@@ -33,21 +33,28 @@ html,body{height:100%;overflow:hidden;color:var(--ink);
   background:#02040d radial-gradient(ellipse at 50% 28%, #0c1535 0%, #050918 55%, #02040d 100%)}
 /* ── Embedded-in-portal theme (2026-06-27): lighter + cleaner, function over form. Scoped to
    ?embed (body.remy-embed) so standalone Remy's locked dark design stays untouched. ── */
+/* Portal match (2026-06-30): the sf-portal is dark night-sky + cream "moon" cards + gold + serif —
+   which is Remy's native language already. So the embed keeps native dark sky + light sky-text +
+   gold + serif, and only flips the CARDS to cream. Card text goes dark via a scoped --ink on each
+   card container (below), so var(--ink) children inherit the portal's --card-ink automatically. */
 body.remy-embed{
-  --bg:#f5f2ec;--bg-deep:#ece7dd;--bg-card:#ffffff;--bg-card-h:#f3efe7;
-  --ink:#232a33;--ink-60:rgba(35,42,51,.6);--ink-30:rgba(35,42,51,.34);
-  --ink-12:rgba(35,42,51,.12);--ink-6:rgba(35,42,51,.05);
-  --terra:#c4633f;--terra-bg:rgba(196,99,63,.12);
-  --olive:#5f7d32;--olive-bg:rgba(95,125,50,.13);
-  --gold:#a97d22;--gold-bg:rgba(169,125,34,.13);
-  background:#f5f2ec!important}
-body.remy-embed #portal,body.remy-embed #trending-home{background:#f5f2ec}
-body.remy-embed #stars,body.remy-embed .sky{display:none!important}
-body.remy-embed .ph-remy{color:var(--ink)!important;text-shadow:none!important}   /* dark wordmark on light */
-body.remy-embed .ph-icon{stroke:var(--ink-60)}
-/* active pills/segments hardcode dark text on a var(--ink) bg (light in standalone Remy, DARK here) —
-   flip their text to light so the active state is readable on the dark pill */
-body.remy-embed .kpill.active,body.remy-embed .seg button.on,body.remy-embed .cf-segb.on,body.remy-embed .cf-sortb.on,body.remy-embed .at-use,body.remy-embed .pill.active,body.remy-embed .bucket-btn.sel,body.remy-embed .bucket-btn:active{color:#f5f2ec!important}
+  --bg:#0a1430;--bg-deep:#050a1c;--bg-card:#f5efe1;--bg-card-h:#fdfaf1;
+  --ink:#eaf0ff;--ink-60:rgba(234,240,255,.66);--ink-30:rgba(234,240,255,.36);
+  --ink-12:rgba(234,240,255,.14);--ink-6:rgba(234,240,255,.07);
+  --moon:#f5efe1;--moon-glow:rgba(245,239,225,.42);
+  --terra:#e08763;--terra-bg:rgba(224,135,99,.14);
+  --olive:#a8b97e;--olive-bg:rgba(168,185,126,.14);
+  --gold:#e6c878;--gold-bg:rgba(230,200,120,.16);
+  background:#0a1430!important}
+/* cards become cream "moons"; scope a dark ink onto each card container so its var(--ink)
+   descendants inherit the portal --card-ink (#241f15) automatically. */
+body.remy-embed .card,body.remy-embed .cf-row,body.remy-embed .bucket-btn,
+body.remy-embed .cf-ord-card,body.remy-embed .cf-ord-cart,
+body.remy-embed .at-card,body.remy-embed .tr-card,body.remy-embed .mv-card,
+body.remy-embed .vn-card,body.remy-embed .menu-card,body.remy-embed .plan-card{
+  --ink:#241f15;--ink-60:rgba(36,31,21,.64);--ink-30:rgba(36,31,21,.4);
+  --ink-12:rgba(36,31,21,.15);--ink-6:rgba(36,31,21,.06);
+  background:var(--bg-card)!important;border-color:var(--moon-edge,#d9cbab)}
 /* starfield sits behind everything — subtle, almost ambient */
 #stars{position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%;
   opacity:0.55}
@@ -34834,10 +34841,10 @@ window.RemyFarm={
   function orderHtml(){
     var all=farmList();
     var count=Object.keys(cfOrder.items).length;
-    var cart='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:11px 13px;border:1px solid var(--ink-12);border-radius:12px;background:var(--bg-card)">'+
+    var cart='<div class="cf-ord-cart" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:11px 13px;border:1px solid var(--ink-12);border-radius:12px;background:var(--bg-card)">'+
       '<span style="flex:1;min-width:130px;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)">'+(count?(count+' item'+(count>1?'s':'')+' in this order'):'Tap items to start an order')+'</span>'+
       '<label style="display:flex;align-items:center;gap:6px;font-family:var(--fb,sans-serif);font-size:12px;color:var(--ink-60)">Needed by <input type="date" value="'+esc(cfOrder.date||'')+'" onchange="_cfOrdDate(this.value)" style="font-size:14px;padding:6px 8px;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)"></label>'+
-      '<button '+(count?'':'disabled')+' onclick="_cfOrdSend()" style="font-family:var(--fb,sans-serif);font-size:14px;padding:9px 16px;border-radius:10px;cursor:'+(count?'pointer':'default')+';border:none;background:'+(count?'var(--ink)':'var(--ink-12)')+';color:'+(count?'var(--bg)':'var(--ink-30)')+';font-weight:600">Review &amp; send</button></div>';
+      '<button '+(count?'':'disabled')+' onclick="_cfOrdSend()" style="font-family:var(--fb,sans-serif);font-size:14px;padding:9px 16px;border-radius:10px;cursor:'+(count?'pointer':'default')+';border:none;background:'+(count?'var(--gold)':'var(--ink-12)')+';color:'+(count?'#1a1205':'var(--ink-30)')+';font-weight:600">Review &amp; send</button></div>';
     var cats=[['all','All'],['green','Greens'],['produce','Produce'],['protein','Proteins'],['flower','Flowers'],['berry','Berries'],['mushroom','Mushrooms'],['herb','Herbs'],['sea','Sea']];
     var present={};all.forEach(function(g){if(g.category)present[g.category]=1;});
     var chips='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">'+cats.filter(function(c){return c[0]==='all'||present[c[0]];}).map(function(c){var on=cfOrder.filter===c[0];return '<button onclick="_cfOrdFilter(\''+c[0]+'\')" style="font-family:var(--fb,sans-serif);font-size:12px;padding:6px 11px;border-radius:16px;cursor:pointer;border:1px solid '+(on?'var(--ink)':'var(--ink-12)')+';background:'+(on?'var(--ink)':'transparent')+';color:'+(on?'var(--bg)':'var(--ink-60)')+'">'+c[1]+'</button>';}).join('')+'</div>';
@@ -34853,7 +34860,7 @@ window.RemyFarm={
         var badge=g.markdown?'<span style="font-family:var(--fb,sans-serif);font-size:9px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:9px;background:rgba(196,99,63,.15);color:#c4633f;margin-left:8px">NEED TO MOVE</span>':(g.status==='Peak'?'<span style="font-family:var(--fb,sans-serif);font-size:9px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:9px;background:rgba(95,125,50,.16);color:#5f7d32;margin-left:8px">PEAK</span>':'');
         var ask=(g.ask!=null)?('<span style="font-family:var(--fb,sans-serif);color:var(--ink-60);font-size:13px;margin-left:8px;white-space:nowrap">'+esc(priceStr(g))+'</span>'):'';
         var units=CF_UNITS.slice();if(sel&&sel.unit&&units.indexOf(sel.unit)<0)units.unshift(sel.unit);
-        body+='<div onclick="_cfOrdToggle(\''+cfJss(g.name)+'\')" style="border:1px solid '+(sel?'var(--ink)':'var(--ink-12)')+';border-radius:11px;padding:12px 13px;margin-bottom:7px;cursor:pointer;background:var(--bg-card)">'+
+        body+='<div class="cf-ord-card" onclick="_cfOrdToggle(\''+cfJss(g.name)+'\')" style="border:1px solid '+(sel?'var(--ink)':'var(--ink-12)')+';border-radius:11px;padding:12px 13px;margin-bottom:7px;cursor:pointer;background:var(--bg-card)">'+
           '<div style="display:flex;align-items:center"><span style="flex:1;font-family:var(--fd,serif);font-size:16px;color:var(--ink)">'+esc(g.name)+'</span>'+badge+ask+'</div>'+
           (sel?('<div onclick="event.stopPropagation()" style="display:flex;align-items:center;gap:8px;margin-top:11px;flex-wrap:wrap">'+
             '<button onclick="_cfOrdQty(\''+cfJss(g.name)+'\',-1)" style="'+stepBtn+'">&minus;</button>'+
