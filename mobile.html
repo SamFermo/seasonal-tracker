@@ -34713,7 +34713,9 @@ window.RemyFarm={
   function host(){return document.getElementById('trending-home');}
   function setActive(k){var b=document.getElementById('kitchen-pills');if(b)b.querySelectorAll('.kpill').forEach(function(p){p.classList.toggle('active',p.dataset.k===k);});}
   var ST={view:'pushing',sort:'smart',q:''};
-  var cfOrder={items:{},date:''};   // in-progress order to Swan House (compose-only; send is hard-stopped for now)
+  var cfOrder={items:{},date:'',filter:'all'};   // in-progress order to Swan House (compose-only; send is hard-stopped for now)
+  var CF_UNITS=['lb','1/2 lb','oz','each','dozen','bunch','pint','quart','case','flat','bag'];
+  function cfJss(s){return String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
   var STATUS_RANK={'Peak':0,'Available':1,'Trickling':2,'Coming Soon':3,'Not Yet':4,'Done':5};
   // Peak's rank is 0, which is falsy — `STATUS_RANK[s]||9` wrongly sent Peak to the bottom.
   // Use an explicit null check so rank 0 (Peak) sorts first.
@@ -34738,6 +34740,21 @@ window.RemyFarm={
   var CAT_LABEL={sea:'Seafood',green:'Greens',produce:'Produce',berry:'Berries',mushroom:'Mushrooms',flower:'Flowers',herb:'Herbs',fruit:'Fruit',prepped:'Prepared',protein:'Proteins',meat:'Meat',egg:'Eggs',root:'Roots',allium:'Alliums',pepper:'Peppers',squash:'Squash',bean:'Beans',other:'Other'};
   function cfCatLabel(c){return CAT_LABEL[c]||(c?(c.charAt(0).toUpperCase()+c.slice(1)):'Other');}
   window._cfToggleType=function(c){cfTypeOpen[c]=!cfTypeOpen[c];render();};
+  // Order composer interactions (mirror the sf-portal Farm Order composer). Send is hard-stopped.
+  window._cfOrdFilter=function(c){cfOrder.filter=c;render();};
+  window._cfOrdToggle=function(name){
+    if(cfOrder.items[name]){delete cfOrder.items[name];}
+    else{var g=farmList().filter(function(x){return x.name===name;})[0]||{};cfOrder.items[name]={qty:1,unit:(g.askUnit||'lb'),price:(g.ask==null?null:g.ask)};}
+    render();
+  };
+  window._cfOrdQty=function(name,d){var it=cfOrder.items[name];if(!it)return;it.qty=Math.max(0.5,Math.round(((parseFloat(it.qty)||1)+d)*100)/100);render();};
+  window._cfOrdQtyInput=function(name,v){var it=cfOrder.items[name];if(!it)return;it.qty=Math.max(0.5,parseFloat(v)||1);render();};
+  window._cfOrdUnit=function(name,u){var it=cfOrder.items[name];if(it)it.unit=u;};
+  window._cfOrdDate=function(v){cfOrder.date=v;};
+  window._cfOrdSend=function(){var n=Object.keys(cfOrder.items).length;if(!n)return;
+    /* HARD STOP (prototype): compose only — no remy-orders write / nothing to Kelly yet. */
+    alert('Order composed: '+n+' item'+(n>1?'s':'')+(cfOrder.date?', needed '+cfOrder.date:'')+'.\n\nSending is turned OFF for now — we will wire this to Kelly next.');
+  };
 
   function render(){
     var h=host();if(!h)return;var rf=window.RemyFarm;
@@ -34811,50 +34828,52 @@ window.RemyFarm={
     else items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
     return bar+'<div class="cf-rows">'+items.map(cfRowHtml).join('')+'</div>';
   }
-  // Order composer (2026-06-27): the chef builds an order to Swan House from the availability list.
-  // COMPOSE ONLY — the Place button is hard-stopped (no remy-orders write) until Sam wires it.
+  // Order composer (2026-06-27): mirrors the sf-portal Farm Order composer the team already uses —
+  // grouped peak-first, collapsed rows showing Kelly's ask, tap to expand into a qty stepper + unit
+  // dropdown. COMPOSE ONLY — "Review & send" is hard-stopped (no remy-orders write) until wired.
   function orderHtml(){
-    var items=farmList().filter(function(g){return g.status!=='Done'&&g.status!=='Not Yet';});
-    items.sort(function(a,b){return ((b.pushed?1:0)-(a.pushed?1:0))||(srank(a.status)-srank(b.status))||a.name.localeCompare(b.name);});
-    if(!items.length)return '<div class="cf-empty">Nothing available from Swan House to order right now.</div>';
+    var all=farmList();
     var count=Object.keys(cfOrder.items).length;
-    var head='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:11px 13px;border:1px solid var(--ink-12);border-radius:12px">'+
-      '<span style="font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)">Needed by</span>'+
-      '<input type="date" id="cf-ord-date" value="'+esc(cfOrder.date||'')+'" style="flex:1;font-family:var(--fb,sans-serif);font-size:15px;padding:8px 10px;border-radius:9px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)"></div>'+
-      '<div style="font-family:var(--fb,sans-serif);font-size:11px;color:var(--ink-30);margin:0 2px 10px">Tap a quantity for anything you want from Swan House.</div>';
-    var rows=items.map(function(g){
-      var cur=cfOrder.items[g.name];var qv=(cur&&cur.qty!=null)?cur.qty:'';
-      var unit=(cur&&cur.unit)||g.askUnit||'lb';
-      return '<div class="cf-row" style="align-items:center">'+
-        '<div class="cf-r-main"><div class="cf-r-name">'+esc(g.name)+'</div><div class="cf-r-qty" style="opacity:.85">'+esc(priceStr(g)||'')+'</div></div>'+
-        '<input class="cf-ord-qty" data-crop="'+esc(g.name)+'" data-unit="'+esc(unit)+'" data-price="'+(g.ask==null?'':g.ask)+'" inputmode="decimal" placeholder="0" value="'+esc(String(qv))+'" style="width:60px;text-align:center;font-family:var(--fb,sans-serif);font-size:15px;padding:7px 6px;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)">'+
-        '<span class="cf-r-price" style="min-width:46px;text-align:left;color:var(--ink-60)">'+esc(unit)+'</span>'+
-      '</div>';
-    }).join('');
-    var place='<div id="cf-ord-bar" style="position:sticky;bottom:0;display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px;border-radius:12px;background:var(--bg-card);border:1px solid var(--ink-12);box-shadow:0 -6px 18px rgba(0,0,0,.14)">'+
-      '<span id="cf-ord-count" style="flex:1;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)">'+(count?(count+' item'+(count>1?'s':'')):'Add quantities to build an order')+'</span>'+
-      '<button id="cf-ord-send" '+(count?'':'disabled')+' style="font-family:var(--fb,sans-serif);font-size:15px;padding:11px 18px;border-radius:11px;cursor:'+(count?'pointer':'default')+';border:none;background:'+(count?'var(--ink)':'var(--ink-12)')+';color:'+(count?'var(--bg)':'var(--ink-30)')+';font-weight:600">Place order</button></div>';
-    return head+'<div class="cf-rows">'+rows+'</div>'+place;
+    var cart='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:11px 13px;border:1px solid var(--ink-12);border-radius:12px;background:var(--bg-card)">'+
+      '<span style="flex:1;min-width:130px;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)">'+(count?(count+' item'+(count>1?'s':'')+' in this order'):'Tap items to start an order')+'</span>'+
+      '<label style="display:flex;align-items:center;gap:6px;font-family:var(--fb,sans-serif);font-size:12px;color:var(--ink-60)">Needed by <input type="date" value="'+esc(cfOrder.date||'')+'" onchange="_cfOrdDate(this.value)" style="font-size:14px;padding:6px 8px;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)"></label>'+
+      '<button '+(count?'':'disabled')+' onclick="_cfOrdSend()" style="font-family:var(--fb,sans-serif);font-size:14px;padding:9px 16px;border-radius:10px;cursor:'+(count?'pointer':'default')+';border:none;background:'+(count?'var(--ink)':'var(--ink-12)')+';color:'+(count?'var(--bg)':'var(--ink-30)')+';font-weight:600">Review &amp; send</button></div>';
+    var cats=[['all','All'],['green','Greens'],['produce','Produce'],['protein','Proteins'],['flower','Flowers'],['berry','Berries'],['mushroom','Mushrooms'],['herb','Herbs'],['sea','Sea']];
+    var present={};all.forEach(function(g){if(g.category)present[g.category]=1;});
+    var chips='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">'+cats.filter(function(c){return c[0]==='all'||present[c[0]];}).map(function(c){var on=cfOrder.filter===c[0];return '<button onclick="_cfOrdFilter(\''+c[0]+'\')" style="font-family:var(--fb,sans-serif);font-size:12px;padding:6px 11px;border-radius:16px;cursor:pointer;border:1px solid '+(on?'var(--ink)':'var(--ink-12)')+';background:'+(on?'var(--ink)':'transparent')+';color:'+(on?'var(--bg)':'var(--ink-60)')+'">'+c[1]+'</button>';}).join('')+'</div>';
+    var groups=[['▲ Need to move — farm surplus',function(g){return g.markdown;},'#c4633f'],['At peak',function(g){return g.status==='Peak'&&!g.markdown;},''],['Available',function(g){return (g.status==='Available'||g.status==='Trickling')&&!g.markdown;},''],['Coming soon',function(g){return g.status==='Coming Soon'&&!g.markdown;},'muted']];
+    var stepBtn='width:34px;height:34px;flex:0 0 auto;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink);font-size:19px;cursor:pointer;line-height:1';
+    var body='';
+    groups.forEach(function(gr){
+      var items=all.filter(gr[1]).filter(function(g){return cfOrder.filter==='all'||g.category===cfOrder.filter;}).sort(function(a,b){return a.name.localeCompare(b.name);});
+      if(!items.length)return;
+      body+='<div style="font-family:var(--fb,sans-serif);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:'+((gr[2]&&gr[2]!=='muted')?gr[2]:'var(--ink-30)')+';padding:14px 2px 6px'+(gr[2]==='muted'?';opacity:.7':'')+'">'+gr[0]+'</div>';
+      items.forEach(function(g){
+        var sel=cfOrder.items[g.name];
+        var badge=g.markdown?'<span style="font-family:var(--fb,sans-serif);font-size:9px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:9px;background:rgba(196,99,63,.15);color:#c4633f;margin-left:8px">NEED TO MOVE</span>':(g.status==='Peak'?'<span style="font-family:var(--fb,sans-serif);font-size:9px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:9px;background:rgba(95,125,50,.16);color:#5f7d32;margin-left:8px">PEAK</span>':'');
+        var ask=(g.ask!=null)?('<span style="font-family:var(--fb,sans-serif);color:var(--ink-60);font-size:13px;margin-left:8px;white-space:nowrap">'+esc(priceStr(g))+'</span>'):'';
+        var units=CF_UNITS.slice();if(sel&&sel.unit&&units.indexOf(sel.unit)<0)units.unshift(sel.unit);
+        body+='<div onclick="_cfOrdToggle(\''+cfJss(g.name)+'\')" style="border:1px solid '+(sel?'var(--ink)':'var(--ink-12)')+';border-radius:11px;padding:12px 13px;margin-bottom:7px;cursor:pointer;background:var(--bg-card)">'+
+          '<div style="display:flex;align-items:center"><span style="flex:1;font-family:var(--fd,serif);font-size:16px;color:var(--ink)">'+esc(g.name)+'</span>'+badge+ask+'</div>'+
+          (sel?('<div onclick="event.stopPropagation()" style="display:flex;align-items:center;gap:8px;margin-top:11px;flex-wrap:wrap">'+
+            '<button onclick="_cfOrdQty(\''+cfJss(g.name)+'\',-1)" style="'+stepBtn+'">&minus;</button>'+
+            '<input type="number" step="0.5" value="'+esc(String(sel.qty))+'" onchange="_cfOrdQtyInput(\''+cfJss(g.name)+'\',this.value)" style="width:56px;text-align:center;font-family:var(--fb,sans-serif);font-size:15px;padding:7px 4px;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)">'+
+            '<button onclick="_cfOrdQty(\''+cfJss(g.name)+'\',1)" style="'+stepBtn+'">+</button>'+
+            '<select onchange="_cfOrdUnit(\''+cfJss(g.name)+'\',this.value)" style="font-family:var(--fb,sans-serif);font-size:14px;padding:7px 8px;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)">'+units.map(function(u){return '<option'+(u===sel.unit?' selected':'')+'>'+esc(u)+'</option>';}).join('')+'</select>'+
+            '<button onclick="_cfOrdToggle(\''+cfJss(g.name)+'\')" style="margin-left:auto;font-family:var(--fb,sans-serif);font-size:12px;padding:7px 10px;border-radius:8px;border:1px solid var(--ink-12);background:transparent;color:var(--ink-60);cursor:pointer">remove</button>'+
+          '</div>'):'')+
+        '</div>';
+      });
+    });
+    if(!body)body='<div class="cf-empty">Nothing available from Swan House to order right now.</div>';
+    return cart+chips+body;
   }
   function bind(){
     var h=host();if(!h)return;
     var s=document.getElementById('cf-search');
     if(s)s.oninput=function(){var pos=s.selectionStart;ST.q=s.value;render();var s2=document.getElementById('cf-search');if(s2){s2.focus();try{s2.setSelectionRange(pos,pos);}catch(e){}}};
     h.querySelectorAll('[data-photo]').forEach(function(im){im.onclick=function(){openCfPhoto(im.getAttribute('data-photo'));};});
-    h.querySelectorAll('.cf-ord-qty').forEach(function(inp){inp.addEventListener('input',function(){
-      var crop=inp.getAttribute('data-crop'),v=inp.value.trim(),n;
-      if(v===''||isNaN(parseFloat(v))||parseFloat(v)===0){delete cfOrder.items[crop];}
-      else{cfOrder.items[crop]={qty:parseFloat(v),unit:inp.getAttribute('data-unit'),price:(inp.getAttribute('data-price')===''?null:parseFloat(inp.getAttribute('data-price')))};}
-      n=Object.keys(cfOrder.items).length;
-      var cnt=document.getElementById('cf-ord-count');if(cnt)cnt.textContent=n?(n+' item'+(n>1?'s':'')):'Add quantities to build an order';
-      var sb=document.getElementById('cf-ord-send');if(sb){sb.disabled=!n;sb.style.background=n?'var(--ink)':'var(--ink-12)';sb.style.color=n?'var(--bg)':'var(--ink-30)';sb.style.cursor=n?'pointer':'default';}
-    });});
-    var _od=document.getElementById('cf-ord-date');if(_od)_od.addEventListener('change',function(){cfOrder.date=_od.value;});
-    var _os=document.getElementById('cf-ord-send');if(_os)_os.addEventListener('click',function(){
-      var n=Object.keys(cfOrder.items).length;if(!n)return;
-      /* HARD STOP (prototype): compose only — do NOT write to remy-orders / send to Kelly yet. */
-      alert('Order composed: '+n+' item'+(n>1?'s':'')+(cfOrder.date?', needed '+cfOrder.date:'')+'.\n\nSending is turned OFF for now — we will wire this to Kelly next.');
-    });
+    // Order composer rows wire themselves via inline onclick (_cfOrd* globals); nothing to bind here.
   }
   function openCfPhoto(url){
     var o=document.getElementById('cfPhoto');
