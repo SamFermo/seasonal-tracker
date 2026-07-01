@@ -33417,7 +33417,9 @@ function fbInit(){try{if(!window.firebase)return;firebase.initializeApp({apiKey:
   // Expose a tiny order-write helper so the kitchen-side Order composer (a separate IIFE) can place
   // a real order into remy-orders without reaching into FB directly. Attested via the same App Check.
   try{window.RemyOrders={ready:function(){return !!(FB.ready&&FB.db);},
-    place:function(order){return FB.db.collection('orders').doc(order.order_id).set(order);}};}catch(e){}
+    place:function(order){return FB.db.collection('orders').doc(order.order_id).set(order);},
+    orders:function(){return (ordersData||[]).slice();},           // live restaurant+farm orders (this farm)
+    onOrders:function(cb){try{if(typeof cb==='function')_ordListeners.push(cb);}catch(e){}}};}catch(e){}
   // offline persistence: prices/status/markdown/transcripts queue locally + auto-sync on reconnect
   try{FB.db.enablePersistence({synchronizeTabs:true}).catch(function(){});}catch(e){}
   try{FB.storage=firebase.storage();}catch(e){}
@@ -34162,6 +34164,7 @@ flushQueue();
    Harvest List tab behind the auth gate (not here). Reads the same remy-orders Firestore the
    farm side already uses (FB.db, compat SDK — matches the staff-portal writer). */
 var ordersData=[], ordersUnsub=null, ordersExpanded={};
+var _ordListeners=[];function _ordNotify(){for(var i=0;i<_ordListeners.length;i++){try{_ordListeners[i](ordersData);}catch(e){}}}
 function oesc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function ofmtDate(iso){try{return new Date(iso).toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'});}catch(e){return iso||'';}}
 /* multi-farm seam: order docs carry no seller/farm_id yet (single san_fermo↔Swan pair today).
@@ -34177,6 +34180,7 @@ function startOrdersSync(){
     ordersUnsub=FB.db.collection('orders').orderBy('placed_at','desc').limit(40).onSnapshot(function(snap){
       ordersData=snap.docs.map(function(d){return d.data();}).filter(orderForThisFarm);
       updateOrdersSeg();
+      _ordNotify();   // let the kitchen-side "Sent" view refresh too
       var v=document.getElementById('view-orders');
       if(v&&v.classList.contains('live'))renderOrders();
     },function(e){});
@@ -34739,7 +34743,8 @@ window.RemyFarm={
   // Prototype (embed): land on Order, not Pushing (Pushing is redundant — peak sorts to the top of
   // Order — and a clean landing means nothing looks off on open). Standalone Remy keeps Pushing.
   var ST={view:(window._REMY_EMBED?'order':'pushing'),sort:'smart',q:''};
-  var cfOrder={items:{},date:'',filter:'all'};   // in-progress order to Swan House (compose-only; send is hard-stopped for now)
+  var cfOrder={items:{},date:'',filter:'all'};   // in-progress order to Swan House (review -> send)
+  var cfSentOpen={};   // expanded rows in the Sent-orders view
   var CF_UNITS=['lb','1/2 lb','oz','each','dozen','bunch','pint','quart','case','flat','bag'];
   function cfJss(s){return String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
   var STATUS_RANK={'Peak':0,'Available':1,'Trickling':2,'Coming Soon':3,'Not Yet':4,'Done':5};
@@ -34777,7 +34782,36 @@ window.RemyFarm={
   window._cfOrdQtyInput=function(name,v){var it=cfOrder.items[name];if(!it)return;it.qty=Math.max(0.5,parseFloat(v)||1);render();};
   window._cfOrdUnit=function(name,u){var it=cfOrder.items[name];if(it)it.unit=u;};
   window._cfOrdDate=function(v){cfOrder.date=v;};
-  window._cfOrdSend=function(){
+  function cfFmtDate(iso){if(!iso)return 'no date set';var p=String(iso).split('-');if(p.length!==3)return iso;
+    var d=new Date(+p[0],+p[1]-1,+p[2]);return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
+  // "Review & send" opens a summary first; only "Send to Swan House" writes the order.
+  window._cfOrdReview=function(){
+    var names=Object.keys(cfOrder.items);if(!names.length)return;
+    var who='San Fermo';try{if(window.parent&&window.parent!==window&&window.parent.__remyPortalUser){who=String(window.parent.__remyPortalUser)||who;}}catch(e){}
+    var rows=names.map(function(nm){var it=cfOrder.items[nm];
+      return '<div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--ink-12)">'+
+        '<span style="font-family:var(--fd,serif);font-size:16px;color:var(--ink)">'+esc(nm)+'</span>'+
+        '<span style="font-family:var(--fb,sans-serif);font-size:14px;color:var(--ink-60);white-space:nowrap">'+esc(String(it.qty))+' '+esc(it.unit)+'</span></div>';}).join('');
+    var o=document.getElementById('cfOrdReview');
+    if(!o){o=document.createElement('div');o.id='cfOrdReview';
+      o.style.cssText='position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,7,17,.72)';
+      document.body.appendChild(o);
+      o.addEventListener('click',function(e){if(e.target.id==='cfOrdReview')o.remove();});}
+    o.innerHTML='<div class="cf-ord-card" style="max-width:440px;width:100%;max-height:82vh;overflow:auto;background:var(--bg-card);border:1px solid var(--ink-12);border-radius:16px;padding:20px 20px 18px">'+
+      '<div style="font-family:var(--fd,serif);font-size:23px;color:var(--ink);margin-bottom:3px">Review your order</div>'+
+      '<div style="font-family:var(--fb,sans-serif);font-size:12.5px;line-height:1.45;color:var(--ink-60);margin-bottom:14px">Sending puts it straight on Swan House’s list. Kelly &amp; Tim check for orders Sunday–Tuesday mornings.</div>'+
+      rows+
+      '<div style="display:flex;justify-content:space-between;margin-top:14px;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)"><span>Needed by</span><span style="color:var(--ink)">'+esc(cfFmtDate(cfOrder.date))+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)"><span>Ordered by</span><span style="color:var(--ink)">'+esc(who)+'</span></div>'+
+      '<div style="display:flex;gap:10px;margin-top:20px">'+
+        '<button onclick="_cfOrdReviewClose()" style="flex:1;font-family:var(--fb,sans-serif);font-size:14px;padding:12px;border-radius:11px;border:1px solid var(--ink-12);background:transparent;color:var(--ink);cursor:pointer">Keep editing</button>'+
+        '<button onclick="_cfOrdConfirmSend()" style="flex:1.4;font-family:var(--fb,sans-serif);font-size:14px;font-weight:600;padding:12px;border-radius:11px;border:none;background:var(--gold);color:#1a1205;cursor:pointer">Send to Swan House</button>'+
+      '</div></div>';
+  };
+  window._cfOrdReviewClose=function(){var o=document.getElementById('cfOrdReview');if(o)o.remove();};
+  window._cfSentToggle=function(id){cfSentOpen[id]=!cfSentOpen[id];render();};
+  window._cfOrdConfirmSend=function(){
+    var _rv=document.getElementById('cfOrdReview');if(_rv)_rv.remove();   // close the review modal
     var names=Object.keys(cfOrder.items);if(!names.length)return;
     if(cfOrder._sending)return;   // guard against a double-tap sending twice
     if(!(window.RemyOrders&&window.RemyOrders.ready&&window.RemyOrders.ready())){
@@ -34824,9 +34858,10 @@ window.RemyFarm={
     var pushBtn=window._REMY_EMBED?'':'<button class="cf-segb'+(ST.view==='pushing'?' on':'')+'" onclick="_cfSetView(\'pushing\')">Pushing</button>';
     var seg='<div class="cf-seg">'+pushBtn+
       '<button class="cf-segb'+(ST.view==='order'?' on':'')+'" onclick="_cfSetView(\'order\')">Order</button>'+
+      '<button class="cf-segb'+(ST.view==='sent'?' on':'')+'" onclick="_cfSetView(\'sent\')">Sent</button>'+
       '<button class="cf-segb'+(ST.view==='list'?' on':'')+'" onclick="_cfSetView(\'list\')">Full list</button></div>';
     var _v=(window._REMY_EMBED&&ST.view==='pushing')?'order':ST.view;   // never land on Pushing in embed
-    h.innerHTML=head+seg+(_v==='pushing'?pushingHtml():(_v==='order'?orderHtml():listHtml()));
+    h.innerHTML=head+seg+(_v==='pushing'?pushingHtml():(_v==='order'?orderHtml():(_v==='sent'?sentHtml():listHtml())));
     bind();
   }
   function pushingHtml(){
@@ -34890,7 +34925,7 @@ window.RemyFarm={
     var cart='<div class="cf-ord-cart" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:11px 13px;border:1px solid var(--ink-12);border-radius:12px;background:var(--bg-card)">'+
       '<span style="flex:1;min-width:130px;font-family:var(--fb,sans-serif);font-size:13px;color:var(--ink-60)">'+(count?(count+' item'+(count>1?'s':'')+' in this order'):'Tap items to start an order')+'</span>'+
       '<label style="display:flex;align-items:center;gap:6px;font-family:var(--fb,sans-serif);font-size:12px;color:var(--ink-60)">Needed by <input type="date" value="'+esc(cfOrder.date||'')+'" onchange="_cfOrdDate(this.value)" style="font-size:14px;padding:6px 8px;border-radius:8px;border:1px solid var(--ink-12);background:var(--bg-card);color:var(--ink)"></label>'+
-      '<button '+(count?'':'disabled')+' onclick="_cfOrdSend()" style="font-family:var(--fb,sans-serif);font-size:14px;padding:9px 16px;border-radius:10px;cursor:'+(count?'pointer':'default')+';border:none;background:'+(count?'var(--gold)':'var(--ink-12)')+';color:'+(count?'#1a1205':'var(--ink-30)')+';font-weight:600">Review &amp; send</button></div>';
+      '<button '+(count?'':'disabled')+' onclick="_cfOrdReview()" style="font-family:var(--fb,sans-serif);font-size:14px;padding:9px 16px;border-radius:10px;cursor:'+(count?'pointer':'default')+';border:none;background:'+(count?'var(--gold)':'var(--ink-12)')+';color:'+(count?'#1a1205':'var(--ink-30)')+';font-weight:600">Review &amp; send</button></div>';
     var cats=[['all','All'],['green','Greens'],['produce','Produce'],['protein','Proteins'],['flower','Flowers'],['berry','Berries'],['mushroom','Mushrooms'],['herb','Herbs'],['sea','Sea']];
     var present={};all.forEach(function(g){if(g.category)present[g.category]=1;});
     var chips='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">'+cats.filter(function(c){return c[0]==='all'||present[c[0]];}).map(function(c){var on=cfOrder.filter===c[0];return '<button onclick="_cfOrdFilter(\''+c[0]+'\')" style="font-family:var(--fb,sans-serif);font-size:12px;padding:6px 11px;border-radius:16px;cursor:pointer;border:1px solid '+(on?'var(--ink)':'var(--ink-12)')+';background:'+(on?'var(--ink)':'transparent')+';color:'+(on?'var(--bg)':'var(--ink-60)')+'">'+c[1]+'</button>';}).join('')+'</div>';
@@ -34921,6 +34956,35 @@ window.RemyFarm={
     if(!body)body='<div class="cf-empty">Nothing available from Swan House to order right now.</div>';
     return cart+chips+body;
   }
+  // "Sent" view — the orders San Fermo has sent to Swan House + the farm's live status. Read-only.
+  function cfWhen(pa){var d;if(typeof pa==='number')d=new Date(pa);
+    else if(typeof pa==='string'){if(/^\d{4}-\d{2}-\d{2}/.test(pa)){var p=pa.slice(0,10).split('-');d=new Date(+p[0],+p[1]-1,+p[2]);}else d=new Date(pa);}
+    else return '';return isNaN(d)?'':d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
+  function sentHtml(){
+    var raw=(window.RemyOrders&&window.RemyOrders.orders)?window.RemyOrders.orders():null;
+    if(raw===null)return '<div class="cf-empty">Connecting to the order feed&hellip;</div>';
+    var mine=raw.filter(function(o){var s=o.status||'placed';return s!=='cancelled'&&s!=='merged'&&!((o.source==='farm_dinner')||(o.placed_by==='swan_house'));});
+    if(!mine.length)return '<div class="cf-empty">No orders sent to Swan House yet. When you send one, it shows here with the farm’s status.</div>';
+    var LBL={placed:'New',acked:'Farm got it',delivered:'Delivered'};
+    var CLR={placed:'var(--gold)',acked:'#5f7d32',delivered:'var(--ink-30)'};
+    var out='';
+    mine.forEach(function(o){
+      var st=o.status||'placed';var lines=o.lines||[];
+      var flags=lines.filter(function(l){return l.farm_status==='short'||l.farm_status==='sub';}).length;
+      var when=cfWhen(o.placed_at);var needed=o.requested_date?cfWhen(o.requested_date):'no date';
+      var open=!!cfSentOpen[o.order_id];
+      var badge='<span style="font-family:var(--fb,sans-serif);font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:9px;border:1px solid '+(CLR[st]||'var(--ink-30)')+';color:'+(CLR[st]||'var(--ink-30)')+'">'+(LBL[st]||esc(st))+'</span>';
+      var detail=open?('<div style="margin-top:10px;border-top:1px solid var(--ink-12);padding-top:9px">'+lines.map(function(l){
+        var fs=l.farm_status==='short'?' <span style="color:#c4633f;font-size:11px;font-weight:600">short</span>':(l.farm_status==='sub'?(' <span style="color:#c4633f;font-size:11px;font-weight:600">sub'+(l.farm_note?': '+esc(l.farm_note):'')+'</span>'):'');
+        return '<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-family:var(--fb,sans-serif);font-size:13.5px;color:var(--ink)"><span>'+(l.packed?'✓ ':'')+esc(String(l.qty))+' '+esc(l.unit||'')+' '+esc(l.item||'')+fs+'</span>'+(l.ask!=null?'<span style="color:var(--ink-60);white-space:nowrap">$'+Number(l.ask).toFixed(2)+'</span>':'')+'</div>';
+      }).join('')+(o.order_note?('<div style="font-family:var(--fb,sans-serif);font-size:12px;color:var(--ink-60);font-style:italic;margin-top:6px">“'+esc(o.order_note)+'”</div>'):'')+'</div>'):'';
+      out+='<div class="cf-ord-card" onclick="_cfSentToggle(\''+cfJss(o.order_id)+'\')" style="border:1px solid var(--ink-12);border-radius:11px;padding:12px 13px;margin-bottom:8px;cursor:pointer;background:var(--bg-card)">'+
+        '<div style="display:flex;align-items:center;gap:10px"><span style="flex:1;font-family:var(--fd,serif);font-size:16px;color:var(--ink)">'+esc(when||'—')+' · '+esc(o.placed_by||'')+'</span>'+badge+'</div>'+
+        '<div style="font-family:var(--fb,sans-serif);font-size:12.5px;color:var(--ink-60);margin-top:4px">'+lines.length+' item'+(lines.length!==1?'s':'')+' · needed '+esc(needed)+(flags?(' · <span style="color:#c4633f">'+flags+' short/sub</span>'):'')+'</div>'+
+        detail+'</div>';
+    });
+    return out;
+  }
   function bind(){
     var h=host();if(!h)return;
     var s=document.getElementById('cf-search');
@@ -34936,6 +35000,10 @@ window.RemyFarm={
   }
   if(window.RemyFarm&&window.RemyFarm.onChange)window.RemyFarm.onChange(function(){
     var a=document.querySelector('#kitchen-pills .kpill[data-k="farms"].active');if(a)render();
+  });
+  // Live order updates (Kelly acks/finalizes) refresh the Sent view when it's the one showing.
+  if(window.RemyOrders&&window.RemyOrders.onOrders)window.RemyOrders.onOrders(function(){
+    var a=document.querySelector('#kitchen-pills .kpill[data-k="farms"].active');if(a&&ST.view==='sent')render();
   });
   // Connected Farms is the restaurant-side landing tab — render it once the pills are built
   (function cfDefault(){
